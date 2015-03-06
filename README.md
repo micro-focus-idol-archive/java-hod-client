@@ -34,6 +34,17 @@ JSON transformation, so you will need to use the Jackson Converter.
 
 You can then call the methods on queryTextIndexService to communicate with IDOL OnDemand.
 
+    final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        .setAbsoluteMaxResults(10)
+        .setTotalResults(true)
+        .build();
+
+    final Documents documents = queryTextIndexService.queryTextIndexWithText(
+        "myApiKey",
+        "cats",
+        Arrays.asList("wiki_eng")
+        params);
+
 ## Is it any good?
 Yes.
 
