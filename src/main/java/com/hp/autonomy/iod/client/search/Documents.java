@@ -16,12 +16,23 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Top level response from the Query Text Index API.
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = Documents.Builder.class)
 public class Documents {
 
+    /**
+     * @returns The list of documents returned by IDOL OnDemand
+     */
     private final List<Document> documents;
+
+    /**
+     * @returns The total number of results found by IDOL OnDemand. If the total_results parameter was not specified,
+     * this will be 0.
+     */
     private final int totalResults;
 
     @Setter
