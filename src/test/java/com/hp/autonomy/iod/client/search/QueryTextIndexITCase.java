@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.iod.client.search;
 
 import java.io.File;
@@ -18,13 +23,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-/*
- * $Id:$
- *
- * Copyright (c) 2015, Autonomy Systems Ltd.
- *
- * Last modified by $Author:$ on $Date:$
- */
 public class QueryTextIndexITCase {
 
     private QueryTextIndexService queryTextIndexService;

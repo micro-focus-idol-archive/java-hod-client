@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.iod.client.search;
 
 import java.util.List;
@@ -11,13 +16,6 @@ import retrofit.http.Query;
 import retrofit.http.QueryMap;
 import retrofit.mime.TypedInput;
 
-/*
- * $Id:$
- *
- * Copyright (c) 2015, Autonomy Systems Ltd.
- *
- * Last modified by $Author:$ on $Date:$
- */
 public interface QueryTextIndexService {
 
     String URL = "/sync/querytextindex/v1";
