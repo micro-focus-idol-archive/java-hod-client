@@ -7,7 +7,7 @@ branches:
   - develop
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
-script: mvn verify deploy --settings settings.xml -Prelease
+script: mvn verify deploy --settings settings.xml -Prelease -Dhp.iod.apiKey=$API_KEY
 env:
   global:
   # SONATYPE_USERNAME
@@ -20,3 +20,5 @@ env:
   - secure: HnMRlqVdjEspQ1oE7wfqhzo95PhFcx5sJhJul7J+P/jXIarwqtmIaQVCjk1C2jMhGrMtslpak1Y/pob8dqrGGtuleoGIQnxddYSFyoCDkPwkZaupeoY6oiQEAOCXpDOLLxjxjSYMQFB9DXRdQzsnn8sz8iwRBvZn9LHdbSxJS28=
   # GPG_KEY
   - secure: ls2sWTc2D6m4rqzu+aIqk2KscWsm2FRbEowez0kRuosW5An/BrjjCFGYVNzovgMMCfnwdNrVlDEgN9jyUUSfZS+zpZmvqi5+OwGnFOi5BhdAq/DvNOi8+2x95dJ7EWHNiowfR8b3PsA4AWvfZfthyDE4B7YZ2UQxbDlht5vujh8=
+  # API_KEY
+  - secure: AA3wcJm48OmcLBmBeu4UihZtE5D2g9x9b53QWvMOc41m008BuG2vtBgdM+qav7fzKwGJAw1n5uRgOJXNDv2zdZydXa8WH9yOVoljbX5RudJW00YXpj1koVxovsMw3q3DKOz3kdJvX9wEDapk6M0xHHTlEtfAZP0Xa/qV9IE6jw4=
