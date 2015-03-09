@@ -2,6 +2,11 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.1.6" date="2015-03-09">
+            <action dev="alex-scown-hp" type="fix">
+                Turns out upgrading the site plugin broke markdown generation. Update markdown plugin.
+            </action>
+        </release>
         <release version="0.1.5" date="2015-03-09">
             <action dev="alex-scown-hp" type="fix">
                 Permissions on the token have been increased. Username is not required.
