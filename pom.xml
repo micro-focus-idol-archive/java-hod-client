@@ -88,6 +88,7 @@
                             <oauth2Token>${env.GITHUB_TOKEN}</oauth2Token>
                             <repositoryName>java-iod-client</repositoryName>
                             <repositoryOwner>hpautonomy</repositoryOwner>
+                            <userName>alex-scown-hp</userName>
                         </configuration>
                         <executions>
                             <execution>
