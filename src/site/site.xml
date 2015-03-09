@@ -21,7 +21,7 @@
                 <item name="Distribution Management" href="distribution-management.html"/>
             </item>
             <item name="Project Reports" href="project-reports.html">
-
+                <item name="Changelist" href="changes-report.html"/>
             </item>
         </menu>
     </body>
