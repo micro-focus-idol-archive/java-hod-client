@@ -4,6 +4,16 @@ Java Client for communicating with [IDOL OnDemand](http://www.idolondemand.com)
 
 Information can be found on the project homepage [here](http://hpautonomy.github.io/java-iod-client)
 
+## Usage
+
+java-iod-client is available from the central Maven repository.
+
+    <dependency>
+        <groupId>com.hp.autonomy.iod</groupId>
+        <artifactId>java-iod-client</artifactId>
+        <version>0.1.6</version>
+    </dependency>
+
 ## License
 Copyright 2015 Hewlett-Packard Development Company, L.P.
 
