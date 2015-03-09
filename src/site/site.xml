@@ -19,6 +19,7 @@
                 <item name="Plugin Management" href="plugin-management.html"/>
                 <item name="Project Plugins" href="plugins.html"/>
                 <item name="Distribution Management" href="distribution-management.html"/>
+                <item name="API Javadoc" href="apidocs/index.html"/>
             </item>
             <item name="Project Reports" href="project-reports.html">
                 <item name="Changelist" href="changes-report.html"/>
