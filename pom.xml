@@ -27,6 +27,15 @@
         <url>https://github.com/hpautonomy/java-iod-client/issues</url>
     </issueManagement>
 
+    <developers>
+        <developer>
+            <name>Alex Scown</name>
+            <email>alex.scown@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+    </developers>
+
     <build>
         <plugins>
             <plugin>
