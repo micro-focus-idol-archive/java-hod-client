@@ -1,0 +1,27 @@
+language: java
+jdk:
+- oraclejdk7
+branches:
+  only:
+  - master
+  - develop
+before_install:
+- echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
+script: mvn verify deploy --settings settings.xml -Prelease -Dhp.iod.apiKey=$API_KEY
+after_script: bash travis.sh
+env:
+  global:
+  # SONATYPE_USERNAME
+  - secure: j4wCbNIj62CKJ39mMJumbPz9NFF8HMQKLVehO9Naq4HtX9IbR0XEv2nYa2ldaIM5Gi3Ki2ikHHZRx+OOnapWjthRWhW0dzNzqdGfAi1heOHB9xLT1xYjS1PiscI88+ip1s8Hc4b0A8v0FSQRa+QtzIoX9srpQiUHwEzXGsunz+E=
+  # SONATYPE_PASSWORD
+  - secure: SeLijG5ju4hzdoz96irT4LvfRLpQk/4B25NMKME9tRgo9Oz61WgrFmm08iuft1NeLT36jDeHl1uEhYx3VJlHfFSueFw1emX2HLTazyAOfl7Ip/5g0DW04AmSYAJnA8RyoP24fE3qib8Uby8YoddUdJot5gMV1aqh0KuV9jBV+Ho=
+  # GPG_PASSPHRASE
+  - secure: FC1sR0dbWExJZERAAk6+4I028JRpW29tY8ngq7fWNPDW67gfvxXHAPV6SpJP6awMu0CRdKg8ANTinM+3AMxXEuKXeJTScVKdzwdoQzLru1toKypor4NrjnBck+i8gHP36BgvJo7YEfspaTRTILyYYTITmYTMK8xic7LIKrSu2GI=
+  # GPG_KEYID
+  - secure: F5TjiUeX2mnv1wcvowQCfLoiuMutIcurgVqxnrCto08RCx7BU5KYhoK9f/j1kI4lNkrhGcHoXy4L+PMwmM94Q7LHbhurBiTcVmOV8tq9isVS8bZXqdw23TyabrXEmIc2LXD7eJhzXX3LXxLg2RUaJAsAvAAxfcOinHuzppJ5z/8=
+  # GPG_KEY
+  - secure: ls2sWTc2D6m4rqzu+aIqk2KscWsm2FRbEowez0kRuosW5An/BrjjCFGYVNzovgMMCfnwdNrVlDEgN9jyUUSfZS+zpZmvqi5+OwGnFOi5BhdAq/DvNOi8+2x95dJ7EWHNiowfR8b3PsA4AWvfZfthyDE4B7YZ2UQxbDlht5vujh8=
+  # API_KEY
+  - secure: AA3wcJm48OmcLBmBeu4UihZtE5D2g9x9b53QWvMOc41m008BuG2vtBgdM+qav7fzKwGJAw1n5uRgOJXNDv2zdZydXa8WH9yOVoljbX5RudJW00YXpj1koVxovsMw3q3DKOz3kdJvX9wEDapk6M0xHHTlEtfAZP0Xa/qV9IE6jw4=
+  # GITHUB_TOKEN
+  - secure: dxKqiSzQ2+HkhZZYRJvhFGVRLWjBZ4/bFHTAqg9bNyEfIPw1xkJVC/ujVL0VhNa9d8pP8rV9+lduodPL+c8jc5GntUqlxBENr9hgMSl0A/sCkxR8TaBPupig3y9fKdIuA7IiYn6VFJ9UATC5t/flXeRyIgZbJHsike6RzKAld3w=
