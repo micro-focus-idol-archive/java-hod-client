@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.iod</groupId>
     <artifactId>java-iod-client</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
 
     <description>Java Client for communicating with IDOL OnDemand</description>
 
@@ -88,6 +88,7 @@
                             <oauth2Token>${env.GITHUB_TOKEN}</oauth2Token>
                             <repositoryName>java-iod-client</repositoryName>
                             <repositoryOwner>hpautonomy</repositoryOwner>
+                            <userName>alex-scown-hp</userName>
                         </configuration>
                         <executions>
                             <execution>
