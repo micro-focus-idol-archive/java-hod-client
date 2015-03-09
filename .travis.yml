@@ -8,6 +8,7 @@ branches:
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 script: mvn verify deploy --settings settings.xml -Prelease -Dhp.iod.apiKey=$API_KEY
+after_script: bash travis.sh
 env:
   global:
   # SONATYPE_USERNAME
