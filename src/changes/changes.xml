@@ -2,6 +2,11 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.1.2" date="2015-03-09">
+            <action dev="alex-scown-hp" type="fix">
+                Update to latest version of Github Site plugin to try and get the site deploying.
+            </action>
+        </release>
         <release version="0.1.1" date="2015-03-09">
             <action dev="alex-scown-hp" type="fix">
                 Update to latest version of Maven Site plugin as Travis uses a later version of Maven.
