@@ -1,0 +1,13 @@
+{
+  "error": 4015,
+  "reason": "Missing required parameter(s)",
+  "detail": {
+    "message": "Exactly one of the listed parameters is required",
+    "params": [
+      "text",
+      "file",
+      "reference",
+      "url"
+    ]
+  }
+}
