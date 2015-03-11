@@ -5,8 +5,7 @@
 
 package com.hp.autonomy.iod.client.search;
 
-import java.util.List;
-import java.util.Map;
+import com.hp.autonomy.iod.client.error.IodErrorException;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -15,6 +14,9 @@ import retrofit.http.PartMap;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 import retrofit.mime.TypedInput;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Interface representing the QueryTextIndex API.
@@ -32,7 +34,7 @@ public interface QueryTextIndexService {
      * @return A list of documents that match the query text
      */
     @GET(URL)
-    Documents queryTextIndexWithText(@Query("apiKey") String apiKey, @Query("text") String text, @Query("indexes") List<String> indexes, @QueryMap Map<String, Object> params);
+    Documents queryTextIndexWithText(@Query("apiKey") String apiKey, @Query("text") String text, @Query("indexes") List<String> indexes, @QueryMap Map<String, Object> params) throws IodErrorException;
 
     /**
      * Query IDOL OnDemand for documents using query text from an object store object
@@ -43,7 +45,7 @@ public interface QueryTextIndexService {
      * @return A list of documents that match the query text
      */
     @GET(URL)
-    Documents queryTextIndexWithReference(@Query("apiKey") String apiKey, @Query("reference") String reference, @Query("indexes") List<String> indexes, @QueryMap Map<String, Object> params);
+    Documents queryTextIndexWithReference(@Query("apiKey") String apiKey, @Query("reference") String reference, @Query("indexes") List<String> indexes, @QueryMap Map<String, Object> params) throws IodErrorException;
 
     /**
      * Query IDOL OnDemand for documents using query text from a url
@@ -54,7 +56,7 @@ public interface QueryTextIndexService {
      * @return A list of documents that match the query text
      */
     @GET(URL)
-    Documents queryTextIndexWithUrl(@Query("apiKey") String apiKey, @Query("url") String url, @Query("indexes") List<String> indexes, @QueryMap Map<String, Object> params);
+    Documents queryTextIndexWithUrl(@Query("apiKey") String apiKey, @Query("url") String url, @Query("indexes") List<String> indexes, @QueryMap Map<String, Object> params) throws IodErrorException;
 
     /**
      * Query IDOL OnDemand for documents using query text in a file
@@ -66,6 +68,6 @@ public interface QueryTextIndexService {
      */
     @Multipart
     @POST(URL)
-    Documents queryTextIndexWithFile(@Part("apiKey") String apiKey, @Part("file") TypedInput file, @Part("indexes") List<String> indexes, @PartMap Map<String, Object> params);
+    Documents queryTextIndexWithFile(@Part("apiKey") String apiKey, @Part("file") TypedInput file, @Part("indexes") List<String> indexes, @PartMap Map<String, Object> params) throws IodErrorException;
 
 }
