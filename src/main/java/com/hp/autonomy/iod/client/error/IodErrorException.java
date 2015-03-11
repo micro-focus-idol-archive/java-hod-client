@@ -5,8 +5,22 @@
 
 package com.hp.autonomy.iod.client.error;
 
-public interface IodErrorException {
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-    IodErrorCode getErrorCode();
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class IodErrorException extends Exception {
+    private static final long serialVersionUID = -1623916762461350039L;
+
+    private final IodErrorCode errorCode;
+    private final boolean serverError;
+
+    public IodErrorException(final IodError iodError, final int httpStatusCode) {
+        super(iodError.getReason());
+
+        this.errorCode = iodError.getErrorCode();
+        this.serverError = httpStatusCode >= 500;
+    }
 
 }

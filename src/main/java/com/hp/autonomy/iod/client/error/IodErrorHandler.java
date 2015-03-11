@@ -28,21 +28,13 @@ public class IodErrorHandler implements ErrorHandler {
                 }
 
                 final Response response = cause.getResponse();
+                final int status = response.getStatus();
 
-                if(response.getStatus() >= 400 && response.getStatus() < 500) {
-                    // client error, return checked exception
-                    log.error("4xx error communicating with IDOL OnDemand");
-                    log.error("Detail was : {}", iodError.getDetail());
+                log.error("{} error communicating with IDOL OnDemand", status);
 
-                    return new IodClientErrorException(iodError);
-                }
-                else {
-                    // server error, throw unchecked exception
-                    log.error("5xx error communicating with IDOL OnDemand");
-                    log.error("Detail was : {}", iodError.getDetail());
+                log.error("Detail was : {}", iodError.getDetail());
 
-                    return new IodServerErrorException(iodError);
-                }
+                return new IodErrorException(iodError, status);
             }
             else {
                 // no response body, not much we can do
