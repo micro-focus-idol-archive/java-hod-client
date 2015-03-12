@@ -131,6 +131,12 @@ public class QueryTextIndexRequestBuilder {
 
     private List<String> indexes = new ArrayList<>();
 
+    /**
+     * Sets the value of the indexes parameter
+     * @param index0 The first index
+     * @param indexes The remaining indexes
+     * @return this
+     */
     public QueryTextIndexRequestBuilder setIndexes(final String index0, final String... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
@@ -138,6 +144,11 @@ public class QueryTextIndexRequestBuilder {
         return this;
     }
 
+    /**
+     * Sets the value of the indexes parameter
+     * @param indexes The indexes to query
+     * @return this
+     */
     public QueryTextIndexRequestBuilder setIndexes(final List<String> indexes) {
         this.indexes = indexes;
 
