@@ -33,9 +33,9 @@ public class IodErrorITCase extends AbstractIodClientIntegrationTest {
     @Test
     public void testNoQueryTextError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "", Arrays.asList("wiki_eng"), null);
+            queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "", null);
             fail("IodClientErrorException not thrown");
-        } catch (IodErrorException e) {
+        } catch (final IodErrorException e) {
             assertThat(e.getErrorCode(), is(IodErrorCode.MISSING_REQUIRED_PARAMETERS));
             assertThat(e.getMessage(), is("Missing required parameter(s)"));
         }

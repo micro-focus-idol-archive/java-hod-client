@@ -5,9 +5,13 @@
 
 package com.hp.autonomy.iod.client.search;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import com.hp.autonomy.iod.client.converter.DoNotConvert;
+import com.hp.autonomy.iod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
@@ -125,11 +129,27 @@ public class QueryTextIndexRequestBuilder {
      */
     private Boolean totalResults;
 
+    private List<String> indexes = new ArrayList<>();
+
+    public QueryTextIndexRequestBuilder setIndexes(final String index0, final String... indexes) {
+        this.indexes.add(index0);
+        this.indexes.addAll(Arrays.asList(indexes));
+
+        return this;
+    }
+
+    public QueryTextIndexRequestBuilder setIndexes(final List<String> indexes) {
+        this.indexes = indexes;
+
+        return this;
+    }
+
     /**
-     * @return A map of query parameters suitable for use with {@link QueryTextIndexService}
+     * @return A map of query parameters suitable for use with {@link QueryTextIndexService}. get is NOT supported on
+     * the resulting map
      */
     public Map<String, Object> build() {
-        final Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> map = new MultiMap<>();
         map.put("end_tag", endTag);
         map.put("field_text", fieldText);
         map.put("highlight", highlight);
@@ -165,12 +185,17 @@ public class QueryTextIndexRequestBuilder {
             map.put("max_date", maxDateSeconds + "s");
         }
 
+        for(final String index : indexes) {
+            map.put("indexes", index);
+        }
+
         return map;
     }
 
     /**
      * Enum type representing the possible options for the print parameter
      */
+    @DoNotConvert
     public enum Print {
         all,
         all_sections,
@@ -185,6 +210,7 @@ public class QueryTextIndexRequestBuilder {
     /**
      * Enum type representing the possible options for the highlight parameter
      */
+    @DoNotConvert
     public enum Highlight {
         off,
         terms,
@@ -194,6 +220,7 @@ public class QueryTextIndexRequestBuilder {
     /**
      * Enum type representing the possible options for the sort parameter
      */
+    @DoNotConvert
     public enum Sort {
         autn_rank,
         date,
@@ -206,6 +233,7 @@ public class QueryTextIndexRequestBuilder {
     /**
      * Enum type representing the possible options for the summary parameter
      */
+    @DoNotConvert
     public enum Summary {
         context,
         concept,
