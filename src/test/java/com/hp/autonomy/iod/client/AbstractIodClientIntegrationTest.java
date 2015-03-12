@@ -1,11 +1,10 @@
 package com.hp.autonomy.iod.client;
 
+import com.hp.autonomy.iod.client.converter.IodConverter;
 import com.hp.autonomy.iod.client.error.IodErrorHandler;
-import com.hp.autonomy.iod.client.search.QueryTextIndexService;
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import retrofit.RestAdapter;
 import retrofit.client.ApacheClient;
 import retrofit.converter.JacksonConverter;
@@ -35,7 +34,7 @@ public abstract class AbstractIodClientIntegrationTest {
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://api.idolondemand.com/1/api")
                 .setClient(new ApacheClient(builder.build()))
-                .setConverter(new JacksonConverter())
+                .setConverter(new IodConverter(new JacksonConverter()))
                 .setErrorHandler(new IodErrorHandler())
                 .build();
     }
