@@ -24,11 +24,12 @@ java-iod-client is available from the central Maven repository.
 
 java-iod-client uses [Retrofit](http://square.github.io/retrofit/) as the basis of its HTTP implementation. This
 requires the use of a RestAdapter to use the services. We have used [Jackson](https://github.com/FasterXML/jackson) for
-JSON transformation, so you will need to use the Jackson Converter.
+JSON transformation, so you will need to use the Jackson Converter. To send multipart requests to IDOL OnDemand
+correctly, you will need to wrap this in an IodConverter.
 
     final RestAdapter restAdapter = new RestAdapter.Builder()
         .setEndpoint("https://api.idolondemand.com/1/api")
-        .setConverter(new JacksonConverter())
+        .setConverter(new IodConverter(new JacksonConverter()))
         .build();
 
     final QueryTextIndexService queryTextIndexService = restAdapter.create(QueryTextIndexService.class);
@@ -38,12 +39,12 @@ You can then call the methods on queryTextIndexService to communicate with IDOL 
     final Map<String, Object> params = new QueryTextIndexRequestBuilder()
         .setAbsoluteMaxResults(10)
         .setTotalResults(true)
+        .setIndexes("wiki_eng")
         .build();
 
     final Documents documents = queryTextIndexService.queryTextIndexWithText(
         "myApiKey",
         "cats",
-        Arrays.asList("wiki_eng")
         params);
 
 ## Is it any good?
