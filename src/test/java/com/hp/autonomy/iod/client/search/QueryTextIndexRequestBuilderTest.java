@@ -6,6 +6,7 @@
 package com.hp.autonomy.iod.client.search;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -17,95 +18,95 @@ public class QueryTextIndexRequestBuilderTest {
 
     @Test
     public void testMinDateFormatFromJodaString() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMinDate(DateTime.parse("2015-03-04T10:39:00"))
-            .build();
+            .build());
 
         assertThat(queryParams.get("min_date").toString(), is("10:39:00 04/03/2015 AD"));
     }
 
     @Test
     public void testMinDateFormatJodaLong() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMinDate(new DateTime(1425465540000L))
-            .build();
+            .build());
 
         assertThat(queryParams.get("min_date").toString(), is("10:39:00 04/03/2015 AD"));
     }
 
     @Test
     public void testMaxDateFormatFromJodaString() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMaxDate(DateTime.parse("2015-03-04T10:39:00"))
-            .build();
+            .build());
 
         assertThat(queryParams.get("max_date").toString(), is("10:39:00 04/03/2015 AD"));
     }
 
     @Test
     public void testMaxDateFormatJodaLong() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMaxDate(new DateTime(1425465540000L))
-            .build();
+            .build());
 
         assertThat(queryParams.get("max_date").toString(), is("10:39:00 04/03/2015 AD"));
     }
 
     @Test
     public void testMinDatePrecedence() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMinDate(new DateTime(1425465540000L))
             .setMinDateDays(20L)
             .setMinDateSeconds(20L)
-            .build();
+            .build());
 
         assertThat(queryParams.get("min_date").toString(), is("10:39:00 04/03/2015 AD"));
 
-        final Map<String, Object> queryParams2 = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams2 = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMinDateDays(20L)
             .setMinDateSeconds(20L)
-            .build();
+            .build());
 
         assertThat(queryParams2.get("min_date").toString(), is("20"));
 
-        final Map<String, Object> queryParams3 = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams3 = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMinDate(new DateTime(1425465540000L))
             .setMinDateSeconds(20L)
-            .build();
+            .build());
 
         assertThat(queryParams3.get("min_date").toString(), is("10:39:00 04/03/2015 AD"));
     }
 
     @Test
     public void testMaxDatePrecedence() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMaxDate(new DateTime(1425465540000L))
             .setMaxDateDays(20L)
             .setMaxDateSeconds(20L)
-            .build();
+            .build());
 
         assertThat(queryParams.get("max_date").toString(), is("10:39:00 04/03/2015 AD"));
 
-        final Map<String, Object> queryParams2 = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams2 = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMaxDateDays(20L)
             .setMaxDateSeconds(20L)
-            .build();
+            .build());
 
         assertThat(queryParams2.get("max_date").toString(), is("20"));
 
-        final Map<String, Object> queryParams3 = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams3 = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setMaxDate(new DateTime(1425465540000L))
             .setMaxDateSeconds(20L)
-            .build();
+            .build());
 
         assertThat(queryParams3.get("max_date").toString(), is("10:39:00 04/03/2015 AD"));
     }
 
     @Test
     public void testPrintFields() {
-        final Map<String, Object> queryParams = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> queryParams = new HashMap<>(new QueryTextIndexRequestBuilder()
             .setPrintFields(Arrays.asList("TITLE", "CHAPTER"))
-            .build();
+            .build());
 
         assertThat(queryParams.get("print_fields").toString(), is("TITLE,CHAPTER"));
     }
