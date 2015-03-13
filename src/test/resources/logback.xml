@@ -13,6 +13,10 @@
         </encoder>
     </appender>
 
+    <logger name="com.hp.autonomy.iod" level="DEBUG" additivity="false">
+        <appender-ref ref="ConsoleAppender"/>
+    </logger>
+
     <root level="WARN">
         <appender-ref ref="ConsoleAppender"/>
     </root>
