@@ -137,7 +137,7 @@ public class QueryTextIndexRequestBuilder {
      * @param indexes The remaining indexes
      * @return this
      */
-    public QueryTextIndexRequestBuilder setIndexes(final String index0, final String... indexes) {
+    public QueryTextIndexRequestBuilder addIndexes(final String index0, final String... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
 
