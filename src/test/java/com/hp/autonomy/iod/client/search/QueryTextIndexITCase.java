@@ -5,59 +5,46 @@
 
 package com.hp.autonomy.iod.client.search;
 
+import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.error.IodErrorException;
+import org.junit.Before;
+import org.junit.Test;
+import retrofit.mime.TypedFile;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.apache.http.HttpHost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import retrofit.RestAdapter;
-import retrofit.client.ApacheClient;
-import retrofit.converter.JacksonConverter;
-import retrofit.mime.TypedFile;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class QueryTextIndexITCase {
+public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
 
+    @Override
     @Before
     public void setUp() {
-        final HttpClientBuilder builder = HttpClientBuilder.create();
+        super.setUp();
 
-        final String proxyHost = System.getProperty("hp.iod.https.proxyHost");
-
-        if(proxyHost != null) {
-            final Integer proxyPort = Integer.valueOf(System.getProperty("hp.iod.https.proxyPort", "8080"));
-            builder.setProxy(new HttpHost(proxyHost, proxyPort));
-        }
-
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://api.idolondemand.com/1/api")
-            .setClient(new ApacheClient(builder.build()))
-            .setConverter(new JacksonConverter())
-            .build();
-
-        queryTextIndexService = restAdapter.create(QueryTextIndexService.class);
+        queryTextIndexService = getRestAdapter().create(QueryTextIndexService.class);
     }
 
     @Test
-    public void testQueryForText() {
+    public void testQueryForText() throws IodErrorException {
         final Map<String, Object> params = new QueryTextIndexRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
             .setSummary(QueryTextIndexRequestBuilder.Summary.concept)
             .setPrint(QueryTextIndexRequestBuilder.Print.all)
             .setTotalResults(true)
+            .setIndexes("wiki_eng", "wiki_ita")
             .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "*", Arrays.asList("wiki_eng"), params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
 
@@ -71,14 +58,16 @@ public class QueryTextIndexITCase {
     }
 
     @Test
-    public void testQueryForFile() {
+    public void testQueryForFile() throws IodErrorException {
         final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/search/queryText.txt"));
         final Map<String, Object> params = new QueryTextIndexRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
+            .setIndexes("wiki_ita", "wiki_eng")
+            .setSort(QueryTextIndexRequestBuilder.Sort.date)
             .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(System.getProperty("hp.iod.apiKey"), file, null, params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithFile(System.getProperty("hp.iod.apiKey"), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
