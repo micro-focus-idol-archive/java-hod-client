@@ -132,7 +132,7 @@ public class QueryTextIndexRequestBuilder {
     private List<String> indexes = new ArrayList<>();
 
     /**
-     * Sets the value of the indexes parameter
+     * Adds indexes to the indexes parameter
      * @param index0 The first index
      * @param indexes The remaining indexes
      * @return this
