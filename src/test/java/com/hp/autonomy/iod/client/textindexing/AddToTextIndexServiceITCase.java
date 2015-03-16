@@ -6,7 +6,7 @@
 package com.hp.autonomy.iod.client.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
-import com.hp.autonomy.iod.client.async.JobId;
+import com.hp.autonomy.iod.client.job.JobId;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

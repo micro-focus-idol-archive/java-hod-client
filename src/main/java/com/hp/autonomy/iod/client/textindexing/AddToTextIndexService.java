@@ -5,7 +5,7 @@
 
 package com.hp.autonomy.iod.client.textindexing;
 
-import com.hp.autonomy.iod.client.async.JobId;
+import com.hp.autonomy.iod.client.job.JobId;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
