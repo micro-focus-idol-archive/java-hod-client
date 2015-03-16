@@ -41,7 +41,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .setSummary(QueryTextIndexRequestBuilder.Summary.concept)
             .setPrint(QueryTextIndexRequestBuilder.Print.all)
             .setTotalResults(true)
-            .setIndexes("wiki_eng", "wiki_ita")
+            .addIndexes("wiki_eng", "wiki_ita")
             .build();
 
         final Documents documents = queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "*", params);
@@ -63,7 +63,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
         final Map<String, Object> params = new QueryTextIndexRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
-            .setIndexes("wiki_ita", "wiki_eng")
+            .addIndexes("wiki_ita", "wiki_eng")
             .setSort(QueryTextIndexRequestBuilder.Sort.date)
             .build();
 
