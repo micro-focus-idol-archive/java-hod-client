@@ -39,7 +39,15 @@ public abstract class AbstractIodClientIntegrationTest {
                 .build();
     }
 
+    public String getIndex() {
+        return "java-iod-client-integration-tests";
+    }
+
     public RestAdapter getRestAdapter() {
         return restAdapter;
+    }
+
+    public String getApiKey() {
+        return System.getProperty("hp.iod.apiKey");
     }
 }
