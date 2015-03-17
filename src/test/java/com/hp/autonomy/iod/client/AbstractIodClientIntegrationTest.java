@@ -32,7 +32,7 @@ public abstract class AbstractIodClientIntegrationTest {
         }
 
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://api.idolondemand.com/1/api")
+                .setEndpoint("http://api.idolondemand.com/1")
                 .setClient(new ApacheClient(builder.build()))
                 .setConverter(new IodConverter(new JacksonConverter()))
                 .setErrorHandler(new IodErrorHandler())

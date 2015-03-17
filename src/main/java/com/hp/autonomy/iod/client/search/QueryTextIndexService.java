@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public interface QueryTextIndexService {
 
-    String URL = "/sync/querytextindex/v1";
+    String URL = "/api/sync/querytextindex/v1";
 
     /**
      * Query IDOL OnDemand for documents matching query text
