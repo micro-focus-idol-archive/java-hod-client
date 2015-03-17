@@ -28,6 +28,11 @@ public class JobId {
         this.jobId = jobId;
     }
 
+    @Override
+    public String toString() {
+        return jobId;
+    }
+
     @Setter
     @Accessors(chain = true)
     @JsonPOJOBuilder(withPrefix = "set")
