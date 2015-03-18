@@ -7,11 +7,15 @@ package com.hp.autonomy.iod.client.error;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.hp.autonomy.iod.client.job.Action;
+import com.hp.autonomy.iod.client.job.Status;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 @Data
 @JsonDeserialize(builder = IodError.Builder.class)
@@ -22,6 +26,8 @@ public class IodError {
     private final IodErrorCode errorCode;
     private final String reason;
     private final Object detail;
+    private final List<Action<?>> actions;
+    private final Status status;
 
     @Setter
     @Accessors(chain = true)
@@ -31,6 +37,8 @@ public class IodError {
         private IodErrorCode errorCode;
         private String reason;
         private Object detail;
+        private List<Action<?>> actions;
+        private Status status;
 
         public Builder setError(final int error) {
             this.error = error;
@@ -39,7 +47,7 @@ public class IodError {
         }
 
         public IodError build() {
-            return new IodError(error, errorCode, reason, detail);
+            return new IodError(error, errorCode, reason, detail, actions, status);
         }
     }
 
