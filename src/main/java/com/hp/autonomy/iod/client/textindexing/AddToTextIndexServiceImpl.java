@@ -37,7 +37,19 @@ public class AddToTextIndexServiceImpl {
     }
 
     public void destroy() {
-        // TODO shutdown ExecutorService
+        log.debug("Shutting down executor service");
+
+        executorService.shutdown();
+
+        try {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+                log.debug("Timed out waiting for executor service to die, calling shutdownNow");
+                executorService.shutdownNow();
+            }
+        } catch (final InterruptedException e) {
+            log.debug("Interrupted waiting for executor service to die, calling shutdownNow");
+            executorService.shutdownNow();
+        }
     }
 
     public void addJsonToTextIndex(

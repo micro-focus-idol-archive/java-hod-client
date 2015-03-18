@@ -10,9 +10,9 @@ import com.hp.autonomy.iod.client.error.IodErrorCode;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import com.hp.autonomy.iod.client.job.IodJobCallback;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import retrofit.RestAdapter;
 import retrofit.mime.TypedFile;
 
 import java.io.File;
@@ -38,6 +38,11 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
         super.setUp();
 
         addToTextIndexService = new AddToTextIndexServiceImpl(getRestAdapter().create(AddToTextIndexService.class));
+    }
+
+    @After
+    public void tearDown() {
+        addToTextIndexService.destroy();
     }
 
     @Test
