@@ -6,6 +6,7 @@
 package com.hp.autonomy.iod.client.textindexing;
 
 import com.hp.autonomy.iod.client.error.IodError;
+import com.hp.autonomy.iod.client.error.IodErrorCode;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import com.hp.autonomy.iod.client.job.Action;
 import com.hp.autonomy.iod.client.job.IodJobCallback;
@@ -15,10 +16,13 @@ import com.hp.autonomy.iod.client.job.Status;
 import lombok.extern.slf4j.Slf4j;
 import retrofit.mime.TypedInput;
 
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class AddToTextIndexServiceImpl {
@@ -102,9 +106,22 @@ public class AddToTextIndexServiceImpl {
 
     private class PollingStatusRunnable implements Runnable {
 
+        private static final int MAX_TRIES = 3;
+
+        private final Set<IodErrorCode> DO_NOT_RETRY_CODES = EnumSet.of(
+                IodErrorCode.API_KEY_REQUIRED,
+                IodErrorCode.INVALID_API_KEY,
+                IodErrorCode.UNKNOWN_API_KEY,
+                IodErrorCode.UNAUTHORIZED_API_KEY,
+                IodErrorCode.USER_ACCOUNT_DISABLED,
+                IodErrorCode.INVALID_JOB_ID
+        );
+
         private final String apiKey;
         private final JobId jobId;
         private final IodJobCallback<AddToTextIndexResponse> callback;
+
+        private final AtomicInteger tries = new AtomicInteger(0);
 
         private PollingStatusRunnable(final String apiKey, final JobId jobId, final IodJobCallback<AddToTextIndexResponse> callback) {
             this.apiKey = apiKey;
@@ -141,13 +158,32 @@ public class AddToTextIndexServiceImpl {
                 else {
                     log.debug("Not finished or failed, retrying");
 
+                    // we got a status successfully, so reset the counter
+                    tries.set(0);
+
                     executorService.schedule(this, 2, TimeUnit.SECONDS);
                 }
             } catch (final IodErrorException e) {
                 log.error("Error retrieving job status for jobId: {}", jobId);
                 log.error("Cause:", e);
 
-                callback.error(e.getErrorCode());
+                if(DO_NOT_RETRY_CODES.contains(e.getErrorCode())) {
+                    log.error("Unrecoverable error, will not retry");
+
+                    callback.error(e.getErrorCode());
+                }
+                else if (tries.get() >= MAX_TRIES) {
+                    log.error("Max retries reached, will not retry");
+
+                    callback.error(e.getErrorCode());
+                }
+                else {
+                    log.error("Retrying");
+
+                    tries.incrementAndGet();
+
+                    executorService.schedule(this, 2, TimeUnit.SECONDS);
+                }
             } catch (final RuntimeException e) {
                 log.error("Error retrieving job status for jobId: {}", jobId);
                 log.error("Cause:", e);
