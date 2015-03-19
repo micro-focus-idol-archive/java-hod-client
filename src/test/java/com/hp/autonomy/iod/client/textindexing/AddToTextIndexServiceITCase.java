@@ -6,9 +6,8 @@
 package com.hp.autonomy.iod.client.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
-import com.hp.autonomy.iod.client.error.IodErrorCode;
 import com.hp.autonomy.iod.client.error.IodErrorException;
-import com.hp.autonomy.iod.client.job.IodJobCallback;
+import com.hp.autonomy.iod.client.util.TestCallback;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
@@ -59,13 +58,13 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
                 .build();
 
         final CountDownLatch latch = new CountDownLatch(1);
-        final TestCallback callback = new TestCallback(latch);
+        final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
         addToTextIndexService.addJsonToTextIndex(getApiKey(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
-        final AddToTextIndexResponse result = callback.result;
+        final AddToTextIndexResponse result = callback.getResult();
 
         assertThat(result, is(notNullValue()));
         assertThat(result.getIndex(), is(getIndex()));
@@ -91,13 +90,13 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
                 .build();
 
         final CountDownLatch latch = new CountDownLatch(1);
-        final TestCallback callback = new TestCallback(latch);
+        final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
         addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, callback);
 
         latch.await();
 
-        final AddToTextIndexResponse result = callback.result;
+        final AddToTextIndexResponse result = callback.getResult();
 
         assertThat(result, is(notNullValue()));
         assertThat(result.getIndex(), is(getIndex()));
@@ -106,40 +105,6 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
         final AddToTextIndexReference referenceObject = result.getReferences().get(0);
 
         assertThat(referenceObject.getReference(), is(reference));
-    }
-
-    private static class TestCallback implements IodJobCallback<AddToTextIndexResponse> {
-
-        private final CountDownLatch latch;
-
-        private volatile AddToTextIndexResponse result;
-
-        public TestCallback(final CountDownLatch latch) {
-            this.latch = latch;
-        }
-
-        @Override
-        public void success(final AddToTextIndexResponse result) {
-            log.debug("Result from IDOL OnDemand: {}", result);
-
-            this.result = result;
-
-            latch.countDown();
-        }
-
-        @Override
-        public void error(final IodErrorCode error) {
-            log.error("Error code " + error + " returned from IDOL OnDemand");
-
-            latch.countDown();
-        }
-
-        @Override
-        public void handleException(final RuntimeException exception) {
-            log.error("Runtime exception thrown", exception);
-
-            latch.countDown();
-        }
     }
 
 }
