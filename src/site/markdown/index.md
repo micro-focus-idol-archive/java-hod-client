@@ -29,7 +29,7 @@ correctly, you will need to wrap this in an IodConverter. An error handler is su
 IDOL OnDemand.
 
     final RestAdapter restAdapter = new RestAdapter.Builder()
-        .setEndpoint("https://api.idolondemand.com/1/api")
+        .setEndpoint("https://api.idolondemand.com/1")
         .setConverter(new IodConverter(new JacksonConverter()))
         .setErrorHandler(new IodErrorHandler())
         .build();

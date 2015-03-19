@@ -5,8 +5,6 @@ import com.hp.autonomy.iod.client.search.QueryTextIndexService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -38,6 +36,17 @@ public class IodErrorITCase extends AbstractIodClientIntegrationTest {
         } catch (final IodErrorException e) {
             assertThat(e.getErrorCode(), is(IodErrorCode.MISSING_REQUIRED_PARAMETERS));
             assertThat(e.getMessage(), is("Missing required parameter(s)"));
+        }
+    }
+
+    @Test
+    public void testIodReturnsJobError() {
+        try {
+            queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "OR", null);
+            fail("IodErrorException not thrown");
+        } catch (final IodErrorException e) {
+            assertThat(e.getErrorCode(), is(IodErrorCode.BACKEND_REQUEST_FAILED));
+            assertThat(e.getMessage(), is("Backend request failed"));
         }
     }
 

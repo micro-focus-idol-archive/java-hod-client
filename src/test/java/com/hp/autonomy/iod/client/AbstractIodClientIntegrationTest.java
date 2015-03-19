@@ -32,14 +32,22 @@ public abstract class AbstractIodClientIntegrationTest {
         }
 
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://api.idolondemand.com/1/api")
+                .setEndpoint("http://api.idolondemand.com/1")
                 .setClient(new ApacheClient(builder.build()))
                 .setConverter(new IodConverter(new JacksonConverter()))
                 .setErrorHandler(new IodErrorHandler())
                 .build();
     }
 
+    public String getIndex() {
+        return "java-iod-client-integration-tests";
+    }
+
     public RestAdapter getRestAdapter() {
         return restAdapter;
+    }
+
+    public String getApiKey() {
+        return System.getProperty("hp.iod.apiKey");
     }
 }

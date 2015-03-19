@@ -9,12 +9,13 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import lombok.Data;
 import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A document returned from an IDOL OnDemand index
@@ -24,37 +25,37 @@ import lombok.Setter;
 public class Document {
 
     /**
-     * @returns The reference of the document
+     * @return The reference of the document
      */
     private final String reference;
 
     /**
-     * @returns The weight (relevance) of the document
+     * @return The weight (relevance) of the document
      */
     private final double weight;
 
     /**
-     * @returns The stemmed terms from the query which matched the document
+     * @return The stemmed terms from the query which matched the document
      */
     private final Set<String> links;
 
     /**
-     * @returns The index in which the document resides
+     * @return The index in which the document resides
      */
     private final String index;
 
     /**
-     * @returns The title of the document
+     * @return The title of the document
      */
     private final String title;
 
     /**
-     * @returns A summary of the document. If summaries were not requested, this will be the empty string
+     * @return A summary of the document. If summaries were not requested, this will be the empty string
      */
     private final String summary;
 
     /**
-     * @returns The content of the document. If content were not requested, this will be the empty string
+     * @return The content of the document. If content were not requested, this will be the empty string
      */
     private final String content;
 
@@ -75,6 +76,7 @@ public class Document {
     }
 
     @Setter
+    @Accessors(chain = true)
     @JsonPOJOBuilder(withPrefix = "set")
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
