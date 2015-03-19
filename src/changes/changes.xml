@@ -2,6 +2,20 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.3.0" date="">
+            <action dev="alex-scown-hp" type="add">
+                Add support for the addtotextindex API
+            </action>
+            <action dev="alex-scown-hp" type="add">
+                Add support for the deletefromtextindex API
+            </action>
+            <action dev="alex-scown-hp" type="add">
+                Add support for the viewdocument API
+            </action>
+            <action dev="alex-scown-hp" type="fix">
+                Fix IodErrorHandler to support job style errors on synchronous requests
+            </action>
+        </release>
         <release version="0.2.0" date="2015-03-13">
             <action dev="alex-scown-hp" type="add">
                 Add an ErrorHandler implementation capable of processing JSON responses from IDOL OnDemand.
