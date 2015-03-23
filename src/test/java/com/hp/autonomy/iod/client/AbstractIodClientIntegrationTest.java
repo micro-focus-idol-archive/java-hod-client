@@ -2,6 +2,8 @@ package com.hp.autonomy.iod.client;
 
 import com.hp.autonomy.iod.client.converter.IodConverter;
 import com.hp.autonomy.iod.client.error.IodErrorHandler;
+import com.hp.autonomy.iod.client.util.ApiKeyRequestInterceptor;
+import com.hp.autonomy.iod.client.util.ApiKeyService;
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
@@ -36,6 +38,7 @@ public abstract class AbstractIodClientIntegrationTest {
                 .setClient(new ApacheClient(builder.build()))
                 .setConverter(new IodConverter(new JacksonConverter()))
                 .setErrorHandler(new IodErrorHandler())
+                .setRequestInterceptor(new ApiKeyRequestInterceptor(getApiKey()))
                 .build();
     }
 

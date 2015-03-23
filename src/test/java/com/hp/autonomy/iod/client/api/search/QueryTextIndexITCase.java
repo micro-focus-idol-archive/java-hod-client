@@ -43,7 +43,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .addIndexes("wiki_eng", "wiki_ita")
             .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText(System.getProperty("hp.iod.apiKey"), "*", params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithText("*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
 

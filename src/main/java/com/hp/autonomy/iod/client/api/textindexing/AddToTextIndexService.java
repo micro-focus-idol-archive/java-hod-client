@@ -104,7 +104,18 @@ public interface AddToTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Get the status of an AddToTextIndex job
+     * Get the status of an AddToTextIndex job using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param jobId The id of the job
+     * @return An object containing the status of the job along with the result if the job has finished
+     * @throws IodErrorException If an error occurred retrieving the status
+     */
+    @GET("/job/status/{jobId}")
+    AddToTextIndexJobStatus getJobStatus(
+            @Path("jobId") JobId jobId
+    ) throws IodErrorException;
+
+    /**
+     * Get the status of an AddToTextIndex job using teh given API key
      * @param apiKey The API key to use to authenticate the request
      * @param jobId The id of the job
      * @return An object containing the status of the job along with the result if the job has finished
@@ -117,7 +128,18 @@ public interface AddToTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Get the result of an AddToTextIndex job
+     * Get the result of an AddToTextIndex job using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param jobId The id of the job
+     * @return An object containing the result of the job
+     * @throws IodErrorException If an error occurred retrieving the result
+     */
+    @GET("/job/result/{jobId}")
+    AddToTextIndexJobStatus getJobResult(
+            @Path("jobId") JobId jobId
+    ) throws IodErrorException;
+
+    /**
+     * Get the result of an AddToTextIndex job using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param jobId The id of the job
      * @return An object containing the result of the job

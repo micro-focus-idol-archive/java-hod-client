@@ -25,7 +25,20 @@ public interface QueryTextIndexService {
     String URL = "/api/sync/querytextindex/v1";
 
     /**
-     * Query IDOL OnDemand for documents matching query text
+     * Query IDOL OnDemand for documents matching query text using an API key provided by a
+     * {@link retrofit.RequestInterceptor}
+     * @param text The query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     */
+    @GET(URL)
+    Documents queryTextIndexWithText(
+            @Query("text") String text,
+            @QueryMap Map<String, Object> params
+    ) throws IodErrorException;
+
+    /**
+     * Query IDOL OnDemand for documents matching query text using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
@@ -39,7 +52,21 @@ public interface QueryTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Query IDOL OnDemand for documents using query text from an object store object
+     * Query IDOL OnDemand for documents using query text from an object store object using an API key
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param reference An IDOL OnDemand reference obtained from either the Expand Container or Store Object API.
+     *                  The contents of the object will be used as the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     */
+    @GET(URL)
+    Documents queryTextIndexWithReference(
+            @Query("reference") String reference,
+            @QueryMap Map<String, Object> params
+    ) throws IodErrorException;
+
+    /**
+     * Query IDOL OnDemand for documents using query text from an object store object using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param reference An IDOL OnDemand reference obtained from either the Expand Container or Store Object API.
      *                  The contents of the object will be used as the query text
@@ -54,7 +81,20 @@ public interface QueryTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Query IDOL OnDemand for documents using query text from a url
+     * Query IDOL OnDemand for documents using query text from a url using an API key
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param url A publicly accessible HTTP URL from which the query text can be retrieved
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     */
+    @GET(URL)
+    Documents queryTextIndexWithUrl(
+            @Query("url") String url,
+            @QueryMap Map<String, Object> params
+    ) throws IodErrorException;
+
+    /**
+     * Query IDOL OnDemand for documents using query text from a url using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
