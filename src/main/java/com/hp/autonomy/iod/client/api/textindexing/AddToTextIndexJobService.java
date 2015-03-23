@@ -12,7 +12,7 @@ import com.hp.autonomy.iod.client.job.JobId;
 import com.hp.autonomy.iod.client.job.JobStatus;
 import com.hp.autonomy.iod.client.job.PollingJobStatusRunnable;
 import lombok.extern.slf4j.Slf4j;
-import retrofit.mime.TypedInput;
+import retrofit.mime.TypedOutput;
 
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
@@ -122,7 +122,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
      */
     public void addFileToTextIndex(
             final String apiKey,
-            final TypedInput file,
+            final TypedOutput file,
             final String index,
             final Map<String, Object> params,
             final IodJobCallback<AddToTextIndexResponse> callback

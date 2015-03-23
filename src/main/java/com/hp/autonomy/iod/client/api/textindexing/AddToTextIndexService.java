@@ -19,7 +19,7 @@ import retrofit.http.Part;
 import retrofit.http.PartMap;
 import retrofit.http.Path;
 import retrofit.http.Query;
-import retrofit.mime.TypedInput;
+import retrofit.mime.TypedOutput;
 
 import java.util.List;
 import java.util.Map;
@@ -62,7 +62,7 @@ public interface AddToTextIndexService {
     @Multipart
     JobId addFileToTextIndex(
             @Part("apiKey") String apiKey,
-            @Part("file") TypedInput file,
+            @Part("file") TypedOutput file,
             @Part("index") String index,
             @PartMap Map<String, Object> params
     ) throws IodErrorException;
