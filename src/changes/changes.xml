@@ -2,7 +2,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
-        <release version="0.3.0" date="">
+        <release version="0.3.0" date="2015-03-23">
             <action dev="alex-scown-hp" type="move">
                 API services have been moved into the API package. This breaks compatibility with previous versions. The
                 migration path is to fix the import statements.
