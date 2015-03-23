@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.formatconversion;
+package com.hp.autonomy.iod.client.api.formatconversion;
 
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import retrofit.client.Response;

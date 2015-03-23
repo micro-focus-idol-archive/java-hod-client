@@ -3,8 +3,9 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.api.textindexing;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.AccessLevel;
@@ -13,38 +14,36 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 /**
- * Holds the response from the AddToTextIndex API
+ * Holds the response from the DeleteFromTextIndex API
  */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonDeserialize(builder = AddToTextIndexResponse.Builder.class)
-public class AddToTextIndexResponse {
+@JsonDeserialize(builder = DeleteFromTextIndexResponse.Builder.class)
+public class DeleteFromTextIndexResponse {
 
     /**
-     * @return The index the documents were added to
+     * @return The index containing the deleted documents
      */
     private final String index;
 
     /**
-     * @return A list containing the references of the indexed documents
+     * @return The number of deleted documents
      */
-    private final List<AddToTextIndexReference> references;
+    private final int documentsDeleted;
 
-    @JsonPOJOBuilder(withPrefix = "set")
     @Setter
     @Accessors(chain = true)
+    @JsonPOJOBuilder(withPrefix = "set")
     public static class Builder {
-
         private String index;
-        private List<AddToTextIndexReference> references;
 
-        public AddToTextIndexResponse build() {
-            return new AddToTextIndexResponse(index, references);
+        @JsonProperty("documents_deleted")
+        private int documentsDeleted;
+
+        public DeleteFromTextIndexResponse build() {
+            return new DeleteFromTextIndexResponse(index, documentsDeleted);
         }
-
     }
 
 }
