@@ -14,12 +14,22 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Holds the response from the DeleteFromTextIndex API
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = DeleteFromTextIndexResponse.Builder.class)
 public class DeleteFromTextIndexResponse {
 
+    /**
+     * @return The index containing the deleted documents
+     */
     private final String index;
+
+    /**
+     * @return The number of deleted documents
+     */
     private final int documentsDeleted;
 
     @Setter

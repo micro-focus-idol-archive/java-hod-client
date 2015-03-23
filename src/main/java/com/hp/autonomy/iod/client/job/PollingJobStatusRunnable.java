@@ -3,16 +3,11 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.job;
 
 import com.hp.autonomy.iod.client.error.IodError;
 import com.hp.autonomy.iod.client.error.IodErrorCode;
 import com.hp.autonomy.iod.client.error.IodErrorException;
-import com.hp.autonomy.iod.client.job.Action;
-import com.hp.autonomy.iod.client.job.IodJobCallback;
-import com.hp.autonomy.iod.client.job.JobId;
-import com.hp.autonomy.iod.client.job.JobStatus;
-import com.hp.autonomy.iod.client.job.Status;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.EnumSet;

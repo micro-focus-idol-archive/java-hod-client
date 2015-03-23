@@ -13,20 +13,32 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Abstract service containing code common to all job services
+ */
 @Slf4j
 public abstract class AbstractJobService {
 
     @Getter(AccessLevel.PROTECTED)
     private final ScheduledExecutorService executorService;
 
+    /**
+     * Constructs a new service with the default executor service
+     */
     public AbstractJobService() {
         this(Executors.newScheduledThreadPool(8));
     }
 
+    /**
+     * Constructs a new service with the given executor service
+     */
     public AbstractJobService(final ScheduledExecutorService executorService) {
         this.executorService = executorService;
     }
 
+    /**
+     * Shuts down the executor service. This method should be called when the job service is no longer needed
+     */
     public void destroy() {
         log.debug("Shutting down executor service");
 

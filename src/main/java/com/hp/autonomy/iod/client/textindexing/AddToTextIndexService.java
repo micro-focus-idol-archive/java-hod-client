@@ -50,7 +50,7 @@ public interface AddToTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Index JSON documents into IDOL OnDemand
+     * Index a file into IDOL OnDemand
      * @param apiKey The API key to use to authenticate the request
      * @param file A file containing the content of the document
      * @param index The index to add to
@@ -68,7 +68,7 @@ public interface AddToTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Index JSON documents into IDOL OnDemand
+     * Index an object store object into IDOL OnDemand
      * @param apiKey The API key to use to authenticate the request
      * @param reference An object store reference pointing at a file to be used for document content
      * @param index The index to add to
@@ -86,7 +86,7 @@ public interface AddToTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Index JSON documents into IDOL OnDemand
+     * Index a publicly accessible into IDOL OnDemand
      * @param apiKey The API key to use to authenticate the request
      * @param url A publicly accessible url containing the document content
      * @param index The index to add to
@@ -103,18 +103,35 @@ public interface AddToTextIndexService {
             @PartMap Map<String, Object> params
     ) throws IodErrorException;
 
+    /**
+     * Get the status of an AddToTextIndex job
+     * @param apiKey The API key to use to authenticate the request
+     * @param jobId The id of the job
+     * @return An object containing the status of the job along with the result if the job has finished
+     * @throws IodErrorException If an error occurred retrieving the status
+     */
     @GET("/job/status/{jobId}")
     AddToTextIndexJobStatus getJobStatus(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId
     ) throws IodErrorException;
 
+    /**
+     * Get the result of an AddToTextIndex job
+     * @param apiKey The API key to use to authenticate the request
+     * @param jobId The id of the job
+     * @return An object containing the result of the job
+     * @throws IodErrorException If an error occurred retrieving the result
+     */
     @GET("/job/result/{jobId}")
     AddToTextIndexJobStatus getJobResult(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId
     ) throws IodErrorException;
 
+    /**
+     * {@link JobStatus} subtype which encodes the generic type for JSON parsing
+     */
     class AddToTextIndexJobStatus extends JobStatus<AddToTextIndexResponse> {
 
         public AddToTextIndexJobStatus(
@@ -126,6 +143,9 @@ public interface AddToTextIndexService {
         }
     }
 
+    /**
+     * {@link Action} subtype which encodes the generic type for JSON parsing
+     */
     class AddToTextIndexJobStatusAction extends Action<AddToTextIndexResponse> {
         // need these @JsonProperty or it doesn't work
         public AddToTextIndexJobStatusAction(
