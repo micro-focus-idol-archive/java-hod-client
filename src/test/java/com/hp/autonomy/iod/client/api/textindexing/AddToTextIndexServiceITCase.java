@@ -77,7 +77,7 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
 
     @Test
     public void testAddFileToTextIndex() throws IodErrorException, InterruptedException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/textindexing/the-end.txt"));
+        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/textindexing/the-end.txt"));
         final String reference = "63edb67f-c930-4b7b-8c33-2cd28e5cc670";
 
         final Map<String, Object> additionalMetadata = new HashMap<>();

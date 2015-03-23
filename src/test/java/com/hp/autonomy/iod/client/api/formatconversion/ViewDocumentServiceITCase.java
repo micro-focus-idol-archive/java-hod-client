@@ -35,7 +35,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
 
     @Test
     public void testViewFile() throws IodErrorException, IOException {
-        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/formatconversion/test-file.txt");
+        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/api/formatconversion/test-file.txt");
 
         final Map<String, Object> params = new ViewDocumentRequestBuilder()
                 .addHighlightExpressions("ventilation")
@@ -56,7 +56,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
 
     @Test
     public void testViewFileAsHtmlString() throws IodErrorException {
-        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/formatconversion/test-file.txt");
+        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/api/formatconversion/test-file.txt");
 
         final Map<String, Object> params = new ViewDocumentRequestBuilder()
                 .addHighlightExpressions("ventilation")
