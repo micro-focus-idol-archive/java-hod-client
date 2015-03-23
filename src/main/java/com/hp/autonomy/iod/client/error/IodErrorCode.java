@@ -5,8 +5,6 @@
 
 package com.hp.autonomy.iod.client.error;
 
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
 

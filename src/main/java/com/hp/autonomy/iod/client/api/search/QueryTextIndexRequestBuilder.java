@@ -5,11 +5,6 @@
 
 package com.hp.autonomy.iod.client.api.search;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import com.hp.autonomy.iod.client.converter.DoNotConvert;
 import com.hp.autonomy.iod.client.util.MultiMap;
 import lombok.Setter;
@@ -18,6 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Helper class for building up optional parameters for the Query Text Index API. The default value for all parameters
