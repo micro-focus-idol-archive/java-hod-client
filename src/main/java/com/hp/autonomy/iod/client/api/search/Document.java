@@ -64,6 +64,11 @@ public class Document {
      */
     private final Map<String, Object> fields;
 
+    /**
+     * @returns The section number of the result document
+     */
+    private final Integer section;
+
     private Document(final Builder builder) {
         reference = builder.reference;
         weight = builder.weight;
@@ -73,6 +78,7 @@ public class Document {
         summary = builder.summary;
         fields = builder.fields;
         content = builder.content;
+        section = builder.section;
     }
 
     @Setter
@@ -86,6 +92,7 @@ public class Document {
         private Set<String> links;
         private String index;
         private String title;
+        private Integer section;
 
         @SuppressWarnings("FieldMayBeFinal")
         private String content = "";

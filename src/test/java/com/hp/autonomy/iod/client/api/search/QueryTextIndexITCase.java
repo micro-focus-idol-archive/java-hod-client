@@ -38,7 +38,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
             .setSummary(QueryTextIndexRequestBuilder.Summary.concept)
-            .setPrint(QueryTextIndexRequestBuilder.Print.all)
+            .setPrint(Print.all)
             .setTotalResults(true)
             .addIndexes("wiki_eng", "wiki_ita")
             .build();
