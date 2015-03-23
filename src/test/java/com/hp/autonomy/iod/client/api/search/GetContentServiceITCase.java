@@ -30,8 +30,9 @@ public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
         final Map<String, Object> params = new GetContentRequestBuilder()
                 .build();
 
-        final Documents documents = getContentService.getContent(getApiKey(), getIndex(),
-                Arrays.asList("3ac70cc2-606e-486a-97d0-511e762b2183"), params);
+        final Documents documents = getContentService.getContent(getApiKey(),
+                Arrays.asList("3ac70cc2-606e-486a-97d0-511e762b2183"), getIndex(),
+                params);
 
         final List<Document> documentList = documents.getDocuments();
 
