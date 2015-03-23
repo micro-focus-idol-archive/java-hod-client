@@ -11,7 +11,7 @@ java-iod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.iod</groupId>
         <artifactId>java-iod-client</artifactId>
-        <version>0.2.0</version>
+        <version>0.3.0</version>
     </dependency>
 
 ## License
