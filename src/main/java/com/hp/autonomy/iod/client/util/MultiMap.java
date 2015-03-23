@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ import java.util.Set;
 @SuppressWarnings("NullableProblems")
 public class MultiMap<K,V> implements Map<K,V> {
 
-    private final Set<Map.Entry<K, V>> entries = new HashSet<>();
+    private final Set<Map.Entry<K, V>> entries = new LinkedHashSet<>();
 
     /**
      * @return The number of entries in the map

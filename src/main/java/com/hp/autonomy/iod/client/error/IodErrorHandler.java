@@ -5,10 +5,13 @@
 
 package com.hp.autonomy.iod.client.error;
 
+import com.hp.autonomy.iod.client.job.Action;
 import lombok.extern.slf4j.Slf4j;
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.util.List;
 
 @Slf4j
 public class IodErrorHandler implements ErrorHandler {
@@ -18,7 +21,15 @@ public class IodErrorHandler implements ErrorHandler {
 
         if(kind == RetrofitError.Kind.HTTP) {
             // IOD returned an unsuccessful status code, parse the JSON response and throw something better
-            final IodError iodError = (IodError) cause.getBodyAs(IodError.class);
+            IodError iodError = (IodError) cause.getBodyAs(IodError.class);
+
+            // if has actions, pull the error out of the action as it will be more useful
+            final List<Action<?>> actions = iodError.getActions();
+
+            if(actions != null && !actions.isEmpty()) {
+                // IOD has given us job style output
+                iodError = actions.get(0).getErrors().get(0);
+            }
 
             // may be null if no response body
             if (iodError != null) {

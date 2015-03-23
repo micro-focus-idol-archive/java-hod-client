@@ -3,12 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.search;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+package com.hp.autonomy.iod.client.api.search;
 
 import com.hp.autonomy.iod.client.converter.DoNotConvert;
 import com.hp.autonomy.iod.client.util.MultiMap;
@@ -18,6 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Helper class for building up optional parameters for the Query Text Index API. The default value for all parameters
@@ -132,12 +132,12 @@ public class QueryTextIndexRequestBuilder {
     private List<String> indexes = new ArrayList<>();
 
     /**
-     * Sets the value of the indexes parameter
+     * Adds indexes to the indexes parameter
      * @param index0 The first index
      * @param indexes The remaining indexes
      * @return this
      */
-    public QueryTextIndexRequestBuilder setIndexes(final String index0, final String... indexes) {
+    public QueryTextIndexRequestBuilder addIndexes(final String index0, final String... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
 
