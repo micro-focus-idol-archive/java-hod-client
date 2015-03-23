@@ -204,21 +204,6 @@ public class QueryTextIndexRequestBuilder {
     }
 
     /**
-     * Enum type representing the possible options for the print parameter
-     */
-    @DoNotConvert
-    public enum Print {
-        all,
-        all_sections,
-        date,
-        fields,
-        none,
-        no_results,
-        parametric,
-        reference
-    }
-
-    /**
      * Enum type representing the possible options for the highlight parameter
      */
     @DoNotConvert
