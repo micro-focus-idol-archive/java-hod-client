@@ -15,8 +15,8 @@ public interface GetContentService {
     @GET(URL)
     Documents getContent(
             @Query("apiKey") String apiKey,
-            @Query("indexes") String indexes,
             @Query("index_reference") List<String> indexReference,
+            @Query("indexes") String indexes,
             @QueryMap Map<String, Object> params
     ) throws IodErrorException;
 }
