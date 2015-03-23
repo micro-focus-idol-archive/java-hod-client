@@ -3,6 +3,10 @@
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
         <release version="0.3.0" date="">
+            <action dev="alex-scown-hp" type="move">
+                API services have been moved into the API package. This breaks compatibility with previous versions. The
+                migration path is to fix the import statements.
+            </action>
             <action dev="alex-scown-hp" type="add">
                 Add support for the addtotextindex API
             </action>
