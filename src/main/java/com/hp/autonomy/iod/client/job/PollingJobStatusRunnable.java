@@ -16,10 +16,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Runnable which will poll the IDOL OnDemand job status API until the job has finished or failed
+ * @param <T> The type that will be returned if the job complete successfully
+ */
 @Slf4j
 public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
     private static final int MAX_TRIES = 3;
+    private static final int WAIT_SECONDS = 2;
 
     private final Set<IodErrorCode> DO_NOT_RETRY_CODES = EnumSet.of(
             IodErrorCode.API_KEY_REQUIRED,
@@ -37,6 +42,13 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
     private final AtomicInteger tries = new AtomicInteger(0);
 
+    /**
+     * Creates a new PollingJobStatusRunnable
+     * @param apiKey The API key used to submit the job
+     * @param jobId The ID of the job
+     * @param callback The callback that will be called with the result
+     * @param executorService The executor service responsible for running the runnable
+     */
     public PollingJobStatusRunnable(final String apiKey, final JobId jobId, final IodJobCallback<T> callback, final ScheduledExecutorService executorService) {
         this.apiKey = apiKey;
         this.jobId = jobId;
@@ -44,8 +56,19 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
         this.executorService = executorService;
     }
 
+    /**
+     *
+     * @param apiKey The API key used to submit the job
+     * @param jobId The ID of the job
+     * @return A job status of the correct return type
+     * @throws IodErrorException
+     */
     public abstract JobStatus<T> getJobStatus(final String apiKey, final JobId jobId) throws IodErrorException;
 
+    /**
+     * Checks the status of the job. If the job has not finished, the runnable will schedule itself to run again after a
+     * short wait
+     */
     @Override
     public void run() {
         try {
@@ -78,7 +101,7 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
                 // we got a status successfully, so reset the counter
                 tries.set(0);
 
-                executorService.schedule(this, 2, TimeUnit.SECONDS);
+                executorService.schedule(this, WAIT_SECONDS, TimeUnit.SECONDS);
             }
         } catch (final IodErrorException e) {
             log.error("Error retrieving job status for jobId: {}", jobId);
@@ -99,7 +122,7 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
                 tries.incrementAndGet();
 
-                executorService.schedule(this, 2, TimeUnit.SECONDS);
+                executorService.schedule(this, WAIT_SECONDS, TimeUnit.SECONDS);
             }
         } catch (final RuntimeException e) {
             log.error("Error retrieving job status for jobId: {}", jobId);

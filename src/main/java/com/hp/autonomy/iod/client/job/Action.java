@@ -28,10 +28,18 @@ public class Action<T> {
     private final String action;
 
     /**
-     * The status of the job
+     * @return The status of the job
      */
     private final Status status;
+
+    /**
+     *  @return A list of errors returned by the job
+     */
     private final List<IodError> errors;
+
+    /**
+     *  @return The result of the job
+     */
     private final T result;
 
     /**

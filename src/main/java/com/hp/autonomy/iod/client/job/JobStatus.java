@@ -11,11 +11,26 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * The status of a job from IDOL OnDemand
+ * @param <T>
+ */
 @Data
 public class JobStatus<T> {
 
+    /**
+     * @return The ID of the job
+     */
     private final String jobId;
+
+    /**
+     * @return The status of the job
+     */
     private final Status status;
+
+    /**
+     * @return A list of the actions which make up the job. Each action has its own status and result
+     */
     private final List<? extends Action<T>> actions;
 
     @JsonCreator

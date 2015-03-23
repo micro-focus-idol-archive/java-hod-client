@@ -37,7 +37,8 @@ public abstract class AbstractJobService {
     }
 
     /**
-     * Shuts down the executor service. This method should be called when the job service is no longer needed
+     * Shuts down the executor service. This method should be called when the job service is no longer needed, if the
+     * default executor service was used
      */
     public void destroy() {
         log.debug("Shutting down executor service");

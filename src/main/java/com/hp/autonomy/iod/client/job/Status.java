@@ -10,10 +10,29 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Possible job statuses that may be returned from IDOL OnDemand
+ */
 public enum Status {
+
+    /**
+     * The job is in the queue, awaiting processing
+     */
     QUEUED("queued"),
+
+    /**
+     * The job is currently processing
+     */
     IN_PROGRESS("in progress"),
+
+    /**
+     * The job finished processing successfully
+     */
     FINISHED("finished"),
+
+    /**
+     * An error occurred while processing the job
+     */
     FAILED("failed");
 
     private static final Map<String, Status> LOOKUP = new HashMap<>();
