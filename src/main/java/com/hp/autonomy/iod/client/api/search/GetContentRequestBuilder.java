@@ -6,6 +6,10 @@ import lombok.experimental.Accessors;
 
 import java.util.Map;
 
+/**
+ * Helper class for building up optional parameters for the Get Content API. The default value for all parameters
+ * is null. Null parameters will not be sent to IDOL OnDemand
+ */
 @Setter
 @Accessors(chain = true)
 public class GetContentRequestBuilder {
