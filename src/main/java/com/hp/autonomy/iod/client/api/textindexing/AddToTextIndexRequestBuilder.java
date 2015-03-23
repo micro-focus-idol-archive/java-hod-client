@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.converter.DoNotConvert;
 import com.hp.autonomy.iod.client.util.MultiMap;
@@ -76,6 +76,10 @@ public class AddToTextIndexRequestBuilder {
         return this;
     }
 
+    /**
+     * @return A map of query parameters suitable for use with {@link AddToTextIndexService}. get is NOT supported on
+     * the resulting map
+     */
     public Map<String, Object> build() {
         final Map<String, Object> params = new MultiMap<>();
 

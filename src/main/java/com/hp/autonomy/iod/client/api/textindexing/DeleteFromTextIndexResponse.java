@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,12 +14,22 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * Holds the response from the DeleteFromTextIndex API
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = DeleteFromTextIndexResponse.Builder.class)
 public class DeleteFromTextIndexResponse {
 
+    /**
+     * @return The index containing the deleted documents
+     */
     private final String index;
+
+    /**
+     * @return The number of deleted documents
+     */
     private final int documentsDeleted;
 
     @Setter

@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.search;
+package com.hp.autonomy.iod.client.api.search;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.error.IodErrorException;
@@ -12,7 +12,6 @@ import org.junit.Test;
 import retrofit.mime.TypedFile;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
     @Test
     public void testQueryForFile() throws IodErrorException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/search/queryText.txt"));
+        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/search/queryText.txt"));
         final Map<String, Object> params = new QueryTextIndexRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)

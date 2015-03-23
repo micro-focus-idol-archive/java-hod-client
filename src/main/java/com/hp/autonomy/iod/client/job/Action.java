@@ -12,13 +12,39 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Holds the result of a job action. Depending on the status, some of the fields will be null.
+ *
+ * If
+ *
+ * @param <T> The result of the action if the action was successful
+ */
 @Data
 public class Action<T> {
 
+    /**
+     * @return The API that was called
+     */
     private final String action;
+
+    /**
+     * @return The status of the job
+     */
     private final Status status;
+
+    /**
+     *  @return A list of errors returned by the job
+     */
     private final List<IodError> errors;
+
+    /**
+     *  @return The result of the job
+     */
     private final T result;
+
+    /**
+     * @return The version of the API
+     */
     private final String version;
 
     @JsonCreator

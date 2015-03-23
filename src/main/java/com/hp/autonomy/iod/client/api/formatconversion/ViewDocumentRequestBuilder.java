@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.formatconversion;
+package com.hp.autonomy.iod.client.api.formatconversion;
 
 import com.hp.autonomy.iod.client.util.MultiMap;
 import lombok.Setter;
@@ -28,7 +28,7 @@ public class ViewDocumentRequestBuilder {
 
     /**
      * Sets the value for the raw_html parameter. You should not need to set this unless using
-     * {@link com.hp.autonomy.iod.client.formatconversion.ViewDocumentService#viewFileAsHtmlString}
+     * {@link com.hp.autonomy.iod.client.api.formatconversion.ViewDocumentService#viewFileAsHtmlString}
      * @param rawHtml Value of the raw_html parameter
      */
     private Boolean rawHtml;

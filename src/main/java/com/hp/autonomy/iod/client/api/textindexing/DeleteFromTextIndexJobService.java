@@ -3,33 +3,56 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import com.hp.autonomy.iod.client.job.AbstractJobService;
 import com.hp.autonomy.iod.client.job.IodJobCallback;
 import com.hp.autonomy.iod.client.job.JobId;
 import com.hp.autonomy.iod.client.job.JobStatus;
+import com.hp.autonomy.iod.client.job.PollingJobStatusRunnable;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class DeleteFromTextIndexServiceImpl extends AbstractJobService {
+/**
+ * Service for managing jobs ids from the DeleteFromTextIndex API
+ *
+ * The destroy method should be called when the service is no longer needed.
+ */
+public class DeleteFromTextIndexJobService extends AbstractJobService {
 
     private final DeleteFromTextIndexService deleteFromTextIndexService;
 
-    public DeleteFromTextIndexServiceImpl(final DeleteFromTextIndexService deleteFromTextIndexService) {
+    /**
+     * Creates a new DeleteFromTextIndexJobService
+     * @param deleteFromTextIndexService The underlying service which will communicate with IDOL OnDemand
+     */
+    public DeleteFromTextIndexJobService(final DeleteFromTextIndexService deleteFromTextIndexService) {
         super();
 
         this.deleteFromTextIndexService = deleteFromTextIndexService;
     }
 
-    public DeleteFromTextIndexServiceImpl(final DeleteFromTextIndexService deleteFromTextIndexService, final ScheduledExecutorService executorService) {
+    /**
+     * Creates a new DeleteFromTextIndexJobService
+     * @param deleteFromTextIndexService The underlying service which will communicate with IDOL OnDemand
+     * @param executorService The executor service to use while polling for status updates
+     */
+    public DeleteFromTextIndexJobService(final DeleteFromTextIndexService deleteFromTextIndexService, final ScheduledExecutorService executorService) {
         super(executorService);
 
         this.deleteFromTextIndexService = deleteFromTextIndexService;
     }
 
+    /**
+     * Deletes the documents with the given references
+     * @param apiKey The API key to use to authenticate the request
+     * @param index The index to delete from
+     * @param references The references of the documents to delete
+     * @param callback Callback that will be called with the response
+     * @throws IodErrorException If an error occurs with the request
+     */
     public void deleteReferencesFromTextIndex(
             final String apiKey,
             final String index,
@@ -41,6 +64,13 @@ public class DeleteFromTextIndexServiceImpl extends AbstractJobService {
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(apiKey, jobId, callback));
     }
 
+    /**
+     * Deletes all the documents from the given text index
+     * @param apiKey The API key to use to authenticate the request
+     * @param index The index to delete from
+     * @param callback Callback that will be called with the response
+     * @throws IodErrorException If an error occurs with the request
+     */
     public void deleteAllDocumentsFromTextIndex(
             final String apiKey,
             final String index,

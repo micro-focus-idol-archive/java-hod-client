@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.formatconversion;
+package com.hp.autonomy.iod.client.api.formatconversion;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.error.IodErrorException;
@@ -35,7 +35,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
 
     @Test
     public void testViewFile() throws IodErrorException, IOException {
-        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/formatconversion/test-file.txt");
+        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/api/formatconversion/test-file.txt");
 
         final Map<String, Object> params = new ViewDocumentRequestBuilder()
                 .addHighlightExpressions("ventilation")
@@ -56,7 +56,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
 
     @Test
     public void testViewFileAsHtmlString() throws IodErrorException {
-        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/formatconversion/test-file.txt");
+        final File file = new File("src/test/resources/com/hp/autonomy/iod/client/api/formatconversion/test-file.txt");
 
         final Map<String, Object> params = new ViewDocumentRequestBuilder()
                 .addHighlightExpressions("ventilation")

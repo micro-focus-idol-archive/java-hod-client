@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.error.IodErrorException;
@@ -29,14 +29,14 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
 
     private static final String REFERENCE = "3ac70cc2-606e-486a-97d0-511e762b2183";
 
-    private AddToTextIndexServiceImpl addToTextIndexService;
+    private AddToTextIndexJobService addToTextIndexService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        addToTextIndexService = new AddToTextIndexServiceImpl(getRestAdapter().create(AddToTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
     }
 
     @After
@@ -77,7 +77,7 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
 
     @Test
     public void testAddFileToTextIndex() throws IodErrorException, InterruptedException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/textindexing/the-end.txt"));
+        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/textindexing/the-end.txt"));
         final String reference = "63edb67f-c930-4b7b-8c33-2cd28e5cc670";
 
         final Map<String, Object> additionalMetadata = new HashMap<>();

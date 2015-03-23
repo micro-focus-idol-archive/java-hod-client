@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.textindexing;
+package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.error.IodErrorException;
@@ -23,16 +23,16 @@ import static org.hamcrest.core.Is.is;
 @Slf4j
 public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrationTest {
 
-    private DeleteFromTextIndexServiceImpl deleteFromTextIndexService;
-    private AddToTextIndexServiceImpl addToTextIndexService;
+    private DeleteFromTextIndexJobService deleteFromTextIndexService;
+    private AddToTextIndexJobService addToTextIndexService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        deleteFromTextIndexService = new DeleteFromTextIndexServiceImpl(getRestAdapter().create(DeleteFromTextIndexService.class));
-        addToTextIndexService = new AddToTextIndexServiceImpl(getRestAdapter().create(AddToTextIndexService.class));
+        deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
     }
 
     @Test

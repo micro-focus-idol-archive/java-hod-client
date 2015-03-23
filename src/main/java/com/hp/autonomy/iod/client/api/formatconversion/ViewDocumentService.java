@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.formatconversion;
+package com.hp.autonomy.iod.client.api.formatconversion;
 
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import retrofit.client.Response;
@@ -15,7 +15,7 @@ import retrofit.http.PartMap;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 import retrofit.http.Streaming;
-import retrofit.mime.TypedInput;
+import retrofit.mime.TypedOutput;
 
 import java.util.Map;
 
@@ -40,7 +40,7 @@ public interface ViewDocumentService {
     @Streaming
     Response viewFile(
             @Part("apiKey") String apiKey,
-            @Part("file") TypedInput file,
+            @Part("file") TypedOutput file,
             @PartMap Map<String, Object> params
     ) throws IodErrorException;
 
@@ -91,7 +91,7 @@ public interface ViewDocumentService {
     @Multipart
     ViewDocumentResponse viewFileAsHtmlString(
             @Part("apiKey") String apiKey,
-            @Part("file") TypedInput file,
+            @Part("file") TypedOutput file,
             @PartMap Map<String, Object> params
     ) throws IodErrorException;
 

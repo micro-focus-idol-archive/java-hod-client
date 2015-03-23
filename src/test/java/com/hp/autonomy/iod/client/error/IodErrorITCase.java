@@ -1,7 +1,7 @@
 package com.hp.autonomy.iod.client.error;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
-import com.hp.autonomy.iod.client.search.QueryTextIndexService;
+import com.hp.autonomy.iod.client.api.search.QueryTextIndexService;
 import org.junit.Before;
 import org.junit.Test;
 

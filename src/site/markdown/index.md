@@ -49,6 +49,37 @@ You can then call the methods on queryTextIndexService to communicate with IDOL 
         "cats",
         params);
 
+## Asynchronous requests
+For asynchronous actions the Retrofit service returns a JobId. We also provide a service which will track the status of
+the job IDs.
+
+    final AddToTextIndexJobService addToTextIndexService = new AddToTextIndexJobService(restAdapter.create(AddToTextIndexJobService.class));
+
+The methods on this service take a callback which will be called when the job is completed
+
+    addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, new IodJobCallback<AddToTextIndexResponse>() {
+        @Override
+        public void success(final AddToTextIndexResponse result) {
+            // called if the job succeeds
+        }
+
+        @Override
+        public void error(final IodErrorCode error) {
+            // called if the job fails
+        }
+
+        @Override
+        public void handleException(final RuntimeException exception) {
+            // called if a RuntimeException is thrown during the process
+        }
+    });
+
+
+The APIs which are currently asynchronous are
+
+* AddToTextIndex
+* DeleteFromTextIndex
+
 ## Is it any good?
 Yes.
 
