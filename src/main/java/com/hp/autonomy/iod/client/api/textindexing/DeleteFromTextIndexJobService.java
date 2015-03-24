@@ -46,6 +46,23 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
     }
 
     /**
+     * Deletes the documents with the given references using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param index The index to delete from
+     * @param references The references of the documents to delete
+     * @param callback Callback that will be called with the response
+     * @throws IodErrorException If an error occurs with the request
+     */
+    public void deleteReferencesFromTextIndex(
+            final String index,
+            final List<String> references,
+            final IodJobCallback<DeleteFromTextIndexResponse> callback
+    ) throws IodErrorException {
+        final JobId jobId = deleteFromTextIndexService.deleteReferencesFromTextIndex(index, references);
+
+        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    /**
      * Deletes the documents with the given references
      * @param apiKey The API key to use to authenticate the request
      * @param index The index to delete from
@@ -65,7 +82,22 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Deletes all the documents from the given text index
+     * Deletes all the documents from the given text index using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param index The index to delete from
+     * @param callback Callback that will be called with the response
+     * @throws IodErrorException If an error occurs with the request
+     */
+    public void deleteAllDocumentsFromTextIndex(
+            final String index,
+            final IodJobCallback<DeleteFromTextIndexResponse> callback
+    ) throws IodErrorException {
+        final JobId jobId = deleteFromTextIndexService.deleteAllDocumentsFromTextIndex(index);
+
+        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    /**
+     * Deletes all the documents from the given text index using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param index The index to delete from
      * @param callback Callback that will be called with the response
@@ -83,8 +115,17 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
 
     private class DeleteFromTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<DeleteFromTextIndexResponse> {
 
+        public DeleteFromTextIndexPollingStatusRunnable(final JobId jobId, final IodJobCallback<DeleteFromTextIndexResponse> callback) {
+            super(jobId, callback, getExecutorService());
+        }
+
         public DeleteFromTextIndexPollingStatusRunnable(final String apiKey, final JobId jobId, final IodJobCallback<DeleteFromTextIndexResponse> callback) {
             super(apiKey, jobId, callback, getExecutorService());
+        }
+
+        @Override
+        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final JobId jobId) throws IodErrorException {
+            return deleteFromTextIndexService.getJobStatus(jobId);
         }
 
         @Override

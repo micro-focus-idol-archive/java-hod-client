@@ -139,6 +139,11 @@ public class AddToTextIndexJobService extends AbstractJobService {
         }
 
         @Override
+        public JobStatus<AddToTextIndexResponse> getJobStatus(final JobId jobId) throws IodErrorException {
+            return addToTextIndexService.getJobStatus(jobId);
+        }
+
+        @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final String apiKey, final JobId jobId) throws IodErrorException {
             return addToTextIndexService.getJobStatus(apiKey, jobId);
         }
