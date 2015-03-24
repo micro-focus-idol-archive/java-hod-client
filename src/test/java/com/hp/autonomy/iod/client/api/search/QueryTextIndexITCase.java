@@ -86,7 +86,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
             .addIndexes("wiki_ita", "wiki_eng")
-            .setSort(QueryTextIndexRequestBuilder.Sort.date)
+            .setSort(Sort.date)
             .build();
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(getApiKey(), file, params);
