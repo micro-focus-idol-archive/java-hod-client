@@ -203,38 +203,4 @@ public class QueryTextIndexRequestBuilder {
         return map;
     }
 
-    /**
-     * Enum type representing the possible options for the highlight parameter
-     */
-    @DoNotConvert
-    public enum Highlight {
-        off,
-        terms,
-        sentences
-    }
-
-    /**
-     * Enum type representing the possible options for the sort parameter
-     */
-    @DoNotConvert
-    public enum Sort {
-        autn_rank,
-        date,
-        off,
-        relevance,
-        reverse_date,
-        reverse_relevance
-    }
-
-    /**
-     * Enum type representing the possible options for the summary parameter
-     */
-    @DoNotConvert
-    public enum Summary {
-        context,
-        concept,
-        quick,
-        off
-    }
-
 }
