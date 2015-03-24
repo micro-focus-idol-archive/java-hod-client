@@ -27,8 +27,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class QueryTextIndexRequestBuilder {
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("HH:mm:ss dd/MM/yyyy G");
-
     /**
      * @param maxDate A DateTime to use as the value for the max_date parameter. This parameter takes precedence over
      *                maxDateDays and maxDateSeconds
@@ -176,65 +174,14 @@ public class QueryTextIndexRequestBuilder {
         map.put("total_results", totalResults);
 
         // prefer the DateTime over the numeric versions
-        if(minDate != null) {
-            map.put("min_date", DATE_FORMAT.print(minDate));
-        }
-        else if(minDateDays != null) {
-            map.put("min_date", minDateDays);
-        }
-        else if(maxDateSeconds != null) {
-            map.put("min_date", minDateSeconds + "s");
-        }
-
-        if(maxDate != null) {
-            map.put("max_date", DATE_FORMAT.print(maxDate));
-        }
-        else if(maxDateDays != null) {
-            map.put("max_date", maxDateDays);
-        }
-        else if(maxDateSeconds != null) {
-            map.put("max_date", maxDateSeconds + "s");
-        }
+        map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
+        map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
 
         for(final String index : indexes) {
             map.put("indexes", index);
         }
 
         return map;
-    }
-
-    /**
-     * Enum type representing the possible options for the highlight parameter
-     */
-    @DoNotConvert
-    public enum Highlight {
-        off,
-        terms,
-        sentences
-    }
-
-    /**
-     * Enum type representing the possible options for the sort parameter
-     */
-    @DoNotConvert
-    public enum Sort {
-        autn_rank,
-        date,
-        off,
-        relevance,
-        reverse_date,
-        reverse_relevance
-    }
-
-    /**
-     * Enum type representing the possible options for the summary parameter
-     */
-    @DoNotConvert
-    public enum Summary {
-        context,
-        concept,
-        quick,
-        off
     }
 
 }
