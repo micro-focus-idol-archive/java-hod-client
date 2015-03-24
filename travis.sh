@@ -2,7 +2,7 @@
 
 if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'develop' ]]
 then
-  mvn deploy --settings settings.xml -Prelease
+  mvn deploy -DskipTests --settings settings.xml -Prelease
 fi
 
 if [[ $TRAVIS_BRANCH == 'master' ]]

@@ -4,7 +4,7 @@ jdk:
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 script: mvn verify -Prelease -Dhp.iod.apiKey=$API_KEY
-after_script: bash travis.sh
+after_success: bash travis.sh
 env:
   global:
   # SONATYPE_USERNAME
