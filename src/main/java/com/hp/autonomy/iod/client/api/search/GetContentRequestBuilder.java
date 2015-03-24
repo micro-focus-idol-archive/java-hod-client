@@ -3,7 +3,9 @@ package com.hp.autonomy.iod.client.api.search;
 import com.hp.autonomy.iod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,9 +32,10 @@ public class GetContentRequestBuilder {
     private String endTag;
 
     /**
-     * @param printFields Value for the print_fields parameter
+     * @param printFields Value for the print_fields parameter. This list will be joined with commas before being sent
+     *                    to the server
      */
-    private String printFields;
+    private List<String> printFields;
 
     /**
      * @param print Value for the print parameter
@@ -49,7 +52,7 @@ public class GetContentRequestBuilder {
         map.put("start_tag", startTag);
         map.put("end_tag", endTag);
         map.put("print", print);
-        map.put("print_fields", printFields);
+        map.put("print_fields", StringUtils.join(printFields, ','));
 
         return map;
     }
