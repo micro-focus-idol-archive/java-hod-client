@@ -12,6 +12,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class IodErrorHandler implements ErrorHandler {
@@ -23,10 +24,24 @@ public class IodErrorHandler implements ErrorHandler {
             // IOD returned an unsuccessful status code, parse the JSON response and throw something better
             IodError iodError = (IodError) cause.getBodyAs(IodError.class);
 
+            // IOD errors are tediously non standard
+            // if it has message (rather than reason, it's probably an API key error)
+            final String message = iodError.getMessage();
+
             // if has actions, pull the error out of the action as it will be more useful
             final List<Action<?>> actions = iodError.getActions();
 
-            if(actions != null && !actions.isEmpty()) {
+            if(message != null && iodError.getErrorCode() == null) {
+                // IOD has given us an API key error
+                final Map<String, Object> detail = (Map<String, Object>) iodError.getDetail();
+                final IodErrorCode errorCode = IodErrorCode.fromCode((Integer) detail.get("error"));
+
+                iodError = new IodError.Builder()
+                        .setErrorCode(errorCode)
+                        .setReason(message)
+                        .build();
+            }
+            else if(actions != null && !actions.isEmpty()) {
                 // IOD has given us job style output
                 iodError = actions.get(0).getErrors().get(0);
             }

@@ -28,6 +28,7 @@ public class IodError {
     private final Object detail;
     private final List<Action<?>> actions;
     private final Status status;
+    private final String message;
 
     @Setter
     @Accessors(chain = true)
@@ -39,6 +40,7 @@ public class IodError {
         private Object detail;
         private List<Action<?>> actions;
         private Status status;
+        private String message;
 
         public Builder setError(final int error) {
             this.error = error;
@@ -47,7 +49,7 @@ public class IodError {
         }
 
         public IodError build() {
-            return new IodError(error, errorCode, reason, detail, actions, status);
+            return new IodError(error, errorCode, reason, detail, actions, status, message);
         }
     }
 
