@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'develop']]
+if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'develop' ]]
 then
   mvn deploy --settings settings.xml -Prelease
 fi
