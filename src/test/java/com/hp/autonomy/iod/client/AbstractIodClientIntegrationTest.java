@@ -5,14 +5,8 @@
 
 package com.hp.autonomy.iod.client;
 
-import com.hp.autonomy.iod.client.converter.IodConverter;
-import com.hp.autonomy.iod.client.error.IodErrorHandler;
-import org.apache.http.HttpHost;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import retrofit.RestAdapter;
-import retrofit.client.ApacheClient;
-import retrofit.converter.JacksonConverter;
 
 public abstract class AbstractIodClientIntegrationTest {
 
