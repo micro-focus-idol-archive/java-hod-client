@@ -43,7 +43,7 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
     private final AtomicInteger tries = new AtomicInteger(0);
 
     /**
-     * Creates a new PollingJobStatusRunnable using the given API key using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Creates a new PollingJobStatusRunnable using an API key provided by a {@link retrofit.RequestInterceptor}
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
