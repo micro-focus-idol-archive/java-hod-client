@@ -18,6 +18,6 @@ env:
   # GPG_KEY
   - secure: ls2sWTc2D6m4rqzu+aIqk2KscWsm2FRbEowez0kRuosW5An/BrjjCFGYVNzovgMMCfnwdNrVlDEgN9jyUUSfZS+zpZmvqi5+OwGnFOi5BhdAq/DvNOi8+2x95dJ7EWHNiowfR8b3PsA4AWvfZfthyDE4B7YZ2UQxbDlht5vujh8=
   # API_KEY
-  - secure: AA3wcJm48OmcLBmBeu4UihZtE5D2g9x9b53QWvMOc41m008BuG2vtBgdM+qav7fzKwGJAw1n5uRgOJXNDv2zdZydXa8WH9yOVoljbX5RudJW00YXpj1koVxovsMw3q3DKOz3kdJvX9wEDapk6M0xHHTlEtfAZP0Xa/qV9IE6jw4=
+  - secure: XD7/u+zC3hO4Nj9fMjg6YrIBFxcqrbkOGpK96NKy2op9Pkc3R/OaDQAI33mD27yMkdNgspL4Cu8xmEy8496yxWkPPLMfeEJJoC64wRkALN9nbwhMssQh/f1fe7oL71bsdwt0Da9k+Wlsokx6thXmYOtdWS5SKd+ISC7PzhiEIKY=
   # GITHUB_TOKEN
   - secure: dxKqiSzQ2+HkhZZYRJvhFGVRLWjBZ4/bFHTAqg9bNyEfIPw1xkJVC/ujVL0VhNa9d8pP8rV9+lduodPL+c8jc5GntUqlxBENr9hgMSl0A/sCkxR8TaBPupig3y9fKdIuA7IiYn6VFJ9UATC5t/flXeRyIgZbJHsike6RzKAld3w=
