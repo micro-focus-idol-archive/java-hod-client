@@ -7,6 +7,27 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.0" date="">
+            <action dev="daniel-grayling-hp" type="add">
+                Add support for the getcontent API
+            </action>
+            <action dev="alex-scown-hp" type="add">
+                Add request interceptors for automatically populating the API key
+            </action>
+            <action dev="alex-scown-hp" type="add">
+                Add a TypedByteArray subclass which adds a filename; this allows arbitrary byte arrays to be uploaded to
+                IDOL OnDemand in place of files
+            </action>
+            <action dev="daniel-grayling-hp" type="add">
+                Add support for the findrelatedconcepts API
+            </action>
+            <action dev="alex-scown-hp" type="add">
+                Add IdolOnDemandService, which can query any API, at a cost of losing type safety.
+            </action>
+            <action dev="aly-ivano-hp" type="add">
+                Add support for the listindexes API
+            </action>
+        </release>
         <release version="0.3.0" date="2015-03-23">
             <action dev="alex-scown-hp" type="move">
                 API services have been moved into the API package. This breaks compatibility with previous versions. The
