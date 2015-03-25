@@ -80,6 +80,64 @@ The APIs which are currently asynchronous are
 * AddToTextIndex
 * DeleteFromTextIndex
 
+## Request Interceptors
+For cases where you want to send the same API key with every request, we provide RequestInterceptors. These are
+configured when the RestAdapter is created. Most API methods have a version which does not take an API, which can be used
+in conjunction with a request interceptor.
+
+    // set up a RestAdapter using a request interceptor
+    final RestAdapter restAdapter = new RestAdapter.Builder()
+        .setEndpoint("https://api.idolondemand.com/1")
+        .setConverter(new IodConverter(new JacksonConverter()))
+        .setErrorHandler(new IodErrorHandler())
+        .setRequestInterceptor(new ApiKeyRequestInterceptor(apiKey))
+        .build();
+
+    // query for documents using apiKey
+    final Documents documents = queryTextIndexService.queryTextIndexWithText(
+        "cats",
+        params);
+
+These have a couple of limitations:
+
+* They will not add an API key to a multipart request, as IDOL OnDemand does not read query parameters on multipart
+requests. Service methods which send a multipart request are not overloaded to allow the omission of an API key
+* They will break any non-multipart requests which specify an API key. This is because the API key will be set twice,
+which makes IDOL OnDemand sad. In particular, job service methods which take an API key cannot be used as they will
+attempt to poll for job status with the given API key
+
+    // set up a RestAdapter using a request interceptor
+    final RestAdapter restAdapter = new RestAdapter.Builder()
+        .setEndpoint("https://api.idolondemand.com/1")
+        .setConverter(new IodConverter(new JacksonConverter()))
+        .setErrorHandler(new IodErrorHandler())
+        .setRequestInterceptor(new ApiKeyRequestInterceptor(apiKey))
+        .build();
+
+    // BROKEN - this will generate an IodErrorException as the API key will be set twice
+    final Documents documents = queryTextIndexService.queryTextIndexWithText(
+        "someOtherApiKey"
+        "cats",
+        params);
+
+    // BROKEN - the initial request will succeed but polling for the job status will fail
+    addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, new IodJobCallback<AddToTextIndexResponse>() {
+        @Override
+        public void success(final AddToTextIndexResponse result) {
+            // called if the job succeeds
+        }
+
+        @Override
+        public void error(final IodErrorCode error) {
+            // called if the job fails
+        }
+
+        @Override
+        public void handleException(final RuntimeException exception) {
+            // called if a RuntimeException is thrown during the process
+        }
+    });
+
 ## Is it any good?
 Yes.
 
