@@ -6,21 +6,29 @@
 package com.hp.autonomy.iod.client.api.textanalysis;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
+@RunWith(Parameterized.class)
 public class SentimentAnalysisServiceITCase extends AbstractIodClientIntegrationTest {
 
+    private final Endpoint endpoint;
     private SentimentAnalysisService sentimentAnalysisService;
 
-    @Override
+    public SentimentAnalysisServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
+    }
+
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         sentimentAnalysisService = getRestAdapter().create(SentimentAnalysisService.class);
     }
@@ -31,7 +39,7 @@ public class SentimentAnalysisServiceITCase extends AbstractIodClientIntegration
                 "The food at the restaurant was poor. " +
                 "In conclusion, it was an average restaurant";
 
-        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(getApiKey(), text, SentimentAnalysisLanguage.eng);
+        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(endpoint.getApiKey(), text, SentimentAnalysisLanguage.eng);
 
         assertThat(response.getPositive(), hasSize(1));
         assertThat(response.getNegative(), hasSize(1));
