@@ -106,6 +106,7 @@ requests. Service methods which send a multipart request are not overloaded to a
 which makes IDOL OnDemand sad. In particular, job service methods which take an API key cannot be used as they will
 attempt to poll for job status with the given API key
 
+
     // set up a RestAdapter using a request interceptor
     final RestAdapter restAdapter = new RestAdapter.Builder()
         .setEndpoint("https://api.idolondemand.com/1")
@@ -137,6 +138,21 @@ attempt to poll for job status with the given API key
             // called if a RuntimeException is thrown during the process
         }
     });
+
+## IdolOnDemandService
+For those times where the API you need to use is not currently supported, there is the IdolOnDemand service. This can
+query any API.
+
+    final IdolOnDemand service idolOnDemandService = restAdapter.create(IdolOnDemandService.class)
+    
+    final Map<String, Object> params = new HashMap<>();
+    params.put("apiKey", apiKey);
+    params.put("text", "*");
+    
+    final Map<String, Object> result = idolOnDemandService.get("querytextindex", params);
+    
+This approach requires a greater familiarity with the IDOL OnDemand documentation. It also removes the type safety of
+the dedicated services, making the response useful only for automated transformation into JSON.
 
 ## Is it any good?
 Yes.
