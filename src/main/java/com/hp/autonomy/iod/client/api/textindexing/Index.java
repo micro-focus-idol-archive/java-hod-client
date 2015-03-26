@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,13 +13,35 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+/**
+ * An index returned from IDOL OnDemand
+ */
 @Data
 @JsonDeserialize(builder = Index.Builder.class)
 public class Index {
+    /**
+     * @return The name of the index
+     */
     private final String index;
-    private final String type;
-    private final String flavor;
+
+    /**
+     * @return The type of the index
+     */
+    private final IndexType type;
+
+    /**
+     * @return The flavor of the index. May be null
+     */
+    private final IndexFlavor flavor;
+
+    /**
+     * @return The description of the index
+     */
     private final String description;
+
+    /**
+     * @return The date that index or connector was created. May be null
+     */
     private final String dateCreated;
 
     private Index(final Builder builder) {
@@ -31,8 +58,8 @@ public class Index {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
         private String index;
-        private String type;
-        private String flavor;
+        private IndexType type;
+        private IndexFlavor flavor;
         private String description;
 
         @JsonProperty("date_created")

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,11 +17,21 @@ import lombok.experimental.Accessors;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Holds the indexes returned from IDOL OnDemand
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = Indexes.Builder.class)
 public class Indexes {
+    /**
+     * @return A List of private indexes
+     */
     private final List<Index> indexes;
+
+    /**
+     * @return A List of public indexes. flavor and dateCreated will be null on these indexes.
+     */
     private final List<Index> publicIndexes;
 
     @Setter
