@@ -1,9 +1,12 @@
 package com.hp.autonomy.iod.client.api.search;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,16 +16,21 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+@RunWith(Parameterized.class)
 public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private GetContentService getContentService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         getContentService = getRestAdapter().create(GetContentService.class);
+    }
+
+    public GetContentServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
@@ -30,7 +38,7 @@ public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
         final Map<String, Object> params = new GetContentRequestBuilder()
                 .build();
 
-        final Documents documents = getContentService.getContent(getApiKey(),
+        final Documents documents = getContentService.getContent(endpoint.getApiKey(),
                 Arrays.asList("3ac70cc2-606e-486a-97d0-511e762b2183"), getIndex(),
                 params);
 

@@ -6,10 +6,13 @@
 package com.hp.autonomy.iod.client.api.formatconversion;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import retrofit.client.Response;
 import retrofit.mime.TypedFile;
 
@@ -21,16 +24,21 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
+@RunWith(Parameterized.class)
 public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private ViewDocumentService viewDocumentService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         viewDocumentService = getRestAdapter().create(ViewDocumentService.class);
+    }
+
+    public ViewDocumentServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
@@ -42,7 +50,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
                 .addStartTags("<highlight>")
                 .build();
 
-        final Response response = viewDocumentService.viewFile(getApiKey(), new TypedFile("text/plain", file), params);
+        final Response response = viewDocumentService.viewFile(endpoint.getApiKey(), new TypedFile("text/plain", file), params);
 
         final InputStream inputStream = response.getBody().in();
 
@@ -64,7 +72,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
                 .setRawHtml(false)
                 .build();
 
-        final ViewDocumentResponse response = viewDocumentService.viewFileAsHtmlString(getApiKey(), new TypedFile("text/plain", file), params);
+        final ViewDocumentResponse response = viewDocumentService.viewFileAsHtmlString(endpoint.getApiKey(), new TypedFile("text/plain", file), params);
 
         final String html = response.getDocument();
 
