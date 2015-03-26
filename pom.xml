@@ -38,6 +38,18 @@
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
+        <developer>
+            <name>Daniel Grayling</name>
+            <email>daniel.grayling@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>ivanoaly</name>
+            <email>alyona.ivanova@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
     </developers>
 
     <properties>
