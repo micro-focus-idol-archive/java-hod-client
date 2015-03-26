@@ -1,13 +1,11 @@
 package com.hp.autonomy.iod.client;
 
-import com.hp.autonomy.iod.client.converter.IodConverter;
-import com.hp.autonomy.iod.client.error.IodErrorHandler;
-import org.apache.http.HttpHost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.Before;
+
+import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
-import retrofit.client.ApacheClient;
-import retrofit.converter.JacksonConverter;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /*
  * $Id:$
@@ -20,9 +18,20 @@ public abstract class AbstractIodClientIntegrationTest {
 
     private RestAdapter restAdapter;
 
-    @Before
     public void setUp() {
         restAdapter = RestAdapterFactory.getRestAdapter(false);
+    }
+
+    public void setUp(final Endpoint endpoint) {
+        restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Endpoint> endPoints() {
+        return Arrays.asList(
+                Endpoint.PRODUCTION,
+                Endpoint.DEVELOPMENT
+        );
     }
 
     public String getIndex() {
