@@ -6,12 +6,15 @@
 package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import com.hp.autonomy.iod.client.util.TestCallback;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import retrofit.mime.TypedFile;
 
 import java.io.File;
@@ -25,16 +28,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
+@RunWith(Parameterized.class)
 public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTest {
 
     private static final String REFERENCE = "3ac70cc2-606e-486a-97d0-511e762b2183";
+    private Endpoint endpoint;
 
     private AddToTextIndexJobService addToTextIndexService;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
     }
@@ -42,6 +46,10 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
     @After
     public void tearDown() {
         addToTextIndexService.destroy();
+    }
+
+    public AddToTextIndexServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
@@ -60,7 +68,7 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addJsonToTextIndex(getApiKey(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(endpoint.getApiKey(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
@@ -92,7 +100,7 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, callback);
+        addToTextIndexService.addFileToTextIndex(endpoint.getApiKey(), file, getIndex(), params, callback);
 
         latch.await();
 

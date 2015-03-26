@@ -5,16 +5,27 @@
 
 package com.hp.autonomy.iod.client;
 
-import org.junit.Before;
+
+import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 
 public abstract class AbstractIodClientIntegrationTest {
 
     private RestAdapter restAdapter;
 
-    @Before
-    public void setUp() {
-        restAdapter = RestAdapterFactory.getRestAdapter(false);
+    public void setUp(final Endpoint endpoint) {
+        restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Endpoint> endPoints() {
+        return Arrays.asList(
+                Endpoint.PRODUCTION
+        );
     }
 
     public String getIndex() {
@@ -25,7 +36,4 @@ public abstract class AbstractIodClientIntegrationTest {
         return restAdapter;
     }
 
-    public String getApiKey() {
-        return System.getProperty("hp.iod.apiKey");
-    }
 }

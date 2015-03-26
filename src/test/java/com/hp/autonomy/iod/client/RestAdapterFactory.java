@@ -17,6 +17,10 @@ import retrofit.converter.JacksonConverter;
 public class RestAdapterFactory {
 
     public static RestAdapter getRestAdapter(final boolean withInterceptor) {
+        return getRestAdapter(withInterceptor, Endpoint.PRODUCTION);
+    }
+
+    public static RestAdapter getRestAdapter(final boolean withInterceptor, final Endpoint endpoint) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
 
         final String proxyHost = System.getProperty("hp.iod.https.proxyHost");
@@ -27,14 +31,14 @@ public class RestAdapterFactory {
         }
 
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
-                .setEndpoint("http://api.idolondemand.com/1")
+                .setEndpoint(endpoint.getUrl())
                 .setClient(new ApacheClient(builder.build()))
                 .setConverter(new IodConverter(new JacksonConverter()))
                 .setErrorHandler(new IodErrorHandler());
 
 
         if (withInterceptor) {
-            restAdapterBuilder.setRequestInterceptor(new ApiKeyRequestInterceptor(System.getProperty("hp.iod.apiKey")));
+            restAdapterBuilder.setRequestInterceptor(new ApiKeyRequestInterceptor(endpoint.getApiKey()));
         }
 
         return restAdapterBuilder.build();

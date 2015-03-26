@@ -6,9 +6,12 @@
 package com.hp.autonomy.iod.client.error;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.api.search.QueryTextIndexService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,22 +20,28 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+
+@RunWith(Parameterized.class)
 public class IodErrorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         queryTextIndexService = getRestAdapter().create(QueryTextIndexService.class);
+    }
+
+    public IodErrorITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
     public void testNoQueryTextError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(getApiKey(), "", null);
+            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "", null);
             fail("IodClientErrorException not thrown");
         } catch (final IodErrorException e) {
             assertThat(e.getErrorCode(), is(IodErrorCode.MISSING_REQUIRED_PARAMETERS));
@@ -43,7 +52,7 @@ public class IodErrorITCase extends AbstractIodClientIntegrationTest {
     @Test
     public void testIodReturnsJobError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(getApiKey(), "OR", null);
+            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "OR", null);
             fail("IodErrorException not thrown");
         } catch (final IodErrorException e) {
             assertThat(e.getErrorCode(), is(IodErrorCode.BACKEND_REQUEST_FAILED));
@@ -65,10 +74,10 @@ public class IodErrorITCase extends AbstractIodClientIntegrationTest {
     @Test
     public void testIodReturnsApiKeyErrorWithDuplicateKeys() {
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", getApiKey());
+        params.put("apiKey", endpoint.getApiKey());
 
         try {
-            queryTextIndexService.queryTextIndexWithText(getApiKey(), "*", params);
+            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "*", params);
             fail("IodErrorException not thrown");
         } catch (final IodErrorException e) {
             assertThat(e.getErrorCode(), is(IodErrorCode.INVALID_API_KEY));

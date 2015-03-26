@@ -1,12 +1,15 @@
 package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -21,16 +24,21 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 @Slf4j
+@RunWith(Parameterized.class)
 public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
 
     private ListIndexesService listIndexesService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         listIndexesService = getRestAdapter().create(ListIndexesService.class);
+    }
+
+    public ListIndexesServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
@@ -40,7 +48,7 @@ public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
                 .setIndexTypes(EnumSet.of(IndexType.content))
                 .build();
 
-        final Indexes indexes = listIndexesService.listIndexes(getApiKey(), params);
+        final Indexes indexes = listIndexesService.listIndexes(endpoint.getApiKey(), params);
 
         assertThat(indexes.getPublicIndexes(), is(not(empty())));
         assertThat(indexes.getIndexes(), hasIndex(getIndex()));

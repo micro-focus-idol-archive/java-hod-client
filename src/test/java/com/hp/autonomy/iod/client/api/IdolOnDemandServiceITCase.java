@@ -6,6 +6,7 @@
 package com.hp.autonomy.iod.client.api;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.api.textindexing.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.iod.client.api.textindexing.Document;
 import com.hp.autonomy.iod.client.api.textindexing.Documents;
@@ -17,6 +18,8 @@ import com.hp.autonomy.iod.client.util.TestCallback;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import retrofit.mime.TypedFile;
 
 import java.io.File;
@@ -35,15 +38,19 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+
+
+
+@RunWith(Parameterized.class)
 public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
 
     private IdolOnDemandService idolOnDemandService;
     private ScheduledExecutorService scheduledExecutorService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         idolOnDemandService = getRestAdapter().create(IdolOnDemandService.class);
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -55,10 +62,14 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
         scheduledExecutorService.awaitTermination(5, TimeUnit.SECONDS);
     }
 
+    public IdolOnDemandServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
+    }
+
     @Test
     public void testGet() throws IodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", getApiKey());
+        params.put("apiKey", endpoint.getApiKey());
         params.put("text", "*");
         params.put("total_results", true);
 
@@ -71,13 +82,13 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
     @Test
     public void testAsyncGet() throws IodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", getApiKey());
+        params.put("apiKey", endpoint.getApiKey());
         params.put("text", "*");
         params.put("total_results", true);
 
         final JobId jobId = idolOnDemandService.getAsync("querytextindex", params);
 
-        final JobStatus<Map<String, Object>> jobResult = idolOnDemandService.getJobResult(getApiKey(), jobId);
+        final JobStatus<Map<String, Object>> jobResult = idolOnDemandService.getJobResult(endpoint.getApiKey(), jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
@@ -88,7 +99,7 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
     @Test
     public void testPost() throws IodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", getApiKey());
+        params.put("apiKey", endpoint.getApiKey());
         params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/search/queryText.txt")));
         params.put("total_results", true);
 
@@ -109,14 +120,14 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
         final Documents<Document> documents = new Documents<>(document);
 
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", getApiKey());
+        params.put("apiKey", endpoint.getApiKey());
         params.put("json", documents);
         params.put("index", getIndex());
         params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
         final JobId jobId = idolOnDemandService.postAsync("addtotextindex", params);
 
-        final JobStatus<Map<String, Object>> jobResult = idolOnDemandService.getJobResult(getApiKey(), jobId);
+        final JobStatus<Map<String, Object>> jobResult = idolOnDemandService.getJobResult(endpoint.getApiKey(), jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
@@ -139,7 +150,7 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
         final Documents<Document> documents = new Documents<>(document);
 
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", getApiKey());
+        params.put("apiKey", endpoint.getApiKey());
         params.put("json", documents);
         params.put("index", getIndex());
         params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
@@ -148,7 +159,7 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
-        final Runnable runnable = new IdolOnDemandJobStatusRunnable(idolOnDemandService, getApiKey(), jobId, testCallback, scheduledExecutorService);
+        final Runnable runnable = new IdolOnDemandJobStatusRunnable(idolOnDemandService, endpoint.getApiKey(), jobId, testCallback, scheduledExecutorService);
 
         scheduledExecutorService.submit(runnable);
 

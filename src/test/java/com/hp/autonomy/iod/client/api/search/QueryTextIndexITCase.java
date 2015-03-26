@@ -6,11 +6,14 @@
 package com.hp.autonomy.iod.client.api.search;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import com.hp.autonomy.iod.client.util.TypedByteArrayWithFilename;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedOutput;
 
@@ -25,16 +28,21 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+@RunWith(Parameterized.class)
 public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         queryTextIndexService = getRestAdapter().create(QueryTextIndexService.class);
+    }
+
+    public QueryTextIndexITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
@@ -48,7 +56,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .addIndexes("wiki_eng", "wiki_ita")
             .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText(getApiKey(), "*", params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
 
@@ -71,7 +79,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .setSort(Sort.date)
             .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(getApiKey(), file, params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithFile(endpoint.getApiKey(), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
@@ -89,7 +97,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
             .setSort(Sort.date)
             .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(getApiKey(), file, params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithFile(endpoint.getApiKey(), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
