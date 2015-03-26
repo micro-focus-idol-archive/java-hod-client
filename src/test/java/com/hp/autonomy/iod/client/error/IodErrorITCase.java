@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.iod.client.error;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
@@ -15,13 +20,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-/*
- * $Id:$
- *
- * Copyright (c) 2015, Autonomy Systems Ltd.
- *
- * Last modified by $Author:$ on $Date:$
- */
+
 @RunWith(Parameterized.class)
 public class IodErrorITCase extends AbstractIodClientIntegrationTest {
 
