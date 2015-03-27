@@ -158,6 +158,10 @@ query any API.
 This approach requires a greater familiarity with the IDOL OnDemand documentation. It also removes the type safety of
 the dedicated services, making the response useful only for automated transformation into JSON.
 
+## Contributing
+We welcome pull requests. These must be licensed under the MIT license. Please submit pull requests to the develop
+branch - the develop branch is for stable code only.
+
 ## Is it any good?
 Yes.
 
