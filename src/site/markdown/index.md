@@ -49,6 +49,10 @@ You can then call the methods on queryTextIndexService to communicate with IDOL 
         "cats",
         params);
 
+## Library structure
+APIs can be found in the com.hp.autonomy.iod.client.api package. There is one package per category as seen in the IDOL
+OnDemand documentation. There is one service per API.
+
 ## Asynchronous requests
 For asynchronous actions the Retrofit service returns a JobId. We also provide a service which will track the status of
 the job IDs.
