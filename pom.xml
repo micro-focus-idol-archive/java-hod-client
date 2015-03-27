@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.iod</groupId>
     <artifactId>java-iod-client</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 
     <description>Java Client for communicating with IDOL OnDemand</description>
 
@@ -35,6 +35,24 @@
         <developer>
             <name>Alex Scown</name>
             <email>alex.scown@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Daniel Grayling</name>
+            <email>daniel.grayling@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>ivanoaly</name>
+            <email>alyona.ivanova@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jonathan Soul</name>
+            <email>jonathan.soul@hp.com</email>
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>

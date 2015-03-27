@@ -43,7 +43,20 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
     private final AtomicInteger tries = new AtomicInteger(0);
 
     /**
-     * Creates a new PollingJobStatusRunnable
+     * Creates a new PollingJobStatusRunnable using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param jobId The ID of the job
+     * @param callback The callback that will be called with the result
+     * @param executorService The executor service responsible for running the runnable
+     */
+    public PollingJobStatusRunnable(final JobId jobId, final IodJobCallback<T> callback, final ScheduledExecutorService executorService) {
+        this.apiKey = null;
+        this.jobId = jobId;
+        this.callback = callback;
+        this.executorService = executorService;
+    }
+
+    /**
+     * Creates a new PollingJobStatusRunnable using the given API key
      * @param apiKey The API key used to submit the job
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
@@ -57,7 +70,15 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
     }
 
     /**
-     *
+     * Fetches the status of a job  using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param jobId The ID of the job
+     * @return A job status of the correct return type
+     * @throws IodErrorException
+     */
+    public abstract JobStatus<T> getJobStatus(final JobId jobId) throws IodErrorException;
+
+    /**
+     * Fetches the status of a job using the given API key
      * @param apiKey The API key used to submit the job
      * @param jobId The ID of the job
      * @return A job status of the correct return type
@@ -74,7 +95,15 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
         try {
             log.debug("About to check status for jobId {}", jobId);
 
-            final JobStatus<T> jobStatus = getJobStatus(apiKey, jobId);
+            final JobStatus<T> jobStatus;
+
+            if (apiKey != null) {
+                jobStatus = getJobStatus(apiKey, jobId);
+            }
+            else {
+                jobStatus = getJobStatus(jobId);
+            }
+
             final Status jobStatusStatus = jobStatus.getStatus();
 
             if(jobStatusStatus == Status.FINISHED || jobStatusStatus == Status.FAILED) {

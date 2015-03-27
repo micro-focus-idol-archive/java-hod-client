@@ -23,7 +23,20 @@ public interface DeleteFromTextIndexService {
     String URL = "/api/async/deletefromtextindex/v1";
 
     /**
-     * Deletes the documents with the given references
+     * Deletes the documents with the given references using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param index The index to delete from
+     * @param references The references of the documents to delete
+     * @return The job ID of the request
+     * @throws IodErrorException If an error occurs with the request
+     */
+    @GET(URL)
+    JobId deleteReferencesFromTextIndex(
+            @Query("index") final String index,
+            @Query("index_reference") final List<String> references
+    ) throws IodErrorException;
+
+    /**
+     * Deletes the documents with the given references using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param index The index to delete from
      * @param references The references of the documents to delete
@@ -38,7 +51,18 @@ public interface DeleteFromTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Deletes all the documents from the given text index
+     * Deletes all the documents from the given text index using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param index The index to delete from
+     * @return The job ID of the request
+     * @throws IodErrorException If an error occurs with the request
+     */
+    @GET(URL + "?delete_all_documents=true")
+    JobId deleteAllDocumentsFromTextIndex(
+            @Query("index") final String index
+    ) throws IodErrorException;
+
+    /**
+     * Deletes all the documents from the given text index using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param index The index to delete from
      * @return The job ID of the request
@@ -64,7 +88,29 @@ public interface DeleteFromTextIndexService {
     ) throws IodErrorException;
 
     /**
-     * Get the result of an DeleteFromTextIndex job
+     * Get the status of an DeleteFromTextIndex job  using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param jobId The id of the job
+     * @return An object containing the status of the job along with the result if the job has finished
+     * @throws IodErrorException If an error occurred retrieving the status
+     */
+    @GET("/job/status/{jobId}")
+    DeleteFromTextIndexJobStatus getJobStatus(
+            @Path("jobId") JobId jobId
+    ) throws IodErrorException;
+
+    /**
+     * Get the result of an DeleteFromTextIndex job using an API key provided by a {@link retrofit.RequestInterceptor}
+     * @param jobId The id of the job
+     * @return An object containing the result of the job
+     * @throws IodErrorException If an error occurred retrieving the result
+     */
+    @GET("/job/result/{jobId}")
+    DeleteFromTextIndexJobStatus getJobResult(
+            @Path("jobId") JobId jobId
+    ) throws IodErrorException;
+
+    /**
+     * Get the result of an DeleteFromTextIndex job using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param jobId The id of the job
      * @return An object containing the result of the job

@@ -162,7 +162,7 @@ public enum IodErrorCode {
 
     private final int code;
 
-    private IodErrorCode(final int code) {
+    IodErrorCode(final int code) {
         this.code = code;
     }
 

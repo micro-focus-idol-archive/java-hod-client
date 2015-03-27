@@ -5,14 +5,11 @@
 
 package com.hp.autonomy.iod.client.api.search;
 
-import com.hp.autonomy.iod.client.converter.DoNotConvert;
 import com.hp.autonomy.iod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,14 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper class for building up optional parameters for the Query Text Index API. The default value for all parameters
- * is null. Null parameters will not be sent to IDOL OnDemand
+ * Helper class for building up optional parameters for the QueryTextIndex API and FindSimilar API. The default value
+ * for all parameters is null. Null parameters will not be sent to IDOL OnDemand
  */
 @Setter
 @Accessors(chain = true)
-public class QueryTextIndexRequestBuilder {
-
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("HH:mm:ss dd/MM/yyyy G");
+public class QueryRequestBuilder {
 
     /**
      * @param maxDate A DateTime to use as the value for the max_date parameter. This parameter takes precedence over
@@ -137,7 +132,7 @@ public class QueryTextIndexRequestBuilder {
      * @param indexes The remaining indexes
      * @return this
      */
-    public QueryTextIndexRequestBuilder addIndexes(final String index0, final String... indexes) {
+    public QueryRequestBuilder addIndexes(final String index0, final String... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
 
@@ -149,7 +144,7 @@ public class QueryTextIndexRequestBuilder {
      * @param indexes The indexes to query
      * @return this
      */
-    public QueryTextIndexRequestBuilder setIndexes(final List<String> indexes) {
+    public QueryRequestBuilder setIndexes(final List<String> indexes) {
         this.indexes = indexes;
 
         return this;
@@ -176,80 +171,14 @@ public class QueryTextIndexRequestBuilder {
         map.put("total_results", totalResults);
 
         // prefer the DateTime over the numeric versions
-        if(minDate != null) {
-            map.put("min_date", DATE_FORMAT.print(minDate));
-        }
-        else if(minDateDays != null) {
-            map.put("min_date", minDateDays);
-        }
-        else if(maxDateSeconds != null) {
-            map.put("min_date", minDateSeconds + "s");
-        }
-
-        if(maxDate != null) {
-            map.put("max_date", DATE_FORMAT.print(maxDate));
-        }
-        else if(maxDateDays != null) {
-            map.put("max_date", maxDateDays);
-        }
-        else if(maxDateSeconds != null) {
-            map.put("max_date", maxDateSeconds + "s");
-        }
+        map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
+        map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
 
         for(final String index : indexes) {
             map.put("indexes", index);
         }
 
         return map;
-    }
-
-    /**
-     * Enum type representing the possible options for the print parameter
-     */
-    @DoNotConvert
-    public enum Print {
-        all,
-        all_sections,
-        date,
-        fields,
-        none,
-        no_results,
-        parametric,
-        reference
-    }
-
-    /**
-     * Enum type representing the possible options for the highlight parameter
-     */
-    @DoNotConvert
-    public enum Highlight {
-        off,
-        terms,
-        sentences
-    }
-
-    /**
-     * Enum type representing the possible options for the sort parameter
-     */
-    @DoNotConvert
-    public enum Sort {
-        autn_rank,
-        date,
-        off,
-        relevance,
-        reverse_date,
-        reverse_relevance
-    }
-
-    /**
-     * Enum type representing the possible options for the summary parameter
-     */
-    @DoNotConvert
-    public enum Summary {
-        context,
-        concept,
-        quick,
-        off
     }
 
 }

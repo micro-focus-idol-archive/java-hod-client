@@ -6,11 +6,14 @@
 package com.hp.autonomy.iod.client.api.textindexing;
 
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
+import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import com.hp.autonomy.iod.client.util.TestCallback;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -20,19 +23,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
+
 @Slf4j
+@RunWith(Parameterized.class)
 public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrationTest {
 
     private DeleteFromTextIndexJobService deleteFromTextIndexService;
     private AddToTextIndexJobService addToTextIndexService;
+    private Endpoint endpoint;
 
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
+        super.setUp(endpoint);
 
         deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
         addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
+    }
+
+    public DeleteFromTextIndexServiceITCase(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Test
@@ -52,7 +61,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrati
         final CountDownLatch latch = new CountDownLatch(1);
 
         final DeleteTestCallback callback = new DeleteTestCallback(latch, reference);
-        addToTextIndexService.addJsonToTextIndex(getApiKey(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(endpoint.getApiKey(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
@@ -82,7 +91,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrati
             log.debug("Document indexed successfully");
 
             try {
-                deleteFromTextIndexService.deleteReferencesFromTextIndex(getApiKey(), getIndex(), Arrays.asList(reference), callback);
+                deleteFromTextIndexService.deleteReferencesFromTextIndex(endpoint.getApiKey(), getIndex(), Arrays.asList(reference), callback);
             } catch (final IodErrorException e) {
                 log.error("Error deleting document", e);
 
