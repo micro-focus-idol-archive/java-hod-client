@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Top level response from the Query Text Index API.
+ * Top level response from the QueryTextIndex API and FindSimilar API.
  */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
