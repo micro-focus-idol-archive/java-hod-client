@@ -8,7 +8,6 @@ package com.hp.autonomy.iod.client.api.queryprofile;
 import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
