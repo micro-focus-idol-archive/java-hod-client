@@ -17,8 +17,6 @@ import java.util.Map;
 
 import static com.hp.autonomy.iod.client.api.textindexing.ListIndexesServiceITCase.IndexMatcher.hasIndex;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
