@@ -50,6 +50,12 @@
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
+        <developer>
+            <name>Jonathan Soul</name>
+            <email>jonathan.soul@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
     </developers>
 
     <properties>
