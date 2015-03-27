@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Setter
 @Accessors(chain = true)
-public class QueryTextIndexRequestBuilder {
+public class QueryRequestBuilder {
 
     /**
      * @param maxDate A DateTime to use as the value for the max_date parameter. This parameter takes precedence over
@@ -132,7 +132,7 @@ public class QueryTextIndexRequestBuilder {
      * @param indexes The remaining indexes
      * @return this
      */
-    public QueryTextIndexRequestBuilder addIndexes(final String index0, final String... indexes) {
+    public QueryRequestBuilder addIndexes(final String index0, final String... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
 
@@ -144,7 +144,7 @@ public class QueryTextIndexRequestBuilder {
      * @param indexes The indexes to query
      * @return this
      */
-    public QueryTextIndexRequestBuilder setIndexes(final List<String> indexes) {
+    public QueryRequestBuilder setIndexes(final List<String> indexes) {
         this.indexes = indexes;
 
         return this;

@@ -9,7 +9,7 @@ import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.RestAdapterFactory;
 import com.hp.autonomy.iod.client.api.search.Documents;
-import com.hp.autonomy.iod.client.api.search.QueryTextIndexRequestBuilder;
+import com.hp.autonomy.iod.client.api.search.QueryRequestBuilder;
 import com.hp.autonomy.iod.client.api.search.QueryTextIndexService;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import org.junit.Before;
@@ -43,7 +43,7 @@ public class RequestInterceptorITCase extends AbstractIodClientIntegrationTest {
 
     @Test
     public void testInterceptor() throws IodErrorException {
-        final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> params = new QueryRequestBuilder()
                 .addIndexes("wiki_eng")
                 .setTotalResults(true)
                 .build();

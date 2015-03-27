@@ -47,7 +47,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
     @Test
     public void testQueryForText() throws IodErrorException {
-        final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> params = new QueryRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
             .setSummary(Summary.concept)
@@ -72,7 +72,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
     @Test
     public void testQueryForFile() throws IodErrorException {
         final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/search/queryText.txt"));
-        final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> params = new QueryRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
             .addIndexes("wiki_ita", "wiki_eng")
@@ -90,7 +90,7 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
         final InputStream stream = getClass().getResourceAsStream("/com/hp/autonomy/iod/client/api/search/queryText.txt");
 
         final TypedOutput file = new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(stream));
-        final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> params = new QueryRequestBuilder()
             .setMaxPageResults(10)
             .setAbsoluteMaxResults(10)
             .addIndexes("wiki_ita", "wiki_eng")

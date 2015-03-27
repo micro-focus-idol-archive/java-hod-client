@@ -55,7 +55,7 @@ public class FindSimilarITCase extends AbstractIodClientIntegrationTest {
 
     @Test
     public void testFindSimilarWithText() throws IodErrorException {
-        final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> params = new QueryRequestBuilder()
                 .addIndexes("wiki_eng")
                 .build();
 
@@ -69,7 +69,7 @@ public class FindSimilarITCase extends AbstractIodClientIntegrationTest {
     @Test
     public void testFindSimilarWithFile() throws IodErrorException {
         final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/formatconversion/test-file.txt"));
-        final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+        final Map<String, Object> params = new QueryRequestBuilder()
                 .addIndexes("wiki_eng")
                 .build();
 
@@ -109,7 +109,7 @@ public class FindSimilarITCase extends AbstractIodClientIntegrationTest {
             @Override
             public void success(final AddToTextIndexResponse response) {
                 try {
-                    final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+                    final Map<String, Object> params = new QueryRequestBuilder()
                             .addIndexes(getIndex())
                             .build();
 
