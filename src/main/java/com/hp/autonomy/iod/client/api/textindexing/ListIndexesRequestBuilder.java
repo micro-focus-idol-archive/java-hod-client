@@ -19,12 +19,12 @@ public class ListIndexesRequestBuilder {
     /**
      * @param indexTypes The value of the type parameter
      */
-    private Set<IndexType> indexTypes = Collections.emptySet();
+    private final Set<IndexType> indexTypes = Collections.emptySet();
 
     /**
      * @param indexFlavors The value of the flavor parameter
      */
-    private Set<IndexFlavor> indexFlavors = Collections.emptySet();
+    private final Set<IndexFlavor> indexFlavors = Collections.emptySet();
 
     /**
      * @return A map of parameters suitable for use with {@link ListIndexesService}.

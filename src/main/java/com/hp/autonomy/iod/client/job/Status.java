@@ -50,7 +50,7 @@ public enum Status {
         return LOOKUP.get(value);
     }
 
-    private Status(final String iodName) {
+    Status(final String iodName) {
         this.iodName = iodName;
     }
 }

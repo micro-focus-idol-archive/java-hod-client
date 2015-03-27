@@ -102,7 +102,7 @@ public class AddToTextIndexRequestBuilder {
     @DoNotConvert
     public enum DuplicateMode {
         duplicate,
-        replace;
+        replace
     }
 
 }
