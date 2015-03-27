@@ -32,10 +32,6 @@ public abstract class AbstractIodClientIntegrationTest {
         return "java-iod-client-integration-tests";
     }
 
-    public String getQueryManipulationIndex() {
-        return "java-iod-client-integration-tests-query-manipulation";
-    }
-
     public RestAdapter getRestAdapter() {
         return restAdapter;
     }
