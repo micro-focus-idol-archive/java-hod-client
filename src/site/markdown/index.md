@@ -19,7 +19,7 @@ java-iod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.iod</groupId>
         <artifactId>java-iod-client</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </dependency>
 
 java-iod-client uses [Retrofit](http://square.github.io/retrofit/) as the basis of its HTTP implementation. This
@@ -48,6 +48,10 @@ You can then call the methods on queryTextIndexService to communicate with IDOL 
         "myApiKey",
         "cats",
         params);
+
+## Library structure
+APIs can be found in the com.hp.autonomy.iod.client.api package. There is one package per category as seen in the IDOL
+OnDemand documentation. There is one service per API.
 
 ## Asynchronous requests
 For asynchronous actions the Retrofit service returns a JobId. We also provide a service which will track the status of
@@ -153,6 +157,10 @@ query any API.
     
 This approach requires a greater familiarity with the IDOL OnDemand documentation. It also removes the type safety of
 the dedicated services, making the response useful only for automated transformation into JSON.
+
+## Contributing
+We welcome pull requests. These must be licensed under the MIT license. Please submit pull requests to the develop
+branch - the develop branch is for stable code only.
 
 ## Is it any good?
 Yes.

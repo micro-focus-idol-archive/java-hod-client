@@ -145,7 +145,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue> {
 
     private class ParametricValueIterator implements Iterator<ParametricValue> {
 
-        private Iterator<ParametricValue> inner;
+        private final Iterator<ParametricValue> inner;
 
         private ParametricValueIterator() {
             final List<ParametricValue> values = new ArrayList<>();
