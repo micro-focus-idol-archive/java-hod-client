@@ -83,6 +83,8 @@ The APIs which are currently asynchronous are
 
 * AddToTextIndex
 * DeleteFromTextIndex
+* CreateTextIndex
+* DeleteTextIndex
 
 ## Request Interceptors
 For cases where you want to send the same API key with every request, we provide RequestInterceptors. These are
