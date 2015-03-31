@@ -160,7 +160,7 @@ the dedicated services, making the response useful only for automated transforma
 
 ## Contributing
 We welcome pull requests. These must be licensed under the MIT license. Please submit pull requests to the develop
-branch - the develop branch is for stable code only.
+branch - the master branch is for stable code only.
 
 ## Is it any good?
 Yes.
