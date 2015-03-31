@@ -9,7 +9,6 @@ import com.hp.autonomy.iod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -20,12 +19,14 @@ public class ListIndexesRequestBuilder {
     /**
      * @param indexTypes The value of the type parameter
      */
-    private final Set<IndexType> indexTypes = new HashSet<>();
+    @SuppressWarnings("FieldMayBeFinal")
+    private Set<IndexType> indexTypes = new HashSet<>();
 
     /**
      * @param indexFlavors The value of the flavor parameter
      */
-    private final Set<IndexFlavor> indexFlavors = new HashSet<>();
+    @SuppressWarnings("FieldMayBeFinal")
+    private Set<IndexFlavor> indexFlavors = new HashSet<>();
 
     /**
      * @return A map of parameters suitable for use with {@link ListIndexesService}.
