@@ -7,6 +7,19 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.5.0" date="2015-03-31">
+            <action dev="daniel-garyling-hp" type="add">
+                Add support for the createtextindex API
+            </action>
+            <action dev="daniel-garyling-hp" type="add">
+                Add support for the deletetextindex API
+            </action>
+        </release>
+        <release version="0.4.1" date="2015-03-31">
+            <action dev="alex-scown-hp" type="fix">
+                Add support for querymanipulation flavor indexes.
+            </action>
+        </release>
         <release version="0.4.0" date="2015-03-27">
             <action dev="daniel-grayling-hp" type="add">
                 Add support for the getcontent API
