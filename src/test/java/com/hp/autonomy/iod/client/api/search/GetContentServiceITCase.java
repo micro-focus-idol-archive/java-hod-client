@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private GetContentService getContentService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
@@ -41,6 +41,7 @@ public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
     @Test
     public void testGetContentWithReference() throws IodErrorException {
         final Map<String, Object> params = new GetContentRequestBuilder()
+                .setPrint(Print.all)
                 .build();
 
         final Documents documents = getContentService.getContent(endpoint.getApiKey(),

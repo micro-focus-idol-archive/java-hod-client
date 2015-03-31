@@ -46,7 +46,7 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
 
     private IdolOnDemandService idolOnDemandService;
     private ScheduledExecutorService scheduledExecutorService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

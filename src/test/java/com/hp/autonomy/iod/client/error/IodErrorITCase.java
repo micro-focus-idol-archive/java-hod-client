@@ -25,7 +25,7 @@ import static org.junit.Assert.fail;
 public class IodErrorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
