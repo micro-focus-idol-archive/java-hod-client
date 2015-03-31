@@ -19,7 +19,7 @@ java-iod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.iod</groupId>
         <artifactId>java-iod-client</artifactId>
-        <version>0.4.0</version>
+        <version>0.5.0</version>
     </dependency>
 
 java-iod-client uses [Retrofit](http://square.github.io/retrofit/) as the basis of its HTTP implementation. This
