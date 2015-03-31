@@ -48,7 +48,8 @@ public class DeleteTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a file into IDOL OnDemand using the given API key
+     * Deletes the given text index using the given API key. This API handles the confirm token returned by IDOL
+     * OnDemand automatically.
      * @param apiKey The API key to use to authenticate the request
      * @param index The name of the index
      * @param callback Callback that will be called with the response
@@ -67,7 +68,8 @@ public class DeleteTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a file into IDOL OnDemand using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Deletes the given text index using an API key provided by a {@link retrofit.RequestInterceptor}. This API handles
+     * the confirm token returned by IDOL OnDemand automatically.
      * @param index The name of the index
      * @param callback Callback that will be called with the response
      * @throws IodErrorException If an error occurs
