@@ -40,7 +40,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractIodClientIntegrati
 
     @Test
     public void testRetrieveIndexFieldsGrouped() throws IodErrorException {
-        final String wikiEngField = "DOCUMENT/DRECONTENT";
+        final String wikiEngField = "drecontent";
 
         final Map<String,Object> params = new RetrieveIndexFieldsRequestBuilder()
                 .setFieldType(FieldType.index)

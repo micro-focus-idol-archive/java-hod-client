@@ -53,11 +53,11 @@ public class GetParametricValuesServiceITCase extends AbstractIodClientIntegrati
 
         final Set<String> fieldNamesSet = fieldNames.getFieldNames();
 
-        assertThat(fieldNamesSet, hasItems("WIKIPEDIA_TYPE", "PERSON_PROFESSION"));
+        assertThat(fieldNamesSet, hasItems("wikipedia_type", "person_profession"));
 
-        assertThat(fieldNames.getValuesForFieldName("PERSON_PROFESSION").size(), is(lessThanOrEqualTo(15)));
+        assertThat(fieldNames.getValuesForFieldName("person_profession").size(), is(lessThanOrEqualTo(15)));
 
-        final List<FieldNames.ValueAndCount> wikipediaTypes = fieldNames.getValuesAndCountsForFieldName("WIKIPEDIA_TYPE");
+        final List<FieldNames.ValueAndCount> wikipediaTypes = fieldNames.getValuesAndCountsForFieldName("wikipedia_type");
 
         final String first = wikipediaTypes.get(0).getValue();
         final String last = wikipediaTypes.get(wikipediaTypes.size() - 1).getValue();
