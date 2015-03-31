@@ -30,7 +30,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrati
 
     private DeleteFromTextIndexJobService deleteFromTextIndexService;
     private AddToTextIndexJobService addToTextIndexService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

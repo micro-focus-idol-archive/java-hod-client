@@ -31,7 +31,7 @@ public class GetParametricValuesServiceITCase extends AbstractIodClientIntegrati
     private final Endpoint endpoint;
     private GetParametricValuesService getParametricValuesService;
 
-    public GetParametricValuesServiceITCase(Endpoint endpoint) {
+    public GetParametricValuesServiceITCase(final Endpoint endpoint) {
         this.endpoint = endpoint;
     }
 

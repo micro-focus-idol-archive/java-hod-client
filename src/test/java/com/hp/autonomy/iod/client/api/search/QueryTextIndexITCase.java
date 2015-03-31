@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
 public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

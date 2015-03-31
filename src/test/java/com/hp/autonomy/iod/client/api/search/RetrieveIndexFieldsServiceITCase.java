@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 public class RetrieveIndexFieldsServiceITCase extends AbstractIodClientIntegrationTest {
 
     private RetrieveIndexFieldsService retrieveIndexFieldsService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

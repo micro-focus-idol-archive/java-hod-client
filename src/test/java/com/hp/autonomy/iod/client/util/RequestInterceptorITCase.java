@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.greaterThan;
 public class RequestInterceptorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

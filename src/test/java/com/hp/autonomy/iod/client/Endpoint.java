@@ -15,7 +15,7 @@ public enum Endpoint {
     private final String url;
     private final String apiKey;
 
-    Endpoint(String url, String apiKey) {
+    Endpoint(final String url, final String apiKey) {
         this.url = url;
         this.apiKey = apiKey;
     }
