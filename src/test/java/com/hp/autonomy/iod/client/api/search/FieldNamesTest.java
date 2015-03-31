@@ -29,11 +29,11 @@ public class FieldNamesTest {
 
     @Before
     public void initialize() {
-        final Map<String, Integer> fieldValue0 = new LinkedHashMap<>();;
+        final Map<String, Integer> fieldValue0 = new LinkedHashMap<>();
         fieldValue0.put("1", 1);
         fieldValue0.put("2", 2);
 
-        final Map<String, Integer> fieldValue1 = new LinkedHashMap<>();;
+        final Map<String, Integer> fieldValue1 = new LinkedHashMap<>();
         fieldValue1.put("3", 3);
         fieldValue1.put("4", 4);
         fieldValue1.put("5", 5);

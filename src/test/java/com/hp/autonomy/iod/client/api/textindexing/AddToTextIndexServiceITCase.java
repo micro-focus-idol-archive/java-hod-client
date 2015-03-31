@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.hasSize;
 public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTest {
 
     private static final String REFERENCE = "3ac70cc2-606e-486a-97d0-511e762b2183";
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     private AddToTextIndexJobService addToTextIndexService;
 

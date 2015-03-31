@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.containsString;
 public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private ViewDocumentService viewDocumentService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

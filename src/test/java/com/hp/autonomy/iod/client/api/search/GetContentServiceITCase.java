@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private GetContentService getContentService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {

@@ -20,12 +20,12 @@ public class ListIndexesRequestBuilder {
     /**
      * @param indexTypes The value of the type parameter
      */
-    private Set<IndexType> indexTypes = new HashSet<>();
+    private final Set<IndexType> indexTypes = new HashSet<>();
 
     /**
      * @param indexFlavors The value of the flavor parameter
      */
-    private Set<IndexFlavor> indexFlavors = new HashSet<>();
+    private final Set<IndexFlavor> indexFlavors = new HashSet<>();
 
     /**
      * @return A map of parameters suitable for use with {@link ListIndexesService}.

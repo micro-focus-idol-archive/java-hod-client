@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
 
     private ListIndexesService listIndexesService;
-    private Endpoint endpoint;
+    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
@@ -65,7 +65,7 @@ public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
         }
 
         @Override
-        public boolean matches(Object o) {
+        public boolean matches(final Object o) {
             if(!(o instanceof List)) {
                 return false;
             }
@@ -82,7 +82,7 @@ public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
         }
 
         @Override
-        public void describeTo(Description description) {
+        public void describeTo(final Description description) {
             description.appendText("A list containing the index with name " + indexName);
         }
     }
