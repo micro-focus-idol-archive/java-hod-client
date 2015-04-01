@@ -18,8 +18,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class CreateDeleteQueryProfileServiceITCase extends AbstractIodClientIntegrationTest {
@@ -34,13 +32,6 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractIodClientInte
 
         createQueryProfileService = getRestAdapter().create(CreateQueryProfileService.class);
         deleteQueryProfileService = getRestAdapter().create(DeleteQueryProfileService.class);
-    }
-
-    @Parameterized.Parameters
-    public static Collection<Endpoint> endPoints() {
-        return Arrays.asList(
-                Endpoint.DEVELOPMENT
-        );
     }
 
     public CreateDeleteQueryProfileServiceITCase(final Endpoint endpoint) {
