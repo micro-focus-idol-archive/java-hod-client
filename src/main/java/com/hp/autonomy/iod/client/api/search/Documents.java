@@ -47,7 +47,7 @@ public class Documents {
         private Integer totalResults;
 
         @JsonProperty("totalhits")
-        public Builder setTotalResults(final int totalResults) {
+        public Builder setTotalResults(final Integer totalResults) {
             this.totalResults = totalResults;
             return this;
         }
