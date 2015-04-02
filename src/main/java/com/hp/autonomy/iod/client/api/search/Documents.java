@@ -34,7 +34,7 @@ public class Documents {
      * @returns The total number of results found by IDOL OnDemand. If the total_results parameter was not specified,
      * this will be 0.
      */
-    private final int totalResults;
+    private final Integer totalResults;
 
     @Setter
     @Accessors(chain = true)
@@ -44,7 +44,7 @@ public class Documents {
         @SuppressWarnings("FieldMayBeFinal")
         private List<Document> documents = Collections.emptyList();
 
-        private int totalResults;
+        private Integer totalResults;
 
         @JsonProperty("totalhits")
         public Builder setTotalResults(final int totalResults) {
