@@ -73,6 +73,12 @@ public class FindRelatedConceptsRequestBuilder {
     private List<String> printFields;
 
     /**
+     * @param indexes Value for the indexes parameter. This list will be sent as separate parameters,
+     *                e.g. indexes=wiki_eng&indexes=news_eng&...
+     */
+    private List<String> indexes;
+
+    /**
      * @return A map of query parameters suitable for use with {@link FindRelatedConceptsService}. get is NOT supported on
      * the resulting map
      */
@@ -85,6 +91,10 @@ public class FindRelatedConceptsRequestBuilder {
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
+
+        for(final String index : indexes) {
+            map.put("indexes", index);
+        }
 
         return map;
     }
