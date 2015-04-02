@@ -56,6 +56,12 @@
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
+        <developer>
+            <name>Brian Beckett</name>
+            <email>brian.beckett@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
     </developers>
 
     <properties>
