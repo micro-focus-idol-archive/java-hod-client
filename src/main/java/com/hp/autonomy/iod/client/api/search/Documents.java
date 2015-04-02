@@ -32,7 +32,7 @@ public class Documents {
 
     /**
      * @returns The total number of results found by IDOL OnDemand. If the total_results parameter was not specified,
-     * this will be 0.
+     * this will be null.
      */
     private final Integer totalResults;
 
