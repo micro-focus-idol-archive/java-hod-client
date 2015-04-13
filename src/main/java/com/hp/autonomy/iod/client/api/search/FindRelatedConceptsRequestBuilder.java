@@ -73,6 +73,22 @@ public class FindRelatedConceptsRequestBuilder {
     private List<String> printFields;
 
     /**
+     * @param indexes Value for the indexes parameter. This list will be sent as separate parameters,
+     *                e.g. indexes=wiki_eng&indexes=news_eng&...
+     */
+    private List<String> indexes;
+
+    /**
+     * @param maxResults Value for the max_results parameter.
+     */
+    private Integer maxResults;
+
+    /**
+     * @param sampleSize Value for the sample_size parameter.
+     */
+    private Integer sampleSize;
+
+    /**
      * @return A map of query parameters suitable for use with {@link FindRelatedConceptsService}. get is NOT supported on
      * the resulting map
      */
@@ -81,10 +97,16 @@ public class FindRelatedConceptsRequestBuilder {
         map.put("field_text", fieldText);
         map.put("min_score", minScore);
         map.put("print_fields", StringUtils.join(printFields, ','));
+        map.put("max_results", maxResults);
+        map.put("sample_size", sampleSize);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
+
+        for(final String index : indexes) {
+            map.put("indexes", index);
+        }
 
         return map;
     }
