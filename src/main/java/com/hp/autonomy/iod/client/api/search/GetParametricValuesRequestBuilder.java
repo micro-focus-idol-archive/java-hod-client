@@ -52,6 +52,11 @@ public class GetParametricValuesRequestBuilder {
     private ParametricSort sort;
 
     /**
+     * @param queryProfile The value of the query_profile parameter
+     */
+    private String queryProfile;
+
+    /**
      * Adds indexes to the indexes parameter
      * @param index0 The first index
      * @param indexes The remaining indexes
@@ -105,6 +110,7 @@ public class GetParametricValuesRequestBuilder {
         map.put("min_score", minScore);
         map.put("document_count", documentCount);
         map.put("sort", sort);
+        map.put("query_profile", queryProfile);
 
         for(final String index : indexes) {
             map.put("indexes", index);
