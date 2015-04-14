@@ -124,6 +124,11 @@ public class QueryRequestBuilder {
      */
     private Boolean totalResults;
 
+    /**
+     * @param queryProfile Value for the query_profile parameter
+     */
+    private String queryProfile;
+
     private List<String> indexes = new ArrayList<>();
 
     /**
@@ -169,6 +174,7 @@ public class QueryRequestBuilder {
         map.put("start_tag", startTag);
         map.put("summary", summary);
         map.put("total_results", totalResults);
+        map.put("query_profile", queryProfile);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
