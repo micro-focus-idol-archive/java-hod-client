@@ -119,6 +119,8 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
                         log.debug("Found a failed action, calling callback");
 
                         for(final IodError error : action.getErrors()) {
+                            log.debug("Error callback called with: {}", error);
+
                             callback.error(error.getErrorCode());
                         }
                     }
