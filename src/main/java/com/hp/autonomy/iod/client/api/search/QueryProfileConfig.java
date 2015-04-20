@@ -12,7 +12,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
- * A query profile to send to IDOL onDemand for use with other actions
+ * A query profile config to send to IDOL OnDemand for use with other actions
  */
 @Data
 public class QueryProfileConfig {
