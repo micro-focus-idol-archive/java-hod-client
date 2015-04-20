@@ -29,6 +29,6 @@ public interface CreateQueryProfileService {
     CreateDeleteQueryProfileResponse createQueryProfile(
             @Part("apiKey") String apiKey,
             @Part("query_profile") String name,
-            @Part("config") QueryProfile config
+            @Part("config") QueryProfileConfig config
     ) throws HodErrorException;
 }

@@ -53,7 +53,7 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractHodClientInte
                 .setCategories(categories)
                 .build();
 
-        final QueryProfile queryProfile = new QueryProfile.Builder()
+        final QueryProfileConfig queryProfile = new QueryProfileConfig.Builder()
                 .setQueryManipulationIndex(getQueryManipulationIndex())
                 .setPromotions(promotions)
                 .build();
