@@ -22,7 +22,7 @@ public interface DeleteQueryProfileService {
      * @return The name of the deleted query profile
      */
     @GET(URL)
-    CreateDeleteQueryProfileResponse deleteQueryProfile(
+    QueryProfileStatusResponse deleteQueryProfile(
             @Query("query_profile") String name
     ) throws HodErrorException;
 
@@ -33,7 +33,7 @@ public interface DeleteQueryProfileService {
      * @return The name of the deleted query profile
      */
     @GET(URL)
-    CreateDeleteQueryProfileResponse deleteQueryProfile(
+    QueryProfileStatusResponse deleteQueryProfile(
             @Query("apiKey") String apiKey,
             @Query("query_profile") String name
     ) throws HodErrorException;

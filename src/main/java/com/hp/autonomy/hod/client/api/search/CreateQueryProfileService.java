@@ -26,7 +26,7 @@ public interface CreateQueryProfileService {
      */
     @POST(URL)
     @Multipart
-    CreateDeleteQueryProfileResponse createQueryProfile(
+    QueryProfileStatusResponse createQueryProfile(
             @Part("apiKey") String apiKey,
             @Part("query_profile") String name,
             @Part("config") QueryProfileConfig config

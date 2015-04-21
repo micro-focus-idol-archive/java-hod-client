@@ -58,8 +58,8 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractHodClientInte
                 .setPromotions(promotions)
                 .build();
 
-        final CreateDeleteQueryProfileResponse createResponse = createQueryProfileService.createQueryProfile(endpoint.getApiKey(), profileName, queryProfile);
-        final CreateDeleteQueryProfileResponse deleteResponse = deleteQueryProfileService.deleteQueryProfile(endpoint.getApiKey(), profileName);
+        final QueryProfileStatusResponse createResponse = createQueryProfileService.createQueryProfile(endpoint.getApiKey(), profileName, queryProfile);
+        final QueryProfileStatusResponse deleteResponse = deleteQueryProfileService.deleteQueryProfile(endpoint.getApiKey(), profileName);
 
         assertThat(createResponse.getMessage(), is(notNullValue()));
         assertThat(createResponse.getQueryProfileName(), is(profileName));
