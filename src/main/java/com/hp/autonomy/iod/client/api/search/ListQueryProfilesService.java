@@ -16,7 +16,7 @@ public interface ListQueryProfilesService {
     String URL = "/api/sync/listqueryprofiles/v1";
 
     @GET(URL)
-	List<String> listQueryProfiles(
+    List<String> listQueryProfiles(
             @Query("apiKey") String apiKey
     ) throws IodErrorException;
 }
