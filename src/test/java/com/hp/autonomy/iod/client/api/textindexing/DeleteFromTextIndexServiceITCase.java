@@ -30,18 +30,17 @@ public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrati
 
     private DeleteFromTextIndexJobService deleteFromTextIndexService;
     private AddToTextIndexJobService addToTextIndexService;
-    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
         addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
     }
 
     public DeleteFromTextIndexServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

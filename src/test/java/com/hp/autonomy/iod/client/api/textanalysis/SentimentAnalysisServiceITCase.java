@@ -19,16 +19,15 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class SentimentAnalysisServiceITCase extends AbstractIodClientIntegrationTest {
 
-    private final Endpoint endpoint;
     private SentimentAnalysisService sentimentAnalysisService;
 
     public SentimentAnalysisServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         sentimentAnalysisService = getRestAdapter().create(SentimentAnalysisService.class);
     }

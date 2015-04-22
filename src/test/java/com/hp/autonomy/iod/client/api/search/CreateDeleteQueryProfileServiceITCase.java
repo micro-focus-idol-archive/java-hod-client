@@ -24,18 +24,17 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractIodClientInte
 
     private CreateQueryProfileService createQueryProfileService;
     private DeleteQueryProfileService deleteQueryProfileService;
-    private Endpoint endpoint;
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         createQueryProfileService = getRestAdapter().create(CreateQueryProfileService.class);
         deleteQueryProfileService = getRestAdapter().create(DeleteQueryProfileService.class);
     }
 
     public CreateDeleteQueryProfileServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

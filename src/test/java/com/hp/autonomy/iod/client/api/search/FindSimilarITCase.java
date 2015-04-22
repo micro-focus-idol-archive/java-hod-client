@@ -36,17 +36,16 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class FindSimilarITCase extends AbstractIodClientIntegrationTest {
 
-    private final Endpoint endpoint;
     private FindSimilarService findSimilarService;
     private AddToTextIndexJobService addToTextIndexService;
 
     public FindSimilarITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         final RestAdapter restAdapter = getRestAdapter();
         findSimilarService = restAdapter.create(FindSimilarService.class);

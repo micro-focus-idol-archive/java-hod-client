@@ -26,17 +26,16 @@ import static org.junit.Assert.assertThat;
 public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
 
     private ListIndexesService listIndexesService;
-    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         listIndexesService = getRestAdapter().create(ListIndexesService.class);
     }
 
     public ListIndexesServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

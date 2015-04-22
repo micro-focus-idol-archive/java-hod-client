@@ -28,17 +28,16 @@ import static org.hamcrest.Matchers.containsString;
 public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private ViewDocumentService viewDocumentService;
-    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         viewDocumentService = getRestAdapter().create(ViewDocumentService.class);
     }
 
     public ViewDocumentServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

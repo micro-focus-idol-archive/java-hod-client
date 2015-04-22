@@ -5,19 +5,18 @@
 
 package com.hp.autonomy.iod.client;
 
-
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-
 public abstract class AbstractIodClientIntegrationTest {
 
     private RestAdapter restAdapter;
+    protected Endpoint endpoint;
 
-    public void setUp(final Endpoint endpoint) {
+    public void setUp() {
         restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);
     }
 
@@ -26,6 +25,14 @@ public abstract class AbstractIodClientIntegrationTest {
         return Arrays.asList(
                 Endpoint.PRODUCTION
         );
+    }
+
+    /**
+     * Make sure you override this and call super(endpoint);
+     * @param endpoint
+     */
+    public AbstractIodClientIntegrationTest(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     public String getIndex() {

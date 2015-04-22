@@ -46,11 +46,10 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
 
     private IdolOnDemandService idolOnDemandService;
     private ScheduledExecutorService scheduledExecutorService;
-    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         idolOnDemandService = getRestAdapter().create(IdolOnDemandService.class);
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -63,7 +62,7 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
     }
 
     public IdolOnDemandServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

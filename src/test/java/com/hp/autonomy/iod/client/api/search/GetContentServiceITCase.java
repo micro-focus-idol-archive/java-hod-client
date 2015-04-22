@@ -25,17 +25,16 @@ import static org.junit.Assert.assertThat;
 public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private GetContentService getContentService;
-    private final Endpoint endpoint;
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         getContentService = getRestAdapter().create(GetContentService.class);
     }
 
     public GetContentServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

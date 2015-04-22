@@ -28,16 +28,15 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class GetParametricValuesServiceITCase extends AbstractIodClientIntegrationTest {
 
-    private final Endpoint endpoint;
     private GetParametricValuesService getParametricValuesService;
 
     public GetParametricValuesServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         getParametricValuesService = getRestAdapter().create(GetParametricValuesService.class);
     }
