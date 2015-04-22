@@ -31,7 +31,7 @@ public class CreateDeleteQueryProfileResponse {
     /**
      * @return The name of the created query profile
      */
-    private final String queryProfile;
+    private final String queryProfileName;
 
     @JsonPOJOBuilder(withPrefix = "set")
     @Setter
@@ -41,12 +41,10 @@ public class CreateDeleteQueryProfileResponse {
         private String message;
 
         @JsonProperty("query_profile")
-        private String queryProfile;
+        private String queryProfileName;
 
         public CreateDeleteQueryProfileResponse build() {
-            return new CreateDeleteQueryProfileResponse(message, queryProfile);
+            return new CreateDeleteQueryProfileResponse(message, queryProfileName);
         }
-
     }
-
 }
