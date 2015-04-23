@@ -6,12 +6,14 @@
 package com.hp.autonomy.iod.client.api.search;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Data
+@JsonDeserialize(builder = QueryProfile.Builder.class)
 public class QueryProfile {
 
     /** The name of the Query Profile */

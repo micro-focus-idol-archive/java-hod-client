@@ -18,7 +18,7 @@ import java.util.List;
  * The promotion settings for a query profile
  */
 @Data
-@JsonDeserialize(builder = QueryProfileConfig.Builder.class)
+@JsonDeserialize(builder = QueryProfilePromotions.Builder.class)
 public class QueryProfilePromotions {
     /**
      * @return Whether promotions are enabled

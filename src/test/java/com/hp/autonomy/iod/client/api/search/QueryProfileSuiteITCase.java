@@ -11,6 +11,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CreateDeleteQueryProfileServiceSuiteChild.class,
-        ListQueryProfilesSuiteChild.class
+        ListQueryProfilesSuiteChild.class,
+        RetrieveQueryProfileServiceSuiteChild.class
 })
 public class QueryProfileSuiteITCase {}

@@ -6,6 +6,7 @@
 package com.hp.autonomy.iod.client.api.search;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import lombok.experimental.Accessors;
  * A query profile config to send to IDOL OnDemand for use with other actions
  */
 @Data
+@JsonDeserialize(builder = QueryProfileConfig.Builder.class)
 public class QueryProfileConfig {
     /**
      * @return The name of the query manipulation index to use
