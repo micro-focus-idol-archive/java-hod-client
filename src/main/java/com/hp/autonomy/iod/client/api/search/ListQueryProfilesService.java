@@ -13,6 +13,12 @@ public interface ListQueryProfilesService {
 
     String URL = "/api/sync/listqueryprofiles/v1";
 
+    /**
+     * Gets the names of the query profiles that currently exist for the given API key.
+     * @param apiKey  The API key to use to access IDOL OnDemand.
+     * @return  A QueryProfiles response object, that has a util method on it for getting the actual names.
+     * @throws IodErrorException
+     */
     @GET(URL)
     QueryProfiles listQueryProfiles(
             @Query("apiKey") String apiKey

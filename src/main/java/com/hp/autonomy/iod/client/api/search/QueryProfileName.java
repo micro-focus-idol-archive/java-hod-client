@@ -7,17 +7,20 @@ package com.hp.autonomy.iod.client.api.search;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
+/**
+ * Represents the name of a query profile.  Part of the response from ListQueryProfile.
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = QueryProfileName.Builder.class)
 public class QueryProfileName {
 
+    /**
+     * The name of a query profile
+     */
     @JsonProperty("name")
     private final String name;
 

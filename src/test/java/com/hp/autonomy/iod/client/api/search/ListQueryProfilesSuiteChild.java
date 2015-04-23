@@ -15,9 +15,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
@@ -95,14 +99,77 @@ public class ListQueryProfilesSuiteChild extends AbstractIodClientIntegrationTes
 
     @Test
     public void testSingleQueryProfile() throws IodErrorException {
-        QueryProfile qp = createTestQueryProfile("001");
+        // Setup
+        final QueryProfile qp = createTestQueryProfile("001");
         createQueryProfileService.createQueryProfile(endpoint.getApiKey(), qp.getName(), qp.getConfig());
+        final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(endpoint.getApiKey());
 
-        final QueryProfiles qpsResponse = listQueryProfilesService.listQueryProfiles(endpoint.getApiKey());
-
-        final List<QueryProfileName> qps = qpsResponse.getQueryProfiles();
-
+        // Test response from getQueryProfiles
+        final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
         assertThat(qps.size(), is(1));
-        assertThat(qps.get(0).getName(), is(qp.getName()));
+        for (QueryProfileName qpn : qps) {
+            assertThat(qpn.getName(), is(qp.getName()));
+        }
+
+        // Test response from getNames convenience method
+        final Set<String> qpNames = listQPsResponse.getNames();
+        assertThat(qpNames.size(), is(1));
+        assertThat(qpNames, contains(qp.getName()));
+    }
+
+    @Test
+    public void testTwoQueryProfiles() throws IodErrorException {
+        // Setup
+        final QueryProfile qp1 = createTestQueryProfile("001");
+        final QueryProfile qp2 = createTestQueryProfile("002");
+        createQueryProfileService.createQueryProfile(endpoint.getApiKey(), qp1.getName(), qp1.getConfig());
+        createQueryProfileService.createQueryProfile(endpoint.getApiKey(), qp2.getName(), qp2.getConfig());
+        final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(endpoint.getApiKey());
+
+        // Test response from getQueryProfiles
+        final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
+        assertThat(qps.size(), is(2));
+
+        // Test response from getNames convenience method
+        final Set<String> qpNames = listQPsResponse.getNames();
+        assertThat(qpNames.size(), is(2));
+        assertThat(qpNames, containsInAnyOrder(qp1.getName(), qp2.getName()));
+    }
+
+    @Test
+    public void testSeveralQueryProfiles() throws IodErrorException {
+        // Setup
+        final Set<QueryProfile> testProfiles = new HashSet<>();
+        final Set<String> testNames = new HashSet<>();
+
+        for (int i = 0; i < 5; i++) {
+            final QueryProfile qp = createTestQueryProfile("" + i);
+            createQueryProfileService.createQueryProfile(endpoint.getApiKey(), qp.getName(), qp.getConfig());
+            testProfiles.add(qp);
+            testNames.add(qp.getName());
+        }
+        final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(endpoint.getApiKey());
+
+        // Test response from getQueryProfiles
+        final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
+        assertThat(qps.size(), is(testProfiles.size()));
+
+        // Test response from getNames convenience method
+        final Set<String> qpNames = listQPsResponse.getNames();
+        assertThat(qpNames.size(), is(testProfiles.size()));
+        assertThat(qpNames, containsInAnyOrder(testNames.toArray(new String[testNames.size()])));
+    }
+
+    @Test
+    public void testNoQueryProfiles() throws IodErrorException {
+        final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(endpoint.getApiKey());
+
+        // Test response from getQueryProfiles
+        final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
+        assertThat(qps.size(), is(0));
+
+        // Test response from getNames convenience method
+        final Set<String> qpNames = listQPsResponse.getNames();
+        assertThat(qpNames.size(), is(0));
     }
 }
