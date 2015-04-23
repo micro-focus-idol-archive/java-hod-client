@@ -9,14 +9,12 @@ import com.hp.autonomy.iod.client.error.IodErrorException;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
-import java.util.List;
-
 public interface ListQueryProfilesService {
 
     String URL = "/api/sync/listqueryprofiles/v1";
 
     @GET(URL)
-    List<String> listQueryProfiles(
+    QueryProfiles listQueryProfiles(
             @Query("apiKey") String apiKey
     ) throws IodErrorException;
 }
