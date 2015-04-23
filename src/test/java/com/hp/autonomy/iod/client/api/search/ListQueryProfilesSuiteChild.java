@@ -5,11 +5,9 @@
 
 package com.hp.autonomy.iod.client.api.search;
 
-import com.hp.autonomy.iod.client.AbstractIodClientIntegrationTest;
 import com.hp.autonomy.iod.client.AbstractQueryProfileIntegrationTest;
 import com.hp.autonomy.iod.client.Endpoint;
 import com.hp.autonomy.iod.client.error.IodErrorException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
