@@ -21,11 +21,6 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractIodCli
     private CreateQueryProfileService createQueryProfileService;
     private DeleteQueryProfileService deleteQueryProfileService;
 
-    /**
-     * Make sure you override this and call super(endpoint);
-     *
-     * @param endpoint
-     */
     public AbstractQueryProfileIntegrationTest(Endpoint endpoint) {
         super(endpoint);
     }
