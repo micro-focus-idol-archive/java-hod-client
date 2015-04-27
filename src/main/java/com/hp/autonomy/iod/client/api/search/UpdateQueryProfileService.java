@@ -8,7 +8,7 @@ package com.hp.autonomy.iod.client.api.search;
 import com.hp.autonomy.iod.client.error.IodErrorException;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit.http.Part;
 
 public interface UpdateQueryProfileService {
 
@@ -17,8 +17,8 @@ public interface UpdateQueryProfileService {
     @POST(URL)
     @Multipart
     QueryProfileStatusResponse updateQueryProfile(
-            @Query("apiKey") String apiKey,
-            @Query("query_profile") String name,
-            @Query("config") QueryProfileConfig config
+            @Part("apiKey") String apiKey,
+            @Part("query_profile") String name,
+            @Part("config") QueryProfileConfig config
     ) throws IodErrorException;
 }
