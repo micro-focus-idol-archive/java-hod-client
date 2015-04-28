@@ -22,9 +22,8 @@ public abstract class AbstractIodClientIntegrationTest {
 
     @Parameterized.Parameters
     public static Collection<Endpoint> endPoints() {
-        return Arrays.asList(
-                Endpoint.PRODUCTION
-        );
+        final Endpoint endpoint = Enum.valueOf(Endpoint.class, System.getProperty("hp.iod.env", "PRODUCTION"));
+        return Arrays.asList(endpoint);
     }
 
     /**
