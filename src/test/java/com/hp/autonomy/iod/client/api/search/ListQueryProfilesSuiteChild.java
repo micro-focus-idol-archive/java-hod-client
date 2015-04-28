@@ -17,9 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(Parameterized.class)
 public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegrationTest {
@@ -46,14 +44,14 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
-        assertThat(qps.size(), is(1));
+        assertThat(qps, hasSize(1));
         for (QueryProfileName qpn : qps) {
             assertThat(qpn.getName(), is(qp.getName()));
         }
 
         // Test response from getNames convenience method
         final Set<String> qpNames = listQPsResponse.getNames();
-        assertThat(qpNames.size(), is(1));
+        assertThat(qpNames, hasSize(1));
         assertThat(qpNames, contains(qp.getName()));
     }
 
@@ -66,11 +64,11 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
-        assertThat(qps.size(), is(2));
+        assertThat(qps, hasSize(2));
 
         // Test response from getNames convenience method
         final Set<String> qpNames = listQPsResponse.getNames();
-        assertThat(qpNames.size(), is(2));
+        assertThat(qpNames, hasSize(2));
         assertThat(qpNames, containsInAnyOrder(qp1.getName(), qp2.getName()));
     }
 
@@ -89,11 +87,11 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
-        assertThat(qps.size(), is(testProfiles.size()));
+        assertThat(qps, hasSize(testProfiles.size()));
 
         // Test response from getNames convenience method
         final Set<String> qpNames = listQPsResponse.getNames();
-        assertThat(qpNames.size(), is(testProfiles.size()));
+        assertThat(qpNames, hasSize(testProfiles.size()));
         assertThat(qpNames, containsInAnyOrder(testNames.toArray(new String[testNames.size()])));
     }
 
@@ -103,10 +101,10 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
-        assertThat(qps.size(), is(0));
+        assertThat(qps, hasSize(0));
 
         // Test response from getNames convenience method
         final Set<String> qpNames = listQPsResponse.getNames();
-        assertThat(qpNames.size(), is(0));
+        assertThat(qpNames, hasSize(0));
     }
 }

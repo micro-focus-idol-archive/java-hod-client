@@ -27,7 +27,6 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileI
     @Before
     public void setUp() {
         super.setUp();
-
         retrieveQueryProfileService = getRestAdapter().create(RetrieveQueryProfileService.class);
     }
 
