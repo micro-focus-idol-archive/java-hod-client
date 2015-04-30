@@ -38,7 +38,7 @@ public enum Status {
     private static final Map<String, Status> LOOKUP = new HashMap<>();
 
     static {
-        for(final Status status : values()) {
+        for (final Status status : values()) {
             LOOKUP.put(status.iodName, status);
         }
     }

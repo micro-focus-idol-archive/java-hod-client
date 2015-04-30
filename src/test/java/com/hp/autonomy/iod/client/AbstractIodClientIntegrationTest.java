@@ -5,31 +5,41 @@
 
 package com.hp.autonomy.iod.client;
 
-
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-
 public abstract class AbstractIodClientIntegrationTest {
 
     private RestAdapter restAdapter;
+    protected final Endpoint endpoint;
 
-    public void setUp(final Endpoint endpoint) {
+    public void setUp() {
         restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);
     }
 
     @Parameterized.Parameters
     public static Collection<Endpoint> endPoints() {
-        return Arrays.asList(
-                Endpoint.PRODUCTION
-        );
+        final Endpoint endpoint = Enum.valueOf(Endpoint.class, System.getProperty("hp.iod.env", "PRODUCTION"));
+        return Arrays.asList(endpoint);
+    }
+
+    /**
+     * Make sure you override this and call super(endpoint);
+     * @param endpoint
+     */
+    public AbstractIodClientIntegrationTest(final Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     public String getIndex() {
         return "java-iod-client-integration-tests";
+    }
+
+    public String getQueryManipulationIndex() {
+        return "java-iod-client-integration-tests-query-manipulation";
     }
 
     public RestAdapter getRestAdapter() {

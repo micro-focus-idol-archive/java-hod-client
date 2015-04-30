@@ -28,8 +28,8 @@ import static org.hamcrest.Matchers.greaterThan;
 public class RequestInterceptorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
-    private final Endpoint endpoint;
 
+    @Override
     @Before
     public void setUp() {
         final RestAdapter restAdapter = RestAdapterFactory.getRestAdapter(true, endpoint);
@@ -38,7 +38,7 @@ public class RequestInterceptorITCase extends AbstractIodClientIntegrationTest {
     }
 
     public RequestInterceptorITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

@@ -25,24 +25,24 @@ import static org.junit.Assert.assertThat;
 public class RetrieveIndexFieldsServiceITCase extends AbstractIodClientIntegrationTest {
 
     private RetrieveIndexFieldsService retrieveIndexFieldsService;
-    private final Endpoint endpoint;
 
+    @Override
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         retrieveIndexFieldsService = getRestAdapter().create(RetrieveIndexFieldsService.class);
     }
 
     public RetrieveIndexFieldsServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test
     public void testRetrieveIndexFieldsGrouped() throws IodErrorException {
         final String wikiEngField = "drecontent";
 
-        final Map<String,Object> params = new RetrieveIndexFieldsRequestBuilder()
+        final Map<String, Object> params = new RetrieveIndexFieldsRequestBuilder()
                 .setFieldType(FieldType.index)
                 .setGroupFieldsByType(true)
                 .build();

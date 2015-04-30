@@ -25,17 +25,17 @@ import static org.junit.Assert.assertThat;
 public class FindRelatedConceptsServiceITCase extends AbstractIodClientIntegrationTest {
 
     private FindRelatedConceptsService findRelatedConceptsService;
-    private final Endpoint endpoint;
 
+    @Override
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         findRelatedConceptsService = getRestAdapter().create(FindRelatedConceptsService.class);
     }
 
     public FindRelatedConceptsServiceITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

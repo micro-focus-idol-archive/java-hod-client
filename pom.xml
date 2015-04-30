@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.iod</groupId>
     <artifactId>java-iod-client</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 
     <description>Java Client for communicating with IDOL OnDemand</description>
 
@@ -53,6 +53,12 @@
         <developer>
             <name>Jonathan Soul</name>
             <email>jonathan.soul@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Brian Beckett</name>
+            <email>brian.beckett@hp.com</email>
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>

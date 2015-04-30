@@ -9,7 +9,7 @@ import retrofit.RequestInterceptor;
 
 /**
  * Request interceptor for automatically adding an API key from an API key service to requests
- *
+ * <p/>
  * If you need to send Multipart requests to IDOL OnDemand the DO NOT use this request interceptor as you will be unable to
  * poll for job statuses
  */

@@ -56,7 +56,7 @@ public interface FindSimilarService {
      * Finds similar documents to the text from an object store object using an API key
      * provided by a {@link retrofit.RequestInterceptor}
      * @param reference An IDOL OnDemand reference obtained from either the Expand Container or Store Object API.
-     *                  The contents of the object will be used as the query text
+     * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
      */
@@ -70,7 +70,7 @@ public interface FindSimilarService {
      * Finds similar documents to the text from an object store object using the given API key
      * @param apiKey The API key to use to authenticate the request
      * @param reference An IDOL OnDemand reference obtained from either the Expand Container or Store Object API.
-     *                  The contents of the object will be used as the query text
+     * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
      */

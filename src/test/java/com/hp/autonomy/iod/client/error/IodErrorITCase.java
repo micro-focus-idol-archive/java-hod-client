@@ -25,17 +25,17 @@ import static org.junit.Assert.fail;
 public class IodErrorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
-    private final Endpoint endpoint;
 
+    @Override
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         queryTextIndexService = getRestAdapter().create(QueryTextIndexService.class);
     }
 
     public IodErrorITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test

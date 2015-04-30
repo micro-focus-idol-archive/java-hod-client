@@ -32,29 +32,29 @@ import static org.junit.Assert.assertThat;
 public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
-    private final Endpoint endpoint;
 
+    @Override
     @Before
     public void setUp() {
-        super.setUp(endpoint);
+        super.setUp();
 
         queryTextIndexService = getRestAdapter().create(QueryTextIndexService.class);
     }
 
     public QueryTextIndexITCase(final Endpoint endpoint) {
-        this.endpoint = endpoint;
+        super(endpoint);
     }
 
     @Test
     public void testQueryForText() throws IodErrorException {
         final Map<String, Object> params = new QueryRequestBuilder()
-            .setMaxPageResults(10)
-            .setAbsoluteMaxResults(10)
-            .setSummary(Summary.concept)
-            .setPrint(Print.all)
-            .setTotalResults(true)
-            .addIndexes("wiki_eng", "wiki_ita")
-            .build();
+                .setMaxPageResults(10)
+                .setAbsoluteMaxResults(10)
+                .setSummary(Summary.concept)
+                .setPrint(Print.all)
+                .setTotalResults(true)
+                .addIndexes("wiki_eng", "wiki_ita")
+                .build();
 
         final Documents documents = queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "*", params);
 
@@ -73,11 +73,11 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
     public void testQueryForFile() throws IodErrorException {
         final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/iod/client/api/search/queryText.txt"));
         final Map<String, Object> params = new QueryRequestBuilder()
-            .setMaxPageResults(10)
-            .setAbsoluteMaxResults(10)
-            .addIndexes("wiki_ita", "wiki_eng")
-            .setSort(Sort.date)
-            .build();
+                .setMaxPageResults(10)
+                .setAbsoluteMaxResults(10)
+                .addIndexes("wiki_ita", "wiki_eng")
+                .setSort(Sort.date)
+                .build();
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(endpoint.getApiKey(), file, params);
         final List<Document> documentList = documents.getDocuments();
@@ -91,11 +91,11 @@ public class QueryTextIndexITCase extends AbstractIodClientIntegrationTest {
 
         final TypedOutput file = new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(stream));
         final Map<String, Object> params = new QueryRequestBuilder()
-            .setMaxPageResults(10)
-            .setAbsoluteMaxResults(10)
-            .addIndexes("wiki_ita", "wiki_eng")
-            .setSort(Sort.date)
-            .build();
+                .setMaxPageResults(10)
+                .setAbsoluteMaxResults(10)
+                .addIndexes("wiki_ita", "wiki_eng")
+                .setSort(Sort.date)
+                .build();
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(endpoint.getApiKey(), file, params);
         final List<Document> documentList = documents.getDocuments();

@@ -85,11 +85,11 @@ public class AddToTextIndexRequestBuilder {
 
         params.put("duplicate_mode", duplicateMode);
 
-        for(final String referencePrefix : referencePrefixes) {
+        for (final String referencePrefix : referencePrefixes) {
             params.put("reference_prefix", referencePrefix);
         }
 
-        for(final Object metadata : additionalMetadata) {
+        for (final Object metadata : additionalMetadata) {
             params.put("additional_metadata", metadata);
         }
 

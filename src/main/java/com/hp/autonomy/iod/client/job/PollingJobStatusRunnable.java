@@ -106,19 +106,21 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
             final Status jobStatusStatus = jobStatus.getStatus();
 
-            if(jobStatusStatus == Status.FINISHED || jobStatusStatus == Status.FAILED) {
-                for(final Action<T> action : jobStatus.getActions()) {
+            if (jobStatusStatus == Status.FINISHED || jobStatusStatus == Status.FAILED) {
+                for (final Action<T> action : jobStatus.getActions()) {
                     final Status status = action.getStatus();
 
-                    if(status == Status.FINISHED) {
+                    if (status == Status.FINISHED) {
                         log.debug("Found a finished action, calling callback");
 
                         callback.success(action.getResult());
                     }
-                    else if(status == Status.FAILED) {
+                    else if (status == Status.FAILED) {
                         log.debug("Found a failed action, calling callback");
 
-                        for(final IodError error : action.getErrors()) {
+                        for (final IodError error : action.getErrors()) {
+                            log.debug("Error callback called with: {}", error);
+
                             callback.error(error.getErrorCode());
                         }
                     }
@@ -136,7 +138,7 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
             log.error("Error retrieving job status for jobId: {}", jobId);
             log.error("Cause:", e);
 
-            if(DO_NOT_RETRY_CODES.contains(e.getErrorCode())) {
+            if (DO_NOT_RETRY_CODES.contains(e.getErrorCode())) {
                 log.error("Unrecoverable error, will not retry");
 
                 callback.error(e.getErrorCode());

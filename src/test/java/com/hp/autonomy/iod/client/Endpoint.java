@@ -10,6 +10,7 @@ package com.hp.autonomy.iod.client;
  */
 public enum Endpoint {
     DEVELOPMENT("https://api.dev.idolondemand.com/1", System.getProperty("hp.dev.iod.apiKey")),
+    STAGING("https://api.staging.idolondemand.com/1", System.getProperty("hp.staging.iod.apiKey")),
     PRODUCTION("https://api.idolondemand.com/1", System.getProperty("hp.iod.apiKey"));
 
     private final String url;

@@ -19,13 +19,13 @@ class TimeSelector {
     static Map<String, Object> max(final DateTime maxDate, final Long maxDateDays, final Long maxDateSeconds) {
         final Map<String, Object> map = new MultiMap<>();
 
-        if(maxDate != null) {
+        if (maxDate != null) {
             map.put("max_date", DATE_FORMAT.print(maxDate));
         }
-        else if(maxDateDays != null) {
+        else if (maxDateDays != null) {
             map.put("max_date", maxDateDays);
         }
-        else if(maxDateSeconds != null) {
+        else if (maxDateSeconds != null) {
             map.put("max_date", maxDateSeconds + "s");
         }
 
@@ -35,13 +35,13 @@ class TimeSelector {
     static Map<String, Object> min(final DateTime minDate, final Long minDateDays, final Long minDateSeconds) {
         final Map<String, Object> map = new MultiMap<>();
 
-        if(minDate != null) {
+        if (minDate != null) {
             map.put("min_date", DATE_FORMAT.print(minDate));
         }
-        else if(minDateDays != null) {
+        else if (minDateDays != null) {
             map.put("min_date", minDateDays);
         }
-        else if(minDateSeconds != null) {
+        else if (minDateSeconds != null) {
             map.put("min_date", minDateSeconds + "s");
         }
 

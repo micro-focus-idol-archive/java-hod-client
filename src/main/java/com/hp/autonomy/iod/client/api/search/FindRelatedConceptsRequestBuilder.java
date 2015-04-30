@@ -29,19 +29,19 @@ public class FindRelatedConceptsRequestBuilder {
 
     /**
      * @param maxDate A DateTime to use as the value for the max_date parameter. This parameter takes precedence over
-     *                maxDateDays and maxDateSeconds
+     * maxDateDays and maxDateSeconds
      */
     private DateTime maxDate;
 
     /**
      * @param minDate A DateTime to use as the value for the min_date parameter. This parameter takes precedence over
-     *                minDateDays and minDateSeconds
+     * minDateDays and minDateSeconds
      */
     private DateTime minDate;
 
     /**
      * @param maxDateDays A number of days to use as the value for the max_date parameter. This parameter takes
-     *                    precedence over maxDateSeconds
+     * precedence over maxDateSeconds
      */
     private Long maxDateDays;
 
@@ -52,7 +52,7 @@ public class FindRelatedConceptsRequestBuilder {
 
     /**
      * @param minDateDays A number of days to use as the value for the min_date parameter. This parameter takes
-     *                    precedence over maxDateSeconds
+     * precedence over maxDateSeconds
      */
     private Long minDateDays;
 
@@ -68,9 +68,25 @@ public class FindRelatedConceptsRequestBuilder {
 
     /**
      * @param printFields Value for the print_fields parameter. This list will be joined with commas before being sent
-     *                    to the server
+     * to the server
      */
     private List<String> printFields;
+
+    /**
+     * @param indexes Value for the indexes parameter. This list will be sent as separate parameters,
+     * e.g. indexes=wiki_eng&indexes=news_eng&...
+     */
+    private List<String> indexes;
+
+    /**
+     * @param maxResults Value for the max_results parameter.
+     */
+    private Integer maxResults;
+
+    /**
+     * @param sampleSize Value for the sample_size parameter.
+     */
+    private Integer sampleSize;
 
     /**
      * @return A map of query parameters suitable for use with {@link FindRelatedConceptsService}. get is NOT supported on
@@ -81,10 +97,16 @@ public class FindRelatedConceptsRequestBuilder {
         map.put("field_text", fieldText);
         map.put("min_score", minScore);
         map.put("print_fields", StringUtils.join(printFields, ','));
+        map.put("max_results", maxResults);
+        map.put("sample_size", sampleSize);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
+
+        for (final String index : indexes) {
+            map.put("indexes", index);
+        }
 
         return map;
     }

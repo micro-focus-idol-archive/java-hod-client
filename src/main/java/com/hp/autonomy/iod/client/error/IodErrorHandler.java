@@ -20,7 +20,7 @@ public class IodErrorHandler implements ErrorHandler {
     public Throwable handleError(final RetrofitError cause) {
         final RetrofitError.Kind kind = cause.getKind();
 
-        if(kind == RetrofitError.Kind.HTTP) {
+        if (kind == RetrofitError.Kind.HTTP) {
             // IOD returned an unsuccessful status code, parse the JSON response and throw something better
             IodError iodError = (IodError) cause.getBodyAs(IodError.class);
 
@@ -31,7 +31,7 @@ public class IodErrorHandler implements ErrorHandler {
             // if has actions, pull the error out of the action as it will be more useful
             final List<Action<?>> actions = iodError.getActions();
 
-            if(message != null && iodError.getErrorCode() == null) {
+            if (message != null && iodError.getErrorCode() == null) {
                 // IOD has given us an API key error
                 final Map<String, Object> detail = (Map<String, Object>) iodError.getDetail();
                 final IodErrorCode errorCode = IodErrorCode.fromCode((Integer) detail.get("error"));
@@ -41,14 +41,14 @@ public class IodErrorHandler implements ErrorHandler {
                         .setReason(message)
                         .build();
             }
-            else if(actions != null && !actions.isEmpty()) {
+            else if (actions != null && !actions.isEmpty()) {
                 // IOD has given us job style output
                 iodError = actions.get(0).getErrors().get(0);
             }
 
             // may be null if no response body
             if (iodError != null) {
-                if(iodError.getErrorCode() == IodErrorCode.UNKNOWN_ERROR_CODE) {
+                if (iodError.getErrorCode() == IodErrorCode.UNKNOWN_ERROR_CODE) {
                     // a code we've not seen before has been returned, log it
                     log.error("UNKNOWN ERROR CODE {}", iodError.getErrorCode());
                 }

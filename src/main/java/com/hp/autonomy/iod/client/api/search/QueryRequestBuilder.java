@@ -26,19 +26,19 @@ public class QueryRequestBuilder {
 
     /**
      * @param maxDate A DateTime to use as the value for the max_date parameter. This parameter takes precedence over
-     *                maxDateDays and maxDateSeconds
+     * maxDateDays and maxDateSeconds
      */
     private DateTime maxDate;
 
     /**
      * @param minDate A DateTime to use as the value for the min_date parameter. This parameter takes precedence over
-     *                minDateDays and minDateSeconds
+     * minDateDays and minDateSeconds
      */
     private DateTime minDate;
 
     /**
      * @param maxDateDays A number of days to use as the value for the max_date parameter. This parameter takes
-     *                    precedence over maxDateSeconds
+     * precedence over maxDateSeconds
      */
     private Long maxDateDays;
 
@@ -49,7 +49,7 @@ public class QueryRequestBuilder {
 
     /**
      * @param minDateDays A number of days to use as the value for the min_date parameter. This parameter takes
-     *                    precedence over maxDateSeconds
+     * precedence over maxDateSeconds
      */
     private Long minDateDays;
 
@@ -95,7 +95,7 @@ public class QueryRequestBuilder {
 
     /**
      * @param printFields Value for the print_fields parameter. This list will be joined with commas before being sent
-     *                    to the server
+     * to the server
      */
     private List<String> printFields;
 
@@ -123,6 +123,11 @@ public class QueryRequestBuilder {
      * @param totalResults Value for the total_results parameter
      */
     private Boolean totalResults;
+
+    /**
+     * @param queryProfile Value for the query_profile parameter
+     */
+    private String queryProfile;
 
     private List<String> indexes = new ArrayList<>();
 
@@ -169,12 +174,13 @@ public class QueryRequestBuilder {
         map.put("start_tag", startTag);
         map.put("summary", summary);
         map.put("total_results", totalResults);
+        map.put("query_profile", queryProfile);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
 
-        for(final String index : indexes) {
+        for (final String index : indexes) {
             map.put("indexes", index);
         }
 
