@@ -26,6 +26,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractIodClientIntegrati
 
     private FindRelatedConceptsService findRelatedConceptsService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

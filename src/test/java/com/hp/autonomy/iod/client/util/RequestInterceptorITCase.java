@@ -29,6 +29,7 @@ public class RequestInterceptorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
 
+    @Override
     @Before
     public void setUp() {
         final RestAdapter restAdapter = RestAdapterFactory.getRestAdapter(true, endpoint);

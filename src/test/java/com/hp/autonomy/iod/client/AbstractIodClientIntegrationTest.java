@@ -14,7 +14,7 @@ import java.util.Collection;
 public abstract class AbstractIodClientIntegrationTest {
 
     private RestAdapter restAdapter;
-    protected Endpoint endpoint;
+    protected final Endpoint endpoint;
 
     public void setUp() {
         restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);

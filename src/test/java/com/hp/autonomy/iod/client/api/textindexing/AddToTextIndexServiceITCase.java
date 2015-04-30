@@ -35,6 +35,7 @@ public class AddToTextIndexServiceITCase extends AbstractIodClientIntegrationTes
 
     private AddToTextIndexJobService addToTextIndexService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

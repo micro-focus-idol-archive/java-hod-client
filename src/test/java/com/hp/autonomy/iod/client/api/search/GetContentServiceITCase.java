@@ -26,6 +26,7 @@ public class GetContentServiceITCase extends AbstractIodClientIntegrationTest {
 
     private GetContentService getContentService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

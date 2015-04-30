@@ -25,6 +25,7 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractIodClientInte
     private CreateQueryProfileService createQueryProfileService;
     private DeleteQueryProfileService deleteQueryProfileService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

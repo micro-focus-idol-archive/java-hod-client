@@ -43,6 +43,7 @@ public class FindSimilarITCase extends AbstractIodClientIntegrationTest {
         super(endpoint);
     }
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

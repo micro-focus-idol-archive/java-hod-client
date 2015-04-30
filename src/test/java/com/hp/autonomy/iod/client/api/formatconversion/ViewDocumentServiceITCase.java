@@ -29,6 +29,7 @@ public class ViewDocumentServiceITCase extends AbstractIodClientIntegrationTest 
 
     private ViewDocumentService viewDocumentService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

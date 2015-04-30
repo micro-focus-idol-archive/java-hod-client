@@ -25,6 +25,7 @@ public class SentimentAnalysisServiceITCase extends AbstractIodClientIntegration
         super(endpoint);
     }
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

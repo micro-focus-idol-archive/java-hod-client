@@ -47,6 +47,7 @@ public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
     private IdolOnDemandService idolOnDemandService;
     private ScheduledExecutorService scheduledExecutorService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

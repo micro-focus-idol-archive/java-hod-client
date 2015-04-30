@@ -27,6 +27,7 @@ public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
 
     private ListIndexesService listIndexesService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

@@ -26,6 +26,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractIodClientIntegrati
 
     private RetrieveIndexFieldsService retrieveIndexFieldsService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();
