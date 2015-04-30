@@ -31,6 +31,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractIodClientIntegrati
     private DeleteFromTextIndexJobService deleteFromTextIndexService;
     private AddToTextIndexJobService addToTextIndexService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

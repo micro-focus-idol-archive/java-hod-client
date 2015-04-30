@@ -26,6 +26,7 @@ public class IodErrorITCase extends AbstractIodClientIntegrationTest {
 
     private QueryTextIndexService queryTextIndexService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

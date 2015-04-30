@@ -112,13 +112,12 @@ public class GetParametricValuesRequestBuilder {
         map.put("sort", sort);
         map.put("query_profile", queryProfile);
 
-        for(final String index : indexes) {
+        for (final String index : indexes) {
             map.put("indexes", index);
         }
 
         return map;
     }
-
 
 
 }

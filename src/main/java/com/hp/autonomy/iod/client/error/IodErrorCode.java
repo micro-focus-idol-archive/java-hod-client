@@ -155,7 +155,7 @@ public enum IodErrorCode {
     private static final Map<Integer, IodErrorCode> LOOKUP = new HashMap<>();
 
     static {
-        for(final IodErrorCode iodErrorCode : values()) {
+        for (final IodErrorCode iodErrorCode : values()) {
             LOOKUP.put(iodErrorCode.code, iodErrorCode);
         }
     }
@@ -169,7 +169,7 @@ public enum IodErrorCode {
     public static IodErrorCode fromCode(final int code) {
         final IodErrorCode errorCode = LOOKUP.get(code);
 
-        if(errorCode != null) {
+        if (errorCode != null) {
             return errorCode;
         }
         else {

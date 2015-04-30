@@ -34,6 +34,7 @@ public class GetParametricValuesServiceITCase extends AbstractIodClientIntegrati
         super(endpoint);
     }
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();

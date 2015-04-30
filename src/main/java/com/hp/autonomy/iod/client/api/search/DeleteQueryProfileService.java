@@ -6,7 +6,8 @@
 package com.hp.autonomy.iod.client.api.search;
 
 import com.hp.autonomy.iod.client.error.IodErrorException;
-import retrofit.http.*;
+import retrofit.http.GET;
+import retrofit.http.Query;
 
 /**
  * Interface representing the DeleteQueryProfile API.

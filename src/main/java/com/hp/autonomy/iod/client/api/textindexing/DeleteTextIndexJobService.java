@@ -18,7 +18,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Service for managing jobs ids from the DeleteTextIndex API.
- *
+ * <p/>
  * The destroy method should be called when the service is no longer needed.
  */
 @Slf4j
@@ -62,7 +62,7 @@ public class DeleteTextIndexJobService extends AbstractJobService {
     ) throws IodErrorException {
         final DeleteTextIndexResponse response = deleteTextIndexService.initialDeleteTextIndex(apiKey, index);
 
-        final JobId jobId = deleteTextIndexService.deleteTextIndex(apiKey,index,response.getConfirm());
+        final JobId jobId = deleteTextIndexService.deleteTextIndex(apiKey, index, response.getConfirm());
 
         getExecutorService().submit(new DeleteTextIndexPollingStatusRunnable(apiKey, jobId, callback));
     }
@@ -80,7 +80,7 @@ public class DeleteTextIndexJobService extends AbstractJobService {
     ) throws IodErrorException {
         final DeleteTextIndexResponse response = deleteTextIndexService.initialDeleteTextIndex(index);
 
-        final JobId jobId = deleteTextIndexService.deleteTextIndex(index,response.getConfirm());
+        final JobId jobId = deleteTextIndexService.deleteTextIndex(index, response.getConfirm());
 
         getExecutorService().submit(new DeleteTextIndexPollingStatusRunnable(jobId, callback));
     }

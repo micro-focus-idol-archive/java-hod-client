@@ -26,6 +26,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractIodClientIntegrati
 
     private RetrieveIndexFieldsService retrieveIndexFieldsService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();
@@ -41,7 +42,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractIodClientIntegrati
     public void testRetrieveIndexFieldsGrouped() throws IodErrorException {
         final String wikiEngField = "drecontent";
 
-        final Map<String,Object> params = new RetrieveIndexFieldsRequestBuilder()
+        final Map<String, Object> params = new RetrieveIndexFieldsRequestBuilder()
                 .setFieldType(FieldType.index)
                 .setGroupFieldsByType(true)
                 .build();

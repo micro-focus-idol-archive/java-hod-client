@@ -23,10 +23,11 @@ import static org.junit.Assert.assertThat;
 
 @Slf4j
 @RunWith(Parameterized.class)
-public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
+public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest {
 
     private ListIndexesService listIndexesService;
 
+    @Override
     @Before
     public void setUp() {
         super.setUp();
@@ -65,13 +66,13 @@ public class ListIndexesServiceITCase extends AbstractIodClientIntegrationTest{
 
         @Override
         public boolean matches(final Object o) {
-            if(!(o instanceof List)) {
+            if (!(o instanceof List)) {
                 return false;
             }
 
             final List<Index> indexes = (List<Index>) o;
 
-            for(final Index index : indexes) {
+            for (final Index index : indexes) {
                 if (indexName.equals(index.getIndex())) {
                     return true;
                 }

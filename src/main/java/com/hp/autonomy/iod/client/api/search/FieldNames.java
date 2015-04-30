@@ -50,7 +50,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue> {
     public Integer getFieldValueCount(final String fieldName, final String fieldValue) {
         final Map<String, Integer> values = parametricValuesMap.get(fieldName);
 
-        if(values != null) {
+        if (values != null) {
             return values.get(fieldValue);
         }
 
@@ -104,7 +104,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue> {
     private Map<String, List<ValueAndCount>> getJson() {
         final Map<String, List<ValueAndCount>> map = new LinkedHashMap<>();
 
-        for(final String fieldName : parametricValuesMap.keySet()) {
+        for (final String fieldName : parametricValuesMap.keySet()) {
             map.put(fieldName, getValuesAndCountsForFieldName(fieldName));
         }
 
@@ -150,10 +150,10 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue> {
         private ParametricValueIterator() {
             final List<ParametricValue> values = new ArrayList<>();
 
-            for(final Map.Entry<String, Map<String, Integer>> fieldAndValues : parametricValuesMap.entrySet()) {
+            for (final Map.Entry<String, Map<String, Integer>> fieldAndValues : parametricValuesMap.entrySet()) {
                 final String fieldName = fieldAndValues.getKey();
 
-                for(final Map.Entry<String, Integer> valueAndCount : fieldAndValues.getValue().entrySet()) {
+                for (final Map.Entry<String, Integer> valueAndCount : fieldAndValues.getValue().entrySet()) {
                     final String fieldValue = valueAndCount.getKey();
                     final int count = valueAndCount.getValue();
                     values.add(new ParametricValue(fieldName, fieldValue, count));
