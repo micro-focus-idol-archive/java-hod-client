@@ -34,7 +34,7 @@ public class ListIndexesRequestBuilder {
     public Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
 
-        for(final IndexType indexType : indexTypes) {
+        for (final IndexType indexType : indexTypes) {
             map.put("type", indexType);
         }
 

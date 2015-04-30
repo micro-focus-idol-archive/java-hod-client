@@ -71,5 +71,7 @@ public class QueryProfilePromotions {
      * @return Whether this profile's promotions should appear on every page
      */
     @JsonProperty("every_page")
-    public Boolean getEveryPage() { return everyPage; }
+    public Boolean getEveryPage() {
+        return everyPage;
+    }
 }

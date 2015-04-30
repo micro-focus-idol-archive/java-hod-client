@@ -39,10 +39,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 
-
-
 @RunWith(Parameterized.class)
-public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest{
+public class IdolOnDemandServiceITCase extends AbstractIodClientIntegrationTest {
 
     private IdolOnDemandService idolOnDemandService;
     private ScheduledExecutorService scheduledExecutorService;

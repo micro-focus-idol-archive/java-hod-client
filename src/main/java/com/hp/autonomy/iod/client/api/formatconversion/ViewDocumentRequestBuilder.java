@@ -22,9 +22,9 @@ import java.util.Map;
 @Accessors(chain = true)
 public class ViewDocumentRequestBuilder {
 
-    private List<String> highlightExpressions =  new ArrayList<>();
-    private List<String> startTags =  new ArrayList<>();
-    private List<String> endTags =  new ArrayList<>();
+    private List<String> highlightExpressions = new ArrayList<>();
+    private List<String> startTags = new ArrayList<>();
+    private List<String> endTags = new ArrayList<>();
 
     /**
      * Sets the value for the raw_html parameter. You should not need to set this unless using

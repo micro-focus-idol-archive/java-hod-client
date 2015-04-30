@@ -38,7 +38,7 @@ public class GetContentRequestBuilder {
 
     /**
      * @param printFields Value for the print_fields parameter. This list will be joined with commas before being sent
-     *                    to the server
+     * to the server
      */
     private List<String> printFields;
 
