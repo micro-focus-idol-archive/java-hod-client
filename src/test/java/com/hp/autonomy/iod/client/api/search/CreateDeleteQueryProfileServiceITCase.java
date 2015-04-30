@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.ArrayList;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.ArrayList;
 
 @RunWith(Parameterized.class)
 public class CreateDeleteQueryProfileServiceITCase extends AbstractIodClientIntegrationTest {

@@ -6,7 +6,9 @@
 package com.hp.autonomy.iod.client.api.search;
 
 import com.hp.autonomy.iod.client.error.IodErrorException;
-import retrofit.http.*;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
 
 /**
  * Interface representing the CreateQueryProfile API.
