@@ -129,6 +129,11 @@ public class QueryRequestBuilder {
      */
     private String queryProfile;
 
+    /**
+     * @param promotions Value for the promotion parameter
+     */
+    private Boolean promotions;
+
     private List<String> indexes = new ArrayList<>();
 
     /**
@@ -175,6 +180,7 @@ public class QueryRequestBuilder {
         map.put("summary", summary);
         map.put("total_results", totalResults);
         map.put("query_profile", queryProfile);
+        map.put("promotion", promotions);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
