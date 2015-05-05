@@ -7,6 +7,11 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.7.0" date="2015-05-15">
+            <action dev="matthew-gordon-hp" type="add">
+                Support for promotion parameter on query text index.
+            </action>
+        </release>
         <release version="0.6.0" date="2015-04-29">
             <action dev="jon-soul-hp" type="add">
                 Add support for IDOL OnDemand query profiles on the QueryTextIndex, FindSimilar and GetParametricValues APIs.
