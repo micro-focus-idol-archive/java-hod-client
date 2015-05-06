@@ -23,10 +23,10 @@ public class RestAdapterFactory {
     public static RestAdapter getRestAdapter(final boolean withInterceptor, final Endpoint endpoint) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
 
-        final String proxyHost = System.getProperty("hp.iod.https.proxyHost");
+        final String proxyHost = System.getProperty("hp.hod.https.proxyHost");
 
         if (proxyHost != null) {
-            final Integer proxyPort = Integer.valueOf(System.getProperty("hp.iod.https.proxyPort", "8080"));
+            final Integer proxyPort = Integer.valueOf(System.getProperty("hp.hod.https.proxyPort", "8080"));
             builder.setProxy(new HttpHost(proxyHost, proxyPort));
         }
 

@@ -22,7 +22,7 @@ public abstract class AbstractHodClientIntegrationTest {
 
     @Parameterized.Parameters
     public static Collection<Endpoint> endPoints() {
-        final Endpoint endpoint = Enum.valueOf(Endpoint.class, System.getProperty("hp.iod.env", "PRODUCTION"));
+        final Endpoint endpoint = Enum.valueOf(Endpoint.class, System.getProperty("hp.hod.env", "PRODUCTION"));
         return Arrays.asList(endpoint);
     }
 

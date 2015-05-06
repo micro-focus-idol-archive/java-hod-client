@@ -62,7 +62,7 @@ public interface HavenOnDemandService {
      * Sends a POST request to the given API asynchronously
      * @param api The name of the API
      * @param params The query parameters sent to the API. These should include an API key if not using a RequestInterceptor
-     * @return A Map representing the result from IDOL OnDemand
+     * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL)

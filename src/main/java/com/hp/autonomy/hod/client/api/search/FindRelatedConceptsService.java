@@ -50,7 +50,7 @@ public interface FindRelatedConceptsService {
     /**
      * Query HP Haven OnDemand for documents using query text from an object store object using an API key provided by a
      * {@link retrofit.RequestInterceptor}
-     * @param reference An IDOL OnDemand reference obtained from either the Expand Container or Store Object API.
+     * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text

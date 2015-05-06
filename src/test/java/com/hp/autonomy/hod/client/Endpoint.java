@@ -9,9 +9,9 @@ package com.hp.autonomy.hod.client;
  * Enum type representing the possible endpoints for HP Haven OnDemand
  */
 public enum Endpoint {
-    DEVELOPMENT("https://api.dev.idolondemand.com/1", System.getProperty("hp.dev.iod.apiKey")),
-    STAGING("https://api.staging.idolondemand.com/1", System.getProperty("hp.staging.iod.apiKey")),
-    PRODUCTION("https://api.idolondemand.com/1", System.getProperty("hp.iod.apiKey"));
+    DEVELOPMENT("https://api.dev.idolondemand.com/1", System.getProperty("hp.dev.hod.apiKey")),
+    STAGING("https://api.staging.idolondemand.com/1", System.getProperty("hp.staging.hod.apiKey")),
+    PRODUCTION("https://api.idolondemand.com/1", System.getProperty("hp.hod.apiKey"));
 
     private final String url;
     private final String apiKey;

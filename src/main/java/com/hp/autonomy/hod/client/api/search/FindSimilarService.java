@@ -111,7 +111,7 @@ public interface FindSimilarService {
     /**
      * Finds similar documents to the text from a document in HP Haven OnDemand using an API key
      * provided by a {@link retrofit.RequestInterceptor}
-     * @param indexReference The reference of a document in IDOL OnDemand
+     * @param indexReference The reference of a document in HP Haven OnDemand
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
      */

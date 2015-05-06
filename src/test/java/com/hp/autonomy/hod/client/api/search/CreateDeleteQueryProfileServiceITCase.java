@@ -40,7 +40,7 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractHodClientInte
 
     @Test
     public void testCreateDeleteQueryProfile() throws HodErrorException, InterruptedException {
-        final String profileName = "iod_java_client_query_profile_test";
+        final String profileName = "hod_java_client_query_profile_test";
 
         final ArrayList<String> categories = new ArrayList<>();
         categories.add("Promotions");
