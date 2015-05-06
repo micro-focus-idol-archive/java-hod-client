@@ -25,13 +25,13 @@ java-hod-client is available from the central Maven repository.
 java-hod-client uses [Retrofit](http://square.github.io/retrofit/) as the basis of its HTTP implementation. This
 requires the use of a RestAdapter to use the services. We have used [Jackson](https://github.com/FasterXML/jackson) for
 JSON transformation, so you will need to use the Jackson Converter. To send multipart requests to HP Haven OnDemand
-correctly, you will need to wrap this in an IodConverter. An error handler is supplied for parsing error responses from
+correctly, you will need to wrap this in an HodConverter. An error handler is supplied for parsing error responses from
 HP Haven OnDemand.
 
     final RestAdapter restAdapter = new RestAdapter.Builder()
         .setEndpoint("https://api.idolondemand.com/1")
-        .setConverter(new IodConverter(new JacksonConverter()))
-        .setErrorHandler(new IodErrorHandler())
+        .setConverter(new HodConverter(new JacksonConverter()))
+        .setErrorHandler(new HodErrorHandler())
         .build();
 
     final QueryTextIndexService queryTextIndexService = restAdapter.create(QueryTextIndexService.class);
@@ -50,7 +50,7 @@ You can then call the methods on queryTextIndexService to communicate with HP Ha
         params);
 
 ## Library structure
-APIs can be found in the com.hp.autonomy.iod.client.api package. There is one package per category as seen in the 
+APIs can be found in the com.hp.autonomy.hod.client.api package. There is one package per category as seen in the 
 HP Haven OnDemand documentation. There is one service per API.
 
 ## Asynchronous requests
@@ -61,14 +61,14 @@ the job IDs.
 
 The methods on this service take a callback which will be called when the job is completed
 
-    addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, new IodJobCallback<AddToTextIndexResponse>() {
+    addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, new HodJobCallback<AddToTextIndexResponse>() {
         @Override
         public void success(final AddToTextIndexResponse result) {
             // called if the job succeeds
         }
 
         @Override
-        public void error(final IodErrorCode error) {
+        public void error(final HodErrorCode error) {
             // called if the job fails
         }
 
@@ -94,8 +94,8 @@ in conjunction with a request interceptor.
     // set up a RestAdapter using a request interceptor
     final RestAdapter restAdapter = new RestAdapter.Builder()
         .setEndpoint("https://api.idolondemand.com/1")
-        .setConverter(new IodConverter(new JacksonConverter()))
-        .setErrorHandler(new IodErrorHandler())
+        .setConverter(new HodConverter(new JacksonConverter()))
+        .setErrorHandler(new HodErrorHandler())
         .setRequestInterceptor(new ApiKeyRequestInterceptor(apiKey))
         .build();
 
@@ -116,26 +116,26 @@ attempt to poll for job status with the given API key
     // set up a RestAdapter using a request interceptor
     final RestAdapter restAdapter = new RestAdapter.Builder()
         .setEndpoint("https://api.idolondemand.com/1")
-        .setConverter(new IodConverter(new JacksonConverter()))
-        .setErrorHandler(new IodErrorHandler())
+        .setConverter(new HodConverter(new JacksonConverter()))
+        .setErrorHandler(new HodErrorHandler())
         .setRequestInterceptor(new ApiKeyRequestInterceptor(apiKey))
         .build();
 
-    // BROKEN - this will generate an IodErrorException as the API key will be set twice
+    // BROKEN - this will generate an HodErrorException as the API key will be set twice
     final Documents documents = queryTextIndexService.queryTextIndexWithText(
         "someOtherApiKey"
         "cats",
         params);
 
     // BROKEN - the initial request will succeed but polling for the job status will fail
-    addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, new IodJobCallback<AddToTextIndexResponse>() {
+    addToTextIndexService.addFileToTextIndex(getApiKey(), file, getIndex(), params, new HodJobCallback<AddToTextIndexResponse>() {
         @Override
         public void success(final AddToTextIndexResponse result) {
             // called if the job succeeds
         }
 
         @Override
-        public void error(final IodErrorCode error) {
+        public void error(final HodErrorCode error) {
             // called if the job fails
         }
 
@@ -145,17 +145,17 @@ attempt to poll for job status with the given API key
         }
     });
 
-## IdolOnDemandService
-For those times where the API you need to use is not currently supported, there is the IdolOnDemand service. This can
+## HavenOnDemandService
+For those times where the API you need to use is not currently supported, there is the HavenOnDemandService. This can
 query any API.
 
-    final IdolOnDemand service idolOnDemandService = restAdapter.create(IdolOnDemandService.class)
+    final HavenOnDemandService havenOnDemandService = restAdapter.create(HavenOnDemandService.class)
     
     final Map<String, Object> params = new HashMap<>();
     params.put("apiKey", apiKey);
     params.put("text", "*");
     
-    final Map<String, Object> result = idolOnDemandService.get("querytextindex", params);
+    final Map<String, Object> result = havenOnDemandService.get("querytextindex", params);
     
 This approach requires a greater familiarity with the HP Haven OnDemand documentation. It also removes the type safety of
 the dedicated services, making the response useful only for automated transformation into JSON.
