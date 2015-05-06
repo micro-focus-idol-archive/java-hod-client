@@ -1,19 +1,22 @@
-# java-iod-client
+# java-hod-client
 
-Java Client for communicating with [IDOL OnDemand](http://www.idolondemand.com)
+Java Client for communicating with [HP Haven OnDemand](http://www.idolondemand.com)
 
-Information can be found on the project homepage [here](http://hpautonomy.github.io/java-iod-client)
+This client is designed to work with the version 2 HP Haven OnDemand APIs.
+For the version 1 APIs, see [java-iod-client](http://hpautonomy.github.io/java-iod-client)
 
-[![Build Status](https://travis-ci.org/hpautonomy/java-iod-client.svg?branch=master)](https://travis-ci.org/hpautonomy/java-iod-client)
+Information can be found on the project homepage [here](http://hpautonomy.github.io/java-hod-client)
+
+[![Build Status](https://travis-ci.org/hpautonomy/java-hod-client.svg?branch=master)](https://travis-ci.org/hpautonomy/java-hod-client)
 
 ## Usage
 
-java-iod-client is available from the central Maven repository.
+java-hod-client is available from the central Maven repository.
 
     <dependency>
-        <groupId>com.hp.autonomy.iod</groupId>
-        <artifactId>java-iod-client</artifactId>
-        <version>0.7.0</version>
+        <groupId>com.hp.autonomy.hod</groupId>
+        <artifactId>java-hod-client</artifactId>
+        <version>0.1.0</version>
     </dependency>
 
 ## License
