@@ -7,6 +7,14 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.2.0" date="2015-05-07">
+            <action dev="alex-scown-hp" type="add">
+                Add authentication APIs
+            </action>
+            <action dev="alex-scown-hp" type="fix">
+                Improve logging in HodErrorHandler
+            </action>
+        </release>
         <release version="0.1.0" date="2015-05-06" description="Initial release">
             <action dev="alex-scown-hp" type="add">
                 Initial release corresponding to com.hp.autonomy.iod:java-iod-client:0.7.0
