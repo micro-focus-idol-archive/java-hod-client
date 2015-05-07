@@ -40,7 +40,7 @@ public class AuthenticationToken {
     private final String type;
 
     @JsonCreator
-    AuthenticationToken(
+    public AuthenticationToken(
             @JsonProperty("expiry") final long expiry,
             @JsonProperty("id") final String id,
             @JsonProperty("secret") final String secret,
