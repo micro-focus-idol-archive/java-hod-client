@@ -31,10 +31,13 @@ public class HodErrorHandler implements ErrorHandler {
             // if has actions, pull the error out of the action as it will be more useful
             final List<Action<?>> actions = hodError.getActions();
 
+            int error = hodError.getError();
+
             if (message != null && hodError.getErrorCode() == null) {
                 // HOD has given us an API key error
                 final Map<String, Object> detail = (Map<String, Object>) hodError.getDetail();
-                final HodErrorCode errorCode = HodErrorCode.fromCode((Integer) detail.get("error"));
+                error = (Integer) detail.get("error");
+                final HodErrorCode errorCode = HodErrorCode.fromCode(error);
 
                 hodError = new HodError.Builder()
                         .setErrorCode(errorCode)
@@ -50,7 +53,7 @@ public class HodErrorHandler implements ErrorHandler {
             if (hodError != null) {
                 if (hodError.getErrorCode() == HodErrorCode.UNKNOWN_ERROR_CODE) {
                     // a code we've not seen before has been returned, log it
-                    log.error("UNKNOWN ERROR CODE {}", hodError.getErrorCode());
+                    log.error("UNKNOWN ERROR CODE {}", error);
                 }
 
                 final Response response = cause.getResponse();
