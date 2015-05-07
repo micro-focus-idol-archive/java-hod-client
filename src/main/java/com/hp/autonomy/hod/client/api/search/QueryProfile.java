@@ -6,31 +6,26 @@
 package com.hp.autonomy.hod.client.api.search;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-/**
- * A query profile to send to HP Haven OnDemand for use with other actions
- */
 @Data
+@JsonDeserialize(builder = QueryProfile.Builder.class)
 public class QueryProfile {
-    /**
-     * @return The name of the query manipulation index to use
-     */
-    @JsonProperty("querymanipulationindex")
-    private final String queryManipulationIndex;
 
-    /**
-     * @return The promotions settings for this query profile
-     */
-    private final QueryProfilePromotions promotions;
+    /** The name of the Query Profile */
+    @JsonProperty("query_profile")
+    private final String name;
 
+    /** The Query Profile config */
+    private final QueryProfileConfig config;
 
     private QueryProfile(final Builder builder) {
-        queryManipulationIndex = builder.queryManipulationIndex;
-        promotions = builder.promotions;
+        name = builder.name;
+        config = builder.config;
     }
 
     @JsonPOJOBuilder(withPrefix = "set")
@@ -38,14 +33,15 @@ public class QueryProfile {
     @Accessors(chain = true)
     public static class Builder {
 
-        @JsonProperty("querymanipulationindex")
-        private String queryManipulationIndex;
+        /** The name of the Query Profile */
+        @JsonProperty("query_profile")
+        private String name;
 
-        private QueryProfilePromotions promotions;
+        /** The Query Profile config */
+        private QueryProfileConfig config;
 
         public QueryProfile build() {
             return new QueryProfile(this);
         }
-
     }
 }

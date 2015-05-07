@@ -20,12 +20,11 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Parameterized.class)
-public class CreateDeleteQueryProfileServiceITCase extends AbstractHodClientIntegrationTest {
+public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractHodClientIntegrationTest {
 
     private CreateQueryProfileService createQueryProfileService;
     private DeleteQueryProfileService deleteQueryProfileService;
 
-    @Override
     @Before
     public void setUp() {
         super.setUp();
@@ -34,13 +33,13 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractHodClientInte
         deleteQueryProfileService = getRestAdapter().create(DeleteQueryProfileService.class);
     }
 
-    public CreateDeleteQueryProfileServiceITCase(final Endpoint endpoint) {
+    public CreateDeleteQueryProfileServiceSuiteChild(final Endpoint endpoint) {
         super(endpoint);
     }
 
     @Test
     public void testCreateDeleteQueryProfile() throws HodErrorException, InterruptedException {
-        final String profileName = "hod_java_client_query_profile_test";
+        final String profileName = "iod_java_client_query_profile_test";
 
         final ArrayList<String> categories = new ArrayList<>();
         categories.add("Promotions");
@@ -62,8 +61,9 @@ public class CreateDeleteQueryProfileServiceITCase extends AbstractHodClientInte
         final QueryProfileStatusResponse deleteResponse = deleteQueryProfileService.deleteQueryProfile(endpoint.getApiKey(), profileName);
 
         assertThat(createResponse.getMessage(), is(notNullValue()));
-        assertThat(createResponse.getQueryProfileName(), is(profileName));
+        assertThat(createResponse.getQueryProfile(), is(profileName));
         assertThat(deleteResponse.getMessage(), is(notNullValue()));
-        assertThat(deleteResponse.getQueryProfileName(), is(profileName));
+        assertThat(deleteResponse.getQueryProfile(), is(profileName));
     }
+
 }

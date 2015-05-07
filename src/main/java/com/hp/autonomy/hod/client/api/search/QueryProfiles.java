@@ -2,7 +2,7 @@
  * Copyright 2015 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
-package com.hp.autonomy.iod.client.api.search;
+package com.hp.autonomy.hod.client.api.search;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -13,7 +13,9 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The response object from the ListQueryProfiles API.  Contains a set of query profile names.

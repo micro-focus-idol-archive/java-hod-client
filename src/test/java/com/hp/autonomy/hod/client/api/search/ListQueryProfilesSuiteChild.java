@@ -3,11 +3,11 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.iod.client.api.search;
+package com.hp.autonomy.hod.client.api.search;
 
-import com.hp.autonomy.iod.client.AbstractQueryProfileIntegrationTest;
-import com.hp.autonomy.iod.client.Endpoint;
-import com.hp.autonomy.iod.client.error.IodErrorException;
+import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.AbstractQueryProfileIntegrationTest;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
 public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegrationTest {
@@ -36,7 +39,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
     }
 
     @Test
-    public void testSingleQueryProfile() throws IodErrorException {
+    public void testSingleQueryProfile() throws HodErrorException {
         // Setup
 
         final QueryProfile qp = createQueryProfile("001");
@@ -56,7 +59,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
     }
 
     @Test
-    public void testTwoQueryProfiles() throws IodErrorException {
+    public void testTwoQueryProfiles() throws HodErrorException {
         // Setup
         final QueryProfile qp1 = createQueryProfile("001");
         final QueryProfile qp2 = createQueryProfile("002");
@@ -73,7 +76,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
     }
 
     @Test
-    public void testSeveralQueryProfiles() throws IodErrorException {
+    public void testSeveralQueryProfiles() throws HodErrorException {
         // Setup
         final Set<QueryProfile> testProfiles = new HashSet<>();
         final Set<String> testNames = new HashSet<>();
@@ -96,7 +99,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
     }
 
     @Test
-    public void testNoQueryProfiles() throws IodErrorException {
+    public void testNoQueryProfiles() throws HodErrorException {
         final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(endpoint.getApiKey());
 
         // Test response from getQueryProfiles

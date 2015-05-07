@@ -2,11 +2,11 @@
  * Copyright 2015 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
-package com.hp.autonomy.iod.client.api.search;
+package com.hp.autonomy.hod.client.api.search;
 
-import com.hp.autonomy.iod.client.AbstractQueryProfileIntegrationTest;
-import com.hp.autonomy.iod.client.Endpoint;
-import com.hp.autonomy.iod.client.error.IodErrorException;
+import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.AbstractQueryProfileIntegrationTest;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +31,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileI
     }
 
     @Test
-    public void testRetrieval() throws IodErrorException {
+    public void testRetrieval() throws HodErrorException {
         final QueryProfile qp = createQueryProfile("retr001");
         final QueryProfile retrievedQP = retrieveQueryProfileService.retrieveQueryProfile(endpoint.getApiKey(), qp.getName());
 
@@ -39,8 +39,8 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileI
         assertThat(retrievedQP.getConfig(), is(qp.getConfig()));
     }
 
-    @Test(expected = IodErrorException.class)
-    public void testFailure() throws IodErrorException {
+    @Test(expected = HodErrorException.class)
+    public void testFailure() throws HodErrorException {
         retrieveQueryProfileService.retrieveQueryProfile(endpoint.getApiKey(), "sometest");
     }
 }

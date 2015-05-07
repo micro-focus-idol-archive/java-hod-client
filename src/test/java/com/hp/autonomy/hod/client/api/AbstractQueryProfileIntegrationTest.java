@@ -2,10 +2,16 @@
  * Copyright 2015 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
-package com.hp.autonomy.iod.client;
+package com.hp.autonomy.hod.client.api;
 
-import com.hp.autonomy.iod.client.api.search.*;
-import com.hp.autonomy.iod.client.error.IodErrorException;
+import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
+import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.search.CreateQueryProfileService;
+import com.hp.autonomy.hod.client.api.search.DeleteQueryProfileService;
+import com.hp.autonomy.hod.client.api.search.QueryProfileConfig;
+import com.hp.autonomy.hod.client.api.search.QueryProfile;
+import com.hp.autonomy.hod.client.api.search.QueryProfilePromotions;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.After;
 
 import java.util.ArrayList;
@@ -14,7 +20,7 @@ import java.util.List;
 /**
  * Helper for testing query profile functionality.
  */
-public abstract class AbstractQueryProfileIntegrationTest extends AbstractIodClientIntegrationTest {
+public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodClientIntegrationTest {
 
     private List<QueryProfile> qpTestResources;
     // Not under test
@@ -42,7 +48,7 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractIodCli
             try {
                 // Try/catch as QueryProfiles might not have been created
                 deleteQueryProfileService.deleteQueryProfile(endpoint.getApiKey(), qp.getName());
-            } catch (IodErrorException e) {
+            } catch (HodErrorException e) {
                 e.printStackTrace();
             }
         }
@@ -87,9 +93,9 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractIodCli
      * name IDOL OnDemand uses.  See the response object for that.
      * @param nameSuffix  Suffix to append to the query profile name.
      * @return  A QueryProfile with the name and config used.
-     * @throws IodErrorException
+     * @throws HodErrorException
      */
-    protected QueryProfile createQueryProfile(final String nameSuffix) throws IodErrorException {
+    protected QueryProfile createQueryProfile(final String nameSuffix) throws HodErrorException {
         final QueryProfile qp = createTestQueryProfile(nameSuffix);
         createQueryProfileService.createQueryProfile(endpoint.getApiKey(), qp.getName(), qp.getConfig());
 
