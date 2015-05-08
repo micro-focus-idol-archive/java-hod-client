@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public interface FindSimilarService {
 
-    String URL = "/api/sync/findsimilar/v1";
+    String URL = "/1/api/sync/findsimilar/v1";
 
     /**
      * Finds similar documents to the given text using an API key provided by a

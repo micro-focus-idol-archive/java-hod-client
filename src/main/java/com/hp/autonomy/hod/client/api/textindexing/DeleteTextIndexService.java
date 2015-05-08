@@ -23,8 +23,8 @@ import java.util.List;
  */
 public interface DeleteTextIndexService {
 
-    String syncURL = "/api/sync/deletetextindex/v1";
-    String asyncURL = "/api/async/deletetextindex/v1";
+    String syncURL = "/1/api/sync/deletetextindex/v1";
+    String asyncURL = "/1/api/async/deletetextindex/v1";
 
     /**
      * Delete a text index using a hash code obtained by queryDeleteTextIndex using an API key provided by a {@link retrofit.RequestInterceptor}
@@ -80,7 +80,7 @@ public interface DeleteTextIndexService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException If an error occurred retrieving the status
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     DeleteTextIndexJobStatus getJobStatus(
             @Path("jobId") JobId jobId
     ) throws HodErrorException;
@@ -92,7 +92,7 @@ public interface DeleteTextIndexService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException If an error occurred retrieving the status
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     DeleteTextIndexJobStatus getJobStatus(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId

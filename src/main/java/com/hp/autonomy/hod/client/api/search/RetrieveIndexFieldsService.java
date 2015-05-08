@@ -13,7 +13,7 @@ import retrofit.http.QueryMap;
 import java.util.Map;
 
 public interface RetrieveIndexFieldsService {
-    String URL = "/api/sync/retrieveindexfields/v1";
+    String URL = "/1/api/sync/retrieveindexfields/v1";
 
     /**
      * Retrieve from HP Haven OnDemand a list of the fields that have been ingested

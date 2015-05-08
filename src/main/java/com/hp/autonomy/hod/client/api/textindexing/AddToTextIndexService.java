@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public interface AddToTextIndexService {
 
-    String URL = "/api/async/addtotextindex/v1";
+    String URL = "/1/api/async/addtotextindex/v1";
 
     /**
      * Index JSON documents into HP Haven OnDemand
@@ -109,7 +109,7 @@ public interface AddToTextIndexService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException If an error occurred retrieving the status
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     AddToTextIndexJobStatus getJobStatus(
             @Path("jobId") JobId jobId
     ) throws HodErrorException;
@@ -121,7 +121,7 @@ public interface AddToTextIndexService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException If an error occurred retrieving the status
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     AddToTextIndexJobStatus getJobStatus(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId
@@ -133,7 +133,7 @@ public interface AddToTextIndexService {
      * @return An object containing the result of the job
      * @throws HodErrorException If an error occurred retrieving the result
      */
-    @GET("/job/result/{jobId}")
+    @GET("/1/job/result/{jobId}")
     AddToTextIndexJobStatus getJobResult(
             @Path("jobId") JobId jobId
     ) throws HodErrorException;
@@ -145,7 +145,7 @@ public interface AddToTextIndexService {
      * @return An object containing the result of the job
      * @throws HodErrorException If an error occurred retrieving the result
      */
-    @GET("/job/result/{jobId}")
+    @GET("/1/job/result/{jobId}")
     AddToTextIndexJobStatus getJobResult(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId

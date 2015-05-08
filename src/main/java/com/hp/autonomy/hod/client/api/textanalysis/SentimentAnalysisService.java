@@ -17,7 +17,7 @@ import retrofit.mime.TypedOutput;
  */
 public interface SentimentAnalysisService {
 
-    String URL = "/api/sync/analyzesentiment/v1";
+    String URL = "/1/api/sync/analyzesentiment/v1";
 
     /**
      * Analyze the sentiment of the given text using an API key provided by a {@link retrofit.RequestInterceptor}

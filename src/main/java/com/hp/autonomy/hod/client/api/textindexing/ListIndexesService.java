@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public interface ListIndexesService {
 
-    String URL = "/api/sync/listindexes/v1";
+    String URL = "/1/api/sync/listindexes/v1";
 
     /**
      * Query HP Haven OnDemand for the list of indexes using an API key provided by a {@link retrofit.RequestInterceptor}

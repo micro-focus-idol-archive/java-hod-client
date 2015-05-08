@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public interface CreateTextIndexService {
 
-    String URL = "/api/async/createtextindex/v1";
+    String URL = "/1/api/async/createtextindex/v1";
 
     /**
      * Create a text index using an API key provided by a {@link retrofit.RequestInterceptor}
@@ -63,7 +63,7 @@ public interface CreateTextIndexService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException If an error occurred retrieving the status
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     CreateTextIndexJobStatus getJobStatus(
             @Path("jobId") JobId jobId
     ) throws HodErrorException;
@@ -75,7 +75,7 @@ public interface CreateTextIndexService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException If an error occurred retrieving the status
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     CreateTextIndexJobStatus getJobStatus(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId
@@ -87,7 +87,7 @@ public interface CreateTextIndexService {
      * @return An object containing the result of the job
      * @throws HodErrorException If an error occurred retrieving the result
      */
-    @GET("/job/result/{jobId}")
+    @GET("/1/job/result/{jobId}")
     CreateTextIndexJobStatus getJobResult(
             @Path("jobId") JobId jobId
     ) throws HodErrorException;
@@ -99,7 +99,7 @@ public interface CreateTextIndexService {
      * @return An object containing the result of the job
      * @throws HodErrorException If an error occurred retrieving the result
      */
-    @GET("/job/result/{jobId}")
+    @GET("/1/job/result/{jobId}")
     CreateTextIndexJobStatus getJobResult(
             @Query("apiKey") String apiKey,
             @Path("jobId") JobId jobId

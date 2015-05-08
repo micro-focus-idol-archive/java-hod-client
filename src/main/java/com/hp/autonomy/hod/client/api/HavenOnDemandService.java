@@ -24,8 +24,8 @@ import java.util.Map;
  */
 public interface HavenOnDemandService {
 
-    String SYNC_URL = "/api/sync/{api}/v1";
-    String ASYNC_URL = "/api/async/{api}/v1";
+    String SYNC_URL = "/1/api/sync/{api}/v1";
+    String ASYNC_URL = "/1/api/async/{api}/v1";
 
     /**
      * Sends a GET request to the given API
@@ -75,7 +75,7 @@ public interface HavenOnDemandService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     JobStatus<Map<String, Object>> getJobStatus(@Path("jobId") JobId jobId) throws HodErrorException;
 
     /**
@@ -85,7 +85,7 @@ public interface HavenOnDemandService {
      * @return An object containing the status of the job along with the result if the job has finished
      * @throws HodErrorException
      */
-    @GET("/job/status/{jobId}")
+    @GET("/1/job/status/{jobId}")
     JobStatus<Map<String, Object>> getJobStatus(@Query("apiKey") String apiKey, @Path("jobId") JobId jobId) throws HodErrorException;
 
     /**
@@ -94,7 +94,7 @@ public interface HavenOnDemandService {
      * @return An object containing the result of the job
      * @throws HodErrorException If an error occurred retrieving the result
      */
-    @GET("/job/result/{jobId}")
+    @GET("/1/job/result/{jobId}")
     JobStatus<Map<String, Object>> getJobResult(@Path("jobId") JobId jobId) throws HodErrorException;
 
     /**
@@ -104,7 +104,7 @@ public interface HavenOnDemandService {
      * @return An object containing the result of the job
      * @throws HodErrorException If an error occurred retrieving the result
      */
-    @GET("/job/result/{jobId}")
+    @GET("/1/job/result/{jobId}")
     JobStatus<Map<String, Object>> getJobResult(@Query("apiKey") String apiKey, @Path("jobId") JobId jobId) throws HodErrorException;
 
 }

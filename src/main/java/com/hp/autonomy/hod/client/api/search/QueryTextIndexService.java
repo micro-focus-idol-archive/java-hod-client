@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public interface QueryTextIndexService {
 
-    String URL = "/api/sync/querytextindex/v1";
+    String URL = "/1/api/sync/querytextindex/v1";
 
     /**
      * Query HP Haven OnDemand for documents matching query text using an API key provided by a

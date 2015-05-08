@@ -18,7 +18,7 @@ import retrofit.mime.TypedOutput;
 import java.util.Map;
 
 public interface FindRelatedConceptsService {
-    String URL = "/api/sync/findrelatedconcepts/v1";
+    String URL = "/1/api/sync/findrelatedconcepts/v1";
 
     /**
      * Query HP Haven OnDemand for documents matching query text using an API key provided by a

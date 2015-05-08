@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public interface ViewDocumentService {
 
-    String URL = "/api/sync/viewdocument/v1";
+    String URL = "/1/api/sync/viewdocument/v1";
 
     /**
      * Convert a file to HTML and retrieve the result as a stream containing the HTML using the given API key
