@@ -27,7 +27,7 @@ public interface QueryTextIndexService {
     String URL = "/2/api/sync/textindex/query/search/v1";
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using an API key provided by a
+     * Query HP Haven OnDemand for documents matching query text using a token provided by a
      * {@link retrofit.RequestInterceptor}
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
@@ -40,7 +40,7 @@ public interface QueryTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using the given API key
+     * Query HP Haven OnDemand for documents matching query text using the given token
      * @param token The token to use to authenticate the request
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
@@ -54,7 +54,7 @@ public interface QueryTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using an API key
+     * Query HP Haven OnDemand for documents using query text from an object store object using a token
      * provided by a {@link retrofit.RequestInterceptor}
      * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
@@ -68,7 +68,7 @@ public interface QueryTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using the given API key
+     * Query HP Haven OnDemand for documents using query text from an object store object using the given token
      * @param token The token to use to authenticate the request
      * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
@@ -83,7 +83,7 @@ public interface QueryTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using an API key
+     * Query HP Haven OnDemand for documents using query text from a url using a token
      * provided by a {@link retrofit.RequestInterceptor}
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
@@ -96,7 +96,7 @@ public interface QueryTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using the given API key
+     * Query HP Haven OnDemand for documents using query text from a url using the given token
      * @param token The token to use to authenticate the request
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request

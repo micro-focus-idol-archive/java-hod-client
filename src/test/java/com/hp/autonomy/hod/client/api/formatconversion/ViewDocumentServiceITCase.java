@@ -50,7 +50,7 @@ public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest 
                 .addStartTags("<highlight>")
                 .build();
 
-        final Response response = viewDocumentService.viewFile(endpoint.getApiKey(), new TypedFile("text/plain", file), params);
+        final Response response = viewDocumentService.viewFile(getToken(), new TypedFile("text/plain", file), params);
 
         final InputStream inputStream = response.getBody().in();
 
@@ -72,7 +72,7 @@ public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest 
                 .setRawHtml(false)
                 .build();
 
-        final ViewDocumentResponse response = viewDocumentService.viewFileAsHtmlString(endpoint.getApiKey(), new TypedFile("text/plain", file), params);
+        final ViewDocumentResponse response = viewDocumentService.viewFileAsHtmlString(getToken(), new TypedFile("text/plain", file), params);
 
         final String html = response.getDocument();
 

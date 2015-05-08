@@ -5,9 +5,11 @@
 
 package com.hp.autonomy.hod.client.api.formatconversion;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -24,11 +26,11 @@ import java.util.Map;
  */
 public interface ViewDocumentService {
 
-    String URL = "/1/api/sync/viewdocument/v1";
+    String URL = "/2/api/sync/analysis/viewdocument/v1";
 
     /**
-     * Convert a file to HTML and retrieve the result as a stream containing the HTML using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Convert a file to HTML and retrieve the result as a stream containing the HTML using the given token
+     * @param token The token to use to authenticate the request
      * @param file The file to view
      * @param params Additional parameters to use for the request
      * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
@@ -39,13 +41,13 @@ public interface ViewDocumentService {
     @Multipart
     @Streaming
     Response viewFile(
-            @Part("apiKey") String apiKey,
-            @Part("file") TypedOutput file,
-            @PartMap Map<String, Object> params
+        @Header("token") AuthenticationToken token,
+        @Part("file") TypedOutput file,
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert an object store object to HTML and retrieve the result as a stream containing the HTML using an API key
+     * Convert an object store object to HTML and retrieve the result as a stream containing the HTML using a token
      * provided by a {@link retrofit.RequestInterceptor}
      * @param reference The object store reference to view
      * @param params Additional parameters to use for the request
@@ -56,14 +58,14 @@ public interface ViewDocumentService {
     @GET(URL)
     @Streaming
     Response viewReference(
-            @Query("reference") String reference,
-            @QueryMap Map<String, Object> params
+        @Query("reference") String reference,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Convert an object store object to HTML and retrieve the result as a stream containing the HTML using the given
-     * API key
-     * @param apiKey The API key to use to authenticate the request
+     * token
+     * @param token The token to use to authenticate the request
      * @param reference The object store reference to view
      * @param params Additional parameters to use for the request
      * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
@@ -73,13 +75,13 @@ public interface ViewDocumentService {
     @GET(URL)
     @Streaming
     Response viewReference(
-            @Query("apiKey") String apiKey,
-            @Query("reference") String reference,
-            @QueryMap Map<String, Object> params
+        @Header("token") AuthenticationToken token,
+        @Query("reference") String reference,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert publicly accessible url to HTML and retrieve the result as a stream containing the HTML using an API key
+     * Convert publicly accessible url to HTML and retrieve the result as a stream containing the HTML using a token
      * provided by a {@link retrofit.RequestInterceptor}
      * API key
      * @param url The url to view
@@ -91,14 +93,14 @@ public interface ViewDocumentService {
     @GET(URL)
     @Streaming
     Response viewUrl(
-            @Query("url") String url,
-            @QueryMap Map<String, Object> params
+        @Query("url") String url,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Convert publicly accessible url to HTML and retrieve the result as a stream containing the HTML using the given
-     * API key
-     * @param apiKey The API key to use to authenticate the request
+     * token
+     * @param token The token to use to authenticate the request
      * @param url The url to view
      * @param params Additional parameters to use for the request
      * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
@@ -108,15 +110,15 @@ public interface ViewDocumentService {
     @GET(URL)
     @Streaming
     Response viewUrl(
-            @Query("apiKey") String apiKey,
-            @Query("url") String url,
-            @QueryMap Map<String, Object> params
+        @Header("token") AuthenticationToken token,
+        @Query("url") String url,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using the given API key. When using this method
+     * Convert a file to HTML and retrieve the result as an HTML String using the given token. When using this method
      * the raw_html parameter MUST be set to false
-     * @param apiKey The API key to use to authenticate the request
+     * @param token The token to use to authenticate the request
      * @param file The file to view
      * @param params Additional parameters to use for the request
      * @return A response with a String containing the HTML
@@ -125,13 +127,13 @@ public interface ViewDocumentService {
     @POST(URL)
     @Multipart
     ViewDocumentResponse viewFileAsHtmlString(
-            @Part("apiKey") String apiKey,
-            @Part("file") TypedOutput file,
-            @PartMap Map<String, Object> params
+        @Header("token") AuthenticationToken token,
+        @Part("file") TypedOutput file,
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert a reference to HTML and retrieve the result as an HTML String using an API key
+     * Convert a reference to HTML and retrieve the result as an HTML String using a token
      * provided by a {@link retrofit.RequestInterceptor}
      * @param reference The reference to view
      * @param params Additional parameters to use for the request
@@ -140,13 +142,13 @@ public interface ViewDocumentService {
      */
     @GET(URL + "?raw_html=false")
     ViewDocumentResponse viewReferenceAsHtmlString(
-            @Query("reference") String reference,
-            @QueryMap Map<String, Object> params
+        @Query("reference") String reference,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert a reference to HTML and retrieve the result as an HTML String using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Convert a reference to HTML and retrieve the result as an HTML String using the given token
+     * @param token The token to use to authenticate the request
      * @param reference The reference to view
      * @param params Additional parameters to use for the request
      * @return A response with a String containing the HTML
@@ -154,13 +156,13 @@ public interface ViewDocumentService {
      */
     @GET(URL + "?raw_html=false")
     ViewDocumentResponse viewReferenceAsHtmlString(
-            @Query("apiKey") String apiKey,
-            @Query("reference") String reference,
-            @QueryMap Map<String, Object> params
+        @Header("token") AuthenticationToken token,
+        @Query("reference") String reference,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using an API key
+     * Convert a file to HTML and retrieve the result as an HTML String using a token
      * provided by a {@link retrofit.RequestInterceptor}
      * @param url The url to view
      * @param params Additional parameters to use for the request
@@ -169,13 +171,13 @@ public interface ViewDocumentService {
      */
     @GET(URL + "?raw_html=false")
     ViewDocumentResponse viewUrlAsHtmlString(
-            @Query("url") String url,
-            @QueryMap Map<String, Object> params
+        @Query("url") String url,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Convert a file to HTML and retrieve the result as an HTML String using the given token
+     * @param token The token to use to authenticate the request
      * @param url The url to view
      * @param params Additional parameters to use for the request
      * @return A response with a String containing the HTML
@@ -183,9 +185,9 @@ public interface ViewDocumentService {
      */
     @GET(URL + "?raw_html=false")
     ViewDocumentResponse viewUrlAsHtmlString(
-            @Query("apiKey") String apiKey,
-            @Query("url") String url,
-            @QueryMap Map<String, Object> params
+        @Header("token") AuthenticationToken token,
+        @Query("url") String url,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
 }
