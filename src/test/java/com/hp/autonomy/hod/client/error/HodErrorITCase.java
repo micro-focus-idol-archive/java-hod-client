@@ -41,7 +41,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testNoQueryTextError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "", null);
+            queryTextIndexService.queryTextIndexWithText(getToken(), "", null);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
             assertThat(e.getErrorCode(), is(HodErrorCode.MISSING_REQUIRED_PARAMETERS));
@@ -52,7 +52,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testHodReturnsJobError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "OR", null);
+            queryTextIndexService.queryTextIndexWithText(getToken(), "OR", null);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
             assertThat(e.getErrorCode(), is(HodErrorCode.BACKEND_REQUEST_FAILED));
@@ -77,7 +77,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
         params.put("apiKey", endpoint.getApiKey());
 
         try {
-            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "*", params);
+            queryTextIndexService.queryTextIndexWithText(getToken(), "*", params);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
             assertThat(e.getErrorCode(), is(HodErrorCode.INVALID_API_KEY));
