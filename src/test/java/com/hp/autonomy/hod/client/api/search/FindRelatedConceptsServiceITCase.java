@@ -40,7 +40,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testFindForText() throws HodErrorException {
-        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithText(endpoint.getApiKey(), "Hewlett", null);
+        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithText(getToken(), "Hewlett", null);
 
         final List<Entity> entitiesList = entities.getEntities();
 
@@ -55,7 +55,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
     public void testFindForFile() throws HodErrorException {
         final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/search/queryText.txt"));
 
-        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithFile(endpoint.getApiKey(), file, null);
+        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithFile(getToken(), file, null);
 
         final List<Entity> entitiesList = entities.getEntities();
 
