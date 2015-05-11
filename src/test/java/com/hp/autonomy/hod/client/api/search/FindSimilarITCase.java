@@ -59,7 +59,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                 .addIndexes("wiki_eng")
                 .build();
 
-        final Documents documents = findSimilarService.findSimilarDocumentsToText(endpoint.getApiKey(), "cats", params);
+        final Documents documents = findSimilarService.findSimilarDocumentsToText(getToken(), "cats", params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -73,7 +73,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                 .addIndexes("wiki_eng")
                 .build();
 
-        final Documents documents = findSimilarService.findSimilarDocumentsToFile(endpoint.getApiKey(), file, params);
+        final Documents documents = findSimilarService.findSimilarDocumentsToFile(getToken(), file, params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -113,7 +113,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                             .addIndexes(getIndex())
                             .build();
 
-                    final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(endpoint.getApiKey(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
+                    final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getToken(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
 
                     result.set(similarDocuments);
                 } catch (final HodErrorException e) {
