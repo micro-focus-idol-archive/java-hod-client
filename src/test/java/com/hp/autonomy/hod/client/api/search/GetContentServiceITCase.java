@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +45,11 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
                 .setPrint(Print.all)
                 .build();
 
-        final Documents documents = getContentService.getContent(endpoint.getApiKey(),
-                Arrays.asList("3ac70cc2-606e-486a-97d0-511e762b2183"), getIndex(),
-                params);
+        final Documents documents = getContentService.getContent(
+            getToken(),
+            Collections.singletonList("3ac70cc2-606e-486a-97d0-511e762b2183"), getIndex(),
+            params
+        );
 
         final List<Document> documentList = documents.getDocuments();
 

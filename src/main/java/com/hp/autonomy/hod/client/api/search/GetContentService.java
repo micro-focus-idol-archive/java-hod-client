@@ -5,8 +5,10 @@
 
 package com.hp.autonomy.hod.client.api.search;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 
@@ -18,10 +20,10 @@ import java.util.Map;
  */
 public interface GetContentService {
 
-    String URL = "/1/api/sync/getcontent/v1";
+    String URL = "/2/api/sync/textindex/query/getcontent/v1";
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for documents matching query text using a token provided by a {@link retrofit.RequestInterceptor}
      * @param indexReference The reference list of the documents you want to view
      * @param indexes The index the document resides in
      * @param params Additional parameters to be sent as part of the request
@@ -35,8 +37,8 @@ public interface GetContentService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Query HP Haven OnDemand for documents matching query text using the given token
+     * @param token The token to use to authenticate the request
      * @param indexReference The reference list of the documents you want to view
      * @param indexes The index the document resides in
      * @param params Additional parameters to be sent as part of the request
@@ -44,7 +46,7 @@ public interface GetContentService {
      */
     @GET(URL)
     Documents getContent(
-            @Query("apiKey") String apiKey,
+            @Header("token") AuthenticationToken token,
             @Query("index_reference") List<String> indexReference,
             @Query("indexes") String indexes,
             @QueryMap Map<String, Object> params
