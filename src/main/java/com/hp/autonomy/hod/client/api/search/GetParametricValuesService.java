@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.search;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -13,10 +14,10 @@ import retrofit.http.QueryMap;
 import java.util.Map;
 
 public interface GetParametricValuesService {
-    String URL = "/1/api/sync/getparametricvalues/v1";
+    String URL = "/2/api/sync/textindex/query/parametricvalues/v1";
 
     /**
-     * Query parametric values for the fieldName using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Query parametric values for the fieldName using a token provided by a {@link retrofit.RequestInterceptor}
      * @param fieldName A comma-separated list of field names to return values for.
      * @param params Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
@@ -28,15 +29,15 @@ public interface GetParametricValuesService {
     ) throws HodErrorException;
 
     /**
-     * Get parametric values for the fieldName using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Get parametric values for the fieldName using the given token
+     * @param token The token to use to authenticate the request
      * @param fieldName A comma-separated list of field names to return values for.
      * @param params Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
      */
     @GET(URL)
     FieldNames getParametricValues(
-            @Query("apiKey") String apiKey,
+            @Query("token") AuthenticationToken token,
             @Query("field_name") String fieldName,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;

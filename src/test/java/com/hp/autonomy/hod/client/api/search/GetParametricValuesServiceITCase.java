@@ -49,7 +49,7 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
                 .setMaxValues(15)
                 .build();
 
-        final FieldNames fieldNames = getParametricValuesService.getParametricValues(endpoint.getApiKey(), "wikipedia_type, person_profession", params);
+        final FieldNames fieldNames = getParametricValuesService.getParametricValues(getToken(), "wikipedia_type, person_profession", params);
 
         final Set<String> fieldNamesSet = fieldNames.getFieldNames();
 
