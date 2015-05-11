@@ -5,7 +5,10 @@
 
 package com.hp.autonomy.hod.client.api.textanalysis;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -17,84 +20,112 @@ import retrofit.mime.TypedOutput;
  */
 public interface SentimentAnalysisService {
 
-    String URL = "/1/api/sync/analyzesentiment/v1";
+    String URL = "/2/api/sync/analysis/sentiment/v1";
 
     /**
-     * Analyze the sentiment of the given text using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Analyze the sentiment of the given text using a token provided by a {@link retrofit.RequestInterceptor}
      * @param text The text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForText(@Query("text") String text, @Query("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForText(
+        @Query("text") String text,
+        @Query("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given text using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Analyze the sentiment of the given text using the given token
+     * @param token The token to use to authenticate the request
      * @param text The text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForText(@Query("apiKey") String apiKey, @Query("text") String text, @Query("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForText(
+        @Header("token") AuthenticationToken token,
+        @Query("text") String text,
+        @Query("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given file using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Analyze the sentiment of the given file using a token provided by a {@link retrofit.RequestInterceptor}
      * @param file The file containing the text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @POST(URL)
     @Multipart
-    SentimentAnalysisResponse analyzeSentimentForFile(@Part("file") TypedOutput file, @Part("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForFile(
+        @Part("file") TypedOutput file,
+        @Part("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given file using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Analyze the sentiment of the given file using the given token
+     * @param token The token to use to authenticate the request
      * @param file The file containing the text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @POST(URL)
     @Multipart
-    SentimentAnalysisResponse analyzeSentimentForFile(@Part("apiKey") String apiKey, @Part("file") TypedOutput file, @Part("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForFile(
+        @Header("token") AuthenticationToken token,
+        @Part("file") TypedOutput file,
+        @Part("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given object store object using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Analyze the sentiment of the given object store object using a token provided by a {@link retrofit.RequestInterceptor}
      * @param reference The object store reference containing the text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForReference(@Query("reference") String reference, @Query("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForReference(
+        @Query("reference") String reference,
+        @Query("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given object store object using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Analyze the sentiment of the given object store object using the given token
+     * @param token The token to use to authenticate the request
      * @param reference The object store reference containing the text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForReference(@Query("apiKey") String apiKey, @Query("reference") String reference, @Query("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForReference(
+        @Header("token") AuthenticationToken token,
+        @Query("reference") String reference,
+        @Query("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given url using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Analyze the sentiment of the given url using a token provided by a {@link retrofit.RequestInterceptor}
      * @param url The object store reference containing the text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForUrl(@Query("url") String url, @Query("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForUrl(
+        @Query("url") String url,
+        @Query("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
     /**
-     * Analyze the sentiment of the given url using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Analyze the sentiment of the given url using the given token
+     * @param token The token to use to authenticate the request
      * @param url The object store reference containing the text to analyze
      * @param language The language of the text
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForUrl(@Query("apiKey") String apiKey, @Query("url") String url, @Query("language") SentimentAnalysisLanguage language);
+    SentimentAnalysisResponse analyzeSentimentForUrl(
+        @Header("token") AuthenticationToken token,
+        @Query("url") String url,
+        @Query("language") SentimentAnalysisLanguage language
+    ) throws HodErrorException;
 
 }

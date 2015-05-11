@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textanalysis;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,12 +35,12 @@ public class SentimentAnalysisServiceITCase extends AbstractHodClientIntegration
     }
 
     @Test
-    public void testSentimentAnalysisForText() {
+    public void testSentimentAnalysisForText() throws HodErrorException {
         final String text = "The service at the restaurant was good. " +
                 "The food at the restaurant was poor. " +
                 "In conclusion, it was an average restaurant";
 
-        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(endpoint.getApiKey(), text, SentimentAnalysisLanguage.eng);
+        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(getToken(), text, SentimentAnalysisLanguage.eng);
 
         assertThat(response.getPositive(), hasSize(1));
         assertThat(response.getNegative(), hasSize(1));
