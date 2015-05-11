@@ -45,7 +45,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
         final AuthenticationToken token = authenticationService.authenticateApplication(
-            new ApiKey(endpoint.getApiKey()),
+            apiKey,
             "IOD-TEST-APPLICATION",
             "IOD-TEST-DOMAIN",
             TokenType.simple
