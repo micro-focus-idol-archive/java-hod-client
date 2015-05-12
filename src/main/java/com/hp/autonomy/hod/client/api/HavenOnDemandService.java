@@ -138,15 +138,17 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a POST request to the given API
+     * @param token The token used to authenticate the request
      * @param api The name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(SYNC_URL_ONE)
     @Multipart
     Map<String, Object> post(
+        @Header("token") AuthenticationToken token,
         @Path("first") String api,
         @Path("version") int version,
         @PartMap Map<String, Object> params
@@ -154,16 +156,18 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a POST request to the given API
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(SYNC_URL_TWO)
     @Multipart
     Map<String, Object> post(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -172,17 +176,19 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a POST request to the given API
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param third The third part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(SYNC_URL_THREE)
     @Multipart
     Map<String, Object> post(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -192,15 +198,17 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a POST request to the given API asynchronously
+     * @param token The token used to authenticate the request
      * @param api The name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL_ONE)
     @Multipart
     JobId postAsync(
+        @Header("token") AuthenticationToken token,
         @Path("api") String api,
         @Path("version") int version,
         @PartMap Map<String, Object> params
@@ -208,16 +216,18 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a POST request to the given API asynchronously
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL_TWO)
     @Multipart
     JobId postAsync(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -226,17 +236,19 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a POST request to the given API asynchronously
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param third The third part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL_THREE)
     @Multipart
     JobId postAsync(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -246,104 +258,122 @@ public interface HavenOnDemandService {
 
     /**
      * Sends a PUT request to the given API
+     * @param token The token used to authenticate the request
      * @param api The name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @PUT(SYNC_URL_ONE)
+    @Multipart
     Map<String, Object> put(
+        @Header("token") AuthenticationToken token,
         @Path("first") String api,
         @Path("version") int version,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Sends a PUT request to the given API
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @PUT(SYNC_URL_TWO)
+    @Multipart
     Map<String, Object> put(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Sends a PUT request to the given API
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param third The third part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return A Map representing the result from HP Haven OnDemand
      * @throws HodErrorException
      */
     @PUT(SYNC_URL_THREE)
+    @Multipart
     Map<String, Object> put(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
         @Path("version") int version,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Sends a PUT request to the given API asynchronously
+     * @param token The token used to authenticate the request
      * @param api The name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return The job ID of the request
      * @throws HodErrorException
      */
     @PUT(ASYNC_URL_ONE)
+    @Multipart
     JobId putAsync(
+        @Header("token") AuthenticationToken token,
         @Path("first") String api,
         @Path("version") int version,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Sends a PUT request to the given API asynchronously
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return The job ID of the request
      * @throws HodErrorException
      */
     @PUT(ASYNC_URL_TWO)
+    @Multipart
     JobId putAsync(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
      * Sends a PUT request to the given API asynchronously
+     * @param token The token used to authenticate the request
      * @param first The first part of the name of the API
      * @param second The second part of the name of the API
      * @param third The third part of the name of the API
      * @param version The version of the API
-     * @param params The query parameters sent to the API. These should include an token if not using a RequestInterceptor
+     * @param params The query parameters sent to the API
      * @return The job ID of the request
      * @throws HodErrorException
      */
     @PUT(ASYNC_URL_THREE)
+    @Multipart
     JobId putAsync(
+        @Header("token") AuthenticationToken token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
         @Path("version") int version,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**

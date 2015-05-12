@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.textindexing.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindexing.Document;
 import com.hp.autonomy.hod.client.api.textindexing.Documents;
@@ -97,11 +98,10 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     @Test
     public void testPost() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", getToken());
         params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/search/queryText.txt")));
         params.put("total_results", true);
 
-        final Map<String, Object> result = havenOnDemandService.post("textindex", "query", "search", 1, params);
+        final Map<String, Object> result = havenOnDemandService.post(getToken(), "textindex", "query", "search", 1, params);
 
         assertThat(result.get("totalhits"), is(instanceOf(Integer.class)));
         assertThat((Integer) result.get("totalhits"), is(greaterThan(0)));
@@ -118,13 +118,14 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         final Documents<Document> documents = new Documents<>(document);
 
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", getToken());
         params.put("json", documents);
         params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
-        final JobId jobId = havenOnDemandService.postAsync("textindex", getIndex(), "document", 1, params);
+        final AuthenticationToken token = getToken();
 
-        final JobStatus<Map<String, Object>> jobResult = havenOnDemandService.getJobResult(getToken(), jobId);
+        final JobId jobId = havenOnDemandService.postAsync(token, "textindex", getIndex(), "document", 1, params);
+
+        final JobStatus<Map<String, Object>> jobResult = havenOnDemandService.getJobResult(token, jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
@@ -147,15 +148,16 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         final Documents<Document> documents = new Documents<>(document);
 
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", getToken());
         params.put("json", documents);
         params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
-        final JobId jobId = havenOnDemandService.postAsync("textindex", getIndex(), "document", 1, params);
+        final AuthenticationToken token = getToken();
+
+        final JobId jobId = havenOnDemandService.postAsync(token, "textindex", getIndex(), "document", 1, params);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
-        final Runnable runnable = new HavenOnDemandJobStatusRunnable(havenOnDemandService, getToken(), jobId, testCallback, scheduledExecutorService);
+        final Runnable runnable = new HavenOnDemandJobStatusRunnable(havenOnDemandService, token, jobId, testCallback, scheduledExecutorService);
 
         scheduledExecutorService.submit(runnable);
 
