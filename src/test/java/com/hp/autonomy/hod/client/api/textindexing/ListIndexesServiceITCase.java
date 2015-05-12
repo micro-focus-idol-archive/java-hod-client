@@ -46,7 +46,7 @@ public class ListIndexesServiceITCase extends AbstractHodClientIntegrationTest {
                 .setIndexTypes(EnumSet.of(IndexType.content))
                 .build();
 
-        final Indexes indexes = listIndexesService.listIndexes(endpoint.getApiKey(), params);
+        final Indexes indexes = listIndexesService.listIndexes(getToken(), params);
 
         assertThat(indexes.getPublicIndexes(), is(not(empty())));
         assertThat(indexes.getIndexes(), hasIndex(getIndex()));

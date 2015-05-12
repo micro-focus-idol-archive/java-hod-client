@@ -5,9 +5,10 @@
 
 package com.hp.autonomy.hod.client.api.textindexing;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit.http.Header;
 import retrofit.http.QueryMap;
 
 import java.util.Map;
@@ -17,10 +18,10 @@ import java.util.Map;
  */
 public interface ListIndexesService {
 
-    String URL = "/1/api/sync/listindexes/v1";
+    String URL = "/2/api/sync/listindexes/v1";
 
     /**
-     * Query HP Haven OnDemand for the list of indexes using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for the list of indexes using a token provided by a {@link retrofit.RequestInterceptor}
      * @param params Parameters to be sent as part of the request
      * @return A list of available indexes
      */
@@ -30,14 +31,14 @@ public interface ListIndexesService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for indexes using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Query HP Haven OnDemand for indexes using the given token
+     * @param token The API key to use to authenticate the request
      * @param params Parameters to be sent as part of the request
      * @return A list of available indexes
      */
     @GET(URL)
     Indexes listIndexes(
-            @Query("apiKey") String apiKey,
+            @Header("token") AuthenticationToken token,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
