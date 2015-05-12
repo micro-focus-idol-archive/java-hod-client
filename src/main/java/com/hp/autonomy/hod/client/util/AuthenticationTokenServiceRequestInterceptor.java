@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.util;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import retrofit.RequestInterceptor;
 
 /**
@@ -13,16 +14,20 @@ import retrofit.RequestInterceptor;
  * If you need to send Multipart requests to HP Haven OnDemand DO NOT use this request interceptor as you will be unable to
  * poll for job statuses
  */
-public class ApiKeyServiceRequestInterceptor implements RequestInterceptor {
+public class AuthenticationTokenServiceRequestInterceptor implements RequestInterceptor {
 
-    private final ApiKeyService apiKeyService;
+    private final AuthenticationTokenService authenticationTokenService;
 
-    public ApiKeyServiceRequestInterceptor(final ApiKeyService apiKeyService) {
-        this.apiKeyService = apiKeyService;
+    public AuthenticationTokenServiceRequestInterceptor(final AuthenticationTokenService authenticationTokenService) {
+        this.authenticationTokenService = authenticationTokenService;
     }
 
     @Override
     public void intercept(final RequestFacade request) {
-        request.addQueryParam("apiKey", apiKeyService.getApiKey());
+        final AuthenticationToken token = authenticationTokenService.getToken();
+
+        if (token != null) {
+            request.addHeader("token", token.toString());
+        }
     }
 }

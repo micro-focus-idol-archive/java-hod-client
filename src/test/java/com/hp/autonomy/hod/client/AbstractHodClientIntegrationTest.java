@@ -20,12 +20,23 @@ public abstract class AbstractHodClientIntegrationTest {
 
     private RestAdapter restAdapter;
     protected final Endpoint endpoint;
-    private AuthenticationService authenticationService;
-
+    private AuthenticationToken token;
 
     public void setUp() {
-        restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);
-        authenticationService = restAdapter.create(AuthenticationService.class);
+        restAdapter = RestAdapterFactory.getRestAdapter(null, endpoint);
+
+        final AuthenticationService authenticationService = restAdapter.create(AuthenticationService.class);
+
+        try {
+            token = authenticationService.authenticateApplication(
+                new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
+                "IOD-TEST-APPLICATION",
+                "IOD-TEST-DOMAIN",
+                TokenType.simple
+            ).getToken();
+        } catch (final HodErrorException e) {
+            throw new AssertionError("COULD NOT OBTAIN TOKEN");
+        }
     }
 
     @Parameterized.Parameters
@@ -54,13 +65,8 @@ public abstract class AbstractHodClientIntegrationTest {
         return restAdapter;
     }
 
-    public AuthenticationToken getToken() throws HodErrorException {
-        return authenticationService.authenticateApplication(
-            new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
-            "IOD-TEST-APPLICATION",
-            "IOD-TEST-DOMAIN",
-            TokenType.simple
-        ).getToken();
+    public AuthenticationToken getToken() {
+        return token;
     }
 
 }
