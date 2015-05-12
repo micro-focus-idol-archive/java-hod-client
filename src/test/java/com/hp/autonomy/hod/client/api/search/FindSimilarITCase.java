@@ -105,7 +105,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                 .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
                 .build();
 
-        addToTextIndexService.addJsonToTextIndex(endpoint.getApiKey(), documents, getIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
+        addToTextIndexService.addJsonToTextIndex(getToken(), documents, getIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
             @Override
             public void success(final AddToTextIndexResponse response) {
                 try {

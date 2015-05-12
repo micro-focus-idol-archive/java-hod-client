@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindexing;
 
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.job.AbstractJobService;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
@@ -50,21 +51,21 @@ public class DeleteTextIndexJobService extends AbstractJobService {
     /**
      * Deletes the given text index using the given API key. This API handles the confirm token returned by HP Haven OnDemand
      * automatically.
-     * @param apiKey The API key to use to authenticate the request
+     * @param token The token to use to authenticate the request
      * @param index The name of the index
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs
      */
     public void deleteTextIndex(
-            final String apiKey,
+            final AuthenticationToken token,
             final String index,
             final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
-        final DeleteTextIndexResponse response = deleteTextIndexService.initialDeleteTextIndex(apiKey, index);
+        final DeleteTextIndexResponse response = deleteTextIndexService.initialDeleteTextIndex(token, index);
 
-        final JobId jobId = deleteTextIndexService.deleteTextIndex(apiKey, index, response.getConfirm());
+        final JobId jobId = deleteTextIndexService.deleteTextIndex(token, index, response.getConfirm());
 
-        getExecutorService().submit(new DeleteTextIndexPollingStatusRunnable(apiKey, jobId, callback));
+        getExecutorService().submit(new DeleteTextIndexPollingStatusRunnable(token, jobId, callback));
     }
 
     /**
@@ -88,8 +89,8 @@ public class DeleteTextIndexJobService extends AbstractJobService {
 
     private class DeleteTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<DeleteTextIndexResponse> {
 
-        private DeleteTextIndexPollingStatusRunnable(final String apiKey, final JobId jobId, final HodJobCallback<DeleteTextIndexResponse> callback) {
-            super(apiKey, jobId, callback, getExecutorService());
+        private DeleteTextIndexPollingStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<DeleteTextIndexResponse> callback) {
+            super(token, jobId, callback, getExecutorService());
         }
 
         private DeleteTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<DeleteTextIndexResponse> callback) {
@@ -102,8 +103,8 @@ public class DeleteTextIndexJobService extends AbstractJobService {
         }
 
         @Override
-        public JobStatus<DeleteTextIndexResponse> getJobStatus(final String apiKey, final JobId jobId) throws HodErrorException {
-            return deleteTextIndexService.getJobStatus(apiKey, jobId);
+        public JobStatus<DeleteTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
+            return deleteTextIndexService.getJobStatus(token, jobId);
         }
 
     }

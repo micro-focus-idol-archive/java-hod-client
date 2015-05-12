@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.job;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -35,7 +36,7 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
             HodErrorCode.INVALID_JOB_ID
     );
 
-    private final String apiKey;
+    private final AuthenticationToken token;
     private final JobId jobId;
     private final HodJobCallback<T> callback;
     private final ScheduledExecutorService executorService;
@@ -43,27 +44,24 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
     private final AtomicInteger tries = new AtomicInteger(0);
 
     /**
-     * Creates a new PollingJobStatusRunnable using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Creates a new PollingJobStatusRunnable using a token provided by a {@link retrofit.RequestInterceptor}
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
     public PollingJobStatusRunnable(final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
-        this.apiKey = null;
-        this.jobId = jobId;
-        this.callback = callback;
-        this.executorService = executorService;
+        this(null, jobId, callback, executorService);
     }
 
     /**
      * Creates a new PollingJobStatusRunnable using the given API key
-     * @param apiKey The API key used to submit the job
+     * @param token The token used to submit the job
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final String apiKey, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
-        this.apiKey = apiKey;
+    public PollingJobStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
+        this.token = token;
         this.jobId = jobId;
         this.callback = callback;
         this.executorService = executorService;
@@ -79,12 +77,12 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
     /**
      * Fetches the status of a job using the given API key
-     * @param apiKey The API key used to submit the job
+     * @param token The token used to submit the job
      * @param jobId The ID of the job
      * @return A job status of the correct return type
      * @throws HodErrorException
      */
-    public abstract JobStatus<T> getJobStatus(final String apiKey, final JobId jobId) throws HodErrorException;
+    public abstract JobStatus<T> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException;
 
     /**
      * Checks the status of the job. If the job has not finished, the runnable will schedule itself to run again after a
@@ -97,8 +95,8 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
             final JobStatus<T> jobStatus;
 
-            if (apiKey != null) {
-                jobStatus = getJobStatus(apiKey, jobId);
+            if (token != null) {
+                jobStatus = getJobStatus(token, jobId);
             }
             else {
                 jobStatus = getJobStatus(jobId);

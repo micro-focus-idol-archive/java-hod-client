@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindexing;
 
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.job.AbstractJobService;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
@@ -49,27 +50,27 @@ public class CreateTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a file into HP Haven OnDemand using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * Index a file into HP Haven OnDemand using the given token
+     * @param token The token to use to authenticate the request
      * @param index The name of the index
      * @param flavor The flavor of the index
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs
      */
     public void createTextIndex(
-            final String apiKey,
+            final AuthenticationToken token,
             final String index,
             final IndexFlavor flavor,
             final Map<String, Object> params,
             final HodJobCallback<CreateTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = createTextIndexService.createTextIndex(apiKey, index, flavor, params);
+        final JobId jobId = createTextIndexService.createTextIndex(token, index, flavor, params);
 
-        getExecutorService().submit(new CreateTextIndexPollingStatusRunnable(apiKey, jobId, callback));
+        getExecutorService().submit(new CreateTextIndexPollingStatusRunnable(token, jobId, callback));
     }
 
     /**
-     * Index a file into HP Haven OnDemand using an API key provided by a {@link retrofit.RequestInterceptor}
+     * Index a file into HP Haven OnDemand using a token provided by a {@link retrofit.RequestInterceptor}
      * @param index The name of the index
      * @param flavor The flavor of the index
      * @param callback Callback that will be called with the response
@@ -88,8 +89,8 @@ public class CreateTextIndexJobService extends AbstractJobService {
 
     private class CreateTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<CreateTextIndexResponse> {
 
-        private CreateTextIndexPollingStatusRunnable(final String apiKey, final JobId jobId, final HodJobCallback<CreateTextIndexResponse> callback) {
-            super(apiKey, jobId, callback, getExecutorService());
+        private CreateTextIndexPollingStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<CreateTextIndexResponse> callback) {
+            super(token, jobId, callback, getExecutorService());
         }
 
         private CreateTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<CreateTextIndexResponse> callback) {
@@ -102,8 +103,8 @@ public class CreateTextIndexJobService extends AbstractJobService {
         }
 
         @Override
-        public JobStatus<CreateTextIndexResponse> getJobStatus(final String apiKey, final JobId jobId) throws HodErrorException {
-            return createTextIndexService.getJobStatus(apiKey, jobId);
+        public JobStatus<CreateTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
+            return createTextIndexService.getJobStatus(token, jobId);
         }
 
     }

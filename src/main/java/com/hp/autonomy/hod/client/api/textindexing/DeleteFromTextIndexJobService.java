@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindexing;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.AbstractJobService;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
@@ -64,21 +65,21 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
 
     /**
      * Deletes the documents with the given references
-     * @param apiKey The API key to use to authenticate the request
+     * @param token The token to use to authenticate the request
      * @param index The index to delete from
      * @param references The references of the documents to delete
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
      */
     public void deleteReferencesFromTextIndex(
-            final String apiKey,
+            final AuthenticationToken token,
             final String index,
             final List<String> references,
             final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexService.deleteReferencesFromTextIndex(apiKey, index, references);
+        final JobId jobId = deleteFromTextIndexService.deleteReferencesFromTextIndex(token, index, references);
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(apiKey, jobId, callback));
+        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(token, jobId, callback));
     }
 
     /**
@@ -98,19 +99,19 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
 
     /**
      * Deletes all the documents from the given text index using the given API key
-     * @param apiKey The API key to use to authenticate the request
+     * @param token The token to use to authenticate the request
      * @param index The index to delete from
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
      */
     public void deleteAllDocumentsFromTextIndex(
-            final String apiKey,
+            final AuthenticationToken token,
             final String index,
             final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexService.deleteAllDocumentsFromTextIndex(apiKey, index);
+        final JobId jobId = deleteFromTextIndexService.deleteAllDocumentsFromTextIndex(token, index);
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(apiKey, jobId, callback));
+        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(token, jobId, callback));
     }
 
     private class DeleteFromTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<DeleteFromTextIndexResponse> {
@@ -119,8 +120,8 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
             super(jobId, callback, getExecutorService());
         }
 
-        public DeleteFromTextIndexPollingStatusRunnable(final String apiKey, final JobId jobId, final HodJobCallback<DeleteFromTextIndexResponse> callback) {
-            super(apiKey, jobId, callback, getExecutorService());
+        public DeleteFromTextIndexPollingStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<DeleteFromTextIndexResponse> callback) {
+            super(token, jobId, callback, getExecutorService());
         }
 
         @Override
@@ -129,8 +130,8 @@ public class DeleteFromTextIndexJobService extends AbstractJobService {
         }
 
         @Override
-        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final String apiKey, final JobId jobId) throws HodErrorException {
-            return deleteFromTextIndexService.getJobStatus(apiKey, jobId);
+        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
+            return deleteFromTextIndexService.getJobStatus(token, jobId);
         }
     }
 

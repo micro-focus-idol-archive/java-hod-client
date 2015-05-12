@@ -62,7 +62,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
         final DeleteIndexTestCallback callback = new DeleteIndexTestCallback(latch);
 
         createTextIndexService.createTextIndex(
-                endpoint.getApiKey(),
+                getToken(),
                 testIndexName,
                 IndexFlavor.explorer,
                 createParams,
@@ -104,7 +104,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
 
             try {
                 deleteTextIndexService.deleteTextIndex(
-                        endpoint.getApiKey(),
+                        getToken(),
                         testIndexName,
                         callback);
             } catch (final HodErrorException e) {

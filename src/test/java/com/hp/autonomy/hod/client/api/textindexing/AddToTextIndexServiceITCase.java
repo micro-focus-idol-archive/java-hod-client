@@ -68,7 +68,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addJsonToTextIndex(endpoint.getApiKey(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(getToken(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
@@ -100,7 +100,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addFileToTextIndex(endpoint.getApiKey(), file, getIndex(), params, callback);
+        addToTextIndexService.addFileToTextIndex(getToken(), file, getIndex(), params, callback);
 
         latch.await();
 
