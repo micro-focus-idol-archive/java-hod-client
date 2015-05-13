@@ -40,7 +40,7 @@ public interface DeleteTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Delete a text index using a hash code obtained by queryDeleteTextIndex using the given token {@link retrofit.RequestInterceptor}
+     * Delete a text index using a hash code obtained by queryDeleteTextIndex using the given token
      * @param token The token to use to authenticate the request
      * @param index The name of the index
      * @return A response relaying information about the attempt to delete the index
@@ -64,7 +64,7 @@ public interface DeleteTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Delete a text index using a hash code obtained by queryDeleteTextIndex using the given token {@link retrofit.RequestInterceptor}
+     * Delete a text index using a hash code obtained by queryDeleteTextIndex using the given token
      * @param token The token to use to authenticate the request
      * @param index The name of the index
      * @param confirm The hash code to confirm the deletion

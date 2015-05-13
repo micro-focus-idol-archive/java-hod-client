@@ -50,7 +50,7 @@ public class CreateTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a file into HP Haven OnDemand using the given token
+     * Create a text index using the given token
      * @param token The token to use to authenticate the request
      * @param index The name of the index
      * @param flavor The flavor of the index
@@ -70,7 +70,7 @@ public class CreateTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a file into HP Haven OnDemand using a token provided by a {@link retrofit.RequestInterceptor}
+     * Create a text index using a token provided by a {@link retrofit.RequestInterceptor}
      * @param index The name of the index
      * @param flavor The flavor of the index
      * @param callback Callback that will be called with the response
