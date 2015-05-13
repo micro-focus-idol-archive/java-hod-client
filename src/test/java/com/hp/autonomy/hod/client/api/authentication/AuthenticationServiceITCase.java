@@ -76,7 +76,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Test
     public void failsWithInvalidToken() throws HodErrorException {
         final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(apiKey).getToken();
-        final AuthenticationToken madeUpApplicationToken = new AuthenticationToken(1431357140457L, "InvalidId!!!", "InvalidSecret!", "InvalidType");
+        final AuthenticationToken madeUpApplicationToken = new AuthenticationToken(1431357140457L, "InvalidId!!!", "InvalidSecret!", "InvalidType", 1431357140457L);
 
         HodErrorCode errorCode = null;
 
