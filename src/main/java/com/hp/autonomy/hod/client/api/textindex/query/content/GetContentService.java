@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public interface GetContentService {
 
-    String URL = "/2/api/sync/textindex/query/getcontent/v1";
+    String URL = "/2/api/sync/textindex/query/content/v1";
 
     /**
      * Query HP Haven OnDemand for documents matching query text using a token provided by a {@link retrofit.RequestInterceptor}
