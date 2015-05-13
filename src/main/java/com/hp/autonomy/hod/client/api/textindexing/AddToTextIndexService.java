@@ -34,7 +34,24 @@ public interface AddToTextIndexService {
     String URL = "/2/api/async/textindex/{indexName}/document/v1";
 
     /**
-     * Index JSON documents into HP Haven OnDemand
+     * Index JSON documents into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param documents A collection of objects to convert to JSON
+     * @param indexName The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @return The job ID of the request
+     * @throws HodErrorException
+     */
+    @POST(URL)
+    @Multipart
+    JobId addJsonToTextIndex(
+        @Part("json") Documents<?> documents,
+        @Path("indexName") String indexName,
+        @PartMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Index JSON documents into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param documents A collection of objects to convert to JSON
      * @param indexName The index to add to
@@ -52,7 +69,24 @@ public interface AddToTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Index a file into HP Haven OnDemand
+     * Index a file into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param file A file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @return The job ID of the request
+     * @throws HodErrorException
+     */
+    @POST(URL)
+    @Multipart
+    JobId addFileToTextIndex(
+        @Part("file") TypedOutput file,
+        @Path("indexName") String index,
+        @PartMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Index a file into HP Haven OnDemand using the given token
      * @param token The API key to use to authenticate the request
      * @param file A file containing the content of the document
      * @param index The index to add to
@@ -70,7 +104,24 @@ public interface AddToTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Index an object store object into HP Haven OnDemand
+     * Index an object store object into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param reference An object store reference pointing at a file to be used for document content
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @return The job ID of the request
+     * @throws HodErrorException
+     */
+    @POST(URL)
+    @Multipart
+    JobId addReferenceToTextIndex(
+        @Part("reference") String reference,
+        @Path("indexName") String index,
+        @PartMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Index an object store object into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param reference An object store reference pointing at a file to be used for document content
      * @param index The index to add to
@@ -88,7 +139,24 @@ public interface AddToTextIndexService {
     ) throws HodErrorException;
 
     /**
-     * Index a publicly accessible into HP Haven OnDemand
+     * Index a publicly accessible into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param url A publicly accessible url containing the document content
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @return The job ID of the request
+     * @throws HodErrorException
+     */
+    @POST(URL)
+    @Multipart
+    JobId addUrlToTextIndex(
+        @Part("url") String url,
+        @Path("indexName") String index,
+        @PartMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Index a publicly accessible into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param url A publicly accessible url containing the document content
      * @param index The index to add to

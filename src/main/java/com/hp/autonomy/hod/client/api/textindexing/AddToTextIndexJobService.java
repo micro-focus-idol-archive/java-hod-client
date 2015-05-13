@@ -50,7 +50,27 @@ public class AddToTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index JSON documents into HP Haven OnDemand
+     * Index JSON documents into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param documents A collection of objects to convert to JSON
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     */
+    public void addJsonToTextIndex(
+            final Documents<?> documents,
+            final String index,
+            final Map<String, Object> params,
+            final HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException {
+        final JobId jobId = addToTextIndexService.addJsonToTextIndex(documents, index, params);
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    /**
+     * Index JSON documents into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param documents A collection of objects to convert to JSON
      * @param index The index to add to
@@ -71,7 +91,27 @@ public class AddToTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a public accessible url into HP Haven OnDemand
+     * Index a public accessible url into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param url A publicly accessible url containing the document content
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     */
+    public void addUrlToTextIndex(
+            final String url,
+            final String index,
+            final Map<String, Object> params,
+            final HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException {
+        final JobId jobId = addToTextIndexService.addUrlToTextIndex(url, index, params);
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    /**
+     * Index a public accessible url into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param url A publicly accessible url containing the document content
      * @param index The index to add to
@@ -92,7 +132,27 @@ public class AddToTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index an object store object into HP Haven OnDemand
+     * Index an object store object into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param reference An object store reference pointing at a file to be used for document content
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     */
+    public void addReferenceToTextIndex(
+            final String reference,
+            final String index,
+            final Map<String, Object> params,
+            final HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException {
+        final JobId jobId = addToTextIndexService.addReferenceToTextIndex(reference, index, params);
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    /**
+     * Index an object store object into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param reference An object store reference pointing at a file to be used for document content
      * @param index The index to add to
@@ -113,7 +173,27 @@ public class AddToTextIndexJobService extends AbstractJobService {
     }
 
     /**
-     * Index a file into HP Haven OnDemand
+     * Index a file into HP Haven OnDemand using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param file A file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     */
+    public void addFileToTextIndex(
+            final TypedOutput file,
+            final String index,
+            final Map<String, Object> params,
+            final HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException {
+        final JobId jobId = addToTextIndexService.addFileToTextIndex(file, index, params);
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    /**
+     * Index a file into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param file A file containing the content of the document
      * @param index The index to add to
@@ -134,6 +214,10 @@ public class AddToTextIndexJobService extends AbstractJobService {
     }
 
     private class AddToTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<AddToTextIndexResponse> {
+
+        private AddToTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<AddToTextIndexResponse> callback) {
+            super(jobId, callback, getExecutorService());
+        }
 
         private AddToTextIndexPollingStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<AddToTextIndexResponse> callback) {
             super(token, jobId, callback, getExecutorService());

@@ -138,7 +138,21 @@ public interface FindSimilarService {
     ) throws HodErrorException;
 
     /**
-     * Finds similar documents to the text in a file
+     * Finds similar documents to the text in a file using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param file A file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that are similar to the query text
+     */
+    @Multipart
+    @POST(URL)
+    Documents findSimilarDocumentsToFile(
+        @Part("file") TypedOutput file,
+        @PartMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Finds similar documents to the text in a file using the given token
      * @param token The token to use to authenticate the request
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request

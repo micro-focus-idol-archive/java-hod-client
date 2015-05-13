@@ -106,7 +106,21 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text in a file
+     * Query HP Haven OnDemand for documents using query text in a file using a token
+     * provided by a {@link retrofit.RequestInterceptor}
+     * @param file A file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     */
+    @Multipart
+    @POST(URL)
+    Entities findRelatedConceptsWithFile(
+        @Part("file") TypedOutput file,
+        @PartMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for documents using query text in a file using the given token
      * @param token The token to use to authenticate the request
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
