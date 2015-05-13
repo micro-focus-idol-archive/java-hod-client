@@ -147,6 +147,15 @@ public enum HodErrorCode {
     ROLE_NAME_ALREADY_USED(11007),
     ROLE_NOT_FOUND(11008),
 
+    // Authentication
+    INVALID_AUTHENTICATION_TYPE(12100),
+    INVALID_TOKEN(12101),
+    AUTHENTICATION_FAILED(12102),
+    INSUFFICIENT_PRIVILEGES(12103),
+
+    // Tenancy
+    SEND_EMAIL_FAILED(12200),
+
     /**
      * Default code used as a placeholder for codes returned by HP Haven OnDemand which are not yet enumerated
      */
