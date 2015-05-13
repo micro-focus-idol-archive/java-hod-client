@@ -66,22 +66,22 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
             queryTextIndexService.queryTextIndexWithText("*", null);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.API_KEY_REQUIRED));
-            assertThat(e.getMessage(), is("API key required"));
+            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
+            assertThat(e.getMessage(), is("Authentication failed"));
         }
     }
 
     @Test
     public void testHodReturnsApiKeyErrorWithDuplicateKeys() {
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", endpoint.getApiKey());
+        params.put("token", endpoint.getApiKey());
 
         try {
             queryTextIndexService.queryTextIndexWithText(getToken(), "*", params);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.INVALID_API_KEY));
-            assertThat(e.getMessage(), is("Invalid API key"));
+            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
+            assertThat(e.getMessage(), is("Authentication failed"));
         }
     }
 
