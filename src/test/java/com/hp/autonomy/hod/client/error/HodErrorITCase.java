@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.error;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.search.QueryTextIndexService;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
