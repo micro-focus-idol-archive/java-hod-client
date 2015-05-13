@@ -5,6 +5,11 @@
 
 package com.hp.autonomy.hod.client;
 
+import com.hp.autonomy.hod.client.api.authentication.ApiKey;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
 
@@ -15,9 +20,23 @@ public abstract class AbstractHodClientIntegrationTest {
 
     private RestAdapter restAdapter;
     protected final Endpoint endpoint;
+    private AuthenticationToken token;
 
     public void setUp() {
-        restAdapter = RestAdapterFactory.getRestAdapter(false, endpoint);
+        restAdapter = RestAdapterFactory.getRestAdapter(null, endpoint);
+
+        final AuthenticationService authenticationService = restAdapter.create(AuthenticationService.class);
+
+        try {
+            token = authenticationService.authenticateApplication(
+                new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
+                "IOD-TEST-APPLICATION",
+                "IOD-TEST-DOMAIN",
+                TokenType.simple
+            ).getToken();
+        } catch (final HodErrorException e) {
+            throw new AssertionError("COULD NOT OBTAIN TOKEN");
+        }
     }
 
     @Parameterized.Parameters
@@ -44,6 +63,10 @@ public abstract class AbstractHodClientIntegrationTest {
 
     public RestAdapter getRestAdapter() {
         return restAdapter;
+    }
+
+    public AuthenticationToken getToken() {
+        return token;
     }
 
 }

@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.job;
 
 import com.hp.autonomy.hod.client.api.HavenOnDemandService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 
 import java.util.Map;
@@ -20,13 +21,13 @@ public class HavenOnDemandJobStatusRunnable extends PollingJobStatusRunnable<Map
 
     /**
      * Creates a new HavenOnDemandJobStatusRunnable using the given API key
-     * @param apiKey The API key used to submit the job
+     * @param token The token to submit the job
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public HavenOnDemandJobStatusRunnable(final HavenOnDemandService havenOnDemandService, final String apiKey, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
-        super(apiKey, jobId, callback, executorService);
+    public HavenOnDemandJobStatusRunnable(final HavenOnDemandService havenOnDemandService, final AuthenticationToken token, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
+        super(token, jobId, callback, executorService);
 
         this.havenOnDemandService = havenOnDemandService;
     }
@@ -49,7 +50,7 @@ public class HavenOnDemandJobStatusRunnable extends PollingJobStatusRunnable<Map
     }
 
     @Override
-    public JobStatus<Map<String, Object>> getJobStatus(final String apiKey, final JobId jobId) throws HodErrorException {
-        return havenOnDemandService.getJobStatus(apiKey, jobId);
+    public JobStatus<Map<String, Object>> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
+        return havenOnDemandService.getJobStatus(token, jobId);
     }
 }
