@@ -5,12 +5,13 @@
 
 package com.hp.autonomy.hod.client.util;
 
-import com.hp.autonomy.hod.client.RestAdapterFactory;
-import com.hp.autonomy.hod.client.api.search.Documents;
-import com.hp.autonomy.hod.client.api.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.search.QueryTextIndexService;
+import com.hp.autonomy.hod.client.RestAdapterFactory;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +33,14 @@ public class RequestInterceptorITCase extends AbstractHodClientIntegrationTest {
     @Override
     @Before
     public void setUp() {
-        final RestAdapter restAdapter = RestAdapterFactory.getRestAdapter(true, endpoint);
+        super.setUp();
+
+        final RestAdapter restAdapter = RestAdapterFactory.getRestAdapter(new AuthenticationTokenService() {
+            @Override
+            public AuthenticationToken getToken() {
+                return RequestInterceptorITCase.this.getToken();
+            }
+        }, endpoint);
 
         queryTextIndexService = restAdapter.create(QueryTextIndexService.class);
     }

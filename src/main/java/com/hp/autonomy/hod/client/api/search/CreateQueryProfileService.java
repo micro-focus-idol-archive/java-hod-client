@@ -15,7 +15,7 @@ import retrofit.http.Part;
  */
 public interface CreateQueryProfileService {
 
-    String URL = "/api/sync/createqueryprofile/v1";
+    String URL = "/1/api/sync/createqueryprofile/v1";
 
     /**
      * Create a query profile in HP Haven OnDemand for a specified query manipulation index using the given API key

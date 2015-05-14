@@ -14,7 +14,7 @@ import retrofit.http.Query;
  */
 public interface DeleteQueryProfileService {
 
-    String URL = "/api/sync/deletequeryprofile/v1";
+    String URL = "/1/api/sync/deletequeryprofile/v1";
 
     /**
      * Delete an existing query profile in HP Haven OnDemand using an API key provided by a {@link retrofit.RequestInterceptor}
