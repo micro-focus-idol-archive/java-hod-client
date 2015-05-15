@@ -49,7 +49,7 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
 
         final Documents documents = getContentService.getContent(
             getToken(),
-            Collections.singletonList("3ac70cc2-606e-486a-97d0-511e762b2183"), getIndex(),
+            Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"), getIndex(),
             params
         );
 
@@ -59,6 +59,6 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
 
         final Document document0 = documentList.get(0);
 
-        assertThat(document0.getTitle(), is("TEST DOCUMENT"));
+        assertThat(document0.getTitle(), is("DOCUMENT FOR GET CONTENT"));
     }
 }
