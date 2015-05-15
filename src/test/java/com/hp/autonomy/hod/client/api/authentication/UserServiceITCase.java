@@ -20,12 +20,11 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 @Slf4j
-@Ignore // TODO: Remove this when production has platform version 2 features
-public class UserServiceTest extends AbstractHodClientIntegrationTest {
+public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationService authenticationService;
     private UserService userService;
 
-    public UserServiceTest(final Endpoint endpoint) {
+    public UserServiceITCase(final Endpoint endpoint) {
         super(endpoint);
     }
 

@@ -25,7 +25,6 @@ import static org.hamcrest.core.Is.is;
  */
 @RunWith(Parameterized.class)
 @Slf4j
-@Ignore // TODO: remove this when production has the features
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationService authenticationService;
     private ApiKey apiKey;
