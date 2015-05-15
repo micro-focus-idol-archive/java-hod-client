@@ -5,17 +5,37 @@
 
 package com.hp.autonomy.hod.client.api.search;
 
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit.http.Header;
+import retrofit.http.Path;
 
 public interface RetrieveQueryProfileService {
 
-    String URL = "/api/sync/retrievequeryprofile/v1";
+    String URL = "/2/api/sync/queryprofile/{queryProfileName}/v1";
 
+    /**
+     * Retrieves a query profile using a token provided by a {@link retrofit.RequestInterceptor}
+     * @param name The name of the query profile
+     * @return The query profile
+     * @throws HodErrorException
+     */
     @GET(URL)
     QueryProfile retrieveQueryProfile(
-            @Query("apiKey") String apiKey,
-            @Query("query_profile") String name
+            @Path("queryProfileName") String name
+    ) throws HodErrorException;
+
+    /**
+     * Retrieves a query profile using the given token
+     * @param token The token to use to authenticate the request
+     * @param name The name of the query profile
+     * @return The query profile
+     * @throws HodErrorException
+     */
+    @GET(URL)
+    QueryProfile retrieveQueryProfile(
+            @Header("token") AuthenticationToken token,
+            @Path("queryProfileName") String name
     ) throws HodErrorException;
 }

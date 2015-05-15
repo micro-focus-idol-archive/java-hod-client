@@ -8,35 +8,37 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.search.CreateQueryProfileService;
 import com.hp.autonomy.hod.client.api.search.DeleteQueryProfileService;
-import com.hp.autonomy.hod.client.api.search.QueryProfileConfig;
 import com.hp.autonomy.hod.client.api.search.QueryProfile;
-import com.hp.autonomy.hod.client.api.search.QueryProfilePromotions;
+import com.hp.autonomy.hod.client.api.search.QueryProfileRequestBuilder;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Helper for testing query profile functionality.
  */
+@Slf4j
 public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodClientIntegrationTest {
 
-    private List<QueryProfile> qpTestResources;
+    private List<String> createdQueryProfiles;
     // Not under test
     private CreateQueryProfileService createQueryProfileService;
     private DeleteQueryProfileService deleteQueryProfileService;
 
-    public AbstractQueryProfileIntegrationTest(Endpoint endpoint) {
+    public AbstractQueryProfileIntegrationTest(final Endpoint endpoint) {
         super(endpoint);
     }
 
-
+    @Override
     public void setUp() {
         super.setUp();
         createQueryProfileService = getRestAdapter().create(CreateQueryProfileService.class);
         deleteQueryProfileService = getRestAdapter().create(DeleteQueryProfileService.class);
-        qpTestResources = new ArrayList<>();
+        createdQueryProfiles = new ArrayList<>();
     }
 
     /**
@@ -44,48 +46,14 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
      */
     @After
     public void tearDown() {
-        for (QueryProfile qp : qpTestResources) {
+        for (final String queryProfileName : createdQueryProfiles) {
             try {
                 // Try/catch as QueryProfiles might not have been created
-                deleteQueryProfileService.deleteQueryProfile(endpoint.getApiKey(), qp.getName());
-            } catch (HodErrorException e) {
-                e.printStackTrace();
+                deleteQueryProfileService.deleteQueryProfile(getToken(), queryProfileName);
+            } catch (final HodErrorException e) {
+                log.error("Error deleting query profile", e);
             }
         }
-    }
-
-    /**
-     * Creates a QueryProfile object for using in tests.  Note that the name of the QueryProfile will not be the same as
-     * the nameSuffix that is passed in.
-     * @param nameSuffix  A unique suffix to append to the name of the Query Profile.
-     * @return  A QueryProfile object, with name and config.
-     */
-    private QueryProfile createTestQueryProfile(final String nameSuffix) {
-        final String profileName = "iod_java_client_query_profile_test_" + nameSuffix;
-
-        final List<String> categories = new ArrayList<>();
-        categories.add("Promotions");
-
-        final QueryProfilePromotions promotions = new QueryProfilePromotions.Builder()
-                .setEnabled(true)
-                .setEveryPage(false)
-                .setIdentified(false)
-                .setCategories(categories)
-                .build();
-
-        final QueryProfileConfig config = new QueryProfileConfig.Builder()
-                .setQueryManipulationIndex(getQueryManipulationIndex())
-                .setPromotions(promotions)
-                .build();
-
-        final QueryProfile qp = new QueryProfile.Builder()
-                .setName(profileName)
-                .setConfig(config)
-                .build();
-
-        qpTestResources.add(qp);
-
-        return qp;
     }
 
     /**
@@ -96,9 +64,22 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
      * @throws HodErrorException
      */
     protected QueryProfile createQueryProfile(final String nameSuffix) throws HodErrorException {
-        final QueryProfile qp = createTestQueryProfile(nameSuffix);
-        createQueryProfileService.createQueryProfile(endpoint.getApiKey(), qp.getName(), qp.getConfig());
+        final String profileName = "iod_java_client_query_profile_test_" + nameSuffix;
+        createdQueryProfiles.add(profileName);
 
-        return qp;
+        final QueryProfileRequestBuilder requestBuilder = new QueryProfileRequestBuilder()
+            .setPromotionsEnabled(true)
+            .setPromotionsIdentified(false)
+            .addPromotionCategories("Promotions");
+
+        createQueryProfileService.createQueryProfile(getToken(), profileName, getQueryManipulationIndex(), requestBuilder.build());
+
+        return new QueryProfile.Builder()
+            .setName(profileName)
+            .setQueryManipulationIndex(getQueryManipulationIndex())
+            .setPromotionsEnabled(true)
+            .setPromotionsIdentified(false)
+            .setPromotionCategories(Collections.singletonList("promotions")) // HOD lowercases these
+            .build();
     }
 }

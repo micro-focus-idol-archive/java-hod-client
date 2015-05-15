@@ -12,8 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,15 +20,15 @@ import static org.hamcrest.Matchers.is;
 @RunWith(Parameterized.class)
 public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIntegrationTest {
 
-    public UpdateQueryProfilesServiceSuiteChild(Endpoint endpoint) {
-        super(endpoint);
-    }
-
     // Not under test
     private RetrieveQueryProfileService retrieveQueryProfileService;
 
     // Service under test
     private UpdateQueryProfileService updateQueryProfileService;
+
+    public UpdateQueryProfilesServiceSuiteChild(final Endpoint endpoint) {
+        super(endpoint);
+    }
 
     @Override
     @Before
@@ -45,30 +44,27 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIn
         // Create a query profile, then load it back and verify that it's what we created
         final QueryProfile originalQP = createQueryProfile("test001");
         final String qpName = originalQP.getName();
-        final QueryProfile qpFromServer = retrieveQueryProfileService.retrieveQueryProfile(endpoint.getApiKey(), qpName);
-        assertThat(qpFromServer.getConfig(), is(originalQP.getConfig()));
+        final QueryProfile qpFromServer = retrieveQueryProfileService.retrieveQueryProfile(getToken(), qpName);
+        assertThat(qpFromServer, is(originalQP));
 
         // Create a new config, then change the query profile on the server.  Fetch it back and verify that it's changed
         // These values are deliberately different from the ones created in the superclass
-        final List<String> categories = new ArrayList<>();
-        categories.add("NotPromotions");
+        final QueryProfileRequestBuilder requestBuilder = new QueryProfileRequestBuilder()
+            .setPromotionsEnabled(false)
+            .setPromotionsIdentified(true)
+            .addPromotionCategories("NotPromotions");
 
-        final QueryProfilePromotions promotions = new QueryProfilePromotions.Builder()
-                .setEnabled(false)
-                .setEveryPage(true)
-                .setIdentified(true)
-                .setCategories(categories)
-                .build();
+        updateQueryProfileService.updateQueryProfile(getToken(), qpName, getQueryManipulationIndex(), requestBuilder.build());
 
-        final QueryProfileConfig newConfig = new QueryProfileConfig.Builder()
-                .setQueryManipulationIndex(getQueryManipulationIndex())
-                .setPromotions(promotions)
-                .build();
+        final QueryProfile newQPFromServer = retrieveQueryProfileService.retrieveQueryProfile(getToken(), qpName);
 
-        updateQueryProfileService.updateQueryProfile(endpoint.getApiKey(), qpName, newConfig);
-
-        final QueryProfile newQPFromServer = retrieveQueryProfileService.retrieveQueryProfile(endpoint.getApiKey(), qpName);
-
-        assertThat(newQPFromServer.getConfig(), is(newConfig));
+        assertThat(newQPFromServer, is(new QueryProfile.Builder()
+            .setName(qpName)
+            .setQueryManipulationIndex(getQueryManipulationIndex())
+            .setPromotionsEnabled(false)
+            .setPromotionsIdentified(true)
+            .setPromotionCategories(Collections.singletonList("notpromotions"))
+            .build())
+        );
     }
 }

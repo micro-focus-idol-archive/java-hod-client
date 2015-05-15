@@ -17,13 +17,14 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
 public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileIntegrationTest {
-    public RetrieveQueryProfileServiceSuiteChild(Endpoint endpoint) {
+
+    private RetrieveQueryProfileService retrieveQueryProfileService;
+
+    public RetrieveQueryProfileServiceSuiteChild(final Endpoint endpoint) {
         super(endpoint);
     }
 
-    // Service under test
-    private RetrieveQueryProfileService retrieveQueryProfileService;
-
+    @Override
     @Before
     public void setUp() {
         super.setUp();
@@ -33,14 +34,13 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileI
     @Test
     public void testRetrieval() throws HodErrorException {
         final QueryProfile qp = createQueryProfile("retr001");
-        final QueryProfile retrievedQP = retrieveQueryProfileService.retrieveQueryProfile(endpoint.getApiKey(), qp.getName());
+        final QueryProfile retrievedQP = retrieveQueryProfileService.retrieveQueryProfile(getToken(), qp.getName());
 
-        assertThat(retrievedQP.getName(), is(qp.getName()));
-        assertThat(retrievedQP.getConfig(), is(qp.getConfig()));
+        assertThat(retrievedQP, is(qp));
     }
 
     @Test(expected = HodErrorException.class)
     public void testFailure() throws HodErrorException {
-        retrieveQueryProfileService.retrieveQueryProfile(endpoint.getApiKey(), "sometest");
+        retrieveQueryProfileService.retrieveQueryProfile(getToken(), "sometest");
     }
 }
