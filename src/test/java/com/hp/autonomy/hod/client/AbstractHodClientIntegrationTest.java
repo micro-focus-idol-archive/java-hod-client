@@ -45,10 +45,6 @@ public abstract class AbstractHodClientIntegrationTest {
         return Arrays.asList(endpoint);
     }
 
-    /**
-     * Make sure you override this and call super(endpoint);
-     * @param endpoint
-     */
     public AbstractHodClientIntegrationTest(final Endpoint endpoint) {
         this.endpoint = endpoint;
     }
