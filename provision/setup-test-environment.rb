@@ -43,4 +43,4 @@ required_indexes.reject{|index| private_index_names.include?(index[:name])}.each
   create_text_index(token, index[:name], index[:flavor], proxy_host, proxy_port)
 end
 
-add_to_text_index(token, 'documents.json', required_indexes[0][:name], proxy_host, proxy_port)
+add_to_text_index(token, File.expand_path('../documents.json', __FILE__), required_indexes[0][:name], proxy_host, proxy_port)
