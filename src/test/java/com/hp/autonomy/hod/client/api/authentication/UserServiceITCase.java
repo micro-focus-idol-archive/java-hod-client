@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 @Slf4j
-@Ignore
+@Ignore // TODO remove this when actual data is returned
 public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationService authenticationService;
     private UserService userService;
