@@ -5,9 +5,10 @@
 
 package com.hp.autonomy.hod.client;
 
-import com.hp.autonomy.hod.client.util.ApiKeyRequestInterceptor;
 import com.hp.autonomy.hod.client.converter.HodConverter;
 import com.hp.autonomy.hod.client.error.HodErrorHandler;
+import com.hp.autonomy.hod.client.util.AuthenticationTokenService;
+import com.hp.autonomy.hod.client.util.AuthenticationTokenServiceRequestInterceptor;
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import retrofit.RestAdapter;
@@ -16,11 +17,11 @@ import retrofit.converter.JacksonConverter;
 
 public class RestAdapterFactory {
 
-    public static RestAdapter getRestAdapter(final boolean withInterceptor) {
-        return getRestAdapter(withInterceptor, Endpoint.PRODUCTION);
+    public static RestAdapter getRestAdapter(final AuthenticationTokenService authenticationTokenService) {
+        return getRestAdapter(authenticationTokenService, Endpoint.PRODUCTION);
     }
 
-    public static RestAdapter getRestAdapter(final boolean withInterceptor, final Endpoint endpoint) {
+    public static RestAdapter getRestAdapter(final AuthenticationTokenService authenticationTokenService, final Endpoint endpoint) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
 
         final String proxyHost = System.getProperty("hp.hod.https.proxyHost");
@@ -37,8 +38,8 @@ public class RestAdapterFactory {
                 .setErrorHandler(new HodErrorHandler());
 
 
-        if (withInterceptor) {
-            restAdapterBuilder.setRequestInterceptor(new ApiKeyRequestInterceptor(endpoint.getApiKey()));
+        if (authenticationTokenService != null) {
+            restAdapterBuilder.setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService));
         }
 
         return restAdapterBuilder.build();

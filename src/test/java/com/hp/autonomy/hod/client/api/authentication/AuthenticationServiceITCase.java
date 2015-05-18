@@ -25,7 +25,6 @@ import static org.hamcrest.core.Is.is;
  */
 @RunWith(Parameterized.class)
 @Slf4j
-@Ignore // TODO: remove this when production has the features
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationService authenticationService;
     private ApiKey apiKey;
@@ -38,14 +37,14 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Before
     public void setUp() {
         super.setUp();
-        apiKey = new ApiKey(endpoint.getApiKey());
+        apiKey = new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey"));
         authenticationService = getRestAdapter().create(AuthenticationService.class);
     }
 
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
         final AuthenticationToken token = authenticationService.authenticateApplication(
-            new ApiKey(endpoint.getApiKey()),
+            apiKey,
             "IOD-TEST-APPLICATION",
             "IOD-TEST-DOMAIN",
             TokenType.simple
@@ -64,7 +63,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             "IOD-TEST-DOMAIN"
         ).getToken();
 
-        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(new ApiKey(endpoint.getApiKey())).getToken();
+        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(apiKey).getToken();
 
         final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, TokenType.simple).getToken();
 
@@ -86,6 +85,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             errorCode = e.getErrorCode();
         }
 
-        assertThat(errorCode, is(HodErrorCode.INVALID_TOKEN));
+        assertThat(errorCode, is(HodErrorCode.AUTHENTICATION_FAILED));
     }
 }

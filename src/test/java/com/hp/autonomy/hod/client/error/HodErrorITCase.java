@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.error;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.search.QueryTextIndexService;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +41,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testNoQueryTextError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "", null);
+            queryTextIndexService.queryTextIndexWithText(getToken(), "", null);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
             assertThat(e.getErrorCode(), is(HodErrorCode.MISSING_REQUIRED_PARAMETERS));
@@ -52,7 +52,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testHodReturnsJobError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "OR", null);
+            queryTextIndexService.queryTextIndexWithText(getToken(), "OR", null);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
             assertThat(e.getErrorCode(), is(HodErrorCode.BACKEND_REQUEST_FAILED));
@@ -66,22 +66,22 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
             queryTextIndexService.queryTextIndexWithText("*", null);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.API_KEY_REQUIRED));
-            assertThat(e.getMessage(), is("API key required"));
+            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
+            assertThat(e.getMessage(), is("Authentication failed"));
         }
     }
 
     @Test
     public void testHodReturnsApiKeyErrorWithDuplicateKeys() {
         final Map<String, Object> params = new HashMap<>();
-        params.put("apiKey", endpoint.getApiKey());
+        params.put("token", endpoint.getApiKey());
 
         try {
-            queryTextIndexService.queryTextIndexWithText(endpoint.getApiKey(), "*", params);
+            queryTextIndexService.queryTextIndexWithText(getToken(), "*", params);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.INVALID_API_KEY));
-            assertThat(e.getMessage(), is("Invalid API key"));
+            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
+            assertThat(e.getMessage(), is("Authentication failed"));
         }
     }
 

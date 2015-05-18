@@ -25,7 +25,7 @@ public interface AuthenticationService {
      * @return A response containing a token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/authenticate/application")
+    @POST("/2/authenticate/application")
     @Multipart
     AuthenticationTokenResponse authenticateApplication(
             @Header("apiKey") ApiKey apiKey,
@@ -44,7 +44,7 @@ public interface AuthenticationService {
      * @return A response containing a token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/authenticate/user")
+    @POST("/2/authenticate/user")
     @Multipart
     AuthenticationTokenResponse authenticateUser(
             @Header("apiKey") ApiKey apiKey,
@@ -63,7 +63,7 @@ public interface AuthenticationService {
      * @return A response containing an unbound application token
      * @throws HodErrorException
      */
-    @POST("/authenticate/application/unbound")
+    @POST("/2/authenticate/application/unbound")
     @Multipart
     AuthenticationTokenResponse authenticateApplicationUnbound(
             @Header("apiKey") ApiKey apiKey,
@@ -78,7 +78,7 @@ public interface AuthenticationService {
      * @return A response containing an unbound user token
      * @throws HodErrorException
      */
-    @POST("/authenticate/user/unbound")
+    @POST("/2/authenticate/user/unbound")
     AuthenticationTokenResponse authenticateUserUnbound(
             @Header("apiKey") ApiKey apiKey
     ) throws HodErrorException;
@@ -91,7 +91,7 @@ public interface AuthenticationService {
      * @return A response containing a token which can be used to call HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/authenticate/combined")
+    @POST("/2/authenticate/combined")
     @Multipart
     AuthenticationTokenResponse combineTokens(
         @Header("app_token") AuthenticationToken applicationToken,
