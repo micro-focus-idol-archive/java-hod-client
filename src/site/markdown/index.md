@@ -46,7 +46,7 @@ For more information, consult the HP Haven OnDemand documentation.
         myApplication,
         myDomain,
         TokenType.simple
-    );
+    ).getToken();
 
 You can then call the methods on queryTextIndexService with the token to communicate with HP Haven OnDemand.
 
