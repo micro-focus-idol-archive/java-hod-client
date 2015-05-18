@@ -37,7 +37,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Before
     public void setUp() {
         super.setUp();
-        apiKey = new ApiKey(endpoint.getApiKey());
+        apiKey = new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey"));
         authenticationService = getRestAdapter().create(AuthenticationService.class);
     }
 
@@ -63,7 +63,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             "IOD-TEST-DOMAIN"
         ).getToken();
 
-        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(new ApiKey(endpoint.getApiKey())).getToken();
+        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(apiKey).getToken();
 
         final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, TokenType.simple).getToken();
 
@@ -85,6 +85,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             errorCode = e.getErrorCode();
         }
 
-        assertThat(errorCode, is(HodErrorCode.INVALID_TOKEN));
+        assertThat(errorCode, is(HodErrorCode.AUTHENTICATION_FAILED));
     }
 }
