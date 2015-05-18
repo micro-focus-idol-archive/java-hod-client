@@ -20,6 +20,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 @Slf4j
+@Ignore
 public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationService authenticationService;
     private UserService userService;
