@@ -15,7 +15,7 @@ public interface UserService {
      * @return A response containing the user details
      * @throws HodErrorException
      */
-    @GET("/user")
+    @GET("/2/user")
     GetUserResponse getUser(@Header("user_token") AuthenticationToken userUnboundToken) throws HodErrorException;
 
 }
