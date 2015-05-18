@@ -7,6 +7,18 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.0" date="2015-05-18">
+            <action dev="brian-beckett-hp" type="update">
+                Update the query profile APIs due to backend changes
+            </action>
+            <action dev="Alex Scown" type="update">
+                Update APIs to use /2 urls which take tokens rather than API keys. The base version number has been
+                moved into the API definitions and must no longer be added to the RestAdapter configuration
+            </action>
+            <action dev="Alex Scown" type="add">
+                Add RequestInterceptor support to Multipart APIs as tokens are not passed as parts
+            </action>
+        </release>
         <release version="0.3.0" date="2015-05-13">
             <action dev="matthew-gordon-hp" type="add">
                 Add support for the user API
