@@ -3,7 +3,7 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.hod.client.api.search;
+package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,14 +14,13 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-
 /**
- * Holds the response from the CreateQueryProfile API
+ * The response object for the Create, Delete and Update Query Profile APIs.
  */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonDeserialize(builder = CreateDeleteQueryProfileResponse.Builder.class)
-public class CreateDeleteQueryProfileResponse {
+@JsonDeserialize(builder = QueryProfileStatusResponse.Builder.class)
+public class QueryProfileStatusResponse {
 
     /**
      * @return The message returned by the api
@@ -31,7 +30,7 @@ public class CreateDeleteQueryProfileResponse {
     /**
      * @return The name of the created query profile
      */
-    private final String queryProfileName;
+    private final String queryProfile;
 
     @JsonPOJOBuilder(withPrefix = "set")
     @Setter
@@ -41,10 +40,12 @@ public class CreateDeleteQueryProfileResponse {
         private String message;
 
         @JsonProperty("query_profile")
-        private String queryProfileName;
+        private String queryProfile;
 
-        public CreateDeleteQueryProfileResponse build() {
-            return new CreateDeleteQueryProfileResponse(message, queryProfileName);
+        public QueryProfileStatusResponse build() {
+            return new QueryProfileStatusResponse(message, queryProfile);
         }
+
     }
+
 }

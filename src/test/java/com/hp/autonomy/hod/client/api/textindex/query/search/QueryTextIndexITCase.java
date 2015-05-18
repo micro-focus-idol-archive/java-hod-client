@@ -71,7 +71,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testQueryForFile() throws HodErrorException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/search/queryText.txt"));
+        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt"));
         final Map<String, Object> params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
@@ -87,7 +87,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testQueryForFileAsStream() throws HodErrorException, IOException {
-        final InputStream stream = getClass().getResourceAsStream("/com/hp/autonomy/hod/client/api/search/queryText.txt");
+        final InputStream stream = getClass().getResourceAsStream("/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt");
 
         final TypedOutput file = new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(stream));
         final Map<String, Object> params = new QueryRequestBuilder()
