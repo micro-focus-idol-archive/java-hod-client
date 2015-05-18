@@ -19,7 +19,7 @@ java-hod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.hod</groupId>
         <artifactId>java-hod-client</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </dependency>
 
 java-hod-client uses [Retrofit](http://square.github.io/retrofit/) as the basis of its HTTP implementation. This
@@ -46,7 +46,7 @@ For more information, consult the HP Haven OnDemand documentation.
         myApplication,
         myDomain,
         TokenType.simple
-    );
+    ).getToken();
 
 You can then call the methods on queryTextIndexService with the token to communicate with HP Haven OnDemand.
 
@@ -111,7 +111,7 @@ in conjunction with a request interceptor.
 
     // set up a RestAdapter using a request interceptor
     final RestAdapter restAdapter = new RestAdapter.Builder()
-        .setEndpoint("https://api.idolondemand.com/1")
+        .setEndpoint("https://api.idolondemand.com/")
         .setConverter(new HodConverter(new JacksonConverter()))
         .setErrorHandler(new HodErrorHandler())
         .setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService))
@@ -127,7 +127,7 @@ the token will be set twice, which makes HP Haven OnDemand sad.
 
     // set up a RestAdapter using a request interceptor
     final RestAdapter restAdapter = new RestAdapter.Builder()
-        .setEndpoint("https://api.idolondemand.com/1")
+        .setEndpoint("https://api.idolondemand.com/")
         .setConverter(new HodConverter(new JacksonConverter()))
         .setErrorHandler(new HodErrorHandler())
         .setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService))
