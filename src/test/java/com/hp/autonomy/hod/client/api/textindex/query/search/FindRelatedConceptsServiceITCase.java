@@ -53,7 +53,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testFindForFile() throws HodErrorException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/search/queryText.txt"));
+        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt"));
 
         final Entities entities = findRelatedConceptsService.findRelatedConceptsWithFile(getToken(), file, null);
 

@@ -6,10 +6,10 @@ package com.hp.autonomy.hod.client.api;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.search.CreateQueryProfileService;
-import com.hp.autonomy.hod.client.api.search.DeleteQueryProfileService;
-import com.hp.autonomy.hod.client.api.search.QueryProfile;
-import com.hp.autonomy.hod.client.api.search.QueryProfileRequestBuilder;
+import com.hp.autonomy.hod.client.api.queryprofile.CreateQueryProfileService;
+import com.hp.autonomy.hod.client.api.queryprofile.DeleteQueryProfileService;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfile;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileRequestBuilder;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
