@@ -18,4 +18,13 @@ public interface UserService {
     @GET("/2/user")
     GetUserResponse getUser(@Header("user_token") AuthenticationToken userUnboundToken) throws HodErrorException;
 
+    /**
+     * Get details for the user represented by the given combined token
+     * @param combinedToken The combined token
+     * @return A response containing the user details
+     * @throws HodErrorException
+     */
+    @GET("/2/user")
+    GetUserResponse getUserCombined(@Header("token") AuthenticationToken combinedToken) throws HodErrorException;
+
 }

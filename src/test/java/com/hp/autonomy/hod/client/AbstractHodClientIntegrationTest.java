@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public abstract class AbstractHodClientIntegrationTest {
+    protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
+    protected static final String DOMAIN_NAME = "IOD-TEST-DOMAIN";
 
     private RestAdapter restAdapter;
     protected final Endpoint endpoint;
@@ -30,8 +32,8 @@ public abstract class AbstractHodClientIntegrationTest {
         try {
             token = authenticationService.authenticateApplication(
                 new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
-                "IOD-TEST-APPLICATION",
-                "IOD-TEST-DOMAIN",
+                    APPLICATION_NAME,
+                    DOMAIN_NAME,
                 TokenType.simple
             ).getToken();
         } catch (final HodErrorException e) {
