@@ -5,22 +5,18 @@ import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 @Slf4j
-@Ignore // TODO remove this when actual data is returned
 public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationService authenticationService;
     private UserService userService;
@@ -39,18 +35,40 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void getsUserDetails() throws HodErrorException {
-        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(new ApiKey(endpoint.getApiKey())).getToken();
-        final List<User> users = userService.getUser(userUnboundToken).getUsers();
+        final GetUserResponse getUserResponse = userService.getUser(getUserUnboundToken());
+        checkSingleUserResponse(getUserResponse);
+    }
+
+    @Test
+    public void getsCombinedTokenUsers() throws HodErrorException {
+        final AuthenticationToken userUnboundToken = getUserUnboundToken();
+        final AuthenticationToken applicationUnboundToken = authenticationService.authenticateApplicationUnbound(getApiKey(), APPLICATION_NAME, DOMAIN_NAME).getToken();
+        final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, TokenType.simple).getToken();
+
+        final GetUserResponse getUserResponse = userService.getUserCombined(combinedToken);
+        checkSingleUserResponse(getUserResponse);
+    }
+
+    private void checkSingleUserResponse(final GetUserResponse userResponse) {
+        final List<User> users = userResponse.getUsers();
         assertThat(users, hasSize(1));
 
         final User user = users.get(0);
 
         final String username = user.getUsername();
-        log.debug("Username was {}", username);
         assertThat(username, is(not(nullValue())));
+        log.debug("Username was {}", username);
 
         final String userStore = user.getUserStore();
-        log.debug("User store was {}", userStore);
         assertThat(userStore, is(not(nullValue())));
+        log.debug("User store was {}", userStore);
+    }
+
+    private AuthenticationToken getUserUnboundToken() throws HodErrorException {
+        return authenticationService.authenticateUserUnbound(getApiKey()).getToken();
+    }
+
+    private ApiKey getApiKey() {
+        return new ApiKey(endpoint.getApiKey());
     }
 }
