@@ -69,6 +69,6 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     }
 
     private ApiKey getApiKey() {
-        return new ApiKey(endpoint.getApiKey());
+        return new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey"));
     }
 }
