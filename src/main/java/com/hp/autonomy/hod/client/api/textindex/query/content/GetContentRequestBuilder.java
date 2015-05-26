@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.hp.autonomy.hod.client.api.textindex.query.search.Print;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
+import com.hp.autonomy.hod.client.api.textindex.query.search.Summary;
 import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -50,6 +51,11 @@ public class GetContentRequestBuilder {
     private Print print;
 
     /**
+     * @param summary Value for the summary parameter
+     */
+    private Summary summary;
+
+    /**
      * @return A map of query parameters suitable for use with {@link QueryTextIndexService}. get is NOT supported on
      * the resulting map
      */
@@ -60,6 +66,7 @@ public class GetContentRequestBuilder {
         map.put("end_tag", endTag);
         map.put("print", print);
         map.put("print_fields", StringUtils.join(printFields, ','));
+        map.put("summary", summary);
 
         return map;
     }
