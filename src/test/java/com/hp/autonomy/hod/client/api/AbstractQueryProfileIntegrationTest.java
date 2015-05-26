@@ -67,9 +67,12 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
         final String profileName = "iod_java_client_query_profile_test_" + nameSuffix;
         createdQueryProfiles.add(profileName);
 
+        final boolean promotionsEnabled = true;
+        final boolean promotionsIdentified = false;
+
         final QueryProfileRequestBuilder requestBuilder = new QueryProfileRequestBuilder()
-            .setPromotionsEnabled(true)
-            .setPromotionsIdentified(false)
+            .setPromotionsEnabled(promotionsEnabled)
+            .setPromotionsIdentified(promotionsIdentified)
             .addPromotionCategories("Promotions");
 
         createQueryProfileService.createQueryProfile(getToken(), profileName, getQueryManipulationIndex(), requestBuilder.build());
@@ -77,8 +80,8 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
         return new QueryProfile.Builder()
             .setName(profileName)
             .setQueryManipulationIndex(getQueryManipulationIndex())
-            .setPromotionsEnabled(true)
-            .setPromotionsIdentified(false)
+            .setPromotionsEnabled(promotionsEnabled)
+            .setPromotionsIdentified(promotionsIdentified)
             .setPromotionCategories(Collections.singletonList("promotions")) // HOD lowercases these
             .build();
     }
