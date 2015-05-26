@@ -23,6 +23,7 @@ public class RestAdapterFactory {
 
     public static RestAdapter getRestAdapter(final AuthenticationTokenService authenticationTokenService, final Endpoint endpoint) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
+        builder.disableCookieManagement();
 
         final String proxyHost = System.getProperty("hp.hod.https.proxyHost");
 
