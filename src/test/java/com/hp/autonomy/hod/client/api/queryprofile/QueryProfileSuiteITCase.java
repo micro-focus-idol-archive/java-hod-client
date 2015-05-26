@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -15,4 +16,5 @@ import org.junit.runners.Suite;
         RetrieveQueryProfileServiceSuiteChild.class,
         UpdateQueryProfilesServiceSuiteChild.class
 })
+@Ignore // TODO: Remove @Ignore when HOD query profile functionality is stable
 public class QueryProfileSuiteITCase {}
