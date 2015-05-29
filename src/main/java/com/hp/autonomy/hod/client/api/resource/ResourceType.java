@@ -3,12 +3,9 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.hod.client.api.listindexes;
+package com.hp.autonomy.hod.client.api.resource;
 
-/**
- * Enum type representing the possible options for the index type parameter
- */
-public enum IndexType {
+public enum ResourceType {
     content,
     connector
 }
