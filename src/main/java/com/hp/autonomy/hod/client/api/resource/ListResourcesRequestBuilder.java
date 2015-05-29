@@ -18,19 +18,23 @@ public class ListResourcesRequestBuilder {
     /**
      * @param types Resource type restriction
      */
-    public void setTypes(final Set<ResourceType> types) {
+    public ListResourcesRequestBuilder setTypes(final Set<ResourceType> types) {
         if (types != null) {
             this.types = types;
         }
+
+        return this;
     }
 
     /**
      * @param flavours Resource flavour restriction
      */
-    public void setFlavours(final Set<ResourceFlavour> flavours) {
+    public ListResourcesRequestBuilder setFlavours(final Set<ResourceFlavour> flavours) {
         if (flavours != null) {
             this.flavours = flavours;
         }
+
+        return this;
     }
 
     public Map<String, Object> build() {

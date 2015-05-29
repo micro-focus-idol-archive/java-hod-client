@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
@@ -38,9 +39,11 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void listsResources() {
-        final ListResourcesRequestBuilder builder = new ListResourcesRequestBuilder();
-        builder.setTypes(EnumSet.of(ResourceType.content));
-        final Resources resources = resourcesService.list(getToken(), builder.build());
+        final Map<String, Object> parameters = new ListResourcesRequestBuilder()
+                .setTypes(EnumSet.of(ResourceType.content))
+                .build();
+
+        final Resources resources = resourcesService.list(getToken(), parameters);
 
         assertThat(resources.getPublicResources(), is(not(empty())));
 
