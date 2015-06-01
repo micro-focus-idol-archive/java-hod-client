@@ -40,7 +40,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testRetrieveIndexFieldsGrouped() throws HodErrorException {
-        final String wikiEngField = "drecontent";
+        final String wikiEngField = "content";
 
         final Map<String, Object> params = new RetrieveIndexFieldsRequestBuilder()
                 .setFieldType(FieldType.index)
