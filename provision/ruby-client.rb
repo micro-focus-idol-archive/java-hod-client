@@ -80,6 +80,6 @@ def get_required_indexes
 end
 
 def list_indexes(proxy_host, proxy_port, token)
-  index_list = get("/api/sync/listindexes/v1", proxy_host, proxy_port, :token => token, :params => {:type => 'content'})
-  index_list['index'].map {|index| index['index']}
+  index_list = get("/api/sync/resource/v1", proxy_host, proxy_port, :token => token, :params => {:type => 'content'})
+  index_list['private_resources'].map {|resource| resource['resource']}
 end
