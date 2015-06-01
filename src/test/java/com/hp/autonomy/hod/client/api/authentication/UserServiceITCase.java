@@ -41,7 +41,6 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     }
 
     @Test
-    @Ignore // TODO: Remove @Ignore when HOD supports combined token authentication on the get users API
     public void getsCombinedTokenUsers() throws HodErrorException {
         final AuthenticationToken userUnboundToken = getUserUnboundToken();
         final AuthenticationToken applicationUnboundToken = authenticationService.authenticateApplicationUnbound(getApiKey(), APPLICATION_NAME, DOMAIN_NAME).getToken();
