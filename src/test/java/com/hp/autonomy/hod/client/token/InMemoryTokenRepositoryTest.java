@@ -13,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class InMemoryTokenRepositoryTest {
 
@@ -30,7 +31,7 @@ public class InMemoryTokenRepositoryTest {
 
     @Test
     public void testInsertedTokensCanBeRetrieved() {
-        final AuthenticationToken token = mock(AuthenticationToken.class);
+        final AuthenticationToken token = mockToken();
 
         final TokenProxy key = tokenRepository.insert(token);
 
@@ -39,11 +40,11 @@ public class InMemoryTokenRepositoryTest {
 
     @Test
     public void testUpdate() {
-        final AuthenticationToken token = mock(AuthenticationToken.class);
+        final AuthenticationToken token = mockToken();
 
         final TokenProxy key = tokenRepository.insert(token);
 
-        final AuthenticationToken newToken = mock(AuthenticationToken.class);
+        final AuthenticationToken newToken = mockToken();
         tokenRepository.update(key, newToken);
 
         assertThat(tokenRepository.get(key), is(newToken));
@@ -52,7 +53,7 @@ public class InMemoryTokenRepositoryTest {
     @Test
     public void testUpdateReturnsNullAndDoesNothingIfKeyNotPresent() {
         final TokenProxy key = new TokenProxy();
-        final AuthenticationToken oldToken = tokenRepository.update(key, mock(AuthenticationToken.class));
+        final AuthenticationToken oldToken = tokenRepository.update(key, mockToken());
 
         assertThat(oldToken, is(nullValue()));
         assertThat(tokenRepository.get(key), is(nullValue()));
@@ -60,10 +61,17 @@ public class InMemoryTokenRepositoryTest {
 
     @Test
     public void testRemove() {
-        final AuthenticationToken token = mock(AuthenticationToken.class);
+        final AuthenticationToken token = mockToken();
         final TokenProxy key = tokenRepository.insert(token);
 
         assertThat(tokenRepository.remove(key), is(token));
         assertThat(tokenRepository.get(key), is(nullValue()));
+    }
+
+    private AuthenticationToken mockToken() {
+        final AuthenticationToken token = mock(AuthenticationToken.class);
+        when(token.hasExpired()).thenReturn(false);
+
+        return token;
     }
 }

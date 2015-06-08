@@ -7,6 +7,8 @@ package com.hp.autonomy.hod.client.token;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 
+import java.io.IOException;
+
 /**
  * A TokenRepository stores tokens such that they can be refreshed as instructed by HP Haven OnDemand. Note that the
  * token retrieved by the get method may not be the same token that was originally inserted, but will have the same
@@ -20,8 +22,10 @@ public interface TokenRepository {
      * Insert a token into the repository for later retrieval
      * @param token The {@link AuthenticationToken} to store
      * @return A key which can be used to retrieve the token
+     * @throws IOException If an IO error occurred inserting the token
+     * @throws IllegalArgumentException If the token has expired
      */
-    TokenProxy insert(AuthenticationToken token);
+    TokenProxy insert(AuthenticationToken token) throws IOException;
 
     /**
      * Update the token in the repository associated with the given key. If the key is not in the repository, the new
@@ -29,21 +33,25 @@ public interface TokenRepository {
      * @param key The key to associate with the token
      * @param newToken The new token for the key
      * @return The old token associated with the key, or null if no key was associated
+     * @throws IOException If an IO error occurred updating the token
+     * @throws IllegalArgumentException If the token has expired
      */
-    AuthenticationToken update(TokenProxy key, AuthenticationToken newToken);
+    AuthenticationToken update(TokenProxy key, AuthenticationToken newToken) throws IOException;
 
     /**
      * Retrieve the token associated with the given key
      * @param key The key with which to retrieve a token
      * @return The token associated with the key, or null if no token is associated with the key
+     * @throws IOException If an IO error occurred retrieving the token
      */
-    AuthenticationToken get(TokenProxy key);
+    AuthenticationToken get(TokenProxy key) throws IOException;
 
     /**
      * Removes the token associated with the given key
      * @param key The key for which a token should be removed
      * @return The old token associated with the key
+     * @throws IOException If an IO error occurred removing the token
      */
-    AuthenticationToken remove(TokenProxy key);
+    AuthenticationToken remove(TokenProxy key) throws IOException;
 
 }

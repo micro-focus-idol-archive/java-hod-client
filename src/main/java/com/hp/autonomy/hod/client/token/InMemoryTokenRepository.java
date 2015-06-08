@@ -23,6 +23,8 @@ public class InMemoryTokenRepository implements TokenRepository {
 
     @Override
     public TokenProxy insert(final AuthenticationToken token) {
+        checkTokenExpiry(token);
+
         final TokenProxy key = new TokenProxy();
 
         map.put(key, token);
@@ -32,6 +34,8 @@ public class InMemoryTokenRepository implements TokenRepository {
 
     @Override
     public AuthenticationToken update(final TokenProxy key, final AuthenticationToken newToken) {
+        checkTokenExpiry(newToken);
+
         return map.replace(key, newToken);
     }
 
@@ -43,5 +47,11 @@ public class InMemoryTokenRepository implements TokenRepository {
     @Override
     public AuthenticationToken remove(final TokenProxy key) {
         return map.remove(key);
+    }
+
+    private void checkTokenExpiry(final AuthenticationToken token) {
+        if (token.hasExpired()) {
+            throw new IllegalArgumentException("Token has already expired");
+        }
     }
 }
