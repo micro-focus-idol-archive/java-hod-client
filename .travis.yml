@@ -3,10 +3,10 @@ jdk:
 - oraclejdk7
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
-#before_script: ruby provision/setup-test-environment.rb $DEV_API_KEY_PLACEHOLDER
-script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.dev.hod.apiKey=$DEV_API_KEY -Dhp.dev.placeholder.hod.apiKey=$DEV_API_KEY_PLACEHOLDER -Dhp.hod.env=DEVELOPMENT -Dmaven.test.skip=true
+before_script: ruby provision/setup-test-environment.rb $DEV_API_KEY_PLACEHOLDER
+script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.dev.hod.apiKey=$DEV_API_KEY -Dhp.dev.placeholder.hod.apiKey=$DEV_API_KEY_PLACEHOLDER -Dhp.hod.env=DEVELOPMENT
 after_success: bash travis.sh
-#after_script: ruby provision/destroy-test-environment.rb $DEV_API_KEY_PLACEHOLDER
+after_script: ruby provision/destroy-test-environment.rb $DEV_API_KEY_PLACEHOLDER
 env:
   global:
   # SONATYPE_USERNAME
