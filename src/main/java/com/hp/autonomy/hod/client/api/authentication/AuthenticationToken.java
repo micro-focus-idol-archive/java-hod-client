@@ -12,13 +12,19 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joda.time.DateTime;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
 /**
  * A token which can be used to make API requests to HP Haven OnDemand
  */
 @Getter
 @EqualsAndHashCode
-public class AuthenticationToken {
+public class AuthenticationToken implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * @return The expiry time of the token
      */
@@ -70,6 +76,16 @@ public class AuthenticationToken {
     @Override
     public String toString() {
         return type + ':' + id + ':' + secret;
+    }
+
+    private void readObject(final ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        inputStream.defaultReadObject();
+
+        // values may be null if deserialized from an invalid stream
+        //noinspection ConstantConditions
+        if (expiry == null || id == null || secret == null || type == null || startRefresh == null) {
+            throw new InvalidObjectException("Values must not be null");
+        }
     }
 
 }
