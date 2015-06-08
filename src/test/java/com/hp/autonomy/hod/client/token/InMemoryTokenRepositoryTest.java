@@ -9,9 +9,12 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -66,6 +69,31 @@ public class InMemoryTokenRepositoryTest {
 
         assertThat(tokenRepository.remove(key), is(token));
         assertThat(tokenRepository.get(key), is(nullValue()));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsertThrowsIllegalArgumentExceptionForExpiredTokens() throws IOException {
+        final AuthenticationToken token = mock(AuthenticationToken.class);
+        when(token.hasExpired()).thenReturn(true);
+
+        tokenRepository.insert(token);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateThrowsIllegalArgumentExceptionForExpiredTokens() throws IOException {
+        final AuthenticationToken token1 = mockToken();
+        final AuthenticationToken token2 = mock(AuthenticationToken.class);
+        when(token2.hasExpired()).thenReturn(true);
+
+        TokenProxy key = null;
+
+        try {
+            key = tokenRepository.insert(token1);
+        } catch (final IllegalArgumentException e) {
+            fail("The initial token should not have expired");
+        }
+
+        tokenRepository.update(key, token2);
     }
 
     private AuthenticationToken mockToken() {
