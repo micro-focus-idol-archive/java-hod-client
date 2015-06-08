@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.resource;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.QueryMap;
@@ -25,7 +26,7 @@ public interface ResourcesService {
      * @return Public and private resources
      */
     @GET(URL)
-    Resources list(@QueryMap Map<String, Object> parameters);
+    Resources list(@QueryMap Map<String, Object> parameters) throws HodErrorException;
 
     /**
      * Query HP Haven OnDemand for the list of resources with the given token
@@ -34,6 +35,6 @@ public interface ResourcesService {
      * @return Public and private resources
      */
     @GET(URL)
-    Resources list(@Header("token") AuthenticationToken token, @QueryMap Map<String, Object> parameters);
+    Resources list(@Header("token") AuthenticationToken token, @QueryMap Map<String, Object> parameters) throws HodErrorException;
 
 }
