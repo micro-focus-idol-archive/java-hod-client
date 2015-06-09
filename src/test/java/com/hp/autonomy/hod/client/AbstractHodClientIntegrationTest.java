@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client;
 
 import com.hp.autonomy.hod.client.api.authentication.ApiKey;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -27,10 +27,10 @@ public abstract class AbstractHodClientIntegrationTest {
     public void setUp() {
         restAdapter = RestAdapterFactory.getRestAdapter(null, endpoint);
 
-        final AuthenticationService authenticationService = restAdapter.create(AuthenticationService.class);
+        final AuthenticationBackend authenticationBackend = restAdapter.create(AuthenticationBackend.class);
 
         try {
-            token = authenticationService.authenticateApplication(
+            token = authenticationBackend.authenticateApplication(
                 new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
                     APPLICATION_NAME,
                     DOMAIN_NAME,

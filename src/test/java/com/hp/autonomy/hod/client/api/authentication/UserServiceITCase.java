@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 @Slf4j
 public class UserServiceITCase extends AbstractHodClientIntegrationTest {
-    private AuthenticationService authenticationService;
+    private AuthenticationBackend authenticationBackend;
     private UserService userService;
 
     public UserServiceITCase(final Endpoint endpoint) {
@@ -29,7 +29,7 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     @Before
     public void setUp() {
         super.setUp();
-        authenticationService = getRestAdapter().create(AuthenticationService.class);
+        authenticationBackend = getRestAdapter().create(AuthenticationBackend.class);
         userService = getRestAdapter().create(UserService.class);
     }
 
@@ -42,8 +42,8 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void getsCombinedTokenUsers() throws HodErrorException {
         final AuthenticationToken userUnboundToken = getUserUnboundToken();
-        final AuthenticationToken applicationUnboundToken = authenticationService.authenticateApplicationUnbound(getApiKey()).getToken();
-        final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
+        final AuthenticationToken applicationUnboundToken = authenticationBackend.authenticateApplicationUnbound(getApiKey()).getToken();
+        final AuthenticationToken combinedToken = authenticationBackend.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
 
         final GetUserResponse getUserResponse = userService.getUserCombined(combinedToken);
         checkSingleUserResponse(getUserResponse);
@@ -65,7 +65,7 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     }
 
     private AuthenticationToken getUserUnboundToken() throws HodErrorException {
-        return authenticationService.authenticateUserUnbound(getApiKey()).getToken();
+        return authenticationBackend.authenticateUserUnbound(getApiKey()).getToken();
     }
 
     private ApiKey getApiKey() {

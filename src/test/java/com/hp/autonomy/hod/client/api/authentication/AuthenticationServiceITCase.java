@@ -29,7 +29,7 @@ import static org.hamcrest.core.Is.is;
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
     private static final String USER_STORE = "IOD-TEST-USER-STORE";
 
-    private AuthenticationService authenticationService;
+    private AuthenticationBackend authenticationBackend;
     private ApiKey apiKey;
 
     public AuthenticationServiceITCase(final Endpoint endpoint) {
@@ -41,12 +41,12 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     public void setUp() {
         super.setUp();
         apiKey = new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey"));
-        authenticationService = getRestAdapter().create(AuthenticationService.class);
+        authenticationBackend = getRestAdapter().create(AuthenticationBackend.class);
     }
 
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
-        final AuthenticationToken token = authenticationService.authenticateApplication(
+        final AuthenticationToken token = authenticationBackend.authenticateApplication(
             apiKey,
             APPLICATION_NAME,
             DOMAIN_NAME,
@@ -60,7 +60,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAuthenticateUser() throws HodErrorException {
-        final AuthenticationToken token = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
+        final AuthenticationToken token = authenticationBackend.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
 
         log.debug("Token was: {}", token);
 
@@ -69,7 +69,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testCombinedAuthentication() throws HodErrorException {
-        final ApplicationUnboundResponse applicationUnboundResponse = authenticationService.authenticateApplicationUnbound(apiKey);
+        final ApplicationUnboundResponse applicationUnboundResponse = authenticationBackend.authenticateApplicationUnbound(apiKey);
 
         final AuthenticationToken applicationUnboundToken = applicationUnboundResponse.getToken();
         assertThat(applicationUnboundToken, is(notNullValue()));
@@ -79,7 +79,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(applications.get(0).getName(), is(APPLICATION_NAME));
         assertThat(applications.get(0).getDomain(), is(DOMAIN_NAME));
 
-        final UserUnboundResponse userUnboundResponse = authenticationService.authenticateUserUnbound(apiKey);
+        final UserUnboundResponse userUnboundResponse = authenticationBackend.authenticateUserUnbound(apiKey);
 
         final AuthenticationToken userUnboundToken = userUnboundResponse.getToken();
         assertThat(userUnboundToken, is(notNullValue()));
@@ -89,7 +89,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(users.get(0).getUsername(), is(notNullValue()));
         assertThat(users.get(0).getUserStore(), is(DOMAIN_NAME + ':' + USER_STORE));
 
-        final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
+        final AuthenticationToken combinedToken = authenticationBackend.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
 
         log.debug("Combined token was: {}", combinedToken);
 
@@ -98,13 +98,13 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void failsWithInvalidToken() throws HodErrorException {
-        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(apiKey).getToken();
+        final AuthenticationToken userUnboundToken = authenticationBackend.authenticateUserUnbound(apiKey).getToken();
         final AuthenticationToken madeUpApplicationToken = new AuthenticationToken(1431357140457L, "InvalidId!!!", "InvalidSecret!", "InvalidType", 1431357140457L);
 
         HodErrorCode errorCode = null;
 
         try {
-            authenticationService.combineTokens(madeUpApplicationToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
+            authenticationBackend.combineTokens(madeUpApplicationToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
         } catch (final HodErrorException e) {
             errorCode = e.getErrorCode();
         }
