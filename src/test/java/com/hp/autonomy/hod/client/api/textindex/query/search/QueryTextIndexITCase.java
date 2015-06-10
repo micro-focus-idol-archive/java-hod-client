@@ -31,14 +31,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexService queryTextIndexService;
+    private QueryTextIndexBackend queryTextIndexBackend;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        queryTextIndexService = getRestAdapter().create(QueryTextIndexService.class);
+        queryTextIndexBackend = getRestAdapter().create(QueryTextIndexBackend.class);
     }
 
     public QueryTextIndexITCase(final Endpoint endpoint) {
@@ -56,7 +56,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
                 .addIndexes("wiki_eng", "wiki_ita")
                 .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText(getToken(), "*", params);
+        final Documents documents = queryTextIndexBackend.queryTextIndexWithText(getToken(), "*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
 
@@ -79,7 +79,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
                 .setSort(Sort.date)
                 .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(getToken(), file, params);
+        final Documents documents = queryTextIndexBackend.queryTextIndexWithFile(getToken(), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
@@ -97,7 +97,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
                 .setSort(Sort.date)
                 .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(getToken(), file, params);
+        final Documents documents = queryTextIndexBackend.queryTextIndexWithFile(getToken(), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));

@@ -11,7 +11,7 @@ import com.hp.autonomy.hod.client.HodServiceConfigFactory;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
-import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexBackend;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.greaterThan;
 @RunWith(Parameterized.class)
 public class RequestInterceptorITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexService queryTextIndexService;
+    private QueryTextIndexBackend queryTextIndexBackend;
 
     @Override
     @Before
@@ -42,7 +42,7 @@ public class RequestInterceptorITCase extends AbstractHodClientIntegrationTest {
             }
         }, endpoint).getRestAdapter();
 
-        queryTextIndexService = restAdapter.create(QueryTextIndexService.class);
+        queryTextIndexBackend = restAdapter.create(QueryTextIndexBackend.class);
     }
 
     public RequestInterceptorITCase(final Endpoint endpoint) {
@@ -56,7 +56,7 @@ public class RequestInterceptorITCase extends AbstractHodClientIntegrationTest {
                 .setTotalResults(true)
                 .build();
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText("*", params);
+        final Documents documents = queryTextIndexBackend.queryTextIndexWithText("*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
     }

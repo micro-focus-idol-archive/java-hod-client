@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Interface representing the QueryTextIndex API.
  */
-public interface QueryTextIndexService {
+public interface QueryTextIndexBackend {
 
     String URL = "/2/api/sync/textindex/query/search/v1";
 
