@@ -5,15 +5,12 @@
 
 package com.hp.autonomy.hod.client;
 
-import com.hp.autonomy.hod.client.converter.HodConverter;
-import com.hp.autonomy.hod.client.error.HodErrorHandler;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.util.AuthenticationTokenService;
 import com.hp.autonomy.hod.client.util.AuthenticationTokenServiceRequestInterceptor;
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import retrofit.RestAdapter;
-import retrofit.client.ApacheClient;
-import retrofit.converter.JacksonConverter;
 
 public class RestAdapterFactory {
 
@@ -32,18 +29,15 @@ public class RestAdapterFactory {
             builder.setProxy(new HttpHost(proxyHost, proxyPort));
         }
 
-        final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
-                .setEndpoint(endpoint.getUrl())
-                .setClient(new ApacheClient(builder.build()))
-                .setConverter(new HodConverter(new JacksonConverter()))
-                .setErrorHandler(new HodErrorHandler());
+        final HodServiceConfig.Builder configBuilder = new HodServiceConfig.Builder(endpoint.getUrl())
+            .setHttpClient(builder.build());
 
 
         if (authenticationTokenService != null) {
-            restAdapterBuilder.setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService));
+            configBuilder.setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService));
         }
 
-        return restAdapterBuilder.build();
+        return configBuilder.build().getRestAdapter();
     }
 
 }
