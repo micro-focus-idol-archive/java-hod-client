@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.api.authentication.ApiKey;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
@@ -20,12 +21,14 @@ public abstract class AbstractHodClientIntegrationTest {
     protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
     protected static final String DOMAIN_NAME = "IOD-TEST-DOMAIN";
 
-    private RestAdapter restAdapter;
     protected final Endpoint endpoint;
+    private HodServiceConfig hodServiceConfig;
+    private RestAdapter restAdapter;
     private AuthenticationToken token;
 
     public void setUp() {
-        restAdapter = RestAdapterFactory.getRestAdapter(null, endpoint);
+        hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, endpoint);
+        restAdapter = hodServiceConfig.getRestAdapter();
 
         final AuthenticationBackend authenticationBackend = restAdapter.create(AuthenticationBackend.class);
 
@@ -61,6 +64,10 @@ public abstract class AbstractHodClientIntegrationTest {
 
     public RestAdapter getRestAdapter() {
         return restAdapter;
+    }
+
+    public HodServiceConfig getConfig() {
+        return hodServiceConfig;
     }
 
     public AuthenticationToken getToken() {

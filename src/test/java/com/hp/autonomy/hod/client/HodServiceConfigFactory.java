@@ -10,15 +10,14 @@ import com.hp.autonomy.hod.client.util.AuthenticationTokenService;
 import com.hp.autonomy.hod.client.util.AuthenticationTokenServiceRequestInterceptor;
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
-import retrofit.RestAdapter;
 
-public class RestAdapterFactory {
+public class HodServiceConfigFactory {
 
-    public static RestAdapter getRestAdapter(final AuthenticationTokenService authenticationTokenService) {
-        return getRestAdapter(authenticationTokenService, Endpoint.PRODUCTION);
+    public static HodServiceConfig getHodServiceConfig(final AuthenticationTokenService authenticationTokenService) {
+        return getHodServiceConfig(authenticationTokenService, Endpoint.PRODUCTION);
     }
 
-    public static RestAdapter getRestAdapter(final AuthenticationTokenService authenticationTokenService, final Endpoint endpoint) {
+    public static HodServiceConfig getHodServiceConfig(final AuthenticationTokenService authenticationTokenService, final Endpoint endpoint) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
         builder.disableCookieManagement();
 
@@ -37,7 +36,7 @@ public class RestAdapterFactory {
             configBuilder.setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService));
         }
 
-        return configBuilder.build().getRestAdapter();
+        return configBuilder.build();
     }
 
 }
