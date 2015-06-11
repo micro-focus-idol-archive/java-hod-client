@@ -18,7 +18,7 @@ import retrofit.mime.TypedOutput;
 /**
  * Interface representing the SentimentAnalysis API
  */
-public interface SentimentAnalysisService {
+public interface SentimentAnalysisBackend {
 
     String URL = "/2/api/sync/analysis/sentiment/v1";
 
