@@ -11,9 +11,11 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -25,6 +27,7 @@ public abstract class AbstractHodClientIntegrationTest {
     private HodServiceConfig hodServiceConfig;
     private RestAdapter restAdapter;
     private AuthenticationToken token;
+    private TokenProxy tokenProxy;
 
     public void setUp() {
         hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, endpoint);
@@ -39,7 +42,9 @@ public abstract class AbstractHodClientIntegrationTest {
                     DOMAIN_NAME,
                 TokenType.simple
             ).getToken();
-        } catch (final HodErrorException e) {
+
+            tokenProxy = hodServiceConfig.getTokenRepository().insert(token);
+        } catch (final HodErrorException | IOException e) {
             throw new AssertionError("COULD NOT OBTAIN TOKEN");
         }
     }
@@ -72,6 +77,10 @@ public abstract class AbstractHodClientIntegrationTest {
 
     public AuthenticationToken getToken() {
         return token;
+    }
+
+    public TokenProxy getTokenProxy() {
+        return tokenProxy;
     }
 
 }

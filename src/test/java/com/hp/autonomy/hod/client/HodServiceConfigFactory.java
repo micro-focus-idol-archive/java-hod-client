@@ -6,18 +6,17 @@
 package com.hp.autonomy.hod.client;
 
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
-import com.hp.autonomy.hod.client.util.AuthenticationTokenService;
-import com.hp.autonomy.hod.client.util.AuthenticationTokenServiceRequestInterceptor;
+import com.hp.autonomy.hod.client.token.TokenProxyService;
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 public class HodServiceConfigFactory {
 
-    public static HodServiceConfig getHodServiceConfig(final AuthenticationTokenService authenticationTokenService) {
-        return getHodServiceConfig(authenticationTokenService, Endpoint.PRODUCTION);
+    public static HodServiceConfig getHodServiceConfig(final TokenProxyService tokenProxyService) {
+        return getHodServiceConfig(tokenProxyService, Endpoint.PRODUCTION);
     }
 
-    public static HodServiceConfig getHodServiceConfig(final AuthenticationTokenService authenticationTokenService, final Endpoint endpoint) {
+    public static HodServiceConfig getHodServiceConfig(final TokenProxyService tokenProxyService, final Endpoint endpoint) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
         builder.disableCookieManagement();
 
@@ -32,8 +31,8 @@ public class HodServiceConfigFactory {
             .setHttpClient(builder.build());
 
 
-        if (authenticationTokenService != null) {
-            configBuilder.setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService));
+        if (tokenProxyService != null) {
+            configBuilder.setTokenProxyService(tokenProxyService);
         }
 
         return configBuilder.build();

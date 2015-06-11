@@ -11,7 +11,7 @@ import com.hp.autonomy.hod.client.error.DefaultHodErrorHandler;
 import com.hp.autonomy.hod.client.error.HodErrorHandler;
 import com.hp.autonomy.hod.client.token.InMemoryTokenRepository;
 import com.hp.autonomy.hod.client.token.TokenRepository;
-import com.hp.autonomy.hod.client.util.HodRequestInterceptor;
+import com.hp.autonomy.hod.client.token.TokenProxyService;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -29,6 +29,7 @@ public class HodServiceConfig {
 
     private final RestAdapter restAdapter;
     private final TokenRepository tokenRepository;
+    private final TokenProxyService tokenProxyService;
 
     private HodServiceConfig(final Builder builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
@@ -37,10 +38,6 @@ public class HodServiceConfig {
 
         if(builder.client != null) {
             restAdapterBuilder.setClient(builder.client);
-        }
-
-        if(builder.requestInterceptor != null) {
-            restAdapterBuilder.setRequestInterceptor(new HodRequestInterceptorWrapper(builder.requestInterceptor));
         }
 
         final JacksonConverter jacksonConverter;
@@ -56,6 +53,13 @@ public class HodServiceConfig {
 
         restAdapter = restAdapterBuilder.build();
         tokenRepository = builder.tokenRepository;
+
+        if(builder.tokenProxyService != null) {
+            tokenProxyService = builder.tokenProxyService;
+        }
+        else {
+            tokenProxyService = null;
+        }
     }
 
     /**
@@ -73,18 +77,17 @@ public class HodServiceConfig {
         @Setter
         private TokenRepository tokenRepository = new InMemoryTokenRepository();
 
-        // TODO this probably makes no sense as the only common parameter is the token which is in  the repo
-        /**
-         * @param requestInterceptor The request interceptor to use
-         */
-        @Setter
-        private HodRequestInterceptor requestInterceptor;
-
         /**
          * @param objectMapper The {@link ObjectMapper} to use for processing HP Haven OnDemand requests and responses
          */
         @Setter
         private ObjectMapper objectMapper;
+
+        /**
+         * @param tokenProxyService Provides a TokenProxy which is used for every request
+         */
+        @Setter
+        private TokenProxyService tokenProxyService;
 
         private HodErrorHandler errorHandler = new DefaultHodErrorHandler();
         private Client client;
