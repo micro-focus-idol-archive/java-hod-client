@@ -64,4 +64,9 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
 
         assertTrue("Test index not found in list resources output", found);
     }
+
+    @Test
+    public void listsAllResources() throws HodErrorException {
+        resourcesService.list(getToken(), null);
+    }
 }
