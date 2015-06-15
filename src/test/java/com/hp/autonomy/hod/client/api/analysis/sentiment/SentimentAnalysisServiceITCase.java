@@ -20,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class SentimentAnalysisServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private SentimentAnalysisBackend sentimentAnalysisBackend;
+    private SentimentAnalysisService sentimentAnalysisService;
 
     public SentimentAnalysisServiceITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -31,7 +31,7 @@ public class SentimentAnalysisServiceITCase extends AbstractHodClientIntegration
     public void setUp() {
         super.setUp();
 
-        sentimentAnalysisBackend = getRestAdapter().create(SentimentAnalysisBackend.class);
+        sentimentAnalysisService = new SentimentAnalysisServiceImpl(getConfig());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class SentimentAnalysisServiceITCase extends AbstractHodClientIntegration
                 "The food at the restaurant was poor. " +
                 "In conclusion, it was an average restaurant";
 
-        final SentimentAnalysisResponse response = sentimentAnalysisBackend.analyzeSentimentForText(getToken(), text, SentimentAnalysisLanguage.eng);
+        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(getTokenProxy(), text, SentimentAnalysisLanguage.eng);
 
         assertThat(response.getPositive(), hasSize(1));
         assertThat(response.getNegative(), hasSize(1));

@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.analysis.sentiment;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
@@ -18,21 +19,9 @@ import retrofit.mime.TypedOutput;
 /**
  * Interface representing the SentimentAnalysis API
  */
-public interface SentimentAnalysisBackend {
+interface SentimentAnalysisBackend {
 
     String URL = "/2/api/sync/analysis/sentiment/v1";
-
-    /**
-     * Analyze the sentiment of the given text using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param text The text to analyze
-     * @param language The language of the text
-     * @return The sentiment of the response
-     */
-    @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForText(
-        @Query("text") String text,
-        @Query("language") SentimentAnalysisLanguage language
-    ) throws HodErrorException;
 
     /**
      * Analyze the sentiment of the given text using the given token
@@ -42,23 +31,10 @@ public interface SentimentAnalysisBackend {
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForText(
+    Response analyzeSentimentForText(
         @Header("token") AuthenticationToken token,
         @Query("text") String text,
         @Query("language") SentimentAnalysisLanguage language
-    ) throws HodErrorException;
-
-    /**
-     * Analyze the sentiment of the given file using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param file The file containing the text to analyze
-     * @param language The language of the text
-     * @return The sentiment of the response
-     */
-    @POST(URL)
-    @Multipart
-    SentimentAnalysisResponse analyzeSentimentForFile(
-        @Part("file") TypedOutput file,
-        @Part("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;
 
     /**
@@ -70,22 +46,10 @@ public interface SentimentAnalysisBackend {
      */
     @POST(URL)
     @Multipart
-    SentimentAnalysisResponse analyzeSentimentForFile(
+    Response analyzeSentimentForFile(
         @Header("token") AuthenticationToken token,
         @Part("file") TypedOutput file,
         @Part("language") SentimentAnalysisLanguage language
-    ) throws HodErrorException;
-
-    /**
-     * Analyze the sentiment of the given object store object using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param reference The object store reference containing the text to analyze
-     * @param language The language of the text
-     * @return The sentiment of the response
-     */
-    @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForReference(
-        @Query("reference") String reference,
-        @Query("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;
 
     /**
@@ -96,21 +60,9 @@ public interface SentimentAnalysisBackend {
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForReference(
+    Response analyzeSentimentForReference(
         @Header("token") AuthenticationToken token,
         @Query("reference") String reference,
-        @Query("language") SentimentAnalysisLanguage language
-    ) throws HodErrorException;
-
-    /**
-     * Analyze the sentiment of the given url using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param url The object store reference containing the text to analyze
-     * @param language The language of the text
-     * @return The sentiment of the response
-     */
-    @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForUrl(
-        @Query("url") String url,
         @Query("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;
 
@@ -122,7 +74,7 @@ public interface SentimentAnalysisBackend {
      * @return The sentiment of the response
      */
     @GET(URL)
-    SentimentAnalysisResponse analyzeSentimentForUrl(
+    Response analyzeSentimentForUrl(
         @Header("token") AuthenticationToken token,
         @Query("url") String url,
         @Query("language") SentimentAnalysisLanguage language
