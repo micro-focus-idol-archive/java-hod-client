@@ -26,27 +26,27 @@ import java.util.concurrent.ScheduledExecutorService;
 @Slf4j
 public class AddToTextIndexJobService extends AbstractJobService {
 
-    private final AddToTextIndexService addToTextIndexService;
+    private final AddToTextIndexBackend addToTextIndexBackend;
 
     /**
      * Creates a new AddToTextIndexJobService
-     * @param addToTextIndexService The underlying service which will communicate with HP Haven OnDemand
+     * @param addToTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
      */
-    public AddToTextIndexJobService(final AddToTextIndexService addToTextIndexService) {
+    public AddToTextIndexJobService(final AddToTextIndexBackend addToTextIndexBackend) {
         super();
 
-        this.addToTextIndexService = addToTextIndexService;
+        this.addToTextIndexBackend = addToTextIndexBackend;
     }
 
     /**
      * Creates a new AddToTextIndexJobService
-     * @param addToTextIndexService The underlying service which will communicate with HP Haven OnDemand
+     * @param addToTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
      * @param executorService The executor service to use while polling for status updates
      */
-    public AddToTextIndexJobService(final AddToTextIndexService addToTextIndexService, final ScheduledExecutorService executorService) {
+    public AddToTextIndexJobService(final AddToTextIndexBackend addToTextIndexBackend, final ScheduledExecutorService executorService) {
         super(executorService);
 
-        this.addToTextIndexService = addToTextIndexService;
+        this.addToTextIndexBackend = addToTextIndexBackend;
     }
 
     /**
@@ -64,7 +64,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addJsonToTextIndex(documents, index, params);
+        final JobId jobId = addToTextIndexBackend.addJsonToTextIndex(documents, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -85,7 +85,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addJsonToTextIndex(token, documents, index, params);
+        final JobId jobId = addToTextIndexBackend.addJsonToTextIndex(token, documents, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -105,7 +105,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addUrlToTextIndex(url, index, params);
+        final JobId jobId = addToTextIndexBackend.addUrlToTextIndex(url, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -126,7 +126,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addUrlToTextIndex(token, url, index, params);
+        final JobId jobId = addToTextIndexBackend.addUrlToTextIndex(token, url, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -146,7 +146,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addReferenceToTextIndex(reference, index, params);
+        final JobId jobId = addToTextIndexBackend.addReferenceToTextIndex(reference, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -167,7 +167,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addReferenceToTextIndex(token, reference, index, params);
+        final JobId jobId = addToTextIndexBackend.addReferenceToTextIndex(token, reference, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -187,7 +187,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addFileToTextIndex(file, index, params);
+        final JobId jobId = addToTextIndexBackend.addFileToTextIndex(file, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -208,7 +208,7 @@ public class AddToTextIndexJobService extends AbstractJobService {
             final Map<String, Object> params,
             final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexService.addFileToTextIndex(token, file, index, params);
+        final JobId jobId = addToTextIndexBackend.addFileToTextIndex(token, file, index, params);
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -225,12 +225,12 @@ public class AddToTextIndexJobService extends AbstractJobService {
 
         @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return addToTextIndexService.getJobStatus(jobId);
+            return addToTextIndexBackend.getJobStatus(jobId);
         }
 
         @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            return addToTextIndexService.getJobStatus(token, jobId);
+            return addToTextIndexBackend.getJobStatus(token, jobId);
         }
 
     }

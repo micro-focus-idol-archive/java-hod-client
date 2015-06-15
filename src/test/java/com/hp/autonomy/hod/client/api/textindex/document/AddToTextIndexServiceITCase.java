@@ -40,7 +40,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
     public void setUp() {
         super.setUp();
 
-        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexBackend.class));
     }
 
     @After

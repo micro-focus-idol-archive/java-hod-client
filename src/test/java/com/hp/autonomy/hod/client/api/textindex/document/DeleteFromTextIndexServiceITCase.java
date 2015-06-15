@@ -37,7 +37,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
         super.setUp();
 
         deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
-        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexBackend.class));
     }
 
     public DeleteFromTextIndexServiceITCase(final Endpoint endpoint) {

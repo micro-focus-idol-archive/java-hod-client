@@ -10,7 +10,7 @@ import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexJobService;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexResponse;
-import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexService;
+import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexBackend;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
         final RestAdapter restAdapter = getRestAdapter();
         findSimilarService = restAdapter.create(FindSimilarService.class);
-        addToTextIndexService = new AddToTextIndexJobService(restAdapter.create(AddToTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexJobService(restAdapter.create(AddToTextIndexBackend.class));
     }
 
     @Test

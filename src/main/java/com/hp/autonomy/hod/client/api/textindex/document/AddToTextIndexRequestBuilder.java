@@ -77,7 +77,7 @@ public class AddToTextIndexRequestBuilder {
     }
 
     /**
-     * @return A map of query parameters suitable for use with {@link AddToTextIndexService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link AddToTextIndexBackend}. get is NOT supported on
      * the resulting map
      */
     public Map<String, Object> build() {

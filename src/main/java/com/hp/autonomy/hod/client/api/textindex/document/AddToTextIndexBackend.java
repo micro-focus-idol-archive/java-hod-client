@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Interface representing the Add to Text Index API
  */
-public interface AddToTextIndexService {
+public interface AddToTextIndexBackend {
 
     String URL = "/2/api/async/textindex/{indexName}/document/v1";
 
