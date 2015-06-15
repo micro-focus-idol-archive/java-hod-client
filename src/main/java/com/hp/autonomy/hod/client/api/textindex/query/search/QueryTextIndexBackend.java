@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
@@ -22,22 +23,9 @@ import java.util.Map;
 /**
  * Interface representing the QueryTextIndex API.
  */
-public interface QueryTextIndexBackend {
+interface QueryTextIndexBackend {
 
     String URL = "/2/api/sync/textindex/query/search/v1";
-
-    /**
-     * Query HP Haven OnDemand for documents matching query text using a token provided by a
-     * {@link retrofit.RequestInterceptor}
-     * @param text The query text
-     * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
-     */
-    @GET(URL)
-    Documents queryTextIndexWithText(
-        @Query("text") String text,
-        @QueryMap Map<String, Object> params
-    ) throws HodErrorException;
 
     /**
      * Query HP Haven OnDemand for documents matching query text using the given token
@@ -47,23 +35,9 @@ public interface QueryTextIndexBackend {
      * @return A list of documents that match the query text
      */
     @GET(URL)
-    Documents queryTextIndexWithText(
+    Response queryTextIndexWithText(
         @Header("token") AuthenticationToken token,
         @Query("text") String text,
-        @QueryMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
-     * The contents of the object will be used as the query text
-     * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
-     */
-    @GET(URL)
-    Documents queryTextIndexWithReference(
-        @Query("reference") String reference,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -76,22 +50,9 @@ public interface QueryTextIndexBackend {
      * @return A list of documents that match the query text
      */
     @GET(URL)
-    Documents queryTextIndexWithReference(
+    Response queryTextIndexWithReference(
         @Header("token") AuthenticationToken token,
         @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Query HP Haven OnDemand for documents using query text from a url using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param url A publicly accessible HTTP URL from which the query text can be retrieved
-     * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
-     */
-    @GET(URL)
-    Documents queryTextIndexWithUrl(
-        @Query("url") String url,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -103,24 +64,10 @@ public interface QueryTextIndexBackend {
      * @return A list of documents that match the query text
      */
     @GET(URL)
-    Documents queryTextIndexWithUrl(
+    Response queryTextIndexWithUrl(
         @Header("token") AuthenticationToken token,
         @Query("url") String url,
         @QueryMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Query HP Haven OnDemand for documents using query text in a file using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param file A file containing the query text
-     * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
-     */
-    @Multipart
-    @POST(URL)
-    Documents queryTextIndexWithFile(
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     /**
@@ -132,7 +79,7 @@ public interface QueryTextIndexBackend {
      */
     @Multipart
     @POST(URL)
-    Documents queryTextIndexWithFile(
+    Response queryTextIndexWithFile(
         @Header("token") AuthenticationToken token,
         @Part("file") TypedOutput file,
         @PartMap Map<String, Object> params

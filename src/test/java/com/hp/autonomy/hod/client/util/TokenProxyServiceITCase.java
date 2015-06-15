@@ -9,43 +9,55 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodServiceConfigFactory;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
+import com.hp.autonomy.hod.client.api.textindex.query.search.DocumentsQueryTextIndexService;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
-import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexBackend;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexServiceImpl;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.token.TokenProxyService;
+import com.hp.autonomy.hod.client.token.TokenRepositoryException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import retrofit.RestAdapter;
 
-import java.util.Map;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
-@Ignore // TODO remove this when the QueryTextIndexService replacement has been built
 @RunWith(Parameterized.class)
 public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexBackend queryTextIndexBackend;
+    private QueryTextIndexService<Documents> queryTextIndexService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        final RestAdapter restAdapter = HodServiceConfigFactory.getHodServiceConfig(new TokenProxyService() {
+        // Creating the HodServiceConfig requires the TokenProxyService, but the TokenProxyService requires the
+        // TokenRepository, which requires the HodServiceConfig
+        final AtomicReference<TokenProxy> tokenProxyAtomicReference = new AtomicReference<>();
+
+        final HodServiceConfig hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(new TokenProxyService() {
             @Override
             public TokenProxy getTokenProxy() {
-                return TokenProxyServiceITCase.this.getTokenProxy();
+                return tokenProxyAtomicReference.get();
             }
-        }, endpoint).getRestAdapter();
+        }, endpoint);
 
-        queryTextIndexBackend = restAdapter.create(QueryTextIndexBackend.class);
+        try {
+            tokenProxyAtomicReference.set(hodServiceConfig.getTokenRepository().insert(getToken()));
+        } catch (final IOException e) {
+            throw new TokenRepositoryException(e);
+        }
+
+        queryTextIndexService = new DocumentsQueryTextIndexService(hodServiceConfig);
     }
 
     public TokenProxyServiceITCase(final Endpoint endpoint) {
@@ -54,12 +66,11 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testInterceptor() throws HodErrorException {
-        final Map<String, Object> params = new QueryRequestBuilder()
+        final QueryRequestBuilder params = new QueryRequestBuilder()
                 .addIndexes("wiki_eng")
-                .setTotalResults(true)
-                .build();
+                .setTotalResults(true);
 
-        final Documents documents = queryTextIndexBackend.queryTextIndexWithText("*", params);
+        final Documents documents = queryTextIndexService.queryTextIndexWithText("*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
     }

@@ -29,7 +29,7 @@ public class HodServiceConfig {
 
     private final RestAdapter restAdapter;
     private final TokenRepository tokenRepository;
-    private final TokenProxyService tokenProxyService;
+    private final Requester requester;
 
     private HodServiceConfig(final Builder builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
@@ -49,17 +49,13 @@ public class HodServiceConfig {
             jacksonConverter = new JacksonConverter();
         }
 
-        restAdapterBuilder.setConverter(new HodConverter(jacksonConverter));
+        final HodConverter converter = new HodConverter(jacksonConverter);
+        restAdapterBuilder.setConverter(converter);
 
         restAdapter = restAdapterBuilder.build();
         tokenRepository = builder.tokenRepository;
 
-        if(builder.tokenProxyService != null) {
-            tokenProxyService = builder.tokenProxyService;
-        }
-        else {
-            tokenProxyService = null;
-        }
+        requester = new Requester(tokenRepository, new ResponseParser(tokenRepository, converter), builder.tokenProxyService);
     }
 
     /**

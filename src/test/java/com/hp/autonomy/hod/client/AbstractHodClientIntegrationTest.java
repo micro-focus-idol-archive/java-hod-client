@@ -16,8 +16,8 @@ import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 public abstract class AbstractHodClientIntegrationTest {
     protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
@@ -52,7 +52,7 @@ public abstract class AbstractHodClientIntegrationTest {
     @Parameterized.Parameters
     public static Collection<Endpoint> endPoints() {
         final Endpoint endpoint = Enum.valueOf(Endpoint.class, System.getProperty("hp.hod.env", "PRODUCTION"));
-        return Arrays.asList(endpoint);
+        return Collections.singletonList(endpoint);
     }
 
     public AbstractHodClientIntegrationTest(final Endpoint endpoint) {
