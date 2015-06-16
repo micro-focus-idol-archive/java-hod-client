@@ -10,7 +10,7 @@ import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexJobService;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexResponse;
-import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexBackend;
+import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexService;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import static org.hamcrest.core.Is.is;
 public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
     private FindSimilarService findSimilarService;
-    private AddToTextIndexJobService addToTextIndexService;
+    private AddToTextIndexService addToTextIndexService;
 
     public FindSimilarITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -50,7 +50,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
         final RestAdapter restAdapter = getRestAdapter();
         findSimilarService = restAdapter.create(FindSimilarService.class);
-        addToTextIndexService = new AddToTextIndexJobService(restAdapter.create(AddToTextIndexBackend.class));
+        addToTextIndexService = new AddToTextIndexJobService(getConfig());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                 .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
                 .build();
 
-        addToTextIndexService.addJsonToTextIndex(getToken(), documents, getIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), documents, getIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
             @Override
             public void success(final AddToTextIndexResponse response) {
                 try {

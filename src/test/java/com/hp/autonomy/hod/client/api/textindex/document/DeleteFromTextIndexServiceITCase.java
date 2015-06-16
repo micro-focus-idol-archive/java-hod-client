@@ -29,7 +29,7 @@ import static org.hamcrest.core.Is.is;
 public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrationTest {
 
     private DeleteFromTextIndexJobService deleteFromTextIndexService;
-    private AddToTextIndexJobService addToTextIndexService;
+    private AddToTextIndexService addToTextIndexService;
 
     @Override
     @Before
@@ -37,7 +37,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
         super.setUp();
 
         deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
-        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexBackend.class));
+        addToTextIndexService = new AddToTextIndexJobService(getConfig());
     }
 
     public DeleteFromTextIndexServiceITCase(final Endpoint endpoint) {
@@ -61,7 +61,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
         final CountDownLatch latch = new CountDownLatch(1);
 
         final DeleteTestCallback callback = new DeleteTestCallback(latch, reference);
-        addToTextIndexService.addJsonToTextIndex(getToken(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 

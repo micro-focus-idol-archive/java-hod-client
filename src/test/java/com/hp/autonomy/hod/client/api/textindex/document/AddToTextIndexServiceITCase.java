@@ -40,7 +40,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
     public void setUp() {
         super.setUp();
 
-        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexBackend.class));
+        addToTextIndexService = new AddToTextIndexJobService(getConfig());
     }
 
     @After
@@ -68,7 +68,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addJsonToTextIndex(getToken(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
@@ -85,7 +85,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAddFileToTextIndex() throws HodErrorException, InterruptedException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/the-end.txt"));
+        final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/the-end.txt");
         final String reference = "63edb67f-c930-4b7b-8c33-2cd28e5cc670";
 
         final Map<String, Object> additionalMetadata = new HashMap<>();
@@ -100,7 +100,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addFileToTextIndex(getToken(), file, getIndex(), params, callback);
+        addToTextIndexService.addFileToTextIndex(getTokenProxy(), file, getIndex(), params, callback);
 
         latch.await();
 

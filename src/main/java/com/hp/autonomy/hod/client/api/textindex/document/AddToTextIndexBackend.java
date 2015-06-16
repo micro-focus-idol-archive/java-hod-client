@@ -13,6 +13,7 @@ import com.hp.autonomy.hod.client.job.Action;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.Status;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
@@ -33,23 +34,6 @@ public interface AddToTextIndexBackend {
     String URL = "/2/api/async/textindex/{indexName}/document/v1";
 
     /**
-     * Index JSON documents into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param documents A collection of objects to convert to JSON
-     * @param indexName The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addJsonToTextIndex(
-        @Part("json") Documents<?> documents,
-        @Path("indexName") String indexName,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
      * Index JSON documents into HP Haven OnDemand using the given token
      * @param token The token to use to authenticate the request
      * @param documents A collection of objects to convert to JSON
@@ -60,27 +44,10 @@ public interface AddToTextIndexBackend {
      */
     @POST(URL)
     @Multipart
-    JobId addJsonToTextIndex(
+    Response addJsonToTextIndex(
         @Header("token") AuthenticationToken token,
         @Part("json") Documents<?> documents,
         @Path("indexName") String indexName,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index a file into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param file A file containing the content of the document
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addFileToTextIndex(
-        @Part("file") TypedOutput file,
-        @Path("indexName") String index,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -95,26 +62,9 @@ public interface AddToTextIndexBackend {
      */
     @POST(URL)
     @Multipart
-    JobId addFileToTextIndex(
+    Response addFileToTextIndex(
         @Header("token") AuthenticationToken token,
         @Part("file") TypedOutput file,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index an object store object into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param reference An object store reference pointing at a file to be used for document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addReferenceToTextIndex(
-        @Part("reference") String reference,
         @Path("indexName") String index,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
@@ -130,26 +80,9 @@ public interface AddToTextIndexBackend {
      */
     @POST(URL)
     @Multipart
-    JobId addReferenceToTextIndex(
+    Response addReferenceToTextIndex(
         @Header("token") AuthenticationToken token,
         @Part("reference") String reference,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index a publicly accessible into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param url A publicly accessible url containing the document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addUrlToTextIndex(
-        @Part("url") String url,
         @Path("indexName") String index,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
@@ -165,7 +98,7 @@ public interface AddToTextIndexBackend {
      */
     @POST(URL)
     @Multipart
-    JobId addUrlToTextIndex(
+    Response addUrlToTextIndex(
         @Header("token") AuthenticationToken token,
         @Part("url") String url,
         @Path("indexName") String index,
@@ -179,7 +112,7 @@ public interface AddToTextIndexBackend {
      * @throws HodErrorException If an error occurred retrieving the status
      */
     @GET("/2/job/{jobId}/status")
-    AddToTextIndexJobStatus getJobStatus(
+    Response getJobStatus(
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
 
@@ -191,7 +124,7 @@ public interface AddToTextIndexBackend {
      * @throws HodErrorException If an error occurred retrieving the status
      */
     @GET("/2/job/{jobId}/status")
-    AddToTextIndexJobStatus getJobStatus(
+    Response getJobStatus(
         @Header("token") AuthenticationToken token,
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
@@ -203,7 +136,7 @@ public interface AddToTextIndexBackend {
      * @throws HodErrorException If an error occurred retrieving the result
      */
     @GET("/2/job/{jobId}/result")
-    AddToTextIndexJobStatus getJobResult(
+    Response getJobResult(
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
 
@@ -215,7 +148,7 @@ public interface AddToTextIndexBackend {
      * @throws HodErrorException If an error occurred retrieving the result
      */
     @GET("/2/job/{jobId}/result")
-    AddToTextIndexJobStatus getJobResult(
+    Response getJobResult(
         @Header("token") AuthenticationToken token,
         @Path("jobId") JobId jobId
     ) throws HodErrorException;

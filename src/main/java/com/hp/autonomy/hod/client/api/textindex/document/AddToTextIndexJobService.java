@@ -6,15 +6,24 @@
 package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
+import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.AbstractJobService;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
+import com.hp.autonomy.hod.client.token.TokenProxy;
+import com.hp.autonomy.hod.client.util.TypedByteArrayWithFilename;
 import lombok.extern.slf4j.Slf4j;
-import retrofit.mime.TypedOutput;
+import org.apache.commons.io.IOUtils;
+import retrofit.client.Response;
+import retrofit.mime.TypedFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -24,193 +33,207 @@ import java.util.concurrent.ScheduledExecutorService;
  * The destroy method should be called when the service is no longer needed.
  */
 @Slf4j
-public class AddToTextIndexJobService extends AbstractJobService {
+public class AddToTextIndexJobService extends AbstractJobService implements AddToTextIndexService {
 
     private final AddToTextIndexBackend addToTextIndexBackend;
+    private final Requester requester;
 
     /**
      * Creates a new AddToTextIndexJobService
-     * @param addToTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
+     * @param hodServiceConfig The configuration for the service
      */
-    public AddToTextIndexJobService(final AddToTextIndexBackend addToTextIndexBackend) {
+    public AddToTextIndexJobService(final HodServiceConfig hodServiceConfig) {
         super();
 
-        this.addToTextIndexBackend = addToTextIndexBackend;
+        addToTextIndexBackend = hodServiceConfig.getRestAdapter().create(AddToTextIndexBackend.class);
+        requester = hodServiceConfig.getRequester();
     }
 
     /**
      * Creates a new AddToTextIndexJobService
-     * @param addToTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
+     * @param hodServiceConfig The configuration for the service
      * @param executorService The executor service to use while polling for status updates
      */
-    public AddToTextIndexJobService(final AddToTextIndexBackend addToTextIndexBackend, final ScheduledExecutorService executorService) {
+    public AddToTextIndexJobService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
-        this.addToTextIndexBackend = addToTextIndexBackend;
+        addToTextIndexBackend = hodServiceConfig.getRestAdapter().create(AddToTextIndexBackend.class);
+        requester = hodServiceConfig.getRequester();
     }
 
-    /**
-     * Index JSON documents into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param documents A collection of objects to convert to JSON
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
+    @Override
     public void addJsonToTextIndex(
-            final Documents<?> documents,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
+        final Documents<?> documents,
+        final String index,
+        final Map<String, Object> params,
+        final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addJsonToTextIndex(documents, index, params);
+        final JobId jobId = requester.makeRequest(JobId.class, getTextBackendCaller(documents, index, params));
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
 
-    /**
-     * Index JSON documents into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
-     * @param documents A collection of objects to convert to JSON
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
+    @Override
     public void addJsonToTextIndex(
-            final AuthenticationToken token,
-            final Documents<?> documents,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
+        final TokenProxy tokenProxy,
+        final Documents<?> documents,
+        final String index,
+        final Map<String, Object> params,
+        final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addJsonToTextIndex(token, documents, index, params);
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getTextBackendCaller(documents, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
     }
 
-    /**
-     * Index a public accessible url into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param url A publicly accessible url containing the document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
+    @Override
     public void addUrlToTextIndex(
-            final String url,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
+        final String url,
+        final String index,
+        final Map<String, Object> params,
+        final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addUrlToTextIndex(url, index, params);
+        final JobId jobId = requester.makeRequest(JobId.class, getUrlBackendCaller(url, index, params));
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
 
-    /**
-     * Index a public accessible url into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
-     * @param url A publicly accessible url containing the document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
+    @Override
     public void addUrlToTextIndex(
-            final AuthenticationToken token,
-            final String url,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
+        final TokenProxy tokenProxy,
+        final String url,
+        final String index,
+        final Map<String, Object> params,
+        final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addUrlToTextIndex(token, url, index, params);
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getUrlBackendCaller(url, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
     }
 
-    /**
-     * Index an object store object into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param reference An object store reference pointing at a file to be used for document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
+    @Override
     public void addReferenceToTextIndex(
-            final String reference,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
+        final String reference,
+        final String index,
+        final Map<String, Object> params,
+        final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addReferenceToTextIndex(reference, index, params);
+        final JobId jobId = requester.makeRequest(JobId.class, getReferenceBackendCaller(reference, index, params));
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
 
-    /**
-     * Index an object store object into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
-     * @param reference An object store reference pointing at a file to be used for document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
+    @Override
     public void addReferenceToTextIndex(
-            final AuthenticationToken token,
-            final String reference,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
+        final TokenProxy tokenProxy,
+        final String reference,
+        final String index,
+        final Map<String, Object> params,
+        final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addReferenceToTextIndex(token, reference, index, params);
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getReferenceBackendCaller(reference, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
     }
 
-    /**
-     * Index a file into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param file A file containing the content of the document
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
-    public void addFileToTextIndex(
-            final TypedOutput file,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
-    ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addFileToTextIndex(file, index, params);
+    @Override
+    public void addFileToTextIndex(final File file, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+        final JobId jobId = requester.makeRequest(JobId.class, getFileBackendCaller(file, index, params));
 
         getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
     }
 
-    /**
-     * Index a file into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
-     * @param file A file containing the content of the document
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs indexing the documents
-     */
-    public void addFileToTextIndex(
-            final AuthenticationToken token,
-            final TypedOutput file,
-            final String index,
-            final Map<String, Object> params,
-            final HodJobCallback<AddToTextIndexResponse> callback
-    ) throws HodErrorException {
-        final JobId jobId = addToTextIndexBackend.addFileToTextIndex(token, file, index, params);
+    @Override
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getFileBackendCaller(file, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(token, jobId, callback));
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+    }
+
+    @Override
+    public void addFileToTextIndex(final byte[] bytes, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+        final JobId jobId = requester.makeRequest(JobId.class, getByteArrayBackendCaller(bytes, index, params));
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    @Override
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getByteArrayBackendCaller(bytes, index, params));
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+    }
+
+    @Override
+    public void addFileToTextIndex(final InputStream inputStream, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+        final JobId jobId = requester.makeRequest(JobId.class, getInputStreamBackendCaller(inputStream, index, params));
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+    }
+
+    @Override
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getInputStreamBackendCaller(inputStream, index, params));
+
+        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+    }
+
+    private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final String index, final Map<String, Object> params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return addToTextIndexBackend.addJsonToTextIndex(authenticationToken, documents, index, params);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getUrlBackendCaller(final String url, final String index, final Map<String, Object> params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return addToTextIndexBackend.addUrlToTextIndex(authenticationToken, url, index, params);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getReferenceBackendCaller(final String reference, final String index, final Map<String, Object> params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return addToTextIndexBackend.addReferenceToTextIndex(authenticationToken, reference, index, params);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getFileBackendCaller(final File file, final String index, final Map<String, Object> params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedFile("application/octet-stream", file), index, params);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getByteArrayBackendCaller(final byte[] bytes, final String index, final Map<String, Object> params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", bytes), index, params);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream, final String index, final Map<String, Object> params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                try {
+                    return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", IOUtils.toByteArray(inputStream)), index, params);
+                } catch (final IOException e) {
+                    throw new RuntimeException("Error reading bytes from stream", e);
+                }
+            }
+        };
     }
 
     private class AddToTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<AddToTextIndexResponse> {
@@ -219,18 +242,32 @@ public class AddToTextIndexJobService extends AbstractJobService {
             super(jobId, callback, getExecutorService());
         }
 
-        private AddToTextIndexPollingStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<AddToTextIndexResponse> callback) {
+        private AddToTextIndexPollingStatusRunnable(final TokenProxy token, final JobId jobId, final HodJobCallback<AddToTextIndexResponse> callback) {
             super(token, jobId, callback, getExecutorService());
         }
 
         @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return addToTextIndexBackend.getJobStatus(jobId);
+            return requester.makeRequest(AddToTextIndexBackend.AddToTextIndexJobStatus.class, getBackendCaller(jobId));
         }
 
         @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            return addToTextIndexBackend.getJobStatus(token, jobId);
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public JobStatus<AddToTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
+            return requester.makeRequest(tokenProxy, AddToTextIndexBackend.AddToTextIndexJobStatus.class, getBackendCaller(jobId));
+        }
+
+        private Requester.BackendCaller getBackendCaller(final JobId jobId) {
+            return new Requester.BackendCaller() {
+                @Override
+                public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                    return addToTextIndexBackend.getJobStatus(authenticationToken, jobId);
+                }
+            };
         }
 
     }
