@@ -26,7 +26,7 @@ import java.util.Map;
  * Service for calling HP Haven OnDemand APIs which do not have a dedicated service. These methods provide no assistance
  * with calling HP Haven OnDemand, so prefer dedicated services where available
  */
-public interface HavenOnDemandService {
+public interface HavenOnDemandBackend {
 
     String SYNC_URL_ONE = "/2/api/sync/{first}/v{version}";
     String SYNC_URL_TWO = "/2/api/sync/{first}/{second}/v{version}";

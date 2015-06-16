@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(Parameterized.class)
 public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private HavenOnDemandService havenOnDemandService;
+    private HavenOnDemandBackend havenOnDemandBackend;
     private ScheduledExecutorService scheduledExecutorService;
 
     @Override
@@ -51,7 +51,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     public void setUp() {
         super.setUp();
 
-        havenOnDemandService = getRestAdapter().create(HavenOnDemandService.class);
+        havenOnDemandBackend = getRestAdapter().create(HavenOnDemandBackend.class);
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -72,7 +72,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         params.put("text", "*");
         params.put("total_results", true);
 
-        final Map<String, Object> result = havenOnDemandService.get("textindex", "query", "search", 1, params);
+        final Map<String, Object> result = havenOnDemandBackend.get("textindex", "query", "search", 1, params);
 
         assertThat(result.get("totalhits"), is(instanceOf(Integer.class)));
         assertThat((Integer) result.get("totalhits"), is(greaterThan(0)));
@@ -85,9 +85,9 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         params.put("text", "*");
         params.put("total_results", true);
 
-        final JobId jobId = havenOnDemandService.getAsync("textindex", "query", "search", 1, params);
+        final JobId jobId = havenOnDemandBackend.getAsync("textindex", "query", "search", 1, params);
 
-        final JobStatus<Map<String, Object>> jobResult = havenOnDemandService.getJobResult(getToken(), jobId);
+        final JobStatus<Map<String, Object>> jobResult = havenOnDemandBackend.getJobResult(getToken(), jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
@@ -101,7 +101,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt")));
         params.put("total_results", true);
 
-        final Map<String, Object> result = havenOnDemandService.post(getToken(), "textindex", "query", "search", 1, params);
+        final Map<String, Object> result = havenOnDemandBackend.post(getToken(), "textindex", "query", "search", 1, params);
 
         assertThat(result.get("totalhits"), is(instanceOf(Integer.class)));
         assertThat((Integer) result.get("totalhits"), is(greaterThan(0)));
@@ -123,9 +123,9 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
 
         final AuthenticationToken token = getToken();
 
-        final JobId jobId = havenOnDemandService.postAsync(token, "textindex", getIndex(), "document", 1, params);
+        final JobId jobId = havenOnDemandBackend.postAsync(token, "textindex", getIndex(), "document", 1, params);
 
-        final JobStatus<Map<String, Object>> jobResult = havenOnDemandService.getJobResult(token, jobId);
+        final JobStatus<Map<String, Object>> jobResult = havenOnDemandBackend.getJobResult(token, jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
@@ -153,11 +153,11 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
 
         final AuthenticationToken token = getToken();
 
-        final JobId jobId = havenOnDemandService.postAsync(token, "textindex", getIndex(), "document", 1, params);
+        final JobId jobId = havenOnDemandBackend.postAsync(token, "textindex", getIndex(), "document", 1, params);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
-        final Runnable runnable = new HavenOnDemandJobStatusRunnable(havenOnDemandService, token, jobId, testCallback, scheduledExecutorService);
+        final Runnable runnable = new HavenOnDemandJobStatusRunnable(havenOnDemandBackend, token, jobId, testCallback, scheduledExecutorService);
 
         scheduledExecutorService.submit(runnable);
 

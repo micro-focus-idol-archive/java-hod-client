@@ -5,7 +5,7 @@
 
 package com.hp.autonomy.hod.client.job;
 
-import com.hp.autonomy.hod.client.api.HavenOnDemandService;
+import com.hp.autonomy.hod.client.api.HavenOnDemandBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 
@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * PollingJobStatusRunnable for use with {@link HavenOnDemandService}
+ * PollingJobStatusRunnable for use with {@link HavenOnDemandBackend}
  */
 public class HavenOnDemandJobStatusRunnable extends PollingJobStatusRunnable<Map<String, Object>> {
 
-    private final HavenOnDemandService havenOnDemandService;
+    private final HavenOnDemandBackend havenOnDemandBackend;
 
     /**
      * Creates a new HavenOnDemandJobStatusRunnable using the given API key
@@ -26,10 +26,10 @@ public class HavenOnDemandJobStatusRunnable extends PollingJobStatusRunnable<Map
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public HavenOnDemandJobStatusRunnable(final HavenOnDemandService havenOnDemandService, final AuthenticationToken token, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
+    public HavenOnDemandJobStatusRunnable(final HavenOnDemandBackend havenOnDemandBackend, final AuthenticationToken token, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
         super(token, jobId, callback, executorService);
 
-        this.havenOnDemandService = havenOnDemandService;
+        this.havenOnDemandBackend = havenOnDemandBackend;
     }
 
     /**
@@ -38,19 +38,19 @@ public class HavenOnDemandJobStatusRunnable extends PollingJobStatusRunnable<Map
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public HavenOnDemandJobStatusRunnable(final HavenOnDemandService havenOnDemandService, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
+    public HavenOnDemandJobStatusRunnable(final HavenOnDemandBackend havenOnDemandBackend, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
         super(jobId, callback, executorService);
 
-        this.havenOnDemandService = havenOnDemandService;
+        this.havenOnDemandBackend = havenOnDemandBackend;
     }
 
     @Override
     public JobStatus<Map<String, Object>> getJobStatus(final JobId jobId) throws HodErrorException {
-        return havenOnDemandService.getJobStatus(jobId);
+        return havenOnDemandBackend.getJobStatus(jobId);
     }
 
     @Override
     public JobStatus<Map<String, Object>> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-        return havenOnDemandService.getJobStatus(token, jobId);
+        return havenOnDemandBackend.getJobStatus(token, jobId);
     }
 }
