@@ -28,7 +28,7 @@ public class ViewDocumentRequestBuilder {
 
     /**
      * Sets the value for the raw_html parameter. You should not need to set this unless using
-     * {@link ViewDocumentService#viewFileAsHtmlString}
+     * {@link ViewDocumentBackend#viewFileAsHtmlString}
      * @param rawHtml Value of the raw_html parameter
      */
     private Boolean rawHtml;
@@ -97,7 +97,7 @@ public class ViewDocumentRequestBuilder {
     }
 
     /**
-     * @return A map of query parameters suitable for use with {@link ViewDocumentService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link ViewDocumentBackend}. get is NOT supported on
      * the resulting map
      */
     public Map<String, Object> build() {

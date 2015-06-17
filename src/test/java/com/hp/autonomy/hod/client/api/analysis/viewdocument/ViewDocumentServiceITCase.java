@@ -27,14 +27,14 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(Parameterized.class)
 public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private ViewDocumentService viewDocumentService;
+    private ViewDocumentBackend viewDocumentBackend;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        viewDocumentService = getRestAdapter().create(ViewDocumentService.class);
+        viewDocumentBackend = getRestAdapter().create(ViewDocumentBackend.class);
     }
 
     public ViewDocumentServiceITCase(final Endpoint endpoint) {
@@ -50,7 +50,7 @@ public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest 
                 .addStartTags("<highlight>")
                 .build();
 
-        final Response response = viewDocumentService.viewFile(getToken(), new TypedFile("text/plain", file), params);
+        final Response response = viewDocumentBackend.viewFile(getToken(), new TypedFile("text/plain", file), params);
 
         final InputStream inputStream = response.getBody().in();
 
@@ -72,7 +72,7 @@ public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest 
                 .setRawHtml(false)
                 .build();
 
-        final ViewDocumentResponse response = viewDocumentService.viewFileAsHtmlString(getToken(), new TypedFile("text/plain", file), params);
+        final ViewDocumentResponse response = viewDocumentBackend.viewFileAsHtmlString(getToken(), new TypedFile("text/plain", file), params);
 
         final String html = response.getDocument();
 

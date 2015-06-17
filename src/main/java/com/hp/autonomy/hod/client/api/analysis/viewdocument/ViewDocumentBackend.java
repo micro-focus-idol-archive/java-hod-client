@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Interface representing the ViewDocument API.
  */
-public interface ViewDocumentService {
+public interface ViewDocumentBackend {
 
     String URL = "/2/api/sync/analysis/viewdocument/v1";
 
