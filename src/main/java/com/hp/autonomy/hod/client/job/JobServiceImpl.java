@@ -21,11 +21,11 @@ import retrofit.client.Response;
  */
 public class JobServiceImpl<T extends JobStatus<?>> implements JobService<T> {
 
-    private final Class<T> returnType;
+    private final Class<? extends T> returnType;
     private final JobBackend jobBackend;
     private final Requester requester;
 
-    public JobServiceImpl(final HodServiceConfig hodServiceConfig, final Class<T> returnType) {
+    public JobServiceImpl(final HodServiceConfig hodServiceConfig, final Class<? extends T> returnType) {
         this.returnType = returnType;
 
         jobBackend = hodServiceConfig.getRestAdapter().create(JobBackend.class);

@@ -5,52 +5,44 @@
 
 package com.hp.autonomy.hod.client.job;
 
-import com.hp.autonomy.hod.client.api.HavenOnDemandBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * PollingJobStatusRunnable for use with {@link HavenOnDemandBackend}
+ * PollingJobStatusRunnable for use with {@link com.hp.autonomy.hod.client.api.HavenOnDemandService}
  */
-public class HavenOnDemandJobStatusRunnable extends PollingJobStatusRunnable<Map<String, Object>> {
+public class HavenOnDemandJobStatusRunnable<ReturnType, JobStatusType extends JobStatus<ReturnType>> extends PollingJobStatusRunnable<ReturnType> {
 
-    private final HavenOnDemandBackend havenOnDemandBackend;
+    private final JobService<JobStatusType> jobService;
 
     /**
      * Creates a new HavenOnDemandJobStatusRunnable using the given API key
-     * @param token The token to submit the job
+     * @param tokenProxy The token proxy used to submit the job
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public HavenOnDemandJobStatusRunnable(final HavenOnDemandBackend havenOnDemandBackend, final AuthenticationToken token, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
-        super(token, jobId, callback, executorService);
+    public HavenOnDemandJobStatusRunnable(final JobService<JobStatusType> jobService, final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<ReturnType> callback, final ScheduledExecutorService executorService) {
+        super(tokenProxy, jobId, callback, executorService);
 
-        this.havenOnDemandBackend = havenOnDemandBackend;
-    }
-
-    /**
-     * Creates a new HavenOnDemandJobStatusRunnable using an API key provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The ID of the job
-     * @param callback The callback that will be called with the result
-     * @param executorService The executor service responsible for running the runnable
-     */
-    public HavenOnDemandJobStatusRunnable(final HavenOnDemandBackend havenOnDemandBackend, final JobId jobId, final HodJobCallback<Map<String, Object>> callback, final ScheduledExecutorService executorService) {
-        super(jobId, callback, executorService);
-
-        this.havenOnDemandBackend = havenOnDemandBackend;
+        this.jobService = jobService;
     }
 
     @Override
-    public JobStatus<Map<String, Object>> getJobStatus(final JobId jobId) throws HodErrorException {
-        return havenOnDemandBackend.getJobStatus(jobId);
+    public JobStatus<ReturnType> getJobStatus(final JobId jobId) throws HodErrorException {
+        return jobService.getJobStatus(jobId);
     }
 
     @Override
-    public JobStatus<Map<String, Object>> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-        return havenOnDemandBackend.getJobStatus(token, jobId);
+    public JobStatus<ReturnType> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public JobStatus<ReturnType> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
+        return jobService.getJobStatus(tokenProxy, jobId);
     }
 }

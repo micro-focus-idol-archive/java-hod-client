@@ -5,16 +5,21 @@
 
 package com.hp.autonomy.hod.client.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.document.Document;
 import com.hp.autonomy.hod.client.api.textindex.document.Documents;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.job.Action;
 import com.hp.autonomy.hod.client.job.HavenOnDemandJobStatusRunnable;
 import com.hp.autonomy.hod.client.job.JobId;
+import com.hp.autonomy.hod.client.job.JobService;
+import com.hp.autonomy.hod.client.job.JobServiceImpl;
 import com.hp.autonomy.hod.client.job.JobStatus;
+import com.hp.autonomy.hod.client.job.Status;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import org.junit.After;
 import org.junit.Before;
@@ -43,16 +48,18 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(Parameterized.class)
 public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private HavenOnDemandBackend havenOnDemandBackend;
+    private HavenOnDemandService havenOnDemandService;
     private ScheduledExecutorService scheduledExecutorService;
+    private JobService<JobStatus<Map<String, Object>>> jobService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        havenOnDemandBackend = getRestAdapter().create(HavenOnDemandBackend.class);
+        havenOnDemandService = new HavenOnDemandServiceImpl(getConfig());
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        jobService = new JobServiceImpl<JobStatus<Map<String, Object>>>(getConfig(), MapJobStatus.class);
     }
 
     @After
@@ -68,11 +75,10 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     @Test
     public void testGet() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", getToken());
         params.put("text", "*");
         params.put("total_results", true);
 
-        final Map<String, Object> result = havenOnDemandBackend.get("textindex", "query", "search", 1, params);
+        final Map<String, Object> result = havenOnDemandService.get(getTokenProxy(), "textindex", "query", "search", 1, params, JsonMap.class);
 
         assertThat(result.get("totalhits"), is(instanceOf(Integer.class)));
         assertThat((Integer) result.get("totalhits"), is(greaterThan(0)));
@@ -81,13 +87,12 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     @Test
     public void testAsyncGet() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", getToken());
         params.put("text", "*");
         params.put("total_results", true);
 
-        final JobId jobId = havenOnDemandBackend.getAsync("textindex", "query", "search", 1, params);
+        final JobId jobId = havenOnDemandService.getAsync(getTokenProxy(), "textindex", "query", "search", 1, params);
 
-        final JobStatus<Map<String, Object>> jobResult = havenOnDemandBackend.getJobResult(getToken(), jobId);
+        final JobStatus<Map<String, Object>> jobResult = jobService.getJobResult(getTokenProxy(), jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
@@ -101,7 +106,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt")));
         params.put("total_results", true);
 
-        final Map<String, Object> result = havenOnDemandBackend.post(getToken(), "textindex", "query", "search", 1, params);
+        final Map<String, Object> result = havenOnDemandService.post(getTokenProxy(), "textindex", "query", "search", 1, params, JsonMap.class);
 
         assertThat(result.get("totalhits"), is(instanceOf(Integer.class)));
         assertThat((Integer) result.get("totalhits"), is(greaterThan(0)));
@@ -121,17 +126,16 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         params.put("json", documents);
         params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
-        final AuthenticationToken token = getToken();
+        final JobId jobId = havenOnDemandService.postAsync(getTokenProxy(), "textindex", getIndex(), "document", 1, params);
 
-        final JobId jobId = havenOnDemandBackend.postAsync(token, "textindex", getIndex(), "document", 1, params);
-
-        final JobStatus<Map<String, Object>> jobResult = havenOnDemandBackend.getJobResult(token, jobId);
+        final JobStatus<Map<String, Object>> jobResult = jobService.getJobResult(getTokenProxy(), jobId);
 
         final Map<String, Object> result = jobResult.getActions().get(0).getResult();
 
         assertThat(result.get("references"), is(notNullValue()));
         assertThat(result.get("references"), is(instanceOf(List.class)));
 
+        @SuppressWarnings("unchecked")
         final List<Map<String, Object>> resultList = (List<Map<String, Object>>) result.get("references");
 
         assertThat(resultList, hasSize(1));
@@ -151,13 +155,11 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         params.put("json", documents);
         params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
-        final AuthenticationToken token = getToken();
-
-        final JobId jobId = havenOnDemandBackend.postAsync(token, "textindex", getIndex(), "document", 1, params);
+        final JobId jobId = havenOnDemandService.postAsync(getTokenProxy(), "textindex", getIndex(), "document", 1, params);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
-        final Runnable runnable = new HavenOnDemandJobStatusRunnable(havenOnDemandBackend, token, jobId, testCallback, scheduledExecutorService);
+        final Runnable runnable = new HavenOnDemandJobStatusRunnable<>(jobService, getTokenProxy(), jobId, testCallback, scheduledExecutorService);
 
         scheduledExecutorService.submit(runnable);
 
@@ -168,9 +170,25 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         assertThat(result.get("references"), is(notNullValue()));
         assertThat(result.get("references"), is(instanceOf(List.class)));
 
+        @SuppressWarnings("unchecked")
         final List<Map<String, Object>> resultList = (List<Map<String, Object>>) result.get("references");
 
         assertThat(resultList, hasSize(1));
+    }
+
+    private static class MapJobStatus extends JobStatus<Map<String, Object>> {
+        @JsonCreator
+        public MapJobStatus(
+            @JsonProperty("jobID") final String jobId,
+            @JsonProperty("status") final Status status,
+            @JsonProperty("actions") final List<? extends Action<Map<String, Object>>> actions
+        ) {
+            super(jobId, status, actions);
+        }
+    }
+
+    private static class JsonMap extends HashMap<String, Object> {
+        private static final long serialVersionUID = 1553068245513346650L;
     }
 
 }
