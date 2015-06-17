@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexJobService;
+import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexPollingService;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexResponse;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexService;
@@ -50,7 +50,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
         final RestAdapter restAdapter = getRestAdapter();
         findSimilarService = restAdapter.create(FindSimilarService.class);
-        addToTextIndexService = new AddToTextIndexJobService(getConfig());
+        addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
     @Test

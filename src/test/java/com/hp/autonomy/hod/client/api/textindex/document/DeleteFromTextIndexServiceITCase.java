@@ -28,7 +28,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private DeleteFromTextIndexJobService deleteFromTextIndexService;
+    private DeleteFromTextIndexPollingService deleteFromTextIndexService;
     private AddToTextIndexService addToTextIndexService;
 
     @Override
@@ -36,8 +36,8 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
     public void setUp() {
         super.setUp();
 
-        deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
-        addToTextIndexService = new AddToTextIndexJobService(getConfig());
+        deleteFromTextIndexService = new DeleteFromTextIndexPollingService(getRestAdapter().create(DeleteFromTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
     public DeleteFromTextIndexServiceITCase(final Endpoint endpoint) {

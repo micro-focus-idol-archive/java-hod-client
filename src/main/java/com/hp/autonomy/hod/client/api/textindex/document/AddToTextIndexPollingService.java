@@ -9,9 +9,11 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.job.AbstractJobService;
+import com.hp.autonomy.hod.client.job.AbstractPollingService;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.job.JobId;
+import com.hp.autonomy.hod.client.job.JobService;
+import com.hp.autonomy.hod.client.job.JobServiceImpl;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -33,31 +35,34 @@ import java.util.concurrent.ScheduledExecutorService;
  * The destroy method should be called when the service is no longer needed.
  */
 @Slf4j
-public class AddToTextIndexJobService extends AbstractJobService implements AddToTextIndexService {
+public class AddToTextIndexPollingService extends AbstractPollingService implements AddToTextIndexService {
 
     private final AddToTextIndexBackend addToTextIndexBackend;
+    private final JobService<? extends JobStatus<AddToTextIndexResponse>> jobService;
     private final Requester requester;
 
     /**
-     * Creates a new AddToTextIndexJobService
+     * Creates a new AddToTextIndexPollingService
      * @param hodServiceConfig The configuration for the service
      */
-    public AddToTextIndexJobService(final HodServiceConfig hodServiceConfig) {
+    public AddToTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
         super();
 
         addToTextIndexBackend = hodServiceConfig.getRestAdapter().create(AddToTextIndexBackend.class);
+        jobService = new JobServiceImpl<>(hodServiceConfig, AddToTextIndexBackend.AddToTextIndexJobStatus.class);
         requester = hodServiceConfig.getRequester();
     }
 
     /**
-     * Creates a new AddToTextIndexJobService
+     * Creates a new AddToTextIndexPollingService
      * @param hodServiceConfig The configuration for the service
      * @param executorService The executor service to use while polling for status updates
      */
-    public AddToTextIndexJobService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
+    public AddToTextIndexPollingService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
         addToTextIndexBackend = hodServiceConfig.getRestAdapter().create(AddToTextIndexBackend.class);
+        jobService = new JobServiceImpl<>(hodServiceConfig, AddToTextIndexBackend.AddToTextIndexJobStatus.class);
         requester = hodServiceConfig.getRequester();
     }
 
@@ -248,7 +253,7 @@ public class AddToTextIndexJobService extends AbstractJobService implements AddT
 
         @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return requester.makeRequest(AddToTextIndexBackend.AddToTextIndexJobStatus.class, getBackendCaller(jobId));
+            return jobService.getJobStatus(jobId);
         }
 
         @Override
@@ -258,16 +263,7 @@ public class AddToTextIndexJobService extends AbstractJobService implements AddT
 
         @Override
         public JobStatus<AddToTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
-            return requester.makeRequest(tokenProxy, AddToTextIndexBackend.AddToTextIndexJobStatus.class, getBackendCaller(jobId));
-        }
-
-        private Requester.BackendCaller getBackendCaller(final JobId jobId) {
-            return new Requester.BackendCaller() {
-                @Override
-                public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                    return addToTextIndexBackend.getJobStatus(authenticationToken, jobId);
-                }
-            };
+            return jobService.getJobStatus(tokenProxy, jobId);
         }
 
     }

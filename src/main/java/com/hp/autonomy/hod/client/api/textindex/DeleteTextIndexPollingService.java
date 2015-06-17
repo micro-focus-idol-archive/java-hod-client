@@ -8,7 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.job.AbstractJobService;
+import com.hp.autonomy.hod.client.job.AbstractPollingService;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.job.JobStatus;
@@ -23,26 +23,26 @@ import java.util.concurrent.ScheduledExecutorService;
  * The destroy method should be called when the service is no longer needed.
  */
 @Slf4j
-public class DeleteTextIndexJobService extends AbstractJobService {
+public class DeleteTextIndexPollingService extends AbstractPollingService {
 
     private final DeleteTextIndexService deleteTextIndexService;
 
     /**
-     * Creates a new DeleteTextIndexJobService
+     * Creates a new DeleteTextIndexPollingService
      * @param deleteTextIndexService The underlying service which will communicate with HP Haven OnDemand
      */
-    public DeleteTextIndexJobService(final DeleteTextIndexService deleteTextIndexService) {
+    public DeleteTextIndexPollingService(final DeleteTextIndexService deleteTextIndexService) {
         super();
 
         this.deleteTextIndexService = deleteTextIndexService;
     }
 
     /**
-     * Creates a new DeleteTextIndexJobService
+     * Creates a new DeleteTextIndexPollingService
      * @param deleteTextIndexService The underlying service which will communicate with HP Haven OnDemand
      * @param executorService The executor service to use while polling for status updates
      */
-    public DeleteTextIndexJobService(final DeleteTextIndexService deleteTextIndexService, final ScheduledExecutorService executorService) {
+    public DeleteTextIndexPollingService(final DeleteTextIndexService deleteTextIndexService, final ScheduledExecutorService executorService) {
         super(executorService);
 
         this.deleteTextIndexService = deleteTextIndexService;

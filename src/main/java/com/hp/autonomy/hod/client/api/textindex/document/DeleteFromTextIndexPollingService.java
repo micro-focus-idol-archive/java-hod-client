@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.job.AbstractJobService;
+import com.hp.autonomy.hod.client.job.AbstractPollingService;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.job.JobStatus;
@@ -21,26 +21,26 @@ import java.util.concurrent.ScheduledExecutorService;
  * <p/>
  * The destroy method should be called when the service is no longer needed.
  */
-public class DeleteFromTextIndexJobService extends AbstractJobService {
+public class DeleteFromTextIndexPollingService extends AbstractPollingService {
 
     private final DeleteFromTextIndexService deleteFromTextIndexService;
 
     /**
-     * Creates a new DeleteFromTextIndexJobService
+     * Creates a new DeleteFromTextIndexPollingService
      * @param deleteFromTextIndexService The underlying service which will communicate with HP Haven OnDemand
      */
-    public DeleteFromTextIndexJobService(final DeleteFromTextIndexService deleteFromTextIndexService) {
+    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexService deleteFromTextIndexService) {
         super();
 
         this.deleteFromTextIndexService = deleteFromTextIndexService;
     }
 
     /**
-     * Creates a new DeleteFromTextIndexJobService
+     * Creates a new DeleteFromTextIndexPollingService
      * @param deleteFromTextIndexService The underlying service which will communicate with HP Haven OnDemand
      * @param executorService The executor service to use while polling for status updates
      */
-    public DeleteFromTextIndexJobService(final DeleteFromTextIndexService deleteFromTextIndexService, final ScheduledExecutorService executorService) {
+    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexService deleteFromTextIndexService, final ScheduledExecutorService executorService) {
         super(executorService);
 
         this.deleteFromTextIndexService = deleteFromTextIndexService;

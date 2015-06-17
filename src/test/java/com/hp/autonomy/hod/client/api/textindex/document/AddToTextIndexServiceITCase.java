@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import retrofit.mime.TypedFile;
 
 import java.io.File;
 import java.util.HashMap;
@@ -33,14 +32,14 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
 
     private static final String REFERENCE = "3ac70cc2-606e-486a-97d0-511e762b2183";
 
-    private AddToTextIndexJobService addToTextIndexService;
+    private AddToTextIndexPollingService addToTextIndexService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        addToTextIndexService = new AddToTextIndexJobService(getConfig());
+        addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
     @After

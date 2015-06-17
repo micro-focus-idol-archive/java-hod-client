@@ -29,8 +29,8 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
 
     private static final String testIndexName = "ice-cream";
 
-    private CreateTextIndexJobService createTextIndexService;
-    private DeleteTextIndexJobService deleteTextIndexService;
+    private CreateTextIndexPollingService createTextIndexService;
+    private DeleteTextIndexPollingService deleteTextIndexService;
 
     public CreateAndDeleteTextIndexITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -41,8 +41,8 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
     public void setUp() {
         super.setUp();
 
-        createTextIndexService = new CreateTextIndexJobService(getRestAdapter().create(CreateTextIndexService.class));
-        deleteTextIndexService = new DeleteTextIndexJobService(getRestAdapter().create(DeleteTextIndexService.class));
+        createTextIndexService = new CreateTextIndexPollingService(getRestAdapter().create(CreateTextIndexService.class));
+        deleteTextIndexService = new DeleteTextIndexPollingService(getRestAdapter().create(DeleteTextIndexService.class));
     }
 
     @After
