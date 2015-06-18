@@ -23,27 +23,27 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class DeleteFromTextIndexPollingService extends AbstractPollingService {
 
-    private final DeleteFromTextIndexService deleteFromTextIndexService;
+    private final DeleteFromTextIndexBackend deleteFromTextIndexBackend;
 
     /**
      * Creates a new DeleteFromTextIndexPollingService
-     * @param deleteFromTextIndexService The underlying service which will communicate with HP Haven OnDemand
+     * @param deleteFromTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
      */
-    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexService deleteFromTextIndexService) {
+    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexBackend deleteFromTextIndexBackend) {
         super();
 
-        this.deleteFromTextIndexService = deleteFromTextIndexService;
+        this.deleteFromTextIndexBackend = deleteFromTextIndexBackend;
     }
 
     /**
      * Creates a new DeleteFromTextIndexPollingService
-     * @param deleteFromTextIndexService The underlying service which will communicate with HP Haven OnDemand
+     * @param deleteFromTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
      * @param executorService The executor service to use while polling for status updates
      */
-    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexService deleteFromTextIndexService, final ScheduledExecutorService executorService) {
+    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexBackend deleteFromTextIndexBackend, final ScheduledExecutorService executorService) {
         super(executorService);
 
-        this.deleteFromTextIndexService = deleteFromTextIndexService;
+        this.deleteFromTextIndexBackend = deleteFromTextIndexBackend;
     }
 
     /**
@@ -58,7 +58,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService {
             final List<String> references,
             final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexService.deleteReferencesFromTextIndex(index, references);
+        final JobId jobId = deleteFromTextIndexBackend.deleteReferencesFromTextIndex(index, references);
 
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -77,7 +77,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService {
             final List<String> references,
             final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexService.deleteReferencesFromTextIndex(token, index, references);
+        final JobId jobId = deleteFromTextIndexBackend.deleteReferencesFromTextIndex(token, index, references);
 
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -92,7 +92,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService {
             final String index,
             final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexService.deleteAllDocumentsFromTextIndex(index);
+        final JobId jobId = deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(index);
 
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -109,7 +109,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService {
             final String index,
             final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexService.deleteAllDocumentsFromTextIndex(token, index);
+        final JobId jobId = deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(token, index);
 
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -126,12 +126,12 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService {
 
         @Override
         public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return deleteFromTextIndexService.getJobStatus(jobId);
+            return deleteFromTextIndexBackend.getJobStatus(jobId);
         }
 
         @Override
         public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            return deleteFromTextIndexService.getJobStatus(token, jobId);
+            return deleteFromTextIndexBackend.getJobStatus(token, jobId);
         }
     }
 

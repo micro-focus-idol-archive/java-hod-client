@@ -21,7 +21,7 @@ import retrofit.http.Query;
 
 import java.util.List;
 
-public interface DeleteFromTextIndexService {
+public interface DeleteFromTextIndexBackend {
 
     String URL = "/2/api/async/textindex/{indexName}/document/v1";
 
