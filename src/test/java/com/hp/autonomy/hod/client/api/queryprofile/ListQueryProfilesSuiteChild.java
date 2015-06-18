@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -27,25 +26,25 @@ import static org.hamcrest.Matchers.is;
 @RunWith(Parameterized.class)
 public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegrationTest {
 
+    // Service under test
+    private QueryProfileService queryProfileService;
+
     public ListQueryProfilesSuiteChild(final Endpoint endpoint) {
         super(endpoint);
     }
-
-    // Service under test
-    private ListQueryProfilesService listQueryProfilesService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
-        listQueryProfilesService = getRestAdapter().create(ListQueryProfilesService.class);
+        queryProfileService = new QueryProfileServiceImpl(getConfig());
     }
 
     @Test
     public void testSingleQueryProfile() throws HodErrorException {
         // Setup
         final QueryProfile queryProfile = createQueryProfile("001");
-        final QueryProfiles queryProfiles = listQueryProfilesService.listQueryProfiles(getToken());
+        final QueryProfiles queryProfiles = queryProfileService.listQueryProfiles(getTokenProxy());
 
         // Test response from getQueryProfiles
         final Set<String> queryProfilesNames = queryProfiles.getNames();
@@ -58,7 +57,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
         // Setup
         final QueryProfile qp1 = createQueryProfile("001");
         final QueryProfile qp2 = createQueryProfile("002");
-        final QueryProfiles queryProfiles = listQueryProfilesService.listQueryProfiles(getToken());
+        final QueryProfiles queryProfiles = queryProfileService.listQueryProfiles(getTokenProxy());
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = queryProfiles.getQueryProfiles();
@@ -82,7 +81,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
             testNames.add(qp.getName());
         }
 
-        final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(getToken());
+        final QueryProfiles listQPsResponse = queryProfileService.listQueryProfiles(getTokenProxy());
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
@@ -96,7 +95,7 @@ public class ListQueryProfilesSuiteChild extends AbstractQueryProfileIntegration
 
     @Test
     public void testNoQueryProfiles() throws HodErrorException {
-        final QueryProfiles listQPsResponse = listQueryProfilesService.listQueryProfiles(getToken());
+        final QueryProfiles listQPsResponse = queryProfileService.listQueryProfiles(getTokenProxy());
 
         // Test response from getQueryProfiles
         final Set<QueryProfileName> qps = listQPsResponse.getQueryProfiles();
