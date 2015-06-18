@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Interface representing the list resources API.
  */
-public interface ResourcesService {
+public interface ResourcesBackend {
 
     String URL = "/2/api/sync/resource/v1";
 

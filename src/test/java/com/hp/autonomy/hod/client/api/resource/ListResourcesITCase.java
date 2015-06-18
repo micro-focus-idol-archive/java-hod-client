@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
-    private ResourcesService resourcesService;
+    private ResourcesBackend resourcesBackend;
 
     public ListResourcesITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -35,7 +35,7 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
     @Before
     public void setUp() {
         super.setUp();
-        resourcesService = getRestAdapter().create(ResourcesService.class);
+        resourcesBackend = getRestAdapter().create(ResourcesBackend.class);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
                 .setTypes(EnumSet.of(ResourceType.content))
                 .build();
 
-        final Resources resources = resourcesService.list(getToken(), parameters);
+        final Resources resources = resourcesBackend.list(getToken(), parameters);
 
         assertThat(resources.getPublicResources(), is(not(empty())));
 
@@ -67,6 +67,6 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void listsAllResources() throws HodErrorException {
-        resourcesService.list(getToken(), null);
+        resourcesBackend.list(getToken(), null);
     }
 }
