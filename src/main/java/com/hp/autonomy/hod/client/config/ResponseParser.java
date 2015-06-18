@@ -16,6 +16,7 @@ import retrofit.converter.Converter;
 import retrofit.mime.TypedString;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -64,12 +65,18 @@ class ResponseParser {
         }
 
         try {
-            // The Jackson ObjectMapper actually returns a T but the Converter interface throws this info away
-            @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked"})
-            final T typedResult = (T) converter.fromBody(response.getBody(), clazz);
+            if (clazz == InputStream.class) {
+                // T is InputStream.class, so the caller is expecting an InputStream
+                //noinspection unchecked
+                return (T) response.getBody().in();
+            } else {
+                // The Jackson ObjectMapper actually returns a T but the Converter interface throws this info away
+                @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked"})
+                final T typedResult = (T) converter.fromBody(response.getBody(), clazz);
 
-            return typedResult;
-        } catch (final ConversionException e) {
+                return typedResult;
+            }
+        } catch (final ConversionException | IOException e) {
             throw new RuntimeException(e);
         }
     }
