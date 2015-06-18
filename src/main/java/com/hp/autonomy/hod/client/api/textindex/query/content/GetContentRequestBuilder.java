@@ -55,7 +55,7 @@ public class GetContentRequestBuilder {
     private Summary summary;
 
     /**
-     * @return A map of query parameters suitable for use with {@link GetContentService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link GetContentBackend}. get is NOT supported on
      * the resulting map
      */
     public Map<String, Object> build() {

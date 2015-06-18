@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Interface representing the QueryTextIndex API.
  */
-public interface GetContentService {
+public interface GetContentBackend {
 
     String URL = "/2/api/sync/textindex/query/content/v1";
 

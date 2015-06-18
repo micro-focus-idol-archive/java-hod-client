@@ -27,14 +27,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private GetContentService getContentService;
+    private GetContentBackend getContentBackend;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        getContentService = getRestAdapter().create(GetContentService.class);
+        getContentBackend = getRestAdapter().create(GetContentBackend.class);
     }
 
     public GetContentServiceITCase(final Endpoint endpoint) {
@@ -47,7 +47,7 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
                 .setPrint(Print.all)
                 .build();
 
-        final Documents documents = getContentService.getContent(
+        final Documents documents = getContentBackend.getContent(
             getToken(),
             Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"), getIndex(),
             params
