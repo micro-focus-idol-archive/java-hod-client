@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
-import retrofit.mime.TypedFile;
 
 import java.io.File;
 import java.util.List;
@@ -36,7 +35,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
-    private FindSimilarBackend findSimilarBackend;
+    private FindSimilarService<Documents> findSimilarService;
     private AddToTextIndexService addToTextIndexService;
 
     public FindSimilarITCase(final Endpoint endpoint) {
@@ -49,17 +48,16 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         super.setUp();
 
         final RestAdapter restAdapter = getRestAdapter();
-        findSimilarBackend = restAdapter.create(FindSimilarBackend.class);
+        findSimilarService = FindSimilarServiceImpl.documentsService(getConfig());
         addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
     @Test
     public void testFindSimilarWithText() throws HodErrorException {
-        final Map<String, Object> params = new QueryRequestBuilder()
-                .addIndexes("wiki_eng")
-                .build();
+        final QueryRequestBuilder params = new QueryRequestBuilder()
+                .addIndexes("wiki_eng");
 
-        final Documents documents = findSimilarBackend.findSimilarDocumentsToText(getToken(), "cats", params);
+        final Documents documents = findSimilarService.findSimilarDocumentsToText(getTokenProxy(), "cats", params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -68,12 +66,11 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testFindSimilarWithFile() throws HodErrorException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/formatconversion/test-file.txt"));
-        final Map<String, Object> params = new QueryRequestBuilder()
-                .addIndexes("wiki_eng")
-                .build();
+        final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/formatconversion/test-file.txt");
+        final QueryRequestBuilder params = new QueryRequestBuilder()
+                .addIndexes("wiki_eng");
 
-        final Documents documents = findSimilarBackend.findSimilarDocumentsToFile(getToken(), file, params);
+        final Documents documents = findSimilarService.findSimilarDocumentsToFile(getTokenProxy(), file, params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -109,11 +106,10 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
             @Override
             public void success(final AddToTextIndexResponse response) {
                 try {
-                    final Map<String, Object> params = new QueryRequestBuilder()
-                            .addIndexes(getIndex())
-                            .build();
+                    final QueryRequestBuilder params = new QueryRequestBuilder()
+                            .addIndexes(getIndex());
 
-                    final Documents similarDocuments = findSimilarBackend.findSimilarDocumentsToIndexReference(getToken(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
+                    final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getTokenProxy(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
 
                     result.set(similarDocuments);
                 } catch (final HodErrorException e) {
