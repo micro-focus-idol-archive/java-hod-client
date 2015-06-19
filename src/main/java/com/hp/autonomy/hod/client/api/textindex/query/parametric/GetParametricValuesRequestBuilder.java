@@ -22,8 +22,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class GetParametricValuesRequestBuilder {
 
-    private List<String> indexes = new ArrayList<>();
-
     private Number minScore;
 
     /**
@@ -57,30 +55,6 @@ public class GetParametricValuesRequestBuilder {
     private String queryProfile;
 
     /**
-     * Adds indexes to the indexes parameter
-     * @param index0 The first index
-     * @param indexes The remaining indexes
-     * @return this
-     */
-    public GetParametricValuesRequestBuilder addIndexes(final String index0, final String... indexes) {
-        this.indexes.add(index0);
-        this.indexes.addAll(Arrays.asList(indexes));
-
-        return this;
-    }
-
-    /**
-     * Sets indexes to the indexes parameter
-     * @param indexes The indexes
-     * @return this
-     */
-    public GetParametricValuesRequestBuilder setIndexes(final List<String> indexes) {
-        this.indexes = indexes;
-
-        return this;
-    }
-
-    /**
      * @param minScore Sets the value of minScore
      */
     public GetParametricValuesRequestBuilder setMinScore(final Double minScore) {
@@ -111,10 +85,6 @@ public class GetParametricValuesRequestBuilder {
         map.put("document_count", documentCount);
         map.put("sort", sort);
         map.put("query_profile", queryProfile);
-
-        for (final String index : indexes) {
-            map.put("indexes", index);
-        }
 
         return map;
     }
