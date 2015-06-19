@@ -13,8 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Map;
-
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -24,14 +22,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private RetrieveIndexFieldsBackend retrieveIndexFieldsBackend;
+    private RetrieveIndexFieldsService retrieveIndexFieldsService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        retrieveIndexFieldsBackend = getRestAdapter().create(RetrieveIndexFieldsBackend.class);
+        retrieveIndexFieldsService = new RetrieveIndexFieldsServiceImpl(getConfig());
     }
 
     public RetrieveIndexFieldsServiceITCase(final Endpoint endpoint) {
@@ -42,12 +40,11 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
     public void testRetrieveIndexFieldsGrouped() throws HodErrorException {
         final String wikiEngField = "content";
 
-        final Map<String, Object> params = new RetrieveIndexFieldsRequestBuilder()
+        final RetrieveIndexFieldsRequestBuilder params = new RetrieveIndexFieldsRequestBuilder()
                 .setFieldType(FieldType.index)
-                .setGroupFieldsByType(true)
-                .build();
+                .setGroupFieldsByType(true);
 
-        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsBackend.retrieveIndexFields(getToken(), params);
+        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(getTokenProxy(), params);
 
         assertThat(response.getAllFields(), hasItem(wikiEngField));
         assertThat(response.getTotalFields(), greaterThan(0));

@@ -1,0 +1,45 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
+package com.hp.autonomy.hod.client.api.textindex.query.fields;
+
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
+import com.hp.autonomy.hod.client.config.Requester;
+import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
+import retrofit.client.Response;
+
+public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsService {
+
+    private static final Class<RetrieveIndexFieldsResponse> RESPONSE_CLASS = RetrieveIndexFieldsResponse.class;
+
+    private final RetrieveIndexFieldsBackend retrieveIndexFieldsBackend;
+    private final Requester requester;
+
+    public RetrieveIndexFieldsServiceImpl(final HodServiceConfig hodServiceConfig) {
+        retrieveIndexFieldsBackend = hodServiceConfig.getRestAdapter().create(RetrieveIndexFieldsBackend.class);
+        requester = hodServiceConfig.getRequester();
+    }
+    
+    @Override
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(RESPONSE_CLASS, getBackendCaller(params));
+    }
+
+    @Override
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy tokenProxy, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(params));
+    }
+
+    private Requester.BackendCaller getBackendCaller(final RetrieveIndexFieldsRequestBuilder params) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, params.build());
+            }
+        };
+    }
+}

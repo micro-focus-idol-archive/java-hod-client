@@ -7,25 +7,15 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.QueryMap;
 
 import java.util.Map;
 
-public interface RetrieveIndexFieldsBackend {
+interface RetrieveIndexFieldsBackend {
     String URL = "/2/api/sync/textindex/query/fields/v1";
-
-    /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been ingested
-     * into a given text index using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param params Parameters to be sent as part of the request
-     * @return A list of fields and their types
-     */
-    @GET(URL)
-    RetrieveIndexFieldsResponse retrieveIndexFields(
-            @QueryMap Map<String, Object> params
-    ) throws HodErrorException;
 
     /**
      * Retrieve from HP Haven OnDemand a list of the fields that have been ingested
@@ -35,8 +25,8 @@ public interface RetrieveIndexFieldsBackend {
      * @return A list of fields and their types
      */
     @GET(URL)
-    RetrieveIndexFieldsResponse retrieveIndexFields(
-            @Header("token") AuthenticationToken token,
-            @QueryMap Map<String, Object> params
+    Response retrieveIndexFields(
+        @Header("token") AuthenticationToken token,
+        @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }
