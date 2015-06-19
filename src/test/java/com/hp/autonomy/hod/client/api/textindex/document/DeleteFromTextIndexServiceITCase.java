@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -28,7 +28,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private DeleteFromTextIndexPollingService deleteFromTextIndexService;
+    private DeleteFromTextIndexService deleteFromTextIndexService;
     private AddToTextIndexService addToTextIndexService;
 
     @Override
@@ -36,7 +36,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
     public void setUp() {
         super.setUp();
 
-        deleteFromTextIndexService = new DeleteFromTextIndexPollingService(getRestAdapter().create(DeleteFromTextIndexBackend.class));
+        deleteFromTextIndexService = new DeleteFromTextIndexPollingService(getConfig());
         addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
@@ -91,7 +91,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
             log.debug("Document indexed successfully");
 
             try {
-                deleteFromTextIndexService.deleteReferencesFromTextIndex(getToken(), getIndex(), Arrays.asList(reference), callback);
+                deleteFromTextIndexService.deleteReferencesFromTextIndex(getTokenProxy(), getIndex(), Collections.singletonList(reference), callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document", e);
 

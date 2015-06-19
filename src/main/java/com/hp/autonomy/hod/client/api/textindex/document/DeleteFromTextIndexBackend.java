@@ -13,6 +13,7 @@ import com.hp.autonomy.hod.client.job.Action;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.Status;
+import retrofit.client.Response;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Header;
@@ -21,22 +22,9 @@ import retrofit.http.Query;
 
 import java.util.List;
 
-public interface DeleteFromTextIndexBackend {
+interface DeleteFromTextIndexBackend {
 
     String URL = "/2/api/async/textindex/{indexName}/document/v1";
-
-    /**
-     * Deletes the documents with the given references using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param index The index to delete from
-     * @param references The references of the documents to delete
-     * @return The job ID of the request
-     * @throws HodErrorException If an error occurs with the request
-     */
-    @DELETE(URL)
-    JobId deleteReferencesFromTextIndex(
-        @Path("indexName") final String index,
-        @Query("index_reference") final List<String> references
-    ) throws HodErrorException;
 
     /**
      * Deletes the documents with the given references using the given token
@@ -47,21 +35,10 @@ public interface DeleteFromTextIndexBackend {
      * @throws HodErrorException If an error occurs with the request
      */
     @DELETE(URL)
-    JobId deleteReferencesFromTextIndex(
+    Response deleteReferencesFromTextIndex(
         @Header("token") final AuthenticationToken token,
         @Path("indexName") final String index,
         @Query("index_reference") final List<String> references
-    ) throws HodErrorException;
-
-    /**
-     * Deletes all the documents from the given text index using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param index The index to delete from
-     * @return The job ID of the request
-     * @throws HodErrorException If an error occurs with the request
-     */
-    @DELETE(URL + "?delete_all_documents=true")
-    JobId deleteAllDocumentsFromTextIndex(
-        @Path("indexName") final String index
     ) throws HodErrorException;
 
     /**
@@ -72,57 +49,9 @@ public interface DeleteFromTextIndexBackend {
      * @throws HodErrorException If an error occurs with the request
      */
     @DELETE(URL + "?delete_all_documents=true")
-    JobId deleteAllDocumentsFromTextIndex(
+    Response deleteAllDocumentsFromTextIndex(
         @Header("token") final AuthenticationToken token,
         @Path("indexName") final String index
-    ) throws HodErrorException;
-
-    /**
-     * Get the status of an DeleteFromTextIndex job
-     * @param token The token to use to authenticate the request
-     * @param jobId The id of the job
-     * @return An object containing the status of the job along with the result if the job has finished
-     * @throws HodErrorException If an error occurred retrieving the status
-     */
-    @GET("/2/job/{jobId}/status")
-    DeleteFromTextIndexJobStatus getJobStatus(
-        @Query("token") AuthenticationToken token,
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * Get the status of an DeleteFromTextIndex job using an token provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The id of the job
-     * @return An object containing the status of the job along with the result if the job has finished
-     * @throws HodErrorException If an error occurred retrieving the status
-     */
-    @GET("/2/job/{jobId}/status")
-    DeleteFromTextIndexJobStatus getJobStatus(
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * Get the result of an DeleteFromTextIndex job using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The id of the job
-     * @return An object containing the result of the job
-     * @throws HodErrorException If an error occurred retrieving the result
-     */
-    @GET("/2/job/{jobId}/result")
-    DeleteFromTextIndexJobStatus getJobResult(
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * Get the result of an DeleteFromTextIndex job using the given token
-     * @param token The token to use to authenticate the request
-     * @param jobId The id of the job
-     * @return An object containing the result of the job
-     * @throws HodErrorException If an error occurred retrieving the result
-     */
-    @GET("/2/job/{jobId}/result")
-    DeleteFromTextIndexJobStatus getJobResult(
-        @Header("token") AuthenticationToken token,
-        @Path("jobId") JobId jobId
     ) throws HodErrorException;
 
     /**

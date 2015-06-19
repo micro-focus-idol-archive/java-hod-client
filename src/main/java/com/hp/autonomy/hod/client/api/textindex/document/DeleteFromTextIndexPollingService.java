@@ -6,12 +6,18 @@
 package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
+import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.AbstractPollingService;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.job.JobId;
+import com.hp.autonomy.hod.client.job.JobService;
+import com.hp.autonomy.hod.client.job.JobServiceImpl;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
+import com.hp.autonomy.hod.client.token.TokenProxy;
+import retrofit.client.Response;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,97 +27,97 @@ import java.util.concurrent.ScheduledExecutorService;
  * <p/>
  * The destroy method should be called when the service is no longer needed.
  */
-public class DeleteFromTextIndexPollingService extends AbstractPollingService {
+public class DeleteFromTextIndexPollingService extends AbstractPollingService implements DeleteFromTextIndexService {
 
     private final DeleteFromTextIndexBackend deleteFromTextIndexBackend;
+    private final Requester requester;
+    private final JobService<? extends JobStatus<DeleteFromTextIndexResponse>> jobService;
 
     /**
      * Creates a new DeleteFromTextIndexPollingService
-     * @param deleteFromTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
+     * @param hodServiceConfig The configuration to use
      */
-    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexBackend deleteFromTextIndexBackend) {
+    public DeleteFromTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
         super();
 
-        this.deleteFromTextIndexBackend = deleteFromTextIndexBackend;
+        deleteFromTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteFromTextIndexBackend.class);
+        jobService = new JobServiceImpl<>(hodServiceConfig, DeleteFromTextIndexBackend.DeleteFromTextIndexJobStatus.class);
+        requester = hodServiceConfig.getRequester();
     }
 
     /**
      * Creates a new DeleteFromTextIndexPollingService
-     * @param deleteFromTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
+     * @param hodServiceConfig The configuration to use
      * @param executorService The executor service to use while polling for status updates
      */
-    public DeleteFromTextIndexPollingService(final DeleteFromTextIndexBackend deleteFromTextIndexBackend, final ScheduledExecutorService executorService) {
+    public DeleteFromTextIndexPollingService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
-        this.deleteFromTextIndexBackend = deleteFromTextIndexBackend;
+        deleteFromTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteFromTextIndexBackend.class);
+        jobService = new JobServiceImpl<>(hodServiceConfig, DeleteFromTextIndexBackend.DeleteFromTextIndexJobStatus.class);
+        requester = hodServiceConfig.getRequester();
     }
 
-    /**
-     * Deletes the documents with the given references using an API key provided by a {@link retrofit.RequestInterceptor}
-     * @param index The index to delete from
-     * @param references The references of the documents to delete
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs with the request
-     */
+    @Override
     public void deleteReferencesFromTextIndex(
-            final String index,
-            final List<String> references,
-            final HodJobCallback<DeleteFromTextIndexResponse> callback
+        final String index,
+        final List<String> references,
+        final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexBackend.deleteReferencesFromTextIndex(index, references);
+        final JobId jobId = requester.makeRequest(JobId.class, getDeleteReferencesBackendCaller(index, references));
 
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
     }
 
-    /**
-     * Deletes the documents with the given references
-     * @param token The token to use to authenticate the request
-     * @param index The index to delete from
-     * @param references The references of the documents to delete
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs with the request
-     */
+    @Override
     public void deleteReferencesFromTextIndex(
-            final AuthenticationToken token,
-            final String index,
-            final List<String> references,
-            final HodJobCallback<DeleteFromTextIndexResponse> callback
+        final TokenProxy tokenProxy,
+        final String index,
+        final List<String> references,
+        final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexBackend.deleteReferencesFromTextIndex(token, index, references);
+        final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getDeleteReferencesBackendCaller(index, references));
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(token, jobId, callback));
+        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
     }
 
-    /**
-     * Deletes all the documents from the given text index using an API key provided by a {@link retrofit.RequestInterceptor}
-     * @param index The index to delete from
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs with the request
-     */
+    @Override
     public void deleteAllDocumentsFromTextIndex(
-            final String index,
-            final HodJobCallback<DeleteFromTextIndexResponse> callback
+        final String index,
+        final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(index);
+        final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
 
         getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
     }
 
-    /**
-     * Deletes all the documents from the given text index using the given API key
-     * @param token The token to use to authenticate the request
-     * @param index The index to delete from
-     * @param callback Callback that will be called with the response
-     * @throws HodErrorException If an error occurs with the request
-     */
+    @Override
     public void deleteAllDocumentsFromTextIndex(
-            final AuthenticationToken token,
-            final String index,
-            final HodJobCallback<DeleteFromTextIndexResponse> callback
+        final TokenProxy tokenProxy,
+        final String index,
+        final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(token, index);
+        final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(token, jobId, callback));
+        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+    }
+
+    private Requester.BackendCaller getDeleteReferencesBackendCaller(final String index, final List<String> references) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getDeleteAllBackendCaller(final String index) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                return deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
+            }
+        };
     }
 
     private class DeleteFromTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<DeleteFromTextIndexResponse> {
@@ -120,18 +126,24 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService {
             super(jobId, callback, getExecutorService());
         }
 
-        public DeleteFromTextIndexPollingStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<DeleteFromTextIndexResponse> callback) {
+        public DeleteFromTextIndexPollingStatusRunnable(final TokenProxy token, final JobId jobId, final HodJobCallback<DeleteFromTextIndexResponse> callback) {
             super(token, jobId, callback, getExecutorService());
         }
 
         @Override
         public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return deleteFromTextIndexBackend.getJobStatus(jobId);
+            return jobService.getJobStatus(jobId);
         }
 
         @Override
+        @Deprecated
         public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            return deleteFromTextIndexBackend.getJobStatus(token, jobId);
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
+            return jobService.getJobStatus(tokenProxy, jobId);
         }
     }
 
