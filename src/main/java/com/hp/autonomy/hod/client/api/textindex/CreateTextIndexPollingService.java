@@ -26,27 +26,27 @@ import java.util.concurrent.ScheduledExecutorService;
 @Slf4j
 public class CreateTextIndexPollingService extends AbstractPollingService {
 
-    private final CreateTextIndexService createTextIndexService;
+    private final CreateTextIndexBackend createTextIndexBackend;
 
     /**
      * Creates a new CreateTextIndexPollingService
-     * @param createTextIndexService The underlying service which will communicate with HP Haven OnDemand
+     * @param createTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
      */
-    public CreateTextIndexPollingService(final CreateTextIndexService createTextIndexService) {
+    public CreateTextIndexPollingService(final CreateTextIndexBackend createTextIndexBackend) {
         super();
 
-        this.createTextIndexService = createTextIndexService;
+        this.createTextIndexBackend = createTextIndexBackend;
     }
 
     /**
      * Creates a new CreateTextIndexPollingService
-     * @param createTextIndexService The underlying service which will communicate with HP Haven OnDemand
+     * @param createTextIndexBackend The underlying service which will communicate with HP Haven OnDemand
      * @param executorService The executor service to use while polling for status updates
      */
-    public CreateTextIndexPollingService(final CreateTextIndexService createTextIndexService, final ScheduledExecutorService executorService) {
+    public CreateTextIndexPollingService(final CreateTextIndexBackend createTextIndexBackend, final ScheduledExecutorService executorService) {
         super(executorService);
 
-        this.createTextIndexService = createTextIndexService;
+        this.createTextIndexBackend = createTextIndexBackend;
     }
 
     /**
@@ -64,7 +64,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService {
             final Map<String, Object> params,
             final HodJobCallback<CreateTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = createTextIndexService.createTextIndex(token, index, flavor, params);
+        final JobId jobId = createTextIndexBackend.createTextIndex(token, index, flavor, params);
 
         getExecutorService().submit(new CreateTextIndexPollingStatusRunnable(token, jobId, callback));
     }
@@ -82,7 +82,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService {
             final Map<String, Object> params,
             final HodJobCallback<CreateTextIndexResponse> callback
     ) throws HodErrorException {
-        final JobId jobId = createTextIndexService.createTextIndex(index, flavor, params);
+        final JobId jobId = createTextIndexBackend.createTextIndex(index, flavor, params);
 
         getExecutorService().submit(new CreateTextIndexPollingStatusRunnable(jobId, callback));
     }
@@ -99,12 +99,12 @@ public class CreateTextIndexPollingService extends AbstractPollingService {
 
         @Override
         public JobStatus<CreateTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return createTextIndexService.getJobStatus(jobId);
+            return createTextIndexBackend.getJobStatus(jobId);
         }
 
         @Override
         public JobStatus<CreateTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            return createTextIndexService.getJobStatus(token, jobId);
+            return createTextIndexBackend.getJobStatus(token, jobId);
         }
 
     }

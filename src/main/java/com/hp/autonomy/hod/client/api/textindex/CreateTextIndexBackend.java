@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Interface representing the CreateTextIndex API.
  */
-public interface CreateTextIndexService {
+public interface CreateTextIndexBackend {
 
     String URL = "/2/api/async/textindex/{indexName}/v1";
 

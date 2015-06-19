@@ -24,7 +24,7 @@ public class CreateTextIndexRequestBuilder {
     private String description;
 
     /**
-     * @return A map of query parameters suitable for use with {@link CreateTextIndexService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link CreateTextIndexBackend}. get is NOT supported on
      * the resulting map
      */
     public Map<String, Object> build() {
