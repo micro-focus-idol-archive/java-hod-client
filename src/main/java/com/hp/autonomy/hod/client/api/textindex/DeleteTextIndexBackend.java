@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Interface representing the DeleteTextIndex API.
  */
-public interface DeleteTextIndexService {
+public interface DeleteTextIndexBackend {
 
     String SYNC_URL = "/2/api/sync/textindex/{indexName}/v1";
     String ASYNC_URL = "/2/api/async/textindex/{indexName}/v1";
