@@ -25,20 +25,20 @@ public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsServic
     }
     
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(RESPONSE_CLASS, getBackendCaller(params));
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final String index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(RESPONSE_CLASS, getBackendCaller(index, params));
     }
 
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy tokenProxy, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(params));
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy tokenProxy, final String index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(index, params));
     }
 
-    private Requester.BackendCaller getBackendCaller(final RetrieveIndexFieldsRequestBuilder params) {
+    private Requester.BackendCaller getBackendCaller(final String index, final RetrieveIndexFieldsRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, params.build());
+                return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, index, params.build());
             }
         };
     }

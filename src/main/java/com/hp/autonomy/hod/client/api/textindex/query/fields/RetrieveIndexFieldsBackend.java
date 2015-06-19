@@ -10,6 +10,7 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
+import retrofit.http.Query;
 import retrofit.http.QueryMap;
 
 import java.util.Map;
@@ -27,6 +28,7 @@ interface RetrieveIndexFieldsBackend {
     @GET(URL)
     Response retrieveIndexFields(
         @Header("token") AuthenticationToken token,
+        @Query("index") String index,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }

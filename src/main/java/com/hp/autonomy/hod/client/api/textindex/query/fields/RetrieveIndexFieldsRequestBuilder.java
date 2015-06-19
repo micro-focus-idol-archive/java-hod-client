@@ -19,10 +19,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class RetrieveIndexFieldsRequestBuilder {
 
-    /**
-     * @param index The text index to use to perform the retrieval. Uses the wiki_eng index by default.
-     */
-    private String index;
 
     /**
      * @param groupFieldsByType Whether the fields should be shown grouped by field types.
@@ -46,7 +42,6 @@ public class RetrieveIndexFieldsRequestBuilder {
      */
     public Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
-        map.put("index", index);
         map.put("group_fields_by_type", groupFieldsByType);
         map.put("fieldtype", fieldType);
         map.put("max_values", maxValues);
