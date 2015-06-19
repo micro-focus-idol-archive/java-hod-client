@@ -24,14 +24,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private RetrieveIndexFieldsService retrieveIndexFieldsService;
+    private RetrieveIndexFieldsBackend retrieveIndexFieldsBackend;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        retrieveIndexFieldsService = getRestAdapter().create(RetrieveIndexFieldsService.class);
+        retrieveIndexFieldsBackend = getRestAdapter().create(RetrieveIndexFieldsBackend.class);
     }
 
     public RetrieveIndexFieldsServiceITCase(final Endpoint endpoint) {
@@ -47,7 +47,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
                 .setGroupFieldsByType(true)
                 .build();
 
-        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(getToken(), params);
+        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsBackend.retrieveIndexFields(getToken(), params);
 
         assertThat(response.getAllFields(), hasItem(wikiEngField));
         assertThat(response.getTotalFields(), greaterThan(0));

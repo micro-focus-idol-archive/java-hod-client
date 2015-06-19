@@ -41,7 +41,7 @@ public class RetrieveIndexFieldsRequestBuilder {
 
 
     /**
-     * @return A map of query parameters suitable for use with {@link RetrieveIndexFieldsService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link RetrieveIndexFieldsBackend}. get is NOT supported on
      * the resulting map
      */
     public Map<String, Object> build() {

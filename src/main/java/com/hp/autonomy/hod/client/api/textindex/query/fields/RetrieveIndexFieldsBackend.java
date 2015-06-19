@@ -13,7 +13,7 @@ import retrofit.http.QueryMap;
 
 import java.util.Map;
 
-public interface RetrieveIndexFieldsService {
+public interface RetrieveIndexFieldsBackend {
     String URL = "/2/api/sync/textindex/query/fields/v1";
 
     /**
