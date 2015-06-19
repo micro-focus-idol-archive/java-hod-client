@@ -66,7 +66,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteReferencesBackendCaller(index, references));
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getDeleteReferencesBackendCaller(index, references));
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
 
-        getExecutorService().submit(new DeleteFromTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller getDeleteReferencesBackendCaller(final String index, final List<String> references) {
@@ -118,33 +118,6 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
                 return deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
             }
         };
-    }
-
-    private class DeleteFromTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<DeleteFromTextIndexResponse> {
-
-        public DeleteFromTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<DeleteFromTextIndexResponse> callback) {
-            super(jobId, callback, getExecutorService());
-        }
-
-        public DeleteFromTextIndexPollingStatusRunnable(final TokenProxy token, final JobId jobId, final HodJobCallback<DeleteFromTextIndexResponse> callback) {
-            super(token, jobId, callback, getExecutorService());
-        }
-
-        @Override
-        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(jobId);
-        }
-
-        @Override
-        @Deprecated
-        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public JobStatus<DeleteFromTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(tokenProxy, jobId);
-        }
     }
 
 }

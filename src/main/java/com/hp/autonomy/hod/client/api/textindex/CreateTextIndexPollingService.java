@@ -69,7 +69,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getBackendCaller(index, flavor, params));
 
-        getExecutorService().submit(new CreateTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getBackendCaller(index, flavor, params));
 
-        getExecutorService().submit(new CreateTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller getBackendCaller(final String index, final IndexFlavor flavor, final CreateTextIndexRequestBuilder params) {
@@ -94,30 +94,4 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
         };
     }
 
-    private class CreateTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<CreateTextIndexResponse> {
-
-        private CreateTextIndexPollingStatusRunnable(final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<CreateTextIndexResponse> callback) {
-            super(tokenProxy, jobId, callback, getExecutorService());
-        }
-
-        private CreateTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<CreateTextIndexResponse> callback) {
-            super(jobId, callback, getExecutorService());
-        }
-
-        @Override
-        public JobStatus<CreateTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(jobId);
-        }
-
-        @Override
-        @Deprecated
-        public JobStatus<CreateTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public JobStatus<CreateTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(tokenProxy, jobId);
-        }
-    }
 }

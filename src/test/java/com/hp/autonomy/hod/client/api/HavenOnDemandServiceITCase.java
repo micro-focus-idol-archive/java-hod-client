@@ -14,11 +14,11 @@ import com.hp.autonomy.hod.client.api.textindex.document.Document;
 import com.hp.autonomy.hod.client.api.textindex.document.Documents;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.Action;
-import com.hp.autonomy.hod.client.job.HavenOnDemandJobStatusRunnable;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.job.JobService;
 import com.hp.autonomy.hod.client.job.JobServiceImpl;
 import com.hp.autonomy.hod.client.job.JobStatus;
+import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
 import com.hp.autonomy.hod.client.job.Status;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import org.junit.After;
@@ -159,7 +159,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
-        final Runnable runnable = new HavenOnDemandJobStatusRunnable<>(jobService, getTokenProxy(), jobId, testCallback, scheduledExecutorService);
+        final Runnable runnable = new PollingJobStatusRunnable<>(getTokenProxy(), jobId, testCallback, scheduledExecutorService, jobService);
 
         scheduledExecutorService.submit(runnable);
 

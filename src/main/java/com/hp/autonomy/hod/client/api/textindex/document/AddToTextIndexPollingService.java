@@ -75,7 +75,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getTextBackendCaller(documents, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getTextBackendCaller(documents, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getUrlBackendCaller(url, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -113,7 +113,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getUrlBackendCaller(url, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -125,7 +125,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getReferenceBackendCaller(reference, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -138,49 +138,49 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getReferenceBackendCaller(reference, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
     public void addFileToTextIndex(final File file, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getFileBackendCaller(file, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
     public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getFileBackendCaller(file, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
     public void addFileToTextIndex(final byte[] bytes, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
     public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
     public void addFileToTextIndex(final InputStream inputStream, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
     public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
-        getExecutorService().submit(new AddToTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final String index, final Map<String, Object> params) {
@@ -241,30 +241,4 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         };
     }
 
-    private class AddToTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<AddToTextIndexResponse> {
-
-        private AddToTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<AddToTextIndexResponse> callback) {
-            super(jobId, callback, getExecutorService());
-        }
-
-        private AddToTextIndexPollingStatusRunnable(final TokenProxy token, final JobId jobId, final HodJobCallback<AddToTextIndexResponse> callback) {
-            super(token, jobId, callback, getExecutorService());
-        }
-
-        @Override
-        public JobStatus<AddToTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(jobId);
-        }
-
-        @Override
-        public JobStatus<AddToTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public JobStatus<AddToTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(tokenProxy, jobId);
-        }
-
-    }
 }

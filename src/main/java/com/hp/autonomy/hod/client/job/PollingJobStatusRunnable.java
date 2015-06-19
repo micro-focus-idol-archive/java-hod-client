@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.job;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -23,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <T> The type that will be returned if the job complete successfully
  */
 @Slf4j
-public abstract class PollingJobStatusRunnable<T> implements Runnable {
+public class PollingJobStatusRunnable<T> implements Runnable {
 
     private static final int MAX_TRIES = 3;
     private static final int WAIT_SECONDS = 2;
@@ -37,13 +36,11 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
             HodErrorCode.INVALID_JOB_ID
     );
 
-    // TODO: remove this when all the APIs use TokenProxy
-    private final AuthenticationToken token;
-
     private final TokenProxy tokenProxy;
     private final JobId jobId;
     private final HodJobCallback<T> callback;
     private final ScheduledExecutorService executorService;
+    private final JobService<? extends JobStatus<T>> jobService;
 
     private final AtomicInteger tries = new AtomicInteger(0);
 
@@ -53,24 +50,8 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
-        this((TokenProxy) null, jobId, callback, executorService);
-    }
-
-    /**
-     * Creates a new PollingJobStatusRunnable using the given token
-     * @param token The token used to submit the job
-     * @param jobId The ID of the job
-     * @param callback The callback that will be called with the result
-     * @param executorService The executor service responsible for running the runnable
-     */
-    @Deprecated
-    public PollingJobStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
-        this.tokenProxy = null;
-        this.token = token;
-        this.jobId = jobId;
-        this.callback = callback;
-        this.executorService = executorService;
+    public PollingJobStatusRunnable(final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
+        this(null, jobId, callback, executorService, jobService);
     }
 
     /**
@@ -80,43 +61,12 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
+    public PollingJobStatusRunnable(final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
         this.tokenProxy = tokenProxy;
-        this.token = null;
         this.jobId = jobId;
         this.callback = callback;
         this.executorService = executorService;
-    }
-
-    /**
-     * Fetches the status of a job  using a token proxy provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
-     * @param jobId The ID of the job
-     * @return A job status of the correct return type
-     * @throws HodErrorException
-     */
-    public abstract JobStatus<T> getJobStatus(final JobId jobId) throws HodErrorException;
-
-    /**
-     * Fetches the status of a job using the given token
-     * @param token The token used to submit the job
-     * @param jobId The ID of the job
-     * @return A job status of the correct return type
-     * @throws HodErrorException
-     */
-     // TODO: remove this once everything is upgraded
-    @Deprecated
-    public abstract JobStatus<T> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException;
-
-    /**
-     * Fetches the status of a job using the given token proxy
-     * @param tokenProxy The token proxy used to submit the job
-     * @param jobId The ID of the job
-     * @return A job status of the correct return type
-     * @throws HodErrorException
-     */
-    // TODO: make this abstract once everything is upgraded
-    public JobStatus<T> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
-        throw new UnsupportedOperationException();
+        this.jobService = jobService;
     }
 
     /**
@@ -131,13 +81,10 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
             final JobStatus<T> jobStatus;
 
             if (tokenProxy != null) {
-                jobStatus = getJobStatus(tokenProxy, jobId);
-            }
-            else if (token != null) {
-                jobStatus = getJobStatus(token, jobId);
+                jobStatus = jobService.getJobStatus(tokenProxy, jobId);
             }
             else {
-                jobStatus = getJobStatus(jobId);
+                jobStatus = jobService.getJobStatus(jobId);
             }
 
             final Status jobStatusStatus = jobStatus.getStatus();

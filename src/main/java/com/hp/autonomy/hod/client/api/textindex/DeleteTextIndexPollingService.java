@@ -69,7 +69,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
         final JobId jobId = requester.makeRequest(JobId.class, getDeletingBackendCaller(index, response));
 
-        getExecutorService().submit(new DeleteTextIndexPollingStatusRunnable(jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getDeletingBackendCaller(index, response));
 
-        getExecutorService().submit(new DeleteTextIndexPollingStatusRunnable(tokenProxy, jobId, callback));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller getInitialBackendCaller(final String index) {
@@ -103,31 +103,5 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
         };
     }
 
-    private class DeleteTextIndexPollingStatusRunnable extends PollingJobStatusRunnable<DeleteTextIndexResponse> {
-
-        private DeleteTextIndexPollingStatusRunnable(final JobId jobId, final HodJobCallback<DeleteTextIndexResponse> callback) {
-            super(jobId, callback, getExecutorService());
-        }
-
-        private DeleteTextIndexPollingStatusRunnable(final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<DeleteTextIndexResponse> callback) {
-            super(tokenProxy, jobId, callback, getExecutorService());
-        }
-
-        @Override
-        public JobStatus<DeleteTextIndexResponse> getJobStatus(final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(jobId);
-        }
-
-        @Override
-        @Deprecated
-        public JobStatus<DeleteTextIndexResponse> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public JobStatus<DeleteTextIndexResponse> getJobStatus(final TokenProxy tokenProxy, final JobId jobId) throws HodErrorException {
-            return jobService.getJobStatus(tokenProxy, jobId);
-        }
-    }
 
 }
