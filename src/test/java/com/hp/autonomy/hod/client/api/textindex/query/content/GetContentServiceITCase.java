@@ -18,7 +18,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -27,14 +26,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private GetContentBackend getContentBackend;
+    private GetContentService<Documents> getContentService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        getContentBackend = getRestAdapter().create(GetContentBackend.class);
+        getContentService = GetContentServiceImpl.documentsService(getConfig());
     }
 
     public GetContentServiceITCase(final Endpoint endpoint) {
@@ -43,13 +42,13 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testGetContentWithReference() throws HodErrorException {
-        final Map<String, Object> params = new GetContentRequestBuilder()
-                .setPrint(Print.all)
-                .build();
+        final GetContentRequestBuilder params = new GetContentRequestBuilder()
+                .setPrint(Print.all);
 
-        final Documents documents = getContentBackend.getContent(
-            getToken(),
-            Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"), getIndex(),
+        final Documents documents = getContentService.getContent(
+            getTokenProxy(),
+            Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"),
+            getIndex(),
             params
         );
 
