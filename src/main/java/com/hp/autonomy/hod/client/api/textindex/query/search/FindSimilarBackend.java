@@ -23,7 +23,7 @@ import java.util.Map;
  * Interface representing the FindSimilar API. Use the same parameters as QueryTextIndex, so does not have its own
  * request builder
  */
-public interface FindSimilarService {
+public interface FindSimilarBackend {
 
     String URL = "/2/api/sync/textindex/query/findsimilar/v1";
 

@@ -36,7 +36,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
-    private FindSimilarService findSimilarService;
+    private FindSimilarBackend findSimilarBackend;
     private AddToTextIndexService addToTextIndexService;
 
     public FindSimilarITCase(final Endpoint endpoint) {
@@ -49,7 +49,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         super.setUp();
 
         final RestAdapter restAdapter = getRestAdapter();
-        findSimilarService = restAdapter.create(FindSimilarService.class);
+        findSimilarBackend = restAdapter.create(FindSimilarBackend.class);
         addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
@@ -59,7 +59,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                 .addIndexes("wiki_eng")
                 .build();
 
-        final Documents documents = findSimilarService.findSimilarDocumentsToText(getToken(), "cats", params);
+        final Documents documents = findSimilarBackend.findSimilarDocumentsToText(getToken(), "cats", params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -73,7 +73,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                 .addIndexes("wiki_eng")
                 .build();
 
-        final Documents documents = findSimilarService.findSimilarDocumentsToFile(getToken(), file, params);
+        final Documents documents = findSimilarBackend.findSimilarDocumentsToFile(getToken(), file, params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -113,7 +113,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                             .addIndexes(getIndex())
                             .build();
 
-                    final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getToken(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
+                    final Documents similarDocuments = findSimilarBackend.findSimilarDocumentsToIndexReference(getToken(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
 
                     result.set(similarDocuments);
                 } catch (final HodErrorException e) {
