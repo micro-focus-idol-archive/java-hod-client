@@ -99,7 +99,7 @@ public class GetParametricValuesRequestBuilder {
     }
 
     /**
-     * @return A map of query parameters suitable for use with {@link GetParametricValuesService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link GetParametricValuesBackend}. get is NOT supported on
      * the resulting map
      */
     public Map<String, Object> build() {

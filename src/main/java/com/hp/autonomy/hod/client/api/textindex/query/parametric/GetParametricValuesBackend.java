@@ -13,7 +13,7 @@ import retrofit.http.QueryMap;
 
 import java.util.Map;
 
-public interface GetParametricValuesService {
+public interface GetParametricValuesBackend {
     String URL = "/2/api/sync/textindex/query/parametricvalues/v1";
 
     /**

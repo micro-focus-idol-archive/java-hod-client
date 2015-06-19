@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private GetParametricValuesService getParametricValuesService;
+    private GetParametricValuesBackend getParametricValuesBackend;
 
     public GetParametricValuesServiceITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -39,7 +39,7 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
     public void setUp() {
         super.setUp();
 
-        getParametricValuesService = getRestAdapter().create(GetParametricValuesService.class);
+        getParametricValuesBackend = getRestAdapter().create(GetParametricValuesBackend.class);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
                 .setMaxValues(15)
                 .build();
 
-        final FieldNames fieldNames = getParametricValuesService.getParametricValues(getToken(), "wikipedia_type, person_profession", params);
+        final FieldNames fieldNames = getParametricValuesBackend.getParametricValues(getToken(), "wikipedia_type, person_profession", params);
 
         final Set<String> fieldNamesSet = fieldNames.getFieldNames();
 
