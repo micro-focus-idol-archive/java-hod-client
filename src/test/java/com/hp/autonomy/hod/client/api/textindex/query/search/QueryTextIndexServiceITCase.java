@@ -33,7 +33,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
     public void setUp() {
         super.setUp();
 
-        queryTextIndexService = new DocumentsQueryTextIndexService(getConfig());
+        queryTextIndexService = QueryTextIndexServiceImpl.documentsService(getConfig());
     }
 
     public QueryTextIndexServiceITCase(final Endpoint endpoint) {

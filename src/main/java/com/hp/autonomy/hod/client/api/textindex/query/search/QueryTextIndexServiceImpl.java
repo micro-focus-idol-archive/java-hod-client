@@ -32,6 +32,10 @@ public class QueryTextIndexServiceImpl<T> implements QueryTextIndexService<T> {
         this.clazz = clazz;
     }
 
+    public static QueryTextIndexServiceImpl<Documents> documentsService(final HodServiceConfig hodServiceConfig) {
+        return new QueryTextIndexServiceImpl<>(hodServiceConfig, Documents.class);
+    }
+
     @Override
     public T queryTextIndexWithText(final String text, final QueryRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(clazz, getTextBackendCaller(text, params));
