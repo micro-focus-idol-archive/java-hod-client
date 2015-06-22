@@ -19,7 +19,7 @@ import retrofit.mime.TypedOutput;
 
 import java.util.Map;
 
-public interface FindRelatedConceptsService {
+public interface FindRelatedConceptsBackend {
     String URL = "/2/api/sync/textindex/query/findrelatedconcepts/v1";
 
     /**

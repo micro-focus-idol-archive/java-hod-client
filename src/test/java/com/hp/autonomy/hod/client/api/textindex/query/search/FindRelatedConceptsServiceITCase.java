@@ -24,14 +24,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private FindRelatedConceptsService findRelatedConceptsService;
+    private FindRelatedConceptsBackend findRelatedConceptsBackend;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        findRelatedConceptsService = getRestAdapter().create(FindRelatedConceptsService.class);
+        findRelatedConceptsBackend = getRestAdapter().create(FindRelatedConceptsBackend.class);
     }
 
     public FindRelatedConceptsServiceITCase(final Endpoint endpoint) {
@@ -40,7 +40,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testFindForText() throws HodErrorException {
-        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithText(getToken(), "Hewlett", null);
+        final Entities entities = findRelatedConceptsBackend.findRelatedConceptsWithText(getToken(), "Hewlett", null);
 
         final List<Entity> entitiesList = entities.getEntities();
 
@@ -55,7 +55,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
     public void testFindForFile() throws HodErrorException {
         final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt"));
 
-        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithFile(getToken(), file, null);
+        final Entities entities = findRelatedConceptsBackend.findRelatedConceptsWithFile(getToken(), file, null);
 
         final List<Entity> entitiesList = entities.getEntities();
 
