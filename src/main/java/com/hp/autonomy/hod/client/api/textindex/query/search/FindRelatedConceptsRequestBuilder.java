@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,7 @@ public class FindRelatedConceptsRequestBuilder {
      * @param indexes Value for the indexes parameter. This list will be sent as separate parameters,
      * e.g. indexes=wiki_eng&indexes=news_eng&...
      */
-    private List<String> indexes;
+    private List<String> indexes = Collections.emptyList();
 
     /**
      * @param maxResults Value for the max_results parameter.
