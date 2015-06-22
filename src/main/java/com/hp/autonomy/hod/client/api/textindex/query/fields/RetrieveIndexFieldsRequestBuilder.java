@@ -40,7 +40,7 @@ public class RetrieveIndexFieldsRequestBuilder {
      * @return A map of query parameters suitable for use with {@link RetrieveIndexFieldsBackend}. get is NOT supported on
      * the resulting map
      */
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
         map.put("group_fields_by_type", groupFieldsByType);
         map.put("fieldtype", fieldType);

@@ -26,7 +26,6 @@ import retrofit.mime.TypedFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -70,7 +69,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     public void addJsonToTextIndex(
         final Documents<?> documents,
         final String index,
-        final Map<String, Object> params,
+        final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getTextBackendCaller(documents, index, params));
@@ -83,7 +82,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         final TokenProxy tokenProxy,
         final Documents<?> documents,
         final String index,
-        final Map<String, Object> params,
+        final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getTextBackendCaller(documents, index, params));
@@ -95,7 +94,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     public void addUrlToTextIndex(
         final String url,
         final String index,
-        final Map<String, Object> params,
+        final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getUrlBackendCaller(url, index, params));
@@ -108,7 +107,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         final TokenProxy tokenProxy,
         final String url,
         final String index,
-        final Map<String, Object> params,
+        final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getUrlBackendCaller(url, index, params));
@@ -120,7 +119,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     public void addReferenceToTextIndex(
         final String reference,
         final String index,
-        final Map<String, Object> params,
+        final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getReferenceBackendCaller(reference, index, params));
@@ -133,7 +132,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         final TokenProxy tokenProxy,
         final String reference,
         final String index,
-        final Map<String, Object> params,
+        final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getReferenceBackendCaller(reference, index, params));
@@ -142,98 +141,98 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     }
 
     @Override
-    public void addFileToTextIndex(final File file, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final File file, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getFileBackendCaller(file, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getFileBackendCaller(file, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final byte[] bytes, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final byte[] bytes, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final InputStream inputStream, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final InputStream inputStream, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final String index, final Map<String, Object> params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final String index, final Map<String, Object> params) {
+    private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final String index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return addToTextIndexBackend.addJsonToTextIndex(authenticationToken, documents, index, params);
+                return addToTextIndexBackend.addJsonToTextIndex(authenticationToken, documents, index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getUrlBackendCaller(final String url, final String index, final Map<String, Object> params) {
+    private Requester.BackendCaller getUrlBackendCaller(final String url, final String index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return addToTextIndexBackend.addUrlToTextIndex(authenticationToken, url, index, params);
+                return addToTextIndexBackend.addUrlToTextIndex(authenticationToken, url, index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getReferenceBackendCaller(final String reference, final String index, final Map<String, Object> params) {
+    private Requester.BackendCaller getReferenceBackendCaller(final String reference, final String index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return addToTextIndexBackend.addReferenceToTextIndex(authenticationToken, reference, index, params);
+                return addToTextIndexBackend.addReferenceToTextIndex(authenticationToken, reference, index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getFileBackendCaller(final File file, final String index, final Map<String, Object> params) {
+    private Requester.BackendCaller getFileBackendCaller(final File file, final String index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedFile("application/octet-stream", file), index, params);
+                return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedFile("application/octet-stream", file), index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getByteArrayBackendCaller(final byte[] bytes, final String index, final Map<String, Object> params) {
+    private Requester.BackendCaller getByteArrayBackendCaller(final byte[] bytes, final String index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", bytes), index, params);
+                return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", bytes), index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream, final String index, final Map<String, Object> params) {
+    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream, final String index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
                 try {
-                    return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", IOUtils.toByteArray(inputStream)), index, params);
+                    return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", IOUtils.toByteArray(inputStream)), index, params.build());
                 } catch (final IOException e) {
                     throw new RuntimeException("Error reading bytes from stream", e);
                 }

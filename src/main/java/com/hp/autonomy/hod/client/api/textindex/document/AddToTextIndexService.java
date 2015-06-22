@@ -26,7 +26,7 @@ public interface AddToTextIndexService {
     void addJsonToTextIndex(
         Documents<?> documents,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -42,7 +42,7 @@ public interface AddToTextIndexService {
         TokenProxy tokenProxy,
         Documents<?> documents,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -58,7 +58,7 @@ public interface AddToTextIndexService {
     void addUrlToTextIndex(
         String url,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -74,7 +74,7 @@ public interface AddToTextIndexService {
         TokenProxy tokenProxy,
         String url,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -90,7 +90,7 @@ public interface AddToTextIndexService {
     void addReferenceToTextIndex(
         String reference,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -106,7 +106,7 @@ public interface AddToTextIndexService {
         TokenProxy tokenProxy,
         String reference,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -122,7 +122,7 @@ public interface AddToTextIndexService {
     void addFileToTextIndex(
         File file,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -138,7 +138,7 @@ public interface AddToTextIndexService {
         TokenProxy tokenProxy,
         File file,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -154,7 +154,7 @@ public interface AddToTextIndexService {
     void addFileToTextIndex(
         byte[] bytes,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -170,7 +170,7 @@ public interface AddToTextIndexService {
         TokenProxy tokenProxy,
         byte[] bytes,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -186,7 +186,7 @@ public interface AddToTextIndexService {
     void addFileToTextIndex(
         InputStream inputStream,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -202,7 +202,7 @@ public interface AddToTextIndexService {
         TokenProxy tokenProxy,
         InputStream inputStream,
         String index,
-        Map<String, Object> params,
+        AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 }

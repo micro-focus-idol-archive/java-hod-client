@@ -60,9 +60,8 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .addField("coolstuff", "This is so cool!")
                 .build();
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
-                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .build();
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
+                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
@@ -91,10 +90,9 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         additionalMetadata.put("reference", reference);
         additionalMetadata.put("title", "The End");
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
                 .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .addAdditionalMetadata(additionalMetadata)
-                .build();
+                .addAdditionalMetadata(additionalMetadata);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);

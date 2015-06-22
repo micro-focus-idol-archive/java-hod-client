@@ -37,7 +37,7 @@ public class ListResourcesRequestBuilder {
         return this;
     }
 
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> parameters = new MultiMap<>();
 
         for (final ResourceType type : types) {

@@ -101,7 +101,7 @@ public class ViewDocumentRequestBuilder {
      * @return A map of query parameters suitable for use with {@link ViewDocumentBackend}. get is NOT supported on
      * the resulting map
      */
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> params = new MultiMap<>();
 
         params.put("raw_html", rawHtml);

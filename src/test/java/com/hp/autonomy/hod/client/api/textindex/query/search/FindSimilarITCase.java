@@ -98,9 +98,8 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
-                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .build();
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
+                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
         addToTextIndexService.addJsonToTextIndex(getTokenProxy(), documents, getIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
             @Override

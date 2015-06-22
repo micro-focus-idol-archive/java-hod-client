@@ -54,9 +54,8 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
                 .setTitle("Title is required, for some reason")
                 .build();
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
-                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .build();
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
+                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
         final CountDownLatch latch = new CountDownLatch(1);
 
