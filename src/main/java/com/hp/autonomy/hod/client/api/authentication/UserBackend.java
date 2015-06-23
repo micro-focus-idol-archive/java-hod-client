@@ -1,13 +1,14 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 
 /**
  * Service for getting user details from HP Haven OnDemand
  */
-public interface UserBackend {
+interface UserBackend {
 
     /**
      * Get details for the user represented by the given user unbound token
@@ -25,6 +26,6 @@ public interface UserBackend {
      * @throws HodErrorException
      */
     @GET("/2/user")
-    GetUserResponse getUserCombined(@Header("token") AuthenticationToken combinedToken) throws HodErrorException;
+    Response getUserCombined(@Header("token") AuthenticationToken combinedToken) throws HodErrorException;
 
 }
