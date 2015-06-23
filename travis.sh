@@ -18,9 +18,14 @@ then
   cd target/site
   git config --global user.email "Travis CI"
   git config --global user.name "alex-scown-hp@users.noreply.github.com"
+  echo "Creating repo"
   git init
+  echo "Adding remote"
   git remote add origin "${GITHUB_TOKEN}:@github.com/${TRAVIS_REPO_SLUG}"
+  echo "Adding all the files"
   git add .
+  echo "Committing"
   git commit -m "Update GitHub Pages"
+  echo "Pushing"
   git push --force --quiet origin gh-pages > /dev/null 2>&1
 fi
