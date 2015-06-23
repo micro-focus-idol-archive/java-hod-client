@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.resource;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +39,7 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
     }
 
     @Test
-    public void listsResources() {
+    public void listsResources() throws HodErrorException {
         final Map<String, Object> parameters = new ListResourcesRequestBuilder()
                 .setTypes(EnumSet.of(ResourceType.content))
                 .build();
@@ -62,5 +63,10 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
         }
 
         assertTrue("Test index not found in list resources output", found);
+    }
+
+    @Test
+    public void listsAllResources() throws HodErrorException {
+        resourcesService.list(getToken(), null);
     }
 }

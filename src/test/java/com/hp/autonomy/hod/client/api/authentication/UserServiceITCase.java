@@ -5,7 +5,6 @@ import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -41,11 +40,10 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     }
 
     @Test
-    @Ignore // TODO: Remove @Ignore when HOD supports combined token authentication on the get users API
     public void getsCombinedTokenUsers() throws HodErrorException {
         final AuthenticationToken userUnboundToken = getUserUnboundToken();
-        final AuthenticationToken applicationUnboundToken = authenticationService.authenticateApplicationUnbound(getApiKey(), APPLICATION_NAME, DOMAIN_NAME).getToken();
-        final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, TokenType.simple).getToken();
+        final AuthenticationToken applicationUnboundToken = authenticationService.authenticateApplicationUnbound(getApiKey()).getToken();
+        final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
 
         final GetUserResponse getUserResponse = userService.getUserCombined(combinedToken);
         checkSingleUserResponse(getUserResponse);

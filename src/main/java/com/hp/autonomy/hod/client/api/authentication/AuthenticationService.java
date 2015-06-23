@@ -37,7 +37,6 @@ public interface AuthenticationService {
     /**
      * Acquire a token for a user
      * @param apiKey The API key of the user
-     * @param userName The name of the user
      * @param applicationName The name of the application
      * @param applicationDomain The domain of the application
      * @param tokenType The type of the resulting token
@@ -48,38 +47,54 @@ public interface AuthenticationService {
     @Multipart
     AuthenticationTokenResponse authenticateUser(
             @Header("apiKey") ApiKey apiKey,
-            @Part("name") String userName,
             @Part("application_name") String applicationName,
             @Part("application_domain") String applicationDomain,
             @Part("token_type") TokenType tokenType
     ) throws HodErrorException;
 
     /**
+     * Acquire a token for a user in a given user store
+     * @param apiKey The API key of the user
+     * @param applicationName The name of the application
+     * @param applicationDomain The domain of the application
+     * @param tokenType The type of the resulting token
+     * @param userStore The name of the user store
+     * @param storeDomain The domain of the user store
+     * @return A response containing a token for use with HP Haven OnDemand
+     * @throws HodErrorException
+     */
+    @POST("/2/authenticate/user")
+    @Multipart
+    AuthenticationTokenResponse authenticateUser(
+            @Header("apiKey") ApiKey apiKey,
+            @Part("application_name") String applicationName,
+            @Part("application_domain") String applicationDomain,
+            @Part("token_type") TokenType tokenType,
+            @Part("user_store_name") String userStore,
+            @Part("user_store_domain") String storeDomain
+    ) throws HodErrorException;
+
+    /**
      * Acquire an unbound application token for use with HP Haven OnDemand. This must be combined with an unbound user
      * token before it can be used to query HP Haven OnDemand
-     * @param apiKey The API key of the application
-     * @param applicationName The name of the application
-     * @param domain The domain of the application
-     * @return A response containing an unbound application token
+     * @param apiKey The application API key
+     * @return A response containing an unbound application token and a list of applications
      * @throws HodErrorException
      */
     @POST("/2/authenticate/application/unbound")
-    @Multipart
-    AuthenticationTokenResponse authenticateApplicationUnbound(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("name") String applicationName,
-            @Part("domain") String domain
+    ApplicationUnboundResponse authenticateApplicationUnbound(
+            @Header("apiKey") ApiKey apiKey
     ) throws HodErrorException;
 
     /**
      * Acquire an unbound user token for use with HP Haven OnDemand. This must be combined with an unbound application
      * token before it can be used to query HP Haven OnDemand
-     * @param apiKey The API key of the user
-     * @return A response containing an unbound user token
+     * @param apiKey The user API key
+     * @return A response containing an unbound user token and a list of users
      * @throws HodErrorException
      */
     @POST("/2/authenticate/user/unbound")
-    AuthenticationTokenResponse authenticateUserUnbound(
+    UserUnboundResponse authenticateUserUnbound(
             @Header("apiKey") ApiKey apiKey
     ) throws HodErrorException;
 
@@ -87,6 +102,8 @@ public interface AuthenticationService {
      * Combines an unbound application token with an unbound user token
      * @param applicationToken An unbound application token
      * @param userToken An unbound user token
+     * @param application The application name
+     * @param domain The domain name
      * @param tokenType The type of the resulting token
      * @return A response containing a token which can be used to call HP Haven OnDemand
      * @throws HodErrorException
@@ -96,7 +113,33 @@ public interface AuthenticationService {
     AuthenticationTokenResponse combineTokens(
         @Header("app_token") AuthenticationToken applicationToken,
         @Header("user_token") AuthenticationToken userToken,
+        @Part("application") String application,
+        @Part("domain") String domain,
         @Part("token_type") TokenType tokenType
+    ) throws HodErrorException;
+
+    /**
+     * Combines an unbound application token with an unbound user token for a given user store
+     * @param applicationToken A unbound application token
+     * @param userToken An unbound user token
+     * @param application The application name
+     * @param domain The application domain name
+     * @param tokenType The resulting token type
+     * @param userStore The name of the user store
+     * @param storeDomain The name of the user store
+     * @return A response containing a token which can be used to call HP Haven OnDemand
+     * @throws HodErrorException
+     */
+    @POST("/2/authenticate/combined")
+    @Multipart
+    AuthenticationTokenResponse combineTokens(
+        @Header("app_token") AuthenticationToken applicationToken,
+        @Header("user_token") AuthenticationToken userToken,
+        @Part("application") String application,
+        @Part("domain") String domain,
+        @Part("token_type") TokenType tokenType,
+        @Part("user_store_name") String userStore,
+        @Part("user_store_domain") String storeDomain
     ) throws HodErrorException;
 
 }
