@@ -16,6 +16,8 @@ then
   mvn site
   # mvn site used to do this, but now API rate limiting makes it a non starter
   cd target/site
+  git config --global user.email "Travis CI"
+  git config --global user.name "alex-scown-hp@users.noreply.github.com"
   git init
   git remote add origin "${GITHUB_TOKEN}:@github.com/${TRAVIS_REPO_SLUG}"
   git add .
