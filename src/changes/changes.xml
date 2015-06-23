@@ -7,6 +7,23 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.7.2" date="2015-06-23">
+            <action dev="Matthew Gordon" type="update">
+                Update the AuthenticationService to reflect changes in the HP Haven OnDemand APIs
+            </action>
+            <action dev="Matthew Gordon" type="update">
+                Add descriptions to the Applications class
+            </action>
+            <action dev="Matthew Gordon" type="update">
+                Add the query_profile resource type
+            </action>
+            <action dev="Matthew Gordon" type="update">
+                Add date_created to the output of listQueryProfiles
+            </action>
+            <action dev="Matthew Gordon" type="fix">
+                Add throws HodErrorException to the Resources service
+            </action>
+        </release>
         <release version="0.7.1" date="2015-06-01">
             <action dev="Matthew Gordon" type="fix">
                 Make ListResourcesRequestBuilder return this for consistency.
