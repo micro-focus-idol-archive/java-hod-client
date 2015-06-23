@@ -12,11 +12,18 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
 
+/**
+ * Default implementation of QueryProfileService
+ */
 public class QueryProfileServiceImpl implements QueryProfileService {
 
     private final QueryProfileBackend queryProfileBackend;
     private final Requester requester;
 
+    /**
+     * Creates a new QueryProfileServiceImpl with the given configuration
+     * @param hodServiceConfig The configuration to use
+     */
     public QueryProfileServiceImpl(final HodServiceConfig hodServiceConfig) {
         queryProfileBackend = hodServiceConfig.getRestAdapter().create(QueryProfileBackend.class);
         requester = hodServiceConfig.getRequester();

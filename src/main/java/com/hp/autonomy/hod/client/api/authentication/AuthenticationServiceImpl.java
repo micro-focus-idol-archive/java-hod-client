@@ -21,6 +21,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationBackend authenticationBackend;
     private final TokenRepository tokenRepository;
 
+    /**
+     * Creates a new AuthenticationServiceImpl with the given configuration
+     * @param hodServiceConfig The configuration to use
+     */
     public AuthenticationServiceImpl(final HodServiceConfig hodServiceConfig) {
         authenticationBackend = hodServiceConfig.getRestAdapter().create(AuthenticationBackend.class);
         tokenRepository = hodServiceConfig.getTokenRepository();

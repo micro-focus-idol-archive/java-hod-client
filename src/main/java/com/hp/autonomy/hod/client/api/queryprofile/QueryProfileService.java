@@ -8,6 +8,9 @@ package com.hp.autonomy.hod.client.api.queryprofile;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
+/**
+ * Service for manipulating HP Haven OnDemand Query Profiles
+ */
 public interface QueryProfileService {
 
     /**
@@ -16,6 +19,9 @@ public interface QueryProfileService {
      * @param name The name of the query profile
      * @param params Configuration parameters for the query profile
      * @return The name of the created query profile
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfileStatusResponse createQueryProfile(
         String name,
@@ -29,6 +35,8 @@ public interface QueryProfileService {
      * @param name The name of the query profile
      * @param params Configuration parameters for the query profile
      * @return The name of the created query profile
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfileStatusResponse createQueryProfile(
         TokenProxy tokenProxy,
@@ -42,6 +50,9 @@ public interface QueryProfileService {
      * @param name The name of the query profile
      * @return The query profile
      * @throws HodErrorException
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfile retrieveQueryProfile(
         String name
@@ -53,6 +64,8 @@ public interface QueryProfileService {
      * @param name The name of the query profile
      * @return The query profile
      * @throws HodErrorException
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfile retrieveQueryProfile(
         TokenProxy tokenProxy,
@@ -64,6 +77,9 @@ public interface QueryProfileService {
      * @param name The name of the query profile
      * @param params Configuration parameters for the query profile
      * @return The name of the created query profile
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfileStatusResponse updateQueryProfile(
         String name,
@@ -78,6 +94,8 @@ public interface QueryProfileService {
      * @param name The name of the query profile
      * @param params Configuration parameters for the query profile
      * @return The name of the created query profile
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfileStatusResponse updateQueryProfile(
         TokenProxy tokenProxy,
@@ -91,6 +109,9 @@ public interface QueryProfileService {
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param name The name of the query profile
      * @return The name of the deleted query profile
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfileStatusResponse deleteQueryProfile(
         String name
@@ -101,6 +122,8 @@ public interface QueryProfileService {
      * @param tokenProxy The token proxy to use
      * @param name The name of the query profile
      * @return The name of the deleted query profile
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfileStatusResponse deleteQueryProfile(
         TokenProxy tokenProxy,
@@ -112,6 +135,9 @@ public interface QueryProfileService {
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @return  A QueryProfiles response object, that has a util method on it for getting the actual names.
      * @throws HodErrorException
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfiles listQueryProfiles() throws HodErrorException;
 
@@ -120,6 +146,8 @@ public interface QueryProfileService {
      * @param tokenProxy  The token proxy to use
      * @return  A QueryProfiles response object, that has a util method on it for getting the actual names.
      * @throws HodErrorException
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     QueryProfiles listQueryProfiles(
         TokenProxy tokenProxy

@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Service for managing jobs ids from the AddToTextIndex API.
+ * Implementation of AddToTextIndexService which polls for job completion.
  * <p/>
  * The destroy method should be called when the service is no longer needed.
  */
@@ -41,7 +41,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     private final Requester requester;
 
     /**
-     * Creates a new AddToTextIndexPollingService
+     * Creates a new AddToTextIndexPollingService with a default ScheduledExecutorService
      * @param hodServiceConfig The configuration for the service
      */
     public AddToTextIndexPollingService(final HodServiceConfig hodServiceConfig) {

@@ -11,6 +11,9 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.Map;
 
+/**
+ * Service which allows arbitrary requests to be made to HP Haven OnDemand
+ */
 public interface HavenOnDemandService {
 
     /**

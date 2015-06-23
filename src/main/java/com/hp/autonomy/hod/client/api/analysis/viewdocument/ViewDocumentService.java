@@ -11,6 +11,9 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * Interface representing the ViewDocument API.
+ */
 public interface ViewDocumentService {
 
     /**
@@ -19,6 +22,7 @@ public interface ViewDocumentService {
      * @param file The file to view
      * @param params Additional parameters to use for the request
      * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     InputStream viewFile(
@@ -46,6 +50,7 @@ public interface ViewDocumentService {
      * @param bytes The bytes of the file to view
      * @param params Additional parameters to use for the request
      * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     InputStream viewFile(
@@ -73,6 +78,7 @@ public interface ViewDocumentService {
      * @param inputStream An InputStream representing the file to view
      * @param params Additional parameters to use for the request
      * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     InputStream viewFile(
@@ -100,6 +106,7 @@ public interface ViewDocumentService {
      * @param reference The object store reference to view
      * @param params Additional parameters to use for the request
      * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     InputStream viewReference(
@@ -129,6 +136,7 @@ public interface ViewDocumentService {
      * @param url The url to view
      * @param params Additional parameters to use for the request
      * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     InputStream viewUrl(
@@ -157,6 +165,7 @@ public interface ViewDocumentService {
      * @param file The file to view
      * @param params Additional parameters to use for the request
      * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     String viewFileAsHtmlString(
@@ -184,6 +193,7 @@ public interface ViewDocumentService {
      * @param bytes The bytes of the file to view
      * @param params Additional parameters to use for the request
      * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     String viewFileAsHtmlString(
@@ -211,6 +221,7 @@ public interface ViewDocumentService {
      * @param inputStream An InputStream representing the file to view
      * @param params Additional parameters to use for the request
      * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     String viewFileAsHtmlString(
@@ -238,6 +249,7 @@ public interface ViewDocumentService {
      * @param reference The reference to view
      * @param params Additional parameters to use for the request
      * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     String viewReferenceAsHtmlString(
@@ -265,6 +277,7 @@ public interface ViewDocumentService {
      * @param url The url to view
      * @param params Additional parameters to use for the request
      * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
     String viewUrlAsHtmlString(

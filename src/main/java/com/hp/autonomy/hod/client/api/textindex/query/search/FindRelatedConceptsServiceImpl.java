@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Default implementation of FindRelatedConceptsService
+ */
 public class FindRelatedConceptsServiceImpl implements FindRelatedConceptsService {
     
     private static final Class<Entities> RESPONSE_CLASS = Entities.class;
@@ -27,7 +30,11 @@ public class FindRelatedConceptsServiceImpl implements FindRelatedConceptsServic
 
     private final FindRelatedConceptsBackend findRelatedConceptsBackend;
     private final Requester requester;
-    
+
+    /**
+     * Creates a new FindRelatedConceptsServiceImpl with the given configuration
+     * @param hodServiceConfig The configuration to use
+     */
     public FindRelatedConceptsServiceImpl(final HodServiceConfig hodServiceConfig) {
         findRelatedConceptsBackend = hodServiceConfig.getRestAdapter().create(FindRelatedConceptsBackend.class);
         requester = hodServiceConfig.getRequester();

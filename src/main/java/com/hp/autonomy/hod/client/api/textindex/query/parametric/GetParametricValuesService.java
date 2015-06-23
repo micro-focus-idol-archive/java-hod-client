@@ -10,6 +10,9 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
 
+/**
+ * Service representing the GetParametricValues API
+ */
 public interface GetParametricValuesService {
 
     /**
@@ -19,6 +22,9 @@ public interface GetParametricValuesService {
      * @param indexes The indexes to get values from
      * @param params Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     FieldNames getParametricValues(
         List<String> fieldNames,
@@ -33,6 +39,8 @@ public interface GetParametricValuesService {
      * @param indexes The indexes to get values from
      * @param params Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     FieldNames getParametricValues(
         TokenProxy tokenProxy,

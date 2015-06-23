@@ -11,6 +11,9 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
 
+/**
+ * Service representing the DeleteFromTextIndex API
+ */
 public interface DeleteFromTextIndexService {
     /**
      * Deletes the documents with the given references using a token proxy
@@ -19,6 +22,9 @@ public interface DeleteFromTextIndexService {
      * @param references The references of the documents to delete
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void deleteReferencesFromTextIndex(
         String index,
@@ -33,6 +39,8 @@ public interface DeleteFromTextIndexService {
      * @param references The references of the documents to delete
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void deleteReferencesFromTextIndex(
         TokenProxy tokenProxy,
@@ -47,6 +55,9 @@ public interface DeleteFromTextIndexService {
      * @param index The index to delete from
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void deleteAllDocumentsFromTextIndex(
         String index,
@@ -59,6 +70,8 @@ public interface DeleteFromTextIndexService {
      * @param index The index to delete from
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void deleteAllDocumentsFromTextIndex(
         TokenProxy tokenProxy,

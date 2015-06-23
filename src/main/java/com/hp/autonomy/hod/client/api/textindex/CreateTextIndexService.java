@@ -9,6 +9,9 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
+/**
+ * Service representing the CreateTextIndex API
+ */
 public interface CreateTextIndexService {
 
     /**
@@ -18,6 +21,9 @@ public interface CreateTextIndexService {
      * @param params Additional parameters used to create the index
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void createTextIndex(
         String index,
@@ -34,6 +40,8 @@ public interface CreateTextIndexService {
      * @param params  Additional parameters used to create the index
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void createTextIndex(
         TokenProxy tokenProxy,

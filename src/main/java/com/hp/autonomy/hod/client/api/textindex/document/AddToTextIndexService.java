@@ -11,8 +11,10 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Map;
 
+/**
+ * Service representing the AddToTextIndex API
+ */
 public interface AddToTextIndexService {
     /**
      * Index JSON documents into HP Haven OnDemand using a token proxy
@@ -22,6 +24,9 @@ public interface AddToTextIndexService {
      * @param params Additional parameters to be sent as part of the request
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addJsonToTextIndex(
         Documents<?> documents,
@@ -36,7 +41,10 @@ public interface AddToTextIndexService {
      * @param documents A collection of objects to convert to JSON
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response     @throws HodErrorException If an error occurs indexing the documents
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addJsonToTextIndex(
         TokenProxy tokenProxy,
@@ -54,6 +62,9 @@ public interface AddToTextIndexService {
      * @param params Additional parameters to be sent as part of the request
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addUrlToTextIndex(
         String url,
@@ -68,7 +79,11 @@ public interface AddToTextIndexService {
      * @param url A publicly accessible url containing the document content
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response     @throws HodErrorException If an error occurs indexing the documents
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addUrlToTextIndex(
         TokenProxy tokenProxy,
@@ -86,6 +101,9 @@ public interface AddToTextIndexService {
      * @param params Additional parameters to be sent as part of the request
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addReferenceToTextIndex(
         String reference,
@@ -100,7 +118,10 @@ public interface AddToTextIndexService {
      * @param reference An object store reference pointing at a file to be used for document content
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response     @throws HodErrorException If an error occurs indexing the documents
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addReferenceToTextIndex(
         TokenProxy tokenProxy,
@@ -118,6 +139,9 @@ public interface AddToTextIndexService {
      * @param params Additional parameters to be sent as part of the request
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addFileToTextIndex(
         File file,
@@ -132,7 +156,10 @@ public interface AddToTextIndexService {
      * @param file A file containing the content of the document
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response     @throws HodErrorException If an error occurs indexing the documents
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addFileToTextIndex(
         TokenProxy tokenProxy,
@@ -150,6 +177,9 @@ public interface AddToTextIndexService {
      * @param params Additional parameters to be sent as part of the request
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addFileToTextIndex(
         byte[] bytes,
@@ -164,7 +194,10 @@ public interface AddToTextIndexService {
      * @param bytes The bytes of a file containing the content of the document
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response     @throws HodErrorException If an error occurs indexing the documents
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addFileToTextIndex(
         TokenProxy tokenProxy,
@@ -182,6 +215,9 @@ public interface AddToTextIndexService {
      * @param params Additional parameters to be sent as part of the request
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addFileToTextIndex(
         InputStream inputStream,
@@ -196,7 +232,10 @@ public interface AddToTextIndexService {
      * @param inputStream An InputStream representing a file containing the content of the document
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @param callback Callback that will be called with the response     @throws HodErrorException If an error occurs indexing the documents
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void addFileToTextIndex(
         TokenProxy tokenProxy,

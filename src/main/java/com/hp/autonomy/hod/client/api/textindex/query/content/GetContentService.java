@@ -10,6 +10,10 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
 
+/**
+ * Service representing the GetContent API
+ * @param <T> The desired return type of the API methods
+ */
 public interface GetContentService<T> {
 
     /**
@@ -19,11 +23,14 @@ public interface GetContentService<T> {
      * @param index The index the document resides in
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents with the given references
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T getContent(
-         List<String> indexReference,
-         String index,
-         GetContentRequestBuilder params
+        List<String> indexReference,
+        String index,
+        GetContentRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -33,12 +40,14 @@ public interface GetContentService<T> {
      * @param index The index the document resides in
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents with the given references
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T getContent(
-         TokenProxy tokenProxy,
-         List<String> indexReference,
-         String index,
-         GetContentRequestBuilder params
+        TokenProxy tokenProxy,
+        List<String> indexReference,
+        String index,
+        GetContentRequestBuilder params
     ) throws HodErrorException;
 
 }

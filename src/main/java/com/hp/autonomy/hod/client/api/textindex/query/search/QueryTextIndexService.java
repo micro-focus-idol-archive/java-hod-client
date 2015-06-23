@@ -11,6 +11,10 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * Interface representing the QueryTextIndex API
+ * @param <T> The desired return type of the methods of the service
+ */
 public interface QueryTextIndexService<T> {
 
     /**
@@ -20,6 +24,8 @@ public interface QueryTextIndexService<T> {
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
      * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithText(
         String text,
@@ -32,6 +38,8 @@ public interface QueryTextIndexService<T> {
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithText(
         TokenProxy tokenProxy,
@@ -47,6 +55,8 @@ public interface QueryTextIndexService<T> {
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
      * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithReference(
         String reference,
@@ -60,6 +70,8 @@ public interface QueryTextIndexService<T> {
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithReference(
         TokenProxy tokenProxy,
@@ -74,6 +86,8 @@ public interface QueryTextIndexService<T> {
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
      * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithUrl(
         String url,
@@ -86,6 +100,8 @@ public interface QueryTextIndexService<T> {
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithUrl(
         TokenProxy tokenProxy,
@@ -100,6 +116,8 @@ public interface QueryTextIndexService<T> {
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
      * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithFile(
         File file,
@@ -112,6 +130,8 @@ public interface QueryTextIndexService<T> {
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithFile(
         TokenProxy tokenProxy,
@@ -126,6 +146,8 @@ public interface QueryTextIndexService<T> {
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
      * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithFile(
         byte[] bytes,
@@ -138,6 +160,8 @@ public interface QueryTextIndexService<T> {
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithFile(
         TokenProxy tokenProxy,
@@ -152,6 +176,8 @@ public interface QueryTextIndexService<T> {
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
      * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithFile(
         InputStream inputStream,
@@ -164,6 +190,8 @@ public interface QueryTextIndexService<T> {
      * @param inputStream An InputStream representing a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T queryTextIndexWithFile(
         TokenProxy tokenProxy,

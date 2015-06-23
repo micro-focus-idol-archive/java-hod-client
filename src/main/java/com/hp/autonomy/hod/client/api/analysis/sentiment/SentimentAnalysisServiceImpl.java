@@ -19,6 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Default implementation of a SentimentAnalysisService
+ */
 public class SentimentAnalysisServiceImpl implements SentimentAnalysisService {
 
     private static final Class<SentimentAnalysisResponse> RESPONSE_CLASS = SentimentAnalysisResponse.class;
@@ -26,6 +29,10 @@ public class SentimentAnalysisServiceImpl implements SentimentAnalysisService {
     private final SentimentAnalysisBackend sentimentAnalysisBackend;
     private final Requester requester;
 
+    /**
+     * Creates a new SentimentAnalysisServiceImpl
+     * @param config The configuration to use
+     */
     public SentimentAnalysisServiceImpl(final HodServiceConfig config) {
         sentimentAnalysisBackend = config.getRestAdapter().create(SentimentAnalysisBackend.class);
         requester = config.getRequester();

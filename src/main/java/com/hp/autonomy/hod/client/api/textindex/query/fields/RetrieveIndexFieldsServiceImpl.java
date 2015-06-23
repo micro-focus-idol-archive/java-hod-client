@@ -12,6 +12,9 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
 
+/**
+ * Default implementation of RetrieveIndexFieldsService
+ */
 public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsService {
 
     private static final Class<RetrieveIndexFieldsResponse> RESPONSE_CLASS = RetrieveIndexFieldsResponse.class;
@@ -19,6 +22,10 @@ public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsServic
     private final RetrieveIndexFieldsBackend retrieveIndexFieldsBackend;
     private final Requester requester;
 
+    /**
+     * Creates a new RetrieveIndexFieldsServiceImpl with the given configuration
+     * @param hodServiceConfig The configuration to use
+     */
     public RetrieveIndexFieldsServiceImpl(final HodServiceConfig hodServiceConfig) {
         retrieveIndexFieldsBackend = hodServiceConfig.getRestAdapter().create(RetrieveIndexFieldsBackend.class);
         requester = hodServiceConfig.getRequester();

@@ -11,6 +11,10 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * Service representing the FindSimilarDocuments API
+ * @param <T> The desired return type of the methods of the service
+ */
 public interface FindSimilarService<T> {
 
     /**
@@ -19,10 +23,13 @@ public interface FindSimilarService<T> {
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToText(
-         String text,
-         QueryRequestBuilder params
+        String text,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -31,11 +38,13 @@ public interface FindSimilarService<T> {
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToText(
-         TokenProxy tokenProxy,
-         String text,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        String text,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -45,10 +54,13 @@ public interface FindSimilarService<T> {
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToReference(
-         String reference,
-         QueryRequestBuilder params
+        String reference,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -58,11 +70,13 @@ public interface FindSimilarService<T> {
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToReference(
-         TokenProxy tokenProxy,
-         String reference,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        String reference,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -71,10 +85,13 @@ public interface FindSimilarService<T> {
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToUrl(
-         String url,
-         QueryRequestBuilder params
+        String url,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -83,11 +100,13 @@ public interface FindSimilarService<T> {
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToUrl(
-         TokenProxy tokenProxy,
-         String url,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        String url,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -96,10 +115,13 @@ public interface FindSimilarService<T> {
      * @param indexReference The reference of a document in HP Haven OnDemand
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToIndexReference(
-         String indexReference,
-         QueryRequestBuilder params
+        String indexReference,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -108,11 +130,13 @@ public interface FindSimilarService<T> {
      * @param indexReference The reference of a document in HP Haven OnDemand
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToIndexReference(
-         TokenProxy tokenProxy,
-         String indexReference,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        String indexReference,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -121,10 +145,13 @@ public interface FindSimilarService<T> {
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToFile(
-         File file,
-         QueryRequestBuilder params
+        File file,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -133,11 +160,13 @@ public interface FindSimilarService<T> {
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToFile(
-         TokenProxy tokenProxy,
-         File file,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        File file,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -146,10 +175,13 @@ public interface FindSimilarService<T> {
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToFile(
-         byte[] bytes,
-         QueryRequestBuilder params
+        byte[] bytes,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -158,11 +190,13 @@ public interface FindSimilarService<T> {
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToFile(
-         TokenProxy tokenProxy,
-         byte[] bytes,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        byte[] bytes,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -171,10 +205,13 @@ public interface FindSimilarService<T> {
      * @param inputStream An InputStream representing a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToFile(
-         InputStream inputStream,
-         QueryRequestBuilder params
+        InputStream inputStream,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
@@ -183,11 +220,13 @@ public interface FindSimilarService<T> {
      * @param inputStream An InputStream representing a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     T findSimilarDocumentsToFile(
-         TokenProxy tokenProxy,
-         InputStream inputStream,
-         QueryRequestBuilder params
+        TokenProxy tokenProxy,
+        InputStream inputStream,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
 }

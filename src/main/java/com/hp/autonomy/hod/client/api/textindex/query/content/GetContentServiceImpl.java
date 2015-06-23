@@ -15,6 +15,12 @@ import retrofit.client.Response;
 
 import java.util.List;
 
+/**
+ * Default implementation of GetContentService
+ * <p/>
+ * If a custom return type is not required, use the {@link #documentsService(HodServiceConfig)} static factory method
+ * @param <T> The desired return type of the services methods
+ */
 public class GetContentServiceImpl<T> implements GetContentService<T> {
     
     private final GetContentBackend getContentBackend;
@@ -36,7 +42,7 @@ public class GetContentServiceImpl<T> implements GetContentService<T> {
     /**
      * Create a new GetContentServiceImpl of type {@link Documents}
      * @param hodServiceConfig The configuration to use
-     * @return A new GetContentService<Documents>
+     * @return A new {@literal GetContentService<Documents>}
      */
     public static GetContentServiceImpl<Documents> documentsService(final HodServiceConfig hodServiceConfig) {
         return new GetContentServiceImpl<>(hodServiceConfig, Documents.class);

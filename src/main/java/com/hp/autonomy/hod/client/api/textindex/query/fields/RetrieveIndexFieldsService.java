@@ -8,6 +8,9 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
+/**
+ * Service representing the RetrieveIndexFields API
+ */
 public interface RetrieveIndexFieldsService {
 
     /**
@@ -16,6 +19,9 @@ public interface RetrieveIndexFieldsService {
      * @param index The index to retrieve fields from
      * @param params Parameters to be sent as part of the request
      * @return A list of fields and their types
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
         String index,
@@ -29,6 +35,8 @@ public interface RetrieveIndexFieldsService {
      * @param index The index to retrieve fields from
      * @param params Parameters to be sent as part of the request
      * @return A list of fields and their types
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
         TokenProxy tokenProxy,

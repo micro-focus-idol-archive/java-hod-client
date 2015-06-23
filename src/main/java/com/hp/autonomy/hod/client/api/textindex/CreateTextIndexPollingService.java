@@ -24,7 +24,7 @@ import retrofit.client.Response;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Service for managing jobs ids from the CreateTextIndex API.
+ * Implementation of CreateTextIndexService which polls for job completion.
  * <p/>
  * The destroy method should be called when the service is no longer needed.
  */

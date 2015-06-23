@@ -19,6 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Default implementation of FindSimilarService
+ * <p/>
+ * If you don't need a custom return type use the {@link #documentsService(HodServiceConfig)} static factory
+ * @param <T> The desired return type of the service
+ */
 public class FindSimilarServiceImpl<T> implements FindSimilarService<T> {
 
     private static final String MIME_TYPE = "application/octet-stream";
@@ -27,12 +33,23 @@ public class FindSimilarServiceImpl<T> implements FindSimilarService<T> {
     private final Requester requester;
     private final Class<T> returnType;
 
+    /**
+     * Creates a new FindSimilarServiceImpl with the given configuration and return type
+     * @param hodServiceConfig The configuration to use
+     * @param returnType The desired return type of the methods of the service. This type must have the correct Jackson
+     * annotations to read responses from HP Haven OnDemand
+     */
     public FindSimilarServiceImpl(final HodServiceConfig hodServiceConfig, final Class<T> returnType) {
         findSimilarBackend = hodServiceConfig.getRestAdapter().create(FindSimilarBackend.class);
         requester = hodServiceConfig.getRequester();
         this.returnType = returnType;
     }
 
+    /**
+     * Creates a new FindSimilarServiceImpl of type {@link Documents}
+     * @param hodServiceConfig The configuration to use
+     * @return The new service
+     */
     public static FindSimilarServiceImpl<Documents> documentsService(final HodServiceConfig hodServiceConfig) {
         return new FindSimilarServiceImpl<>(hodServiceConfig, Documents.class);
     }

@@ -9,6 +9,9 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
+/**
+ * Service representing the DeleteTextIndex API
+ */
 public interface DeleteTextIndexService {
 
     /**
@@ -17,7 +20,10 @@ public interface DeleteTextIndexService {
      * This API handles the confirm token returned by HP Haven OnDemand automatically.
      * @param index The name of the index
      * @param callback Callback that will be called with the response
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException If an error occurs
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void deleteTextIndex(
         String index,
@@ -31,6 +37,8 @@ public interface DeleteTextIndexService {
      * @param index The name of the index
      * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     void deleteTextIndex(
         TokenProxy tokenProxy,

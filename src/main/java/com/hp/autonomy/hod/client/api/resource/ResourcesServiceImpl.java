@@ -12,11 +12,18 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
 
+/**
+ * Default implementation of ResourcesService
+ */
 public class ResourcesServiceImpl implements ResourcesService {
     
     private final ResourcesBackend resourcesBackend;
     private final Requester requester;
-    
+
+    /**
+     * Create a new ResourcesServiceImpl with the give configuration
+     * @param hodServiceConfig The configuration to use
+     */
     public ResourcesServiceImpl(final HodServiceConfig hodServiceConfig) {
         resourcesBackend = hodServiceConfig.getRestAdapter().create(ResourcesBackend.class);
         requester = hodServiceConfig.getRequester();

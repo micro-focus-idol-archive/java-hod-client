@@ -15,13 +15,20 @@ import retrofit.client.Response;
 
 import java.util.List;
 
+/**
+ * Default implementation of GetParametricValuesService
+ */
 public class GetParametricValuesServiceImpl implements GetParametricValuesService {
     
     private static final Class<FieldNames> RESPONSE_CLASS = FieldNames.class;
     
     private final GetParametricValuesBackend getParametricValuesBackend;
     private final Requester requester;
-    
+
+    /**
+     * Creates a new GetParametricValuesServiceImpl with the given configuration
+     * @param hodServiceConfig The configuration to use
+     */
     public GetParametricValuesServiceImpl(final HodServiceConfig hodServiceConfig) {
         getParametricValuesBackend = hodServiceConfig.getRestAdapter().create(GetParametricValuesBackend.class);
         requester = hodServiceConfig.getRequester();

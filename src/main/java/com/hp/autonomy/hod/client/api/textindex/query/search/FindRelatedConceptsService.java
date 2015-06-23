@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Service representing the FindRelatedConcepts API
+ */
 public interface FindRelatedConceptsService {
 
     /**
@@ -20,6 +23,9 @@ public interface FindRelatedConceptsService {
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithText(
         String text,
@@ -32,6 +38,8 @@ public interface FindRelatedConceptsService {
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithText(
         TokenProxy tokenProxy,
@@ -46,6 +54,9 @@ public interface FindRelatedConceptsService {
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithReference(
         String reference,
@@ -59,6 +70,8 @@ public interface FindRelatedConceptsService {
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithReference(
         TokenProxy tokenProxy,
@@ -72,6 +85,9 @@ public interface FindRelatedConceptsService {
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithUrl(
         String url,
@@ -84,6 +100,8 @@ public interface FindRelatedConceptsService {
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithUrl(
         TokenProxy tokenProxy,
@@ -97,6 +115,9 @@ public interface FindRelatedConceptsService {
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
         File file,
@@ -109,19 +130,24 @@ public interface FindRelatedConceptsService {
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
         TokenProxy tokenProxy,
         File file,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
-    
+
     /**
      * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
         byte[] bytes,
@@ -134,19 +160,24 @@ public interface FindRelatedConceptsService {
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
         TokenProxy tokenProxy,
         byte[] bytes,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
-    
+
     /**
      * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param inputStream A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
         InputStream inputStream,
@@ -159,6 +190,8 @@ public interface FindRelatedConceptsService {
      * @param inputStream A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
         TokenProxy tokenProxy,

@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+/**
+ * Default implementation of ViewDocumentService
+ */
 public class ViewDocumentServiceImpl implements ViewDocumentService {
 
     private static final Class<ViewDocumentResponse> RESPONSE_CLASS = ViewDocumentResponse.class;
@@ -28,6 +31,10 @@ public class ViewDocumentServiceImpl implements ViewDocumentService {
     private final ViewDocumentBackend viewDocumentBackend;
     private final Requester requester;
 
+    /**
+     * Creates a new ViewDocumentServiceImpl
+     * @param hodServiceConfig The configuration to use
+     */
     public ViewDocumentServiceImpl(final HodServiceConfig hodServiceConfig) {
         viewDocumentBackend = hodServiceConfig.getRestAdapter().create(ViewDocumentBackend.class);
         requester = hodServiceConfig.getRequester();

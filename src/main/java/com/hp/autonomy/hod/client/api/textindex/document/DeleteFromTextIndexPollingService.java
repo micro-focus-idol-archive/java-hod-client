@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Service for managing jobs ids from the DeleteFromTextIndex API
+ * Implementation of DeleteFromTextIndexService which polls for job completion.
  * <p/>
  * The destroy method should be called when the service is no longer needed.
  */
@@ -34,7 +34,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     private final JobService<? extends JobStatus<DeleteFromTextIndexResponse>> jobService;
 
     /**
-     * Creates a new DeleteFromTextIndexPollingService
+     * Creates a new DeleteFromTextIndexPollingService with a default ScheduledExecutorService
      * @param hodServiceConfig The configuration to use
      */
     public DeleteFromTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
