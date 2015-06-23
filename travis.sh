@@ -27,5 +27,5 @@ then
   echo "Committing"
   git commit -m "Update GitHub Pages"
   echo "Pushing"
-  git push --force origin master:gh-pages > /dev/null 2>&1
+  git push --force origin master:gh-pages
 fi
