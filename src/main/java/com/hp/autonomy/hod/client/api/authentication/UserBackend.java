@@ -7,7 +7,7 @@ import retrofit.http.Header;
 /**
  * Service for getting user details from HP Haven OnDemand
  */
-public interface UserService {
+public interface UserBackend {
 
     /**
      * Get details for the user represented by the given user unbound token

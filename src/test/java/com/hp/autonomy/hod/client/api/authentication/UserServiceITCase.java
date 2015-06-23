@@ -19,7 +19,7 @@ import static org.junit.Assert.assertThat;
 @Slf4j
 public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     private AuthenticationBackend authenticationBackend;
-    private UserService userService;
+    private UserBackend userBackend;
 
     public UserServiceITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -30,12 +30,12 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
     public void setUp() {
         super.setUp();
         authenticationBackend = getRestAdapter().create(AuthenticationBackend.class);
-        userService = getRestAdapter().create(UserService.class);
+        userBackend = getRestAdapter().create(UserBackend.class);
     }
 
     @Test
     public void getsUserDetails() throws HodErrorException {
-        final GetUserResponse getUserResponse = userService.getUser(getUserUnboundToken());
+        final GetUserResponse getUserResponse = userBackend.getUser(getUserUnboundToken());
         checkSingleUserResponse(getUserResponse);
     }
 
@@ -45,7 +45,7 @@ public class UserServiceITCase extends AbstractHodClientIntegrationTest {
         final AuthenticationToken applicationUnboundToken = authenticationBackend.authenticateApplicationUnbound(getApiKey()).getToken();
         final AuthenticationToken combinedToken = authenticationBackend.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
 
-        final GetUserResponse getUserResponse = userService.getUserCombined(combinedToken);
+        final GetUserResponse getUserResponse = userBackend.getUserCombined(combinedToken);
         checkSingleUserResponse(getUserResponse);
     }
 
