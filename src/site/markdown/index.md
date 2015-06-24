@@ -4,11 +4,12 @@ Java Client for communicating with [HP Haven OnDemand](http://www.idolondemand.c
 
 ## About
 java-hod-client provides a Java Interface to the HP Haven OnDemand APIs to simplify calling the HP Haven OnDemand APIs
-from Java, allowing consumers of java-hod-client to access HP Haven OnDemand in a typesafe way.
+from Java, allowing consumers of java-hod-client to access HP Haven OnDemand in a typesafe way. It also automatically
+handles refreshed tokens in the headers of HP Haven OnDemand responses.
 
 ## Goals
-Currently only a small subset of HP Haven OnDemand APIs are supported. The eventual aim to support all the HP Haven OnDemand
-APIs.
+Currently only a small subset of HP Haven OnDemand APIs are supported. The eventual aim to support all the HP Haven
+OnDemand APIs.
 
 If an API you need is not supported, submit a pull request!
 
@@ -22,72 +23,90 @@ java-hod-client is available from the central Maven repository.
         <version>0.7.2</version>
     </dependency>
 
-java-hod-client uses [Retrofit](http://square.github.io/retrofit/) as the basis of its HTTP implementation. This
-requires the use of a RestAdapter to use the services. We have used [Jackson](https://github.com/FasterXML/jackson) for
-JSON transformation, so you will need to use the Jackson Converter. To send multipart requests to HP Haven OnDemand
-correctly, you will need to wrap this in an HodConverter. An error handler is supplied for parsing error responses from
-HP Haven OnDemand.
+java-hod-client services are configured using instances of HodServiceConfig. The easiest way to do this is to use the
+default options:
 
-    final RestAdapter restAdapter = new RestAdapter.Builder()
-        .setEndpoint("https://api.idolondemand.com/")
-        .setConverter(new HodConverter(new JacksonConverter()))
-        .setErrorHandler(new HodErrorHandler())
-        .build();
-        
-    final AuthenticationService authenticationService = restAdapter.create(AuthenticationService.class);
+    final HodServiceConfig config = new HodServiceConfig.Builder("https://api.idolondemand.com").build();
 
-    final QueryTextIndexService queryTextIndexService = restAdapter.create(QueryTextIndexService.class);
+This will create a configuration object with an InMemoryTokenRepository for storing tokens, a default Jackson
+ObjectMapper, a default HodErrorHandler, and a default HTTP client. 
+
+It is also possible to override the default configuration:
+
+    final HodServiceConfig config = new HodServiceConfig.Builder("https://api.idolondemand.com")
+        .setTokenRepository(tokenRepository) // configure an alternative TokenRepository
+        .setHttpClient(httpClient) // use a custom Apache HttpClient - useful if you're behind a proxy
+        .setObjectMapper(objectMapper) // use a custom Jackson ObjectMapper if you're using custom types
+        .setErrorHandler(errorHandler) // use a custom error handler
+        .build():
+
+Once a config object has been created, it can be used to construct services. To ensure the TokenRepository works
+correctly, the same configuration object should be used for all services.
+
+    final AuthenticationService authenticationService = new AuthenticationServiceImp(config);
+
+    final QueryTextIndexService<Documents> queryTextIndexService = QueryTextIndexService.documentsService(config);
     
-HP Haven OnDemand requires the use of a token to make API requests. These can be obtained with the AuthenticationService.
+HP Haven OnDemand requires the use of a token to make API requests. These can be obtained with the 
+AuthenticationService. The AuthenticationServiceImpl will store the token in the configured TokenRepository and return a
+TokenProxy which can be used to retrieve the token. This allows the token to be updated when the refresh_token header is
+sent by HP Haven OnDemand.
 For more information, consult the HP Haven OnDemand documentation.
 
-    final AuthenticationToken token = authenticationService.authenticateApplication(
+    final TokenProxy tokenProxy = authenticationService.authenticateApplication(
         myApiKey,
         myApplication,
         myDomain,
         TokenType.simple
-    ).getToken();
+    );
 
-You can then call the methods on queryTextIndexService with the token to communicate with HP Haven OnDemand.
+You can then call the methods on queryTextIndexService with the token proxy to communicate with HP Haven OnDemand.
 
-    final Map<String, Object> params = new QueryTextIndexRequestBuilder()
+    final QueryRequestBuilder params = new QueryRequestBuilder()
         .setAbsoluteMaxResults(10)
         .setTotalResults(true)
-        .setIndexes("wiki_eng")
-        .build();
+        .addIndexes("wiki_eng");
 
     final Documents documents = queryTextIndexService.queryTextIndexWithText(
-        token,
+        tokenProxy,
         "cats",
         params);
+        
+If there is no token associated with the TokenProxy, or the token has expired according to its expiry field, a
+HodAuthenticationFailedException will be thrown.
 
 ## Library structure
 APIs can be found in the com.hp.autonomy.hod.client.api package. APIs are packaged more or less according to their urls.
 
 ## Asynchronous requests
-For asynchronous actions the Retrofit service returns a JobId. We also provide a service which will track the status of
-the job IDs.
+Some APIs are provided as a PollingService. These services will obtain a JobId from HP Haven OnDemand, and poll the job
+status API until completion.
 
-    final AddToTextIndexJobService addToTextIndexService = new AddToTextIndexJobService(restAdapter.create(AddToTextIndexJobService.class));
+    final AddToTextIndexService addToTextIndexService = new AddToTextIndexPollingService(config);
 
 The methods on this service take a callback which will be called when the job is completed
 
-    addToTextIndexService.addFileToTextIndex(getToken(), file, getIndex(), params, new HodJobCallback<AddToTextIndexResponse>() {
-        @Override
-        public void success(final AddToTextIndexResponse result) {
-            // called if the job succeeds
-        }
-
-        @Override
-        public void error(final HodErrorCode error) {
-            // called if the job fails
-        }
-
-        @Override
-        public void handleException(final RuntimeException exception) {
-            // called if a RuntimeException is thrown during the process
-        }
-    });
+    addToTextIndexService.addFileToTextIndex(
+        tokenProxy, 
+        file, 
+        index, 
+        params, 
+        new HodJobCallback<AddToTextIndexResponse>() {
+            @Override
+            public void success(final AddToTextIndexResponse result) {
+                // called if the job succeeds
+            }
+    
+            @Override
+            public void error(final HodErrorCode error) {
+                // called if the job fails
+            }
+    
+            @Override
+            public void handleException(final RuntimeException exception) {
+                // called if a RuntimeException is thrown during the process
+            }
+        });
 
 
 The APIs which are currently asynchronous are
@@ -97,62 +116,52 @@ The APIs which are currently asynchronous are
 * CreateTextIndex
 * DeleteTextIndex
 
-## Request Interceptors
-For cases where you want to send the same token with every request, we provide RequestInterceptors. These are
-configured when the RestAdapter is created. Most API methods have a version which does not take a token, which can be used
-in conjunction with a request interceptor.
+## TokenProxyService
+For cases where you want to send the same token with every request, we provide TokenProxyService. When using a
+TokenProxyService, use the methods which do not take a TokenProxy as the first argument.
 
-    final AuthenticationTokenService authenticationTokenService = new AuthenticationTokenService() {
+    // create a TokenProxyService
+    final TokenProxyService tokenProxyService = new TokenProxyService() {
         @Override
-        public AuthenticationToken getToken() {
-            return myToken;
+        public TokenProxy getTokenProxy() {
+            return myTokenProxy;
         }
     }
 
-    // set up a RestAdapter using a request interceptor
-    final RestAdapter restAdapter = new RestAdapter.Builder()
-        .setEndpoint("https://api.idolondemand.com/")
-        .setConverter(new HodConverter(new JacksonConverter()))
-        .setErrorHandler(new HodErrorHandler())
-        .setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService))
-        .build();
+    // create a configuration object
+    final HodServiceConfig config = new HodServiceConfig.Builder("https://api.idolondemand.com")
+        .setTokenProxyService(tokenProxyService) // configure the TokenProxyService
+        .build():
 
-    // query for documents using the token provided by the service
+    // query for documents using the token proxy provided by the service
     final Documents documents = queryTextIndexService.queryTextIndexWithText(
         "cats",
         params);
 
-When using the RequestInterceptor, be sure not to call any method which takes an AuthenticationToken. This is because 
-the token will be set twice, which makes HP Haven OnDemand sad.
-
-    // set up a RestAdapter using a request interceptor
-    final RestAdapter restAdapter = new RestAdapter.Builder()
-        .setEndpoint("https://api.idolondemand.com/")
-        .setConverter(new HodConverter(new JacksonConverter()))
-        .setErrorHandler(new HodErrorHandler())
-        .setRequestInterceptor(new AuthenticationTokenServiceRequestInterceptor(authenticationTokenService))
-        .build();
-
-    // BROKEN - this will generate an HodErrorException as the token will be set twice
-    final Documents documents = queryTextIndexService.queryTextIndexWithText(
-        someOtherToken
-        "cats",
-        params);
+If a service method is called with a TokenProxy this will take priority over the TokenProxyService.
 
 ## HavenOnDemandService
 For those times where the API you need to use is not currently supported, there is the HavenOnDemandService. This can
 query any API.
 
-    final HavenOnDemandService havenOnDemandService = restAdapter.create(HavenOnDemandService.class)
+    final HavenOnDemandService havenOnDemandService = new HavenOnDemandServiceImpl(config);
     
     final Map<String, Object> params = new HashMap<>();
-    params.put("token", token);
     params.put("text", "*");
     
-    final Map<String, Object> result = havenOnDemandService.get("textindex", "query", "search", 1, params);
+    final Map<String, Object> result = havenOnDemandService.get(
+        tokenProxy, 
+        "textindex", 
+        "query", 
+        "search", 
+        1, 
+        params, 
+        Map.class
+    );
     
-This approach requires a greater familiarity with the HP Haven OnDemand documentation. It also removes the type safety of
-the dedicated services, making the response useful only for automated transformation into JSON.
+This approach requires a greater familiarity with the HP Haven OnDemand documentation. If Map is used as the return 
+type, it also removes the type safety and gives an object which is only useful for things like automated transformation 
+into JSON.
 
 If you find yourself looking at the HavenOnDemandService, we encourage you to write a service for the API and submit a 
 pull request.
