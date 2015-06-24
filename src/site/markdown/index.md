@@ -20,7 +20,7 @@ java-hod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.hod</groupId>
         <artifactId>java-hod-client</artifactId>
-        <version>0.7.2</version>
+        <version>0.8.0</version>
     </dependency>
 
 java-hod-client services are configured using instances of HodServiceConfig. The easiest way to do this is to use the
