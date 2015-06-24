@@ -24,7 +24,7 @@ import java.util.List;
  */
 class ResponseParser {
 
-    private static final String TOKEN_HEADER_NAME = "app_tkn";
+    private static final String TOKEN_HEADER_NAME = "refresh_token";
 
     private final TokenRepository tokenRepository;
     private final Converter converter;
