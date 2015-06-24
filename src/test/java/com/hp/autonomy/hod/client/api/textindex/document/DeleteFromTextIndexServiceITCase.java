@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -28,16 +28,16 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private DeleteFromTextIndexJobService deleteFromTextIndexService;
-    private AddToTextIndexJobService addToTextIndexService;
+    private DeleteFromTextIndexService deleteFromTextIndexService;
+    private AddToTextIndexService addToTextIndexService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        deleteFromTextIndexService = new DeleteFromTextIndexJobService(getRestAdapter().create(DeleteFromTextIndexService.class));
-        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
+        deleteFromTextIndexService = new DeleteFromTextIndexPollingService(getConfig());
+        addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
     public DeleteFromTextIndexServiceITCase(final Endpoint endpoint) {
@@ -54,14 +54,13 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
                 .setTitle("Title is required, for some reason")
                 .build();
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
-                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .build();
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
+                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
         final CountDownLatch latch = new CountDownLatch(1);
 
         final DeleteTestCallback callback = new DeleteTestCallback(latch, reference);
-        addToTextIndexService.addJsonToTextIndex(getToken(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
@@ -91,7 +90,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
             log.debug("Document indexed successfully");
 
             try {
-                deleteFromTextIndexService.deleteReferencesFromTextIndex(getToken(), getIndex(), Arrays.asList(reference), callback);
+                deleteFromTextIndexService.deleteReferencesFromTextIndex(getTokenProxy(), getIndex(), Collections.singletonList(reference), callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document", e);
 

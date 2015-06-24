@@ -6,10 +6,7 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
 /**
  * Service for making authentication requests to HP Haven OnDemand
@@ -22,16 +19,14 @@ public interface AuthenticationService {
      * @param applicationName The name of the application
      * @param domain The domain of the application
      * @param tokenType The type of the resulting token
-     * @return A response containing a token for use with HP Haven OnDemand
+     * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/application")
-    @Multipart
-    AuthenticationTokenResponse authenticateApplication(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("name") String applicationName,
-            @Part("domain") String domain,
-            @Part("token_type") TokenType tokenType
+    TokenProxy authenticateApplication(
+        ApiKey apiKey,
+        String applicationName,
+        String domain,
+        TokenType tokenType
     ) throws HodErrorException;
 
     /**
@@ -40,16 +35,14 @@ public interface AuthenticationService {
      * @param applicationName The name of the application
      * @param applicationDomain The domain of the application
      * @param tokenType The type of the resulting token
-     * @return A response containing a token for use with HP Haven OnDemand
+     * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/user")
-    @Multipart
-    AuthenticationTokenResponse authenticateUser(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("application_name") String applicationName,
-            @Part("application_domain") String applicationDomain,
-            @Part("token_type") TokenType tokenType
+    TokenProxy authenticateUser(
+        ApiKey apiKey,
+        String applicationName,
+        String applicationDomain,
+        TokenType tokenType
     ) throws HodErrorException;
 
     /**
@@ -60,18 +53,16 @@ public interface AuthenticationService {
      * @param tokenType The type of the resulting token
      * @param userStore The name of the user store
      * @param storeDomain The domain of the user store
-     * @return A response containing a token for use with HP Haven OnDemand
+     * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/user")
-    @Multipart
-    AuthenticationTokenResponse authenticateUser(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("application_name") String applicationName,
-            @Part("application_domain") String applicationDomain,
-            @Part("token_type") TokenType tokenType,
-            @Part("user_store_name") String userStore,
-            @Part("user_store_domain") String storeDomain
+    TokenProxy authenticateUser(
+        ApiKey apiKey,
+        String applicationName,
+        String applicationDomain,
+        TokenType tokenType,
+        String userStore,
+        String storeDomain
     ) throws HodErrorException;
 
     /**
@@ -81,9 +72,8 @@ public interface AuthenticationService {
      * @return A response containing an unbound application token and a list of applications
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/application/unbound")
     ApplicationUnboundResponse authenticateApplicationUnbound(
-            @Header("apiKey") ApiKey apiKey
+         ApiKey apiKey
     ) throws HodErrorException;
 
     /**
@@ -93,9 +83,8 @@ public interface AuthenticationService {
      * @return A response containing an unbound user token and a list of users
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/user/unbound")
     UserUnboundResponse authenticateUserUnbound(
-            @Header("apiKey") ApiKey apiKey
+         ApiKey apiKey
     ) throws HodErrorException;
 
     /**
@@ -105,17 +94,15 @@ public interface AuthenticationService {
      * @param application The application name
      * @param domain The domain name
      * @param tokenType The type of the resulting token
-     * @return A response containing a token which can be used to call HP Haven OnDemand
+     * @return A token which can be used to call HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/combined")
-    @Multipart
-    AuthenticationTokenResponse combineTokens(
-        @Header("app_token") AuthenticationToken applicationToken,
-        @Header("user_token") AuthenticationToken userToken,
-        @Part("application") String application,
-        @Part("domain") String domain,
-        @Part("token_type") TokenType tokenType
+    TokenProxy combineTokens(
+        AuthenticationToken applicationToken,
+        AuthenticationToken userToken,
+        String application,
+        String domain,
+        TokenType tokenType
     ) throws HodErrorException;
 
     /**
@@ -127,19 +114,17 @@ public interface AuthenticationService {
      * @param tokenType The resulting token type
      * @param userStore The name of the user store
      * @param storeDomain The name of the user store
-     * @return A response containing a token which can be used to call HP Haven OnDemand
+     * @return A token which can be used to call HP Haven OnDemand
      * @throws HodErrorException
      */
-    @POST("/2/authenticate/combined")
-    @Multipart
-    AuthenticationTokenResponse combineTokens(
-        @Header("app_token") AuthenticationToken applicationToken,
-        @Header("user_token") AuthenticationToken userToken,
-        @Part("application") String application,
-        @Part("domain") String domain,
-        @Part("token_type") TokenType tokenType,
-        @Part("user_store_name") String userStore,
-        @Part("user_store_domain") String storeDomain
+    TokenProxy combineTokens(
+        AuthenticationToken applicationToken,
+        AuthenticationToken userToken,
+        String application,
+        String domain,
+        TokenType tokenType,
+        String userStore,
+        String storeDomain
     ) throws HodErrorException;
 
 }

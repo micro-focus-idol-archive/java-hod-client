@@ -29,8 +29,8 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
 
     private static final String testIndexName = "ice-cream";
 
-    private CreateTextIndexJobService createTextIndexService;
-    private DeleteTextIndexJobService deleteTextIndexService;
+    private CreateTextIndexPollingService createTextIndexService;
+    private DeleteTextIndexPollingService deleteTextIndexService;
 
     public CreateAndDeleteTextIndexITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -41,8 +41,8 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
     public void setUp() {
         super.setUp();
 
-        createTextIndexService = new CreateTextIndexJobService(getRestAdapter().create(CreateTextIndexService.class));
-        deleteTextIndexService = new DeleteTextIndexJobService(getRestAdapter().create(DeleteTextIndexService.class));
+        createTextIndexService = new CreateTextIndexPollingService(getConfig());
+        deleteTextIndexService = new DeleteTextIndexPollingService(getConfig());
     }
 
     @After
@@ -53,16 +53,15 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
 
     @Test
     public void testCreateAndDeleteTextIndex() throws HodErrorException, InterruptedException {
-        final Map<String, Object> createParams = new CreateTextIndexRequestBuilder()
-                .setDescription("A text index")
-                .build();
+        final CreateTextIndexRequestBuilder createParams = new CreateTextIndexRequestBuilder()
+                .setDescription("A text index created and deleted for test purposes");
 
         final CountDownLatch latch = new CountDownLatch(1);
 
         final DeleteIndexTestCallback callback = new DeleteIndexTestCallback(latch);
 
         createTextIndexService.createTextIndex(
-                getToken(),
+                getTokenProxy(),
                 testIndexName,
                 IndexFlavor.explorer,
                 createParams,
@@ -104,7 +103,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
 
             try {
                 deleteTextIndexService.deleteTextIndex(
-                        getToken(),
+                        getTokenProxy(),
                         testIndexName,
                         callback);
             } catch (final HodErrorException e) {

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Abstract service containing code common to all job services
  */
 @Slf4j
-public abstract class AbstractJobService {
+public abstract class AbstractPollingService {
 
     @Getter(AccessLevel.PROTECTED)
     private final ScheduledExecutorService executorService;
@@ -25,14 +25,14 @@ public abstract class AbstractJobService {
     /**
      * Constructs a new service with the default executor service
      */
-    public AbstractJobService() {
+    public AbstractPollingService() {
         this(Executors.newScheduledThreadPool(8));
     }
 
     /**
      * Constructs a new service with the given executor service
      */
-    public AbstractJobService(final ScheduledExecutorService executorService) {
+    public AbstractPollingService(final ScheduledExecutorService executorService) {
         this.executorService = executorService;
     }
 

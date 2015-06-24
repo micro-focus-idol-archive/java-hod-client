@@ -14,8 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -39,17 +40,16 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
     public void setUp() {
         super.setUp();
 
-        getParametricValuesService = getRestAdapter().create(GetParametricValuesService.class);
+        getParametricValuesService = new GetParametricValuesServiceImpl(getConfig());
     }
 
     @Test
     public void testGetParametricValues() throws HodErrorException {
-        final Map<String, Object> params = new GetParametricValuesRequestBuilder()
+        final GetParametricValuesRequestBuilder params = new GetParametricValuesRequestBuilder()
                 .setSort(ParametricSort.alphabetical)
-                .setMaxValues(15)
-                .build();
+                .setMaxValues(15);
 
-        final FieldNames fieldNames = getParametricValuesService.getParametricValues(getToken(), "wikipedia_type, person_profession", params);
+        final FieldNames fieldNames = getParametricValuesService.getParametricValues(getTokenProxy(), Arrays.asList("wikipedia_type", "person_profession"), Collections.singletonList("wiki_eng"), params);
 
         final Set<String> fieldNamesSet = fieldNames.getFieldNames();
 

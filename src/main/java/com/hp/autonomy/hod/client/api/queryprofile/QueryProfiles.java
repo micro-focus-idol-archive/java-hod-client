@@ -46,13 +46,13 @@ public class QueryProfiles {
     }
 
     /**
-     * Util method for getting the query profile names as strings directly.
-     * @return  Unique string names of query profiles.
+     * Utility method for getting the query profile names as strings directly
+     * @return Unique string names of the query profiles
      */
     public Set<String> getNames() {
         final Set<String> names = new HashSet<>();
 
-        for (QueryProfileName qpn : queryProfiles) {
+        for (final QueryProfileName qpn : queryProfiles) {
             names.add(qpn.getName());
         }
 

@@ -5,10 +5,10 @@
 
 package com.hp.autonomy.hod.client.job;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.EnumSet;
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <T> The type that will be returned if the job complete successfully
  */
 @Slf4j
-public abstract class PollingJobStatusRunnable<T> implements Runnable {
+public class PollingJobStatusRunnable<T> implements Runnable {
 
     private static final int MAX_TRIES = 3;
     private static final int WAIT_SECONDS = 2;
@@ -36,53 +36,38 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
             HodErrorCode.INVALID_JOB_ID
     );
 
-    private final AuthenticationToken token;
+    private final TokenProxy tokenProxy;
     private final JobId jobId;
     private final HodJobCallback<T> callback;
     private final ScheduledExecutorService executorService;
+    private final JobService<? extends JobStatus<T>> jobService;
 
     private final AtomicInteger tries = new AtomicInteger(0);
 
     /**
-     * Creates a new PollingJobStatusRunnable using a token provided by a {@link retrofit.RequestInterceptor}
+     * Creates a new PollingJobStatusRunnable using a token provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
-        this(null, jobId, callback, executorService);
+    public PollingJobStatusRunnable(final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
+        this(null, jobId, callback, executorService, jobService);
     }
 
     /**
-     * Creates a new PollingJobStatusRunnable using the given API key
-     * @param token The token used to submit the job
+     * Creates a new PollingJobStatusRunnable using the given token proxy
+     * @param tokenProxy The token proxy used to submit the job
      * @param jobId The ID of the job
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final AuthenticationToken token, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService) {
-        this.token = token;
+    public PollingJobStatusRunnable(final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
+        this.tokenProxy = tokenProxy;
         this.jobId = jobId;
         this.callback = callback;
         this.executorService = executorService;
+        this.jobService = jobService;
     }
-
-    /**
-     * Fetches the status of a job  using an API key provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The ID of the job
-     * @return A job status of the correct return type
-     * @throws HodErrorException
-     */
-    public abstract JobStatus<T> getJobStatus(final JobId jobId) throws HodErrorException;
-
-    /**
-     * Fetches the status of a job using the given API key
-     * @param token The token used to submit the job
-     * @param jobId The ID of the job
-     * @return A job status of the correct return type
-     * @throws HodErrorException
-     */
-    public abstract JobStatus<T> getJobStatus(final AuthenticationToken token, final JobId jobId) throws HodErrorException;
 
     /**
      * Checks the status of the job. If the job has not finished, the runnable will schedule itself to run again after a
@@ -95,11 +80,11 @@ public abstract class PollingJobStatusRunnable<T> implements Runnable {
 
             final JobStatus<T> jobStatus;
 
-            if (token != null) {
-                jobStatus = getJobStatus(token, jobId);
+            if (tokenProxy != null) {
+                jobStatus = jobService.getJobStatus(tokenProxy, jobId);
             }
             else {
-                jobStatus = getJobStatus(jobId);
+                jobStatus = jobService.getJobStatus(jobId);
             }
 
             final Status jobStatusStatus = jobStatus.getStatus();

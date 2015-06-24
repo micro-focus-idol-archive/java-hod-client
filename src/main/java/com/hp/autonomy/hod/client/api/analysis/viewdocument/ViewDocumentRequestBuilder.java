@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.analysis.viewdocument;
 
 import com.hp.autonomy.hod.client.util.MultiMap;
+import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -27,10 +28,10 @@ public class ViewDocumentRequestBuilder {
     private List<String> endTags = new ArrayList<>();
 
     /**
-     * Sets the value for the raw_html parameter. You should not need to set this unless using
-     * {@link ViewDocumentService#viewFileAsHtmlString}
+     * Sets the value for the raw_html parameter
      * @param rawHtml Value of the raw_html parameter
      */
+    @Setter(AccessLevel.PACKAGE) // setting this parameter messes with return values, so should only be used with the appropriate methods
     private Boolean rawHtml;
 
     /**
@@ -97,10 +98,10 @@ public class ViewDocumentRequestBuilder {
     }
 
     /**
-     * @return A map of query parameters suitable for use with {@link ViewDocumentService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link ViewDocumentBackend}. get is NOT supported on
      * the resulting map
      */
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> params = new MultiMap<>();
 
         params.put("raw_html", rawHtml);

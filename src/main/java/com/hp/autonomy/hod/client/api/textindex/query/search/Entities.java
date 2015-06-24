@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = Entities.Builder.class)
-public class Entities {
+class Entities {
 
     private final List<Entity> entities;
 

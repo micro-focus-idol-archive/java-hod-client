@@ -20,11 +20,8 @@ import static org.hamcrest.Matchers.is;
 @RunWith(Parameterized.class)
 public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIntegrationTest {
 
-    // Not under test
-    private RetrieveQueryProfileService retrieveQueryProfileService;
-
     // Service under test
-    private UpdateQueryProfileService updateQueryProfileService;
+    private QueryProfileService queryProfileService;
 
     public UpdateQueryProfilesServiceSuiteChild(final Endpoint endpoint) {
         super(endpoint);
@@ -35,8 +32,7 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIn
     public void setUp() {
         super.setUp();
 
-        updateQueryProfileService = getRestAdapter().create(UpdateQueryProfileService.class);
-        retrieveQueryProfileService = getRestAdapter().create(RetrieveQueryProfileService.class);
+        queryProfileService = new QueryProfileServiceImpl(getConfig());
     }
 
     @Test
@@ -44,7 +40,7 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIn
         // Create a query profile, then load it back and verify that it's what we created
         final QueryProfile originalQP = createQueryProfile("test001");
         final String qpName = originalQP.getName();
-        final QueryProfile qpFromServer = retrieveQueryProfileService.retrieveQueryProfile(getToken(), qpName);
+        final QueryProfile qpFromServer = queryProfileService.retrieveQueryProfile(getTokenProxy(), qpName);
         assertThat(qpFromServer, is(originalQP));
 
         // Create a new config, then change the query profile on the server.  Fetch it back and verify that it's changed
@@ -54,9 +50,9 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIn
             .setPromotionsIdentified(true)
             .addPromotionCategories("NotPromotions");
 
-        updateQueryProfileService.updateQueryProfile(getToken(), qpName, getQueryManipulationIndex(), requestBuilder.build());
+        queryProfileService.updateQueryProfile(getTokenProxy(), qpName, getQueryManipulationIndex(), requestBuilder);
 
-        final QueryProfile newQPFromServer = retrieveQueryProfileService.retrieveQueryProfile(getToken(), qpName);
+        final QueryProfile newQPFromServer = queryProfileService.retrieveQueryProfile(getTokenProxy(), qpName);
 
         assertThat(newQPFromServer, is(new QueryProfile.Builder()
             .setName(qpName)

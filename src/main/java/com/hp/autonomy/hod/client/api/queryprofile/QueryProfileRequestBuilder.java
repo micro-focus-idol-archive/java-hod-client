@@ -94,10 +94,10 @@ public class QueryProfileRequestBuilder {
     }
 
     /**
-     * @return A map of query parameters suitable for use with {@link CreateQueryProfileService} and {@link UpdateQueryProfileService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link QueryProfileService}. get is NOT supported on
      * the resulting map
      */
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> params = new MultiMap<>();
         params.put("promotions_enabled", promotionsEnabled);
         params.put("promotions_identified", promotionsIdentified);
