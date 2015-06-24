@@ -104,35 +104,6 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.github</groupId>
-                        <artifactId>site-maven-plugin</artifactId>
-                        <version>0.11</version>
-                        <configuration>
-                            <message>Creating site for ${project.version}</message>
-                            <oauth2Token>${env.GITHUB_TOKEN}</oauth2Token>
-                            <repositoryName>java-hod-client</repositoryName>
-                            <repositoryOwner>hpautonomy</repositoryOwner>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>site</goal>
-                                </goals>
-                                <phase>site</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <reporting>
         <plugins>
             <plugin>

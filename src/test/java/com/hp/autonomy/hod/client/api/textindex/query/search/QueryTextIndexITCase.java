@@ -75,7 +75,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
         final Map<String, Object> params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes("wiki_ita", "wiki_eng")
+                .addIndexes("wiki_ger", "wiki_eng")
                 .setSort(Sort.date)
                 .build();
 
@@ -93,7 +93,7 @@ public class QueryTextIndexITCase extends AbstractHodClientIntegrationTest {
         final Map<String, Object> params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes("wiki_ita", "wiki_eng")
+                .addIndexes("wiki_ger", "wiki_eng")
                 .setSort(Sort.date)
                 .build();
 
