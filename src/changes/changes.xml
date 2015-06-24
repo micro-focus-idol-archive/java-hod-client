@@ -7,7 +7,23 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
-        <release version="0.7.2" date="2015-06-23">
+        <release version="0.8.0" date="2015-06-24">
+            <action dev="Alex Scown" type="add">
+                Add automatic token refreshing. The result of this is every service is now a concrete type that
+                implements an interface, and methods that took an AuthenticationToken now take a TokenProxy. This is a
+                severe breaking change which changes the way services are instantiated and used, but gives us greater
+                flexibility going forward
+            </action>
+            <action dev="Alex Scown" type="update">
+                QueryTextIndexService, GetContentService and FindSimilarService are now generic types, and can return
+                custom types that better reflect your documents. The old Documents type is still available and these
+                services have a static factory method to help with construction
+            </action>
+            <action dev="Alex Scown" type="update">
+                GetParametricValuesService now takes a List of fieldnames, rather than a CSV
+            </action>
+        </release>
+        <release version="0.7.2" date="2015-06-24">
             <action dev="Matthew Gordon" type="update">
                 Update the AuthenticationService to reflect changes in the HP Haven OnDemand APIs
             </action>
