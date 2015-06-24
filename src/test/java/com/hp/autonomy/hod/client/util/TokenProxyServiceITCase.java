@@ -9,7 +9,6 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodServiceConfigFactory;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
-import com.hp.autonomy.hod.client.api.textindex.query.search.DocumentsQueryTextIndexService;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexServiceImpl;
@@ -57,7 +56,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
             throw new TokenRepositoryException(e);
         }
 
-        queryTextIndexService = new DocumentsQueryTextIndexService(hodServiceConfig);
+        queryTextIndexService = QueryTextIndexServiceImpl.documentsService(hodServiceConfig);
     }
 
     public TokenProxyServiceITCase(final Endpoint endpoint) {
