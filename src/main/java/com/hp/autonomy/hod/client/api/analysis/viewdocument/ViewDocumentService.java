@@ -5,221 +5,298 @@
 
 package com.hp.autonomy.hod.client.api.analysis.viewdocument;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.client.Response;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.PartMap;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
-import retrofit.http.Streaming;
-import retrofit.mime.TypedOutput;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.Map;
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * Interface representing the ViewDocument API.
  */
 public interface ViewDocumentService {
 
-    String URL = "/2/api/sync/analysis/viewdocument/v1";
-
     /**
      * Convert a file to HTML and retrieve the result as a stream containing the HTML using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param file The file to view
      * @param params Additional parameters to use for the request
-     * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
-     * html. This stream must be closed after use.
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
-    @POST(URL)
-    @Multipart
-    @Streaming
-    Response viewFile(
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    InputStream viewFile(
+        File file,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
      * Convert a file to HTML and retrieve the result as a stream containing the HTML using the given token
-     * @param token The token to use to authenticate the request
+     * @param tokenProxy The token proxy to use
      * @param file The file to view
      * @param params Additional parameters to use for the request
-     * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
-     * html. This stream must be closed after use.
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
      * @throws HodErrorException
      */
-    @POST(URL)
-    @Multipart
-    @Streaming
-    Response viewFile(
-        @Header("token") AuthenticationToken token,
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    InputStream viewFile(
+        TokenProxy tokenProxy,
+        File file,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert an object store object to HTML and retrieve the result as a stream containing the HTML using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param reference The object store reference to view
+     * Convert a file to HTML and retrieve the result as a stream containing the HTML using a token
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param bytes The bytes of the file to view
      * @param params Additional parameters to use for the request
-     * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
-     * html. This stream must be closed after use.
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
-    @GET(URL)
-    @Streaming
-    Response viewReference(
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    InputStream viewFile(
+        byte[] bytes,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a file to HTML and retrieve the result as a stream containing the HTML using the given token
+     * @param tokenProxy The token proxy to use
+     * @param bytes The bytes of the file to view
+     * @param params Additional parameters to use for the request
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws HodErrorException
+     */
+    InputStream viewFile(
+        TokenProxy tokenProxy,
+        byte[] bytes,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a file to HTML and retrieve the result as a stream containing the HTML using a token
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param inputStream An InputStream representing the file to view
+     * @param params Additional parameters to use for the request
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws HodErrorException
+     */
+    InputStream viewFile(
+        InputStream inputStream,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a file to HTML and retrieve the result as a stream containing the HTML using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param inputStream An InputStream representing the file to view
+     * @param params Additional parameters to use for the request
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws HodErrorException
+     */
+    InputStream viewFile(
+        TokenProxy tokenProxy,
+        InputStream inputStream,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert an object store object to HTML and retrieve the result as a stream containing the HTML using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param reference The object store reference to view
+     * @param params Additional parameters to use for the request
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws HodErrorException
+     */
+    InputStream viewReference(
+        String reference,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
      * Convert an object store object to HTML and retrieve the result as a stream containing the HTML using the given
-     * token
-     * @param token The token to use to authenticate the request
+     * token proxy
+     * @param tokenProxy The token proxy to use
      * @param reference The object store reference to view
      * @param params Additional parameters to use for the request
-     * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
-     * html. This stream must be closed after use.
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
      * @throws HodErrorException
      */
-    @GET(URL)
-    @Streaming
-    Response viewReference(
-        @Header("token") AuthenticationToken token,
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    InputStream viewReference(
+        TokenProxy tokenProxy,
+        String reference,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert publicly accessible url to HTML and retrieve the result as a stream containing the HTML using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Convert publicly accessible url to HTML and retrieve the result as a stream containing the HTML using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * API key
      * @param url The url to view
      * @param params Additional parameters to use for the request
-     * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
-     * html. This stream must be closed after use.
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
-    @GET(URL)
-    @Streaming
-    Response viewUrl(
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    InputStream viewUrl(
+        String url,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
      * Convert publicly accessible url to HTML and retrieve the result as a stream containing the HTML using the given
-     * token
-     * @param token The token to use to authenticate the request
+     * token proxy
+     * @param tokenProxy The token proxy to use
      * @param url The url to view
      * @param params Additional parameters to use for the request
-     * @return A response whose InputStream contains the HTML of the document. Use response.getBody().in() to access the
-     * html. This stream must be closed after use.
+     * @return An InputStream which contains the HTML of the document. This stream must be closed after use.
      * @throws HodErrorException
      */
-    @GET(URL)
-    @Streaming
-    Response viewUrl(
-        @Header("token") AuthenticationToken token,
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    InputStream viewUrl(
+        TokenProxy tokenProxy,
+        String url,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using a token
-     * provided by a {@link retrofit.RequestInterceptor}. When using this method the raw_html parameter MUST be set to false
+     * Convert a file to HTML and retrieve the result as an HTML String using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * @param file The file to view
      * @param params Additional parameters to use for the request
-     * @return A response with a String containing the HTML
+     * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
-    @POST(URL)
-    @Multipart
-    ViewDocumentResponse viewFileAsHtmlString(
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    String viewFileAsHtmlString(
+        File file,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using the given token. When using this method
-     * the raw_html parameter MUST be set to false
-     * @param token The token to use to authenticate the request
+     * Convert a file to HTML and retrieve the result as an HTML String using the given token proxy
+     * @param tokenProxy The token proxy to use
      * @param file The file to view
      * @param params Additional parameters to use for the request
-     * @return A response with a String containing the HTML
+     * @return A String containing the HTML
      * @throws HodErrorException
      */
-    @POST(URL)
-    @Multipart
-    ViewDocumentResponse viewFileAsHtmlString(
-        @Header("token") AuthenticationToken token,
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    String viewFileAsHtmlString(
+        TokenProxy tokenProxy,
+        File file,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert a reference to HTML and retrieve the result as an HTML String using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Convert a file to HTML and retrieve the result as an HTML String using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * @param bytes The bytes of the file to view
+     * @param params Additional parameters to use for the request
+     * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws HodErrorException
+     */
+    String viewFileAsHtmlString(
+        byte[] bytes,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a file to HTML and retrieve the result as an HTML String using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param bytes The bytes of the file to view
+     * @param params Additional parameters to use for the request
+     * @return A String containing the HTML
+     * @throws HodErrorException
+     */
+    String viewFileAsHtmlString(
+        TokenProxy tokenProxy,
+        byte[] bytes,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a file to HTML and retrieve the result as an HTML String using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * @param inputStream An InputStream representing the file to view
+     * @param params Additional parameters to use for the request
+     * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws HodErrorException
+     */
+    String viewFileAsHtmlString(
+        InputStream inputStream,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a file to HTML and retrieve the result as an HTML String using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param inputStream An InputStream representing the file to view
+     * @param params Additional parameters to use for the request
+     * @return A String containing the HTML
+     * @throws HodErrorException
+     */
+    String viewFileAsHtmlString(
+        TokenProxy tokenProxy,
+        InputStream inputStream,
+        ViewDocumentRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Convert a reference to HTML and retrieve the result as an HTML String using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param reference The reference to view
      * @param params Additional parameters to use for the request
-     * @return A response with a String containing the HTML
+     * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
-    @GET(URL + "?raw_html=false")
-    ViewDocumentResponse viewReferenceAsHtmlString(
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    String viewReferenceAsHtmlString(
+        String reference,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert a reference to HTML and retrieve the result as an HTML String using the given token
-     * @param token The token to use to authenticate the request
+     * Convert a reference to HTML and retrieve the result as an HTML String using the given token proxy
+     * @param tokenProxy The token proxy to use
      * @param reference The reference to view
      * @param params Additional parameters to use for the request
-     * @return A response with a String containing the HTML
+     * @return A String containing the HTML
      * @throws HodErrorException
      */
-    @GET(URL + "?raw_html=false")
-    ViewDocumentResponse viewReferenceAsHtmlString(
-        @Header("token") AuthenticationToken token,
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    String viewReferenceAsHtmlString(
+        TokenProxy tokenProxy,
+        String reference,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Convert a file to HTML and retrieve the result as an HTML String using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param url The url to view
      * @param params Additional parameters to use for the request
-     * @return A response with a String containing the HTML
+     * @return A String containing the HTML
+     * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException
      */
-    @GET(URL + "?raw_html=false")
-    ViewDocumentResponse viewUrlAsHtmlString(
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    String viewUrlAsHtmlString(
+        String url,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Convert a file to HTML and retrieve the result as an HTML String using the given token
-     * @param token The token to use to authenticate the request
+     * Convert a file to HTML and retrieve the result as an HTML String using the given token proxy
+     * @param tokenProxy The token proxy to use to use
      * @param url The url to view
      * @param params Additional parameters to use for the request
-     * @return A response with a String containing the HTML
+     * @return A String containing the HTML
      * @throws HodErrorException
      */
-    @GET(URL + "?raw_html=false")
-    ViewDocumentResponse viewUrlAsHtmlString(
-        @Header("token") AuthenticationToken token,
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    String viewUrlAsHtmlString(
+        TokenProxy tokenProxy,
+        String url,
+        ViewDocumentRequestBuilder params
     ) throws HodErrorException;
 
 }

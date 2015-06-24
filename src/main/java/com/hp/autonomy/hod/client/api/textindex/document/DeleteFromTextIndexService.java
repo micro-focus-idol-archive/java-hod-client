@@ -5,154 +5,77 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.job.Action;
-import com.hp.autonomy.hod.client.job.JobId;
-import com.hp.autonomy.hod.client.job.JobStatus;
-import com.hp.autonomy.hod.client.job.Status;
-import retrofit.http.DELETE;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Path;
-import retrofit.http.Query;
+import com.hp.autonomy.hod.client.job.HodJobCallback;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
 
+/**
+ * Service representing the DeleteFromTextIndex API
+ */
 public interface DeleteFromTextIndexService {
-
-    String URL = "/2/api/async/textindex/{indexName}/document/v1";
-
     /**
-     * Deletes the documents with the given references using a token provided by a {@link retrofit.RequestInterceptor}
+     * Deletes the documents with the given references using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param index The index to delete from
      * @param references The references of the documents to delete
-     * @return The job ID of the request
+     * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @DELETE(URL)
-    JobId deleteReferencesFromTextIndex(
-        @Path("indexName") final String index,
-        @Query("index_reference") final List<String> references
+    void deleteReferencesFromTextIndex(
+        String index,
+        List<String> references,
+        HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Deletes the documents with the given references using the given token
-     * @param token The token to use to authenticate the request
+     * Deletes the documents with the given references using the given token proxy
+     * @param tokenProxy The token proxy to use
      * @param index The index to delete from
      * @param references The references of the documents to delete
-     * @return The job ID of the request
+     * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @DELETE(URL)
-    JobId deleteReferencesFromTextIndex(
-        @Header("token") final AuthenticationToken token,
-        @Path("indexName") final String index,
-        @Query("index_reference") final List<String> references
+    void deleteReferencesFromTextIndex(
+        TokenProxy tokenProxy,
+        String index,
+        List<String> references,
+        HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Deletes all the documents from the given text index using a token provided by a {@link retrofit.RequestInterceptor}
+     * Deletes all the documents from the given text index using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param index The index to delete from
-     * @return The job ID of the request
+     * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @DELETE(URL + "?delete_all_documents=true")
-    JobId deleteAllDocumentsFromTextIndex(
-        @Path("indexName") final String index
+    void deleteAllDocumentsFromTextIndex(
+        String index,
+        HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Deletes all the documents from the given text index using the given API key
-     * @param token The token to use to authenticate the request
+     * Deletes all the documents from the given text index using the given token proxy
+     * @param tokenProxy The token to use to authenticate the request
      * @param index The index to delete from
-     * @return The job ID of the request
+     * @param callback Callback that will be called with the response
      * @throws HodErrorException If an error occurs with the request
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @DELETE(URL + "?delete_all_documents=true")
-    JobId deleteAllDocumentsFromTextIndex(
-        @Header("token") final AuthenticationToken token,
-        @Path("indexName") final String index
+    void deleteAllDocumentsFromTextIndex(
+        TokenProxy tokenProxy,
+        String index,
+        HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
-
-    /**
-     * Get the status of an DeleteFromTextIndex job
-     * @param token The token to use to authenticate the request
-     * @param jobId The id of the job
-     * @return An object containing the status of the job along with the result if the job has finished
-     * @throws HodErrorException If an error occurred retrieving the status
-     */
-    @GET("/2/job/{jobId}/status")
-    DeleteFromTextIndexJobStatus getJobStatus(
-        @Query("token") AuthenticationToken token,
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * Get the status of an DeleteFromTextIndex job using an token provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The id of the job
-     * @return An object containing the status of the job along with the result if the job has finished
-     * @throws HodErrorException If an error occurred retrieving the status
-     */
-    @GET("/2/job/{jobId}/status")
-    DeleteFromTextIndexJobStatus getJobStatus(
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * Get the result of an DeleteFromTextIndex job using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The id of the job
-     * @return An object containing the result of the job
-     * @throws HodErrorException If an error occurred retrieving the result
-     */
-    @GET("/2/job/{jobId}/result")
-    DeleteFromTextIndexJobStatus getJobResult(
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * Get the result of an DeleteFromTextIndex job using the given token
-     * @param token The token to use to authenticate the request
-     * @param jobId The id of the job
-     * @return An object containing the result of the job
-     * @throws HodErrorException If an error occurred retrieving the result
-     */
-    @GET("/2/job/{jobId}/result")
-    DeleteFromTextIndexJobStatus getJobResult(
-        @Header("token") AuthenticationToken token,
-        @Path("jobId") JobId jobId
-    ) throws HodErrorException;
-
-    /**
-     * {@link JobStatus} subtype which encodes the generic type for JSON parsing
-     */
-    class DeleteFromTextIndexJobStatus extends JobStatus<DeleteFromTextIndexResponse> {
-
-        public DeleteFromTextIndexJobStatus(
-            @JsonProperty("jobID") final String jobId,
-            @JsonProperty("status") final Status status,
-            @JsonProperty("actions") final List<DeleteFromTextIndexJobStatusAction> actions
-        ) {
-            super(jobId, status, actions);
-        }
-    }
-
-    /**
-     * {@link Action} subtype which encodes the generic type for JSON parsing
-     */
-    class DeleteFromTextIndexJobStatusAction extends Action<DeleteFromTextIndexResponse> {
-        // need these @JsonProperty or it doesn't work
-        public DeleteFromTextIndexJobStatusAction(
-            @JsonProperty("action") final String action,
-            @JsonProperty("status") final Status status,
-            @JsonProperty("errors") final List<HodError> errors,
-            @JsonProperty("result") final DeleteFromTextIndexResponse result,
-            @JsonProperty("version") final String version
-        ) {
-            super(action, status, errors, result, version);
-        }
-    }
-
 }

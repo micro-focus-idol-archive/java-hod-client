@@ -31,7 +31,7 @@ public class SentimentAnalysisServiceITCase extends AbstractHodClientIntegration
     public void setUp() {
         super.setUp();
 
-        sentimentAnalysisService = getRestAdapter().create(SentimentAnalysisService.class);
+        sentimentAnalysisService = new SentimentAnalysisServiceImpl(getConfig());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class SentimentAnalysisServiceITCase extends AbstractHodClientIntegration
                 "The food at the restaurant was poor. " +
                 "In conclusion, it was an average restaurant";
 
-        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(getToken(), text, SentimentAnalysisLanguage.eng);
+        final SentimentAnalysisResponse response = sentimentAnalysisService.analyzeSentimentForText(getTokenProxy(), text, SentimentAnalysisLanguage.eng);
 
         assertThat(response.getPositive(), hasSize(1));
         assertThat(response.getNegative(), hasSize(1));

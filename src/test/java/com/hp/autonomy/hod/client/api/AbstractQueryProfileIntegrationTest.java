@@ -6,10 +6,10 @@ package com.hp.autonomy.hod.client.api;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.queryprofile.CreateQueryProfileService;
-import com.hp.autonomy.hod.client.api.queryprofile.DeleteQueryProfileService;
 import com.hp.autonomy.hod.client.api.queryprofile.QueryProfile;
 import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileRequestBuilder;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileService;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileServiceImpl;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -26,8 +26,7 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
 
     private List<String> createdQueryProfiles;
     // Not under test
-    private CreateQueryProfileService createQueryProfileService;
-    private DeleteQueryProfileService deleteQueryProfileService;
+    private QueryProfileService queryProfileService;
 
     public AbstractQueryProfileIntegrationTest(final Endpoint endpoint) {
         super(endpoint);
@@ -36,8 +35,7 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
     @Override
     public void setUp() {
         super.setUp();
-        createQueryProfileService = getRestAdapter().create(CreateQueryProfileService.class);
-        deleteQueryProfileService = getRestAdapter().create(DeleteQueryProfileService.class);
+        queryProfileService = new QueryProfileServiceImpl(getConfig());
         createdQueryProfiles = new ArrayList<>();
     }
 
@@ -49,7 +47,7 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
         for (final String queryProfileName : createdQueryProfiles) {
             try {
                 // Try/catch as QueryProfiles might not have been created
-                deleteQueryProfileService.deleteQueryProfile(getToken(), queryProfileName);
+                queryProfileService.deleteQueryProfile(getTokenProxy(), queryProfileName);
             } catch (final HodErrorException e) {
                 log.error("Error deleting query profile", e);
             }
@@ -75,7 +73,7 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
             .setPromotionsIdentified(promotionsIdentified)
             .addPromotionCategories("Promotions");
 
-        createQueryProfileService.createQueryProfile(getToken(), profileName, getQueryManipulationIndex(), requestBuilder.build());
+        queryProfileService.createQueryProfile(getTokenProxy(), profileName, getQueryManipulationIndex(), requestBuilder);
 
         return new QueryProfile.Builder()
             .setName(profileName)

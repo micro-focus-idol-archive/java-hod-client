@@ -20,16 +20,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(Parameterized.class)
 public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractHodClientIntegrationTest {
 
-    private CreateQueryProfileService createQueryProfileService;
-    private DeleteQueryProfileService deleteQueryProfileService;
+    private QueryProfileService queryProfileService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        createQueryProfileService = getRestAdapter().create(CreateQueryProfileService.class);
-        deleteQueryProfileService = getRestAdapter().create(DeleteQueryProfileService.class);
+        queryProfileService = new QueryProfileServiceImpl(getConfig());
     }
 
     public CreateDeleteQueryProfileServiceSuiteChild(final Endpoint endpoint) {
@@ -45,8 +43,8 @@ public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractHodClient
             .setPromotionsIdentified(false)
             .addPromotionCategories("Promotions");
 
-        final QueryProfileStatusResponse createResponse = createQueryProfileService.createQueryProfile(getToken(), profileName, getQueryManipulationIndex(), builder.build());
-        final QueryProfileStatusResponse deleteResponse = deleteQueryProfileService.deleteQueryProfile(getToken(), profileName);
+        final QueryProfileStatusResponse createResponse = queryProfileService.createQueryProfile(getTokenProxy(), profileName, getQueryManipulationIndex(), builder);
+        final QueryProfileStatusResponse deleteResponse = queryProfileService.deleteQueryProfile(getTokenProxy(), profileName);
 
         assertThat(createResponse.getMessage(), is(notNullValue()));
         assertThat(createResponse.getQueryProfile(), is(profileName));

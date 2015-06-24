@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import retrofit.mime.TypedFile;
 
 import java.io.File;
 import java.util.HashMap;
@@ -33,14 +32,14 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
 
     private static final String REFERENCE = "3ac70cc2-606e-486a-97d0-511e762b2183";
 
-    private AddToTextIndexJobService addToTextIndexService;
+    private AddToTextIndexPollingService addToTextIndexService;
 
     @Override
     @Before
     public void setUp() {
         super.setUp();
 
-        addToTextIndexService = new AddToTextIndexJobService(getRestAdapter().create(AddToTextIndexService.class));
+        addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
 
     @After
@@ -61,14 +60,13 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .addField("coolstuff", "This is so cool!")
                 .build();
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
-                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .build();
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
+                .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addJsonToTextIndex(getToken(), new Documents<>(document), getIndex(), params, callback);
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), getIndex(), params, callback);
 
         latch.await();
 
@@ -85,22 +83,21 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAddFileToTextIndex() throws HodErrorException, InterruptedException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/the-end.txt"));
+        final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/the-end.txt");
         final String reference = "63edb67f-c930-4b7b-8c33-2cd28e5cc670";
 
         final Map<String, Object> additionalMetadata = new HashMap<>();
         additionalMetadata.put("reference", reference);
         additionalMetadata.put("title", "The End");
 
-        final Map<String, Object> params = new AddToTextIndexRequestBuilder()
+        final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
                 .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace)
-                .addAdditionalMetadata(additionalMetadata)
-                .build();
+                .addAdditionalMetadata(additionalMetadata);
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addFileToTextIndex(getToken(), file, getIndex(), params, callback);
+        addToTextIndexService.addFileToTextIndex(getTokenProxy(), file, getIndex(), params, callback);
 
         latch.await();
 

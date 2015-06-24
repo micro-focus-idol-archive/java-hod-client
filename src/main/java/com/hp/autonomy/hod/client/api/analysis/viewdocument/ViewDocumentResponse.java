@@ -20,7 +20,7 @@ import org.apache.commons.codec.binary.StringUtils;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = ViewDocumentResponse.Builder.class)
-public class ViewDocumentResponse {
+class ViewDocumentResponse {
 
     /**
      * @return A String containing an HTML representation of the document

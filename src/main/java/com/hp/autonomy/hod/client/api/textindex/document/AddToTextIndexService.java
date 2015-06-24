@@ -5,249 +5,243 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.job.Action;
-import com.hp.autonomy.hod.client.job.JobId;
-import com.hp.autonomy.hod.client.job.JobStatus;
-import com.hp.autonomy.hod.client.job.Status;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.PartMap;
-import retrofit.http.Path;
-import retrofit.mime.TypedOutput;
+import com.hp.autonomy.hod.client.job.HodJobCallback;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.InputStream;
 
 /**
- * Interface representing the Add to Text Index API
+ * Service representing the AddToTextIndex API
  */
 public interface AddToTextIndexService {
-
-    String URL = "/2/api/async/textindex/{indexName}/document/v1";
-
     /**
-     * Index JSON documents into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Index JSON documents into HP Haven OnDemand using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param documents A collection of objects to convert to JSON
-     * @param indexName The index to add to
+     * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @POST(URL)
-    @Multipart
-    JobId addJsonToTextIndex(
-        @Part("json") Documents<?> documents,
-        @Path("indexName") String indexName,
-        @PartMap Map<String, Object> params
+    void addJsonToTextIndex(
+        Documents<?> documents,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Index JSON documents into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
+     * Index JSON documents into HP Haven OnDemand using the given token proxy
+     * @param tokenProxy The token proxy to use
      * @param documents A collection of objects to convert to JSON
-     * @param indexName The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addJsonToTextIndex(
-        @Header("token") AuthenticationToken token,
-        @Part("json") Documents<?> documents,
-        @Path("indexName") String indexName,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index a file into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param file A file containing the content of the document
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @POST(URL)
-    @Multipart
-    JobId addFileToTextIndex(
-        @Part("file") TypedOutput file,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
+    void addJsonToTextIndex(
+        TokenProxy tokenProxy,
+        Documents<?> documents,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Index a file into HP Haven OnDemand using the given token
-     * @param token The API key to use to authenticate the request
-     * @param file A file containing the content of the document
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addFileToTextIndex(
-        @Header("token") AuthenticationToken token,
-        @Part("file") TypedOutput file,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index an object store object into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
-     * @param reference An object store reference pointing at a file to be used for document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addReferenceToTextIndex(
-        @Part("reference") String reference,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index an object store object into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
-     * @param reference An object store reference pointing at a file to be used for document content
-     * @param index The index to add to
-     * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
-     */
-    @POST(URL)
-    @Multipart
-    JobId addReferenceToTextIndex(
-        @Header("token") AuthenticationToken token,
-        @Part("reference") String reference,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
-    ) throws HodErrorException;
-
-    /**
-     * Index a publicly accessible into HP Haven OnDemand using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Index a public accessible url into HP Haven OnDemand using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param url A publicly accessible url containing the document content
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @POST(URL)
-    @Multipart
-    JobId addUrlToTextIndex(
-        @Part("url") String url,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
+    void addUrlToTextIndex(
+        String url,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Index a publicly accessible into HP Haven OnDemand using the given token
-     * @param token The token to use to authenticate the request
+     * Index a public accessible url into HP Haven OnDemand using the given token proxy
+     * @param tokenProxy The token proxy to use
      * @param url A publicly accessible url containing the document content
      * @param index The index to add to
      * @param params Additional parameters to be sent as part of the request
-     * @return The job ID of the request
-     * @throws HodErrorException
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @POST(URL)
-    @Multipart
-    JobId addUrlToTextIndex(
-        @Header("token") AuthenticationToken token,
-        @Part("url") String url,
-        @Path("indexName") String index,
-        @PartMap Map<String, Object> params
+    void addUrlToTextIndex(
+        TokenProxy tokenProxy,
+        String url,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Get the status of an AddToTextIndex job using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The id of the job
-     * @return An object containing the status of the job along with the result if the job has finished
-     * @throws HodErrorException If an error occurred retrieving the status
+     * Index an object store object into HP Haven OnDemand using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param reference An object store reference pointing at a file to be used for document content
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET("/2/job/{jobId}/status")
-    AddToTextIndexJobStatus getJobStatus(
-        @Path("jobId") JobId jobId
+    void addReferenceToTextIndex(
+        String reference,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Get the status of an AddToTextIndex job using the given token
-     * @param token The API key to use to authenticate the request
-     * @param jobId The id of the job
-     * @return An object containing the status of the job along with the result if the job has finished
-     * @throws HodErrorException If an error occurred retrieving the status
+     * Index an object store object into HP Haven OnDemand using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param reference An object store reference pointing at a file to be used for document content
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET("/2/job/{jobId}/status")
-    AddToTextIndexJobStatus getJobStatus(
-        @Header("token") AuthenticationToken token,
-        @Path("jobId") JobId jobId
+    void addReferenceToTextIndex(
+        TokenProxy tokenProxy,
+        String reference,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Get the result of an AddToTextIndex job using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param jobId The id of the job
-     * @return An object containing the result of the job
-     * @throws HodErrorException If an error occurred retrieving the result
+     * Index a file into HP Haven OnDemand using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param file A file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET("/2/job/{jobId}/result")
-    AddToTextIndexJobStatus getJobResult(
-        @Path("jobId") JobId jobId
+    void addFileToTextIndex(
+        File file,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * Get the result of an AddToTextIndex job using the given token
-     * @param token The API key to use to authenticate the request
-     * @param jobId The id of the job
-     * @return An object containing the result of the job
-     * @throws HodErrorException If an error occurred retrieving the result
+     * Index a file into HP Haven OnDemand using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param file A file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET("/2/job/{jobId}/result")
-    AddToTextIndexJobStatus getJobResult(
-        @Header("token") AuthenticationToken token,
-        @Path("jobId") JobId jobId
+    void addFileToTextIndex(
+        TokenProxy tokenProxy,
+        File file,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
 
     /**
-     * {@link JobStatus} subtype which encodes the generic type for JSON parsing
+     * Index a file into HP Haven OnDemand using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param bytes The bytes of a file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    class AddToTextIndexJobStatus extends JobStatus<AddToTextIndexResponse> {
-
-        public AddToTextIndexJobStatus(
-            @JsonProperty("jobID") final String jobId,
-            @JsonProperty("status") final Status status,
-            @JsonProperty("actions") final List<AddToTextIndexJobStatusAction> actions
-        ) {
-            super(jobId, status, actions);
-        }
-    }
+    void addFileToTextIndex(
+        byte[] bytes,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException;
 
     /**
-     * {@link Action} subtype which encodes the generic type for JSON parsing
+     * Index a file into HP Haven OnDemand using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param bytes The bytes of a file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    class AddToTextIndexJobStatusAction extends Action<AddToTextIndexResponse> {
-        // need these @JsonProperty or it doesn't work
-        public AddToTextIndexJobStatusAction(
-            @JsonProperty("action") final String action,
-            @JsonProperty("status") final Status status,
-            @JsonProperty("errors") final List<HodError> errors,
-            @JsonProperty("result") final AddToTextIndexResponse result,
-            @JsonProperty("version") final String version
-        ) {
-            super(action, status, errors, result, version);
-        }
-    }
+    void addFileToTextIndex(
+        TokenProxy tokenProxy,
+        byte[] bytes,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException;
 
+    /**
+     * Index a file into HP Haven OnDemand using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param inputStream An InputStream representing a file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    void addFileToTextIndex(
+        InputStream inputStream,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException;
+
+    /**
+     * Index a file into HP Haven OnDemand using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param inputStream An InputStream representing a file containing the content of the document
+     * @param index The index to add to
+     * @param params Additional parameters to be sent as part of the request
+     * @param callback Callback that will be called with the response
+     * @throws HodErrorException If an error occurs indexing the documents
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    void addFileToTextIndex(
+        TokenProxy tokenProxy,
+        InputStream inputStream,
+        String index,
+        AddToTextIndexRequestBuilder params,
+        HodJobCallback<AddToTextIndexResponse> callback
+    ) throws HodErrorException;
 }

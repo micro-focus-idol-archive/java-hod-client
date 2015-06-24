@@ -13,13 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import retrofit.client.Response;
-import retrofit.mime.TypedFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -34,7 +31,7 @@ public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest 
     public void setUp() {
         super.setUp();
 
-        viewDocumentService = getRestAdapter().create(ViewDocumentService.class);
+        viewDocumentService = new ViewDocumentServiceImpl(getConfig());
     }
 
     public ViewDocumentServiceITCase(final Endpoint endpoint) {
@@ -45,36 +42,27 @@ public class ViewDocumentServiceITCase extends AbstractHodClientIntegrationTest 
     public void testViewFile() throws HodErrorException, IOException {
         final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/formatconversion/test-file.txt");
 
-        final Map<String, Object> params = new ViewDocumentRequestBuilder()
+        final ViewDocumentRequestBuilder params = new ViewDocumentRequestBuilder()
                 .addHighlightExpressions("ventilation")
-                .addStartTags("<highlight>")
-                .build();
+                .addStartTags("<highlight>");
 
-        final Response response = viewDocumentService.viewFile(getToken(), new TypedFile("text/plain", file), params);
+        try(final InputStream inputStream = viewDocumentService.viewFile(getTokenProxy(), file, params)) {
+            final String html = IOUtils.toString(inputStream, "UTF-8");
 
-        final InputStream inputStream = response.getBody().in();
-
-        final String html = IOUtils.toString(inputStream, "UTF-8");
-
-        inputStream.close();
-
-        assertThat(html, containsString("telephone"));
-        assertThat(html, containsString("<highlight>ventilation</highlight>"));
+            assertThat(html, containsString("telephone"));
+            assertThat(html, containsString("<highlight>ventilation</highlight>"));
+        }
     }
 
     @Test
     public void testViewFileAsHtmlString() throws HodErrorException {
         final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/formatconversion/test-file.txt");
 
-        final Map<String, Object> params = new ViewDocumentRequestBuilder()
+        final ViewDocumentRequestBuilder params = new ViewDocumentRequestBuilder()
                 .addHighlightExpressions("ventilation")
-                .addStartTags("<highlight>")
-                .setRawHtml(false)
-                .build();
+                .addStartTags("<highlight>");
 
-        final ViewDocumentResponse response = viewDocumentService.viewFileAsHtmlString(getToken(), new TypedFile("text/plain", file), params);
-
-        final String html = response.getDocument();
+        final String html = viewDocumentService.viewFileAsHtmlString(getTokenProxy(), file, params);
 
         assertThat(html, containsString("telephone"));
         assertThat(html, containsString("<highlight>ventilation</highlight>"));

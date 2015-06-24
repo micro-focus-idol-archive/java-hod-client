@@ -6,37 +6,45 @@
 package com.hp.autonomy.hod.client;
 
 import com.hp.autonomy.hod.client.api.authentication.ApiKey;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
+import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 import org.junit.runners.Parameterized;
 import retrofit.RestAdapter;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 
 public abstract class AbstractHodClientIntegrationTest {
     protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
     protected static final String DOMAIN_NAME = "IOD-TEST-DOMAIN";
 
-    private RestAdapter restAdapter;
     protected final Endpoint endpoint;
+    private HodServiceConfig hodServiceConfig;
+    private RestAdapter restAdapter;
     private AuthenticationToken token;
+    private TokenProxy tokenProxy;
 
     public void setUp() {
-        restAdapter = RestAdapterFactory.getRestAdapter(null, endpoint);
+        hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, endpoint);
+        restAdapter = hodServiceConfig.getRestAdapter();
 
-        final AuthenticationService authenticationService = restAdapter.create(AuthenticationService.class);
+        final AuthenticationBackend authenticationBackend = restAdapter.create(AuthenticationBackend.class);
 
         try {
-            token = authenticationService.authenticateApplication(
+            token = authenticationBackend.authenticateApplication(
                 new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
                     APPLICATION_NAME,
                     DOMAIN_NAME,
                 TokenType.simple
             ).getToken();
-        } catch (final HodErrorException e) {
+
+            tokenProxy = hodServiceConfig.getTokenRepository().insert(token);
+        } catch (final HodErrorException | IOException e) {
             throw new AssertionError("COULD NOT OBTAIN TOKEN");
         }
     }
@@ -44,7 +52,7 @@ public abstract class AbstractHodClientIntegrationTest {
     @Parameterized.Parameters
     public static Collection<Endpoint> endPoints() {
         final Endpoint endpoint = Enum.valueOf(Endpoint.class, System.getProperty("hp.hod.env", "PRODUCTION"));
-        return Arrays.asList(endpoint);
+        return Collections.singletonList(endpoint);
     }
 
     public AbstractHodClientIntegrationTest(final Endpoint endpoint) {
@@ -63,8 +71,16 @@ public abstract class AbstractHodClientIntegrationTest {
         return restAdapter;
     }
 
+    public HodServiceConfig getConfig() {
+        return hodServiceConfig;
+    }
+
     public AuthenticationToken getToken() {
         return token;
+    }
+
+    public TokenProxy getTokenProxy() {
+        return tokenProxy;
     }
 
 }

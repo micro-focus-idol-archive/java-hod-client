@@ -5,51 +5,49 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * Interface representing the QueryTextIndex API.
+ * Service representing the GetContent API
+ * @param <T> The desired return type of the API methods
  */
-public interface GetContentService {
-
-    String URL = "/2/api/sync/textindex/query/content/v1";
+public interface GetContentService<T> {
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param indexReference The reference list of the documents you want to view
-     * @param indexes The index the document resides in
+     * Query HP Haven OnDemand for documents matching query text using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param indexReference The reference list of the documents you want to retrieve
+     * @param index The index the document resides in
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of documents with the given references
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents getContent(
-            @Query("index_reference") List<String> indexReference,
-            @Query("indexes") String indexes,
-            @QueryMap Map<String, Object> params
+    T getContent(
+        List<String> indexReference,
+        String index,
+        GetContentRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using the given token
-     * @param token The token to use to authenticate the request
-     * @param indexReference The reference list of the documents you want to view
-     * @param indexes The index the document resides in
+     * Query HP Haven OnDemand for documents matching query text using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param indexReference The reference list of the documents you want to retrieve
+     * @param index The index the document resides in
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of documents with the given references
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents getContent(
-            @Header("token") AuthenticationToken token,
-            @Query("index_reference") List<String> indexReference,
-            @Query("indexes") String indexes,
-            @QueryMap Map<String, Object> params
+    T getContent(
+        TokenProxy tokenProxy,
+        List<String> indexReference,
+        String index,
+        GetContentRequestBuilder params
     ) throws HodErrorException;
+
 }

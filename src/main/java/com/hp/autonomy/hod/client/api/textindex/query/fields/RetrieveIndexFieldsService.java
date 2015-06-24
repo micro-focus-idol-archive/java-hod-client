@@ -5,38 +5,43 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.QueryMap;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.Map;
-
+/**
+ * Service representing the RetrieveIndexFields API
+ */
 public interface RetrieveIndexFieldsService {
-    String URL = "/2/api/sync/textindex/query/fields/v1";
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been ingested
-     * into a given text index using a token provided by a {@link retrofit.RequestInterceptor}
+     * Retrieve from HP Haven OnDemand a list of the fields that have been indexed
+     * into a given text index using a token proxy provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param index The index to retrieve fields from
      * @param params Parameters to be sent as part of the request
      * @return A list of fields and their types
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
     RetrieveIndexFieldsResponse retrieveIndexFields(
-            @QueryMap Map<String, Object> params
+        String index,
+        RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been ingested
-     * into a given text index using the given token
-     * @param token The token to use to authenticate the request
-     * @param params Additional parameters to be sent as part of the request
+     * Retrieve from HP Haven OnDemand a list of the fields that have been indexed
+     * into a given text index using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param index The index to retrieve fields from
+     * @param params Parameters to be sent as part of the request
      * @return A list of fields and their types
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
     RetrieveIndexFieldsResponse retrieveIndexFields(
-            @Header("token") AuthenticationToken token,
-            @QueryMap Map<String, Object> params
+        TokenProxy tokenProxy,
+        String index,
+        RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
+
 }

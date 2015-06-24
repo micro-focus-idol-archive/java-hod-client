@@ -31,7 +31,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
     public void setUp() {
         super.setUp();
 
-        findRelatedConceptsService = getRestAdapter().create(FindRelatedConceptsService.class);
+        findRelatedConceptsService = new FindRelatedConceptsServiceImpl(getConfig());
     }
 
     public FindRelatedConceptsServiceITCase(final Endpoint endpoint) {
@@ -40,28 +40,24 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testFindForText() throws HodErrorException {
-        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithText(getToken(), "Hewlett", null);
+        final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithText(getTokenProxy(), "Hewlett", new FindRelatedConceptsRequestBuilder());
 
-        final List<Entity> entitiesList = entities.getEntities();
+        assertThat(entities.size(), is(greaterThan(0)));
 
-        assertThat(entitiesList.size(), is(greaterThan(0)));
-
-        final Entity entity0 = entitiesList.get(0);
+        final Entity entity0 = entities.get(0);
 
         assertThat(entity0.getOccurrences(), is(greaterThan(0)));
     }
 
     @Test
     public void testFindForFile() throws HodErrorException {
-        final TypedFile file = new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt"));
+        final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt");
 
-        final Entities entities = findRelatedConceptsService.findRelatedConceptsWithFile(getToken(), file, null);
+        final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithFile(getTokenProxy(), file, new FindRelatedConceptsRequestBuilder());
 
-        final List<Entity> entitiesList = entities.getEntities();
+        assertThat(entities.size(), is(greaterThan(0)));
 
-        assertThat(entitiesList.size(), is(greaterThan(0)));
-
-        final Entity entity0 = entitiesList.get(0);
+        final Entity entity0 = entities.get(0);
 
         assertThat(entity0.getOccurrences(), is(greaterThan(0)));
     }

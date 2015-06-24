@@ -5,137 +5,198 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.PartMap;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
-import retrofit.mime.TypedOutput;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.Map;
+import java.io.File;
+import java.io.InputStream;
 
 /**
- * Interface representing the QueryTextIndex API.
+ * Interface representing the QueryTextIndex API
+ * @param <T> The desired return type of the methods of the service
  */
-public interface QueryTextIndexService {
-
-    String URL = "/2/api/sync/textindex/query/search/v1";
+public interface QueryTextIndexService<T> {
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using a token provided by a
-     * {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for documents matching query text using a token proxy provided by a
+     * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents queryTextIndexWithText(
-        @Query("text") String text,
-        @QueryMap Map<String, Object> params
+    T queryTextIndexWithText(
+        String text,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for documents matching query text using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents queryTextIndexWithText(
-        @Header("token") AuthenticationToken token,
-        @Query("text") String text,
-        @QueryMap Map<String, Object> params
+    T queryTextIndexWithText(
+        TokenProxy tokenProxy,
+        String text,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for documents using query text from an object store object using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents queryTextIndexWithReference(
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    T queryTextIndexWithReference(
+        String reference,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for documents using query text from an object store object using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents queryTextIndexWithReference(
-        @Header("token") AuthenticationToken token,
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    T queryTextIndexWithReference(
+        TokenProxy tokenProxy,
+        String reference,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for documents using query text from a url using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents queryTextIndexWithUrl(
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    T queryTextIndexWithUrl(
+        String url,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for documents using query text from a url using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Documents queryTextIndexWithUrl(
-        @Header("token") AuthenticationToken token,
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    T queryTextIndexWithUrl(
+        TokenProxy tokenProxy,
+        String url,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text in a file using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for documents using query text in a file using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @Multipart
-    @POST(URL)
-    Documents queryTextIndexWithFile(
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    T queryTextIndexWithFile(
+        File file,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text in a file using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for documents using query text in a file using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @Multipart
-    @POST(URL)
-    Documents queryTextIndexWithFile(
-        @Header("token") AuthenticationToken token,
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    T queryTextIndexWithFile(
+        TokenProxy tokenProxy,
+        File file,
+        QueryRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for documents using query text in a file using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param bytes The bytes of a file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    T queryTextIndexWithFile(
+        byte[] bytes,
+        QueryRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for documents using query text in a file using the given token proxy
+     * @param tokenProxy proxy The token to use to authenticate the request
+     * @param bytes The bytes of a file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    T queryTextIndexWithFile(
+        TokenProxy tokenProxy,
+        byte[] bytes,
+        QueryRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for documents using query text in a file using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param inputStream An InputStream representing a file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    T queryTextIndexWithFile(
+        InputStream inputStream,
+        QueryRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for documents using query text in a file using the given token proxy
+     * @param tokenProxy proxy The token to use to authenticate the request
+     * @param inputStream An InputStream representing a file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of documents that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    T queryTextIndexWithFile(
+        TokenProxy tokenProxy,
+        InputStream inputStream,
+        QueryRequestBuilder params
     ) throws HodErrorException;
 
 }

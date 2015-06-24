@@ -161,10 +161,10 @@ public class QueryRequestBuilder {
     }
 
     /**
-     * @return A map of query parameters suitable for use with {@link QueryTextIndexService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link QueryTextIndexBackend}. get is NOT supported on
      * the resulting map
      */
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
         map.put("end_tag", endTag);
         map.put("field_text", fieldText);

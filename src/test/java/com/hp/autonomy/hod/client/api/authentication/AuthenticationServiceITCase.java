@@ -4,6 +4,7 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ import static org.hamcrest.core.Is.is;
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
     private static final String USER_STORE = "IOD-TEST-USER-STORE";
 
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
     private ApiKey apiKey;
 
     public AuthenticationServiceITCase(final Endpoint endpoint) {
@@ -41,30 +42,26 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     public void setUp() {
         super.setUp();
         apiKey = new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey"));
-        authenticationService = getRestAdapter().create(AuthenticationService.class);
+        authenticationService = new AuthenticationServiceImpl(getConfig());
     }
 
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
-        final AuthenticationToken token = authenticationService.authenticateApplication(
+        final TokenProxy tokenProxy = authenticationService.authenticateApplication(
             apiKey,
             APPLICATION_NAME,
             DOMAIN_NAME,
             TokenType.simple
-        ).getToken();
+        );
 
-        log.debug("Token was: {}", token);
-
-        assertThat(token, is(notNullValue()));
+        assertThat(tokenProxy, is(notNullValue()));
     }
 
     @Test
     public void testAuthenticateUser() throws HodErrorException {
-        final AuthenticationToken token = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
+        final TokenProxy tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
 
-        log.debug("Token was: {}", token);
-
-        assertThat(token, is(notNullValue()));
+        assertThat(tokenProxy, is(notNullValue()));
     }
 
     @Test
@@ -89,11 +86,9 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(users.get(0).getUsername(), is(notNullValue()));
         assertThat(users.get(0).getUserStore(), is(DOMAIN_NAME + ':' + USER_STORE));
 
-        final AuthenticationToken combinedToken = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple).getToken();
+        final TokenProxy combinedTokenProxy = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
 
-        log.debug("Combined token was: {}", combinedToken);
-
-        assertThat(combinedToken, is(notNullValue()));
+        assertThat(combinedTokenProxy, is(notNullValue()));
     }
 
     @Test

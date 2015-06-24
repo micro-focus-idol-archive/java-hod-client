@@ -5,40 +5,48 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.Map;
+import java.util.List;
 
+/**
+ * Service representing the GetParametricValues API
+ */
 public interface GetParametricValuesService {
-    String URL = "/2/api/sync/textindex/query/parametricvalues/v1";
 
     /**
-     * Query parametric values for the fieldName using a token provided by a {@link retrofit.RequestInterceptor}
-     * @param fieldName A comma-separated list of field names to return values for.
+     * Query parametric values for the fieldName using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param fieldNames A list of field names to return values for
+     * @param indexes The indexes to get values from
      * @param params Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
     FieldNames getParametricValues(
-            @Query("field_name") String fieldName,
-            @QueryMap Map<String, Object> params
+        List<String> fieldNames,
+        List<String> indexes,
+        GetParametricValuesRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Get parametric values for the fieldName using the given token
-     * @param token The token to use to authenticate the request
-     * @param fieldName A comma-separated list of field names to return values for.
+     * Get parametric values for the fieldName using the given token proxy
+     * @param tokenProxy The token to use to authenticate the request
+     * @param fieldNames A list of field names to return values for
+     * @param indexes The indexes to get values from
      * @param params Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
     FieldNames getParametricValues(
-            @Query("token") AuthenticationToken token,
-            @Query("field_name") String fieldName,
-            @QueryMap Map<String, Object> params
+        TokenProxy tokenProxy,
+        List<String> fieldNames,
+        List<String> indexes,
+        GetParametricValuesRequestBuilder params
     ) throws HodErrorException;
+
 }

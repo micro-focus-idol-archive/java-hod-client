@@ -5,132 +5,198 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.PartMap;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
-import retrofit.mime.TypedOutput;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.Map;
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
 
+/**
+ * Service representing the FindRelatedConcepts API
+ */
 public interface FindRelatedConceptsService {
-    String URL = "/2/api/sync/textindex/query/findrelatedconcepts/v1";
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using a token provided by a
-     * {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for related concepts matching query text using a token proxy provided by a
+     * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Entities findRelatedConceptsWithText(
-        @Query("text") String text,
-        @QueryMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithText(
+        String text,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for related concepts matching query text using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Entities findRelatedConceptsWithText(
-        @Header("token") AuthenticationToken token,
-        @Query("text") String text,
-        @QueryMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithText(
+        TokenProxy tokenProxy,
+        String text,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using a token provided by a
-     * {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for related concepts using query text from an object store object using a token proxy provided by a
+     * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Entities findRelatedConceptsWithReference(
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithReference(
+        String reference,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for related concepts using query text from an object store object using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Entities findRelatedConceptsWithReference(
-        @Header("token") AuthenticationToken token,
-        @Query("reference") String reference,
-        @QueryMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithReference(
+        TokenProxy tokenProxy,
+        String reference,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using a token provided by a
-     * {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for related concepts using query text from a url using a token proxy provided by a
+     * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Entities findRelatedConceptsWithUrl(
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithUrl(
+        String url,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for related concepts using query text from a url using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Entities findRelatedConceptsWithUrl(
-        @Header("token") AuthenticationToken token,
-        @Query("url") String url,
-        @QueryMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithUrl(
+        TokenProxy tokenProxy,
+        String url,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text in a file using a token
-     * provided by a {@link retrofit.RequestInterceptor}
+     * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @Multipart
-    @POST(URL)
-    Entities findRelatedConceptsWithFile(
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithFile(
+        File file,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text in a file using the given token
-     * @param token The token to use to authenticate the request
+     * Query HP Haven OnDemand for related concepts using query text in a file using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
-     * @return A list of documents that match the query text
+     * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @Multipart
-    @POST(URL)
-    Entities findRelatedConceptsWithFile(
-        @Header("token") AuthenticationToken token,
-        @Part("file") TypedOutput file,
-        @PartMap Map<String, Object> params
+    List<Entity> findRelatedConceptsWithFile(
+        TokenProxy tokenProxy,
+        File file,
+        FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param bytes The bytes of a file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    List<Entity> findRelatedConceptsWithFile(
+        byte[] bytes,
+        FindRelatedConceptsRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for related concepts using query text in a file using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
+     * @param bytes The bytes of a file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    List<Entity> findRelatedConceptsWithFile(
+        TokenProxy tokenProxy,
+        byte[] bytes,
+        FindRelatedConceptsRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param inputStream A file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of related concepts that match the query text
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    List<Entity> findRelatedConceptsWithFile(
+        InputStream inputStream,
+        FindRelatedConceptsRequestBuilder params
+    ) throws HodErrorException;
+
+    /**
+     * Query HP Haven OnDemand for related concepts using query text in a file using the given token proxy
+     * @param tokenProxy The token proxy to use to authenticate the request
+     * @param inputStream A file containing the query text
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of related concepts that match the query text
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    List<Entity> findRelatedConceptsWithFile(
+        TokenProxy tokenProxy,
+        InputStream inputStream,
+        FindRelatedConceptsRequestBuilder params
+    ) throws HodErrorException;
+
 }

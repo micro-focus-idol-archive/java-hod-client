@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GetUserResponse {
+class GetUserResponse {
     private final List<User> users;
 
     GetUserResponse(@JsonProperty("users") final List<User> users) {

@@ -5,36 +5,33 @@
 
 package com.hp.autonomy.hod.client.api.resource;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.QueryMap;
-
-import java.util.Map;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 
 /**
- * Interface representing the list resources API.
+ * Service for calling the Resources API
  */
 public interface ResourcesService {
 
-    String URL = "/2/api/sync/resource/v1";
+    /**
+     * Query HP Haven OnDemand for the list of resources using a token proxy
+     * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * @param parameters Request parameters
+     * @return Public and private resources
+     * @throws NullPointerException If a TokenProxyService has not been defined
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
+     */
+    Resources list(ListResourcesRequestBuilder parameters) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for the list of resources using a token provided by a {@link retrofit.RequestInterceptor}.
-     * @param parameters Request parameters (can be built using {@link ListResourcesRequestBuilder}
+     * Query HP Haven OnDemand for the list of resources using the given token proxy
+     * @param tokenProxy The token proxy to use
+     * @param parameters Request parameters
      * @return Public and private resources
+     * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
+     * with the token proxy has expired
      */
-    @GET(URL)
-    Resources list(@QueryMap Map<String, Object> parameters) throws HodErrorException;
-
-    /**
-     * Query HP Haven OnDemand for the list of resources with the given token
-     * @param token The authentication token
-     * @param parameters Request parameters (can be built using {@link ListResourcesRequestBuilder}
-     * @return Public and private resources
-     */
-    @GET(URL)
-    Resources list(@Header("token") AuthenticationToken token, @QueryMap Map<String, Object> parameters) throws HodErrorException;
+    Resources list(TokenProxy tokenProxy, ListResourcesRequestBuilder parameters) throws HodErrorException;
 
 }

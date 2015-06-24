@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,7 @@ public class FindRelatedConceptsRequestBuilder {
      * @param indexes Value for the indexes parameter. This list will be sent as separate parameters,
      * e.g. indexes=wiki_eng&indexes=news_eng&...
      */
-    private List<String> indexes;
+    private List<String> indexes = Collections.emptyList();
 
     /**
      * @param maxResults Value for the max_results parameter.
@@ -89,10 +90,10 @@ public class FindRelatedConceptsRequestBuilder {
     private Integer sampleSize;
 
     /**
-     * @return A map of query parameters suitable for use with {@link FindRelatedConceptsService}. get is NOT supported on
+     * @return A map of query parameters suitable for use with {@link FindRelatedConceptsBackend}. get is NOT supported on
      * the resulting map
      */
-    public Map<String, Object> build() {
+    Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
         map.put("field_text", fieldText);
         map.put("min_score", minScore);
