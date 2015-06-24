@@ -50,7 +50,7 @@ public class ResponseParserTest {
 
         final List<Header> headers = Arrays.asList(
             new Header("foo", "bar"),
-            new Header("app_tkn", "TOKEN") // the converter isn't real so this can be anything
+            new Header("refresh_token", "TOKEN") // the converter isn't real so the value can be anything
         );
 
         final Object expectedReturnValue = new Object();
