@@ -6,11 +6,21 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ListResourcesRequestBuilder;
+import com.hp.autonomy.hod.client.api.resource.Resource;
+import com.hp.autonomy.hod.client.api.resource.ResourceType;
+import com.hp.autonomy.hod.client.api.resource.Resources;
+import com.hp.autonomy.hod.client.api.resource.ResourcesService;
+import com.hp.autonomy.hod.client.api.resource.ResourcesServiceImpl;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Default implementation of QueryProfileService
@@ -20,6 +30,10 @@ public class QueryProfileServiceImpl implements QueryProfileService {
     private final QueryProfileBackend queryProfileBackend;
     private final Requester requester;
 
+    private final ResourcesService resourcesService;
+    private static final ListResourcesRequestBuilder LIST_RESOURCES_REQUEST_BUILDER = new ListResourcesRequestBuilder()
+        .setTypes(EnumSet.of(ResourceType.query_profile));
+
     /**
      * Creates a new QueryProfileServiceImpl with the given configuration
      * @param hodServiceConfig The configuration to use
@@ -27,6 +41,8 @@ public class QueryProfileServiceImpl implements QueryProfileService {
     public QueryProfileServiceImpl(final HodServiceConfig hodServiceConfig) {
         queryProfileBackend = hodServiceConfig.getRestAdapter().create(QueryProfileBackend.class);
         requester = hodServiceConfig.getRequester();
+
+        resourcesService = new ResourcesServiceImpl(hodServiceConfig);
     }
 
     @Override
@@ -70,13 +86,38 @@ public class QueryProfileServiceImpl implements QueryProfileService {
     }
 
     @Override
+    @Deprecated
     public QueryProfiles listQueryProfiles() throws HodErrorException {
-        return requester.makeRequest(QueryProfiles.class, getListBackendCaller());
+        return parseResources(resourcesService.list(LIST_RESOURCES_REQUEST_BUILDER));
     }
 
     @Override
+    @Deprecated
     public QueryProfiles listQueryProfiles(final TokenProxy tokenProxy) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, QueryProfiles.class, getListBackendCaller());
+        return parseResources(resourcesService.list(tokenProxy, LIST_RESOURCES_REQUEST_BUILDER));
+    }
+
+    private QueryProfiles parseResources(final Resources resources) {
+        final Set<QueryProfileName> queryProfileNames = new HashSet<>();
+
+        for (final Resource resource : resources.getResources()) {
+            queryProfileNames.add(new QueryProfileName.Builder()
+                .setName(resource.getResource())
+                .setDateCreated(resource.getDateCreated())
+                .build()
+            );
+        }
+
+        // there probably won't be any of this, but you never know
+        for (final Resource resource : resources.getPublicResources()) {
+            queryProfileNames.add(new QueryProfileName.Builder()
+                .setName(resource.getResource())
+                .setDateCreated(resource.getDateCreated())
+                .build()
+            );
+        }
+
+        return new QueryProfiles.Builder().setQueryProfiles(queryProfileNames).build();
     }
 
     private Requester.BackendCaller getCreateBackendCaller(final String name, final String queryManipulationIndex, final QueryProfileRequestBuilder params) {
