@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegrationTest {
 
-    private static final String testIndexName = "ice-cream";
+    private static final String testIndexName = "ice cream";
 
     private CreateTextIndexPollingService createTextIndexService;
     private DeleteTextIndexPollingService deleteTextIndexService;

@@ -12,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import retrofit.mime.TypedFile;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.greaterThan;
@@ -40,7 +40,10 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testFindForText() throws HodErrorException {
-        final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithText(getTokenProxy(), "Hewlett", new FindRelatedConceptsRequestBuilder());
+        final FindRelatedConceptsRequestBuilder params = new FindRelatedConceptsRequestBuilder()
+            .setIndexes(Collections.singleton(WIKI_ENG));
+
+        final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithText(getTokenProxy(), "Hewlett", params);
 
         assertThat(entities.size(), is(greaterThan(0)));
 
@@ -53,7 +56,10 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
     public void testFindForFile() throws HodErrorException {
         final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt");
 
-        final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithFile(getTokenProxy(), file, new FindRelatedConceptsRequestBuilder());
+        final FindRelatedConceptsRequestBuilder params = new FindRelatedConceptsRequestBuilder()
+            .setIndexes(Collections.singleton(WIKI_ENG));
+
+        final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithFile(getTokenProxy(), file, params);
 
         assertThat(entities.size(), is(greaterThan(0)));
 
