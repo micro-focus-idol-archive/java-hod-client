@@ -17,7 +17,7 @@ proxy_host = ARGV[1]
 proxy_port = ARGV[2]
 
 unless apikey
-  abort("Usage: #{__FILE__} <APIKEY>")
+  abort("Usage: #{__FILE__} APIKEY [PROXY_HOST] [PROXY_PORT]")
 end
 
 token = get_token(apikey, proxy_host, proxy_port)
