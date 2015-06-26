@@ -58,7 +58,10 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testHodReturnsJobError() {
         try {
-            queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", new QueryRequestBuilder());
+            final QueryRequestBuilder params = new QueryRequestBuilder()
+                .addIndexes(WIKI_ENG);
+
+            queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
             assertThat(e.getErrorCode(), is(HodErrorCode.BACKEND_REQUEST_FAILED));
