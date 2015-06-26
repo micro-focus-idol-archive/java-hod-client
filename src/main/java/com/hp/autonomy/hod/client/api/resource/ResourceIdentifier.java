@@ -1,5 +1,6 @@
 package com.hp.autonomy.hod.client.api.resource;
 
+import com.hp.autonomy.hod.client.converter.DoNotConvert;
 import lombok.Data;
 
 import java.util.regex.Pattern;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
  * Represents a domain-qualified resource identifier; for example the identifier for a text index or user store.
  */
 @Data
+@DoNotConvert
 public class ResourceIdentifier {
     private static final String SEPARATOR = ":";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile("([\\\\:])");

@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.Action;
@@ -37,7 +38,7 @@ interface DeleteTextIndexBackend {
     @DELETE(SYNC_URL)
     Response initialDeleteTextIndex(
         @Header("token") AuthenticationToken token,
-        @Path("indexName") String index
+        @Path("indexName") ResourceIdentifier index
     ) throws HodErrorException;
 
     /**
@@ -50,7 +51,7 @@ interface DeleteTextIndexBackend {
     @DELETE(ASYNC_URL)
     Response deleteTextIndex(
         @Header("token") AuthenticationToken token,
-        @Path("indexName") String index,
+        @Path("indexName") ResourceIdentifier index,
         @Query("confirm") String confirm
     ) throws HodErrorException;
 

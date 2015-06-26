@@ -6,13 +6,14 @@
 package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 interface GetParametricValuesBackend {
@@ -30,7 +31,7 @@ interface GetParametricValuesBackend {
     Response getParametricValues(
             @Query("token") AuthenticationToken token,
             @Query("field_name") String fieldName,
-            @Query("indexes") List<String> indexes,
+            @Query("indexes") Collection<ResourceIdentifier> indexes,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }

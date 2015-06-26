@@ -48,7 +48,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .setSummary(Summary.concept)
                 .setPrint(Print.all)
                 .setTotalResults(true)
-                .addIndexes("wiki_eng", "wiki_ger");
+                .addIndexes(WIKI_ENG, WIKI_GER);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
 
@@ -69,7 +69,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes("wiki_ger", "wiki_eng")
+                .addIndexes(WIKI_GER, WIKI_ENG)
                 .setSort(Sort.date);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
@@ -85,7 +85,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes("wiki_ger", "wiki_eng")
+                .addIndexes(WIKI_GER, WIKI_ENG)
                 .setSort(Sort.date);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);

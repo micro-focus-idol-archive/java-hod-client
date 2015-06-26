@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -29,7 +30,7 @@ public interface GetContentService<T> {
      */
     T getContent(
         List<String> indexReference,
-        String index,
+        ResourceIdentifier index,
         GetContentRequestBuilder params
     ) throws HodErrorException;
 
@@ -46,7 +47,7 @@ public interface GetContentService<T> {
     T getContent(
         TokenProxy tokenProxy,
         List<String> indexReference,
-        String index,
+        ResourceIdentifier index,
         GetContentRequestBuilder params
     ) throws HodErrorException;
 

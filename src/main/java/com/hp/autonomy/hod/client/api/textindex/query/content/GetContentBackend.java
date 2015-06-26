@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
@@ -35,7 +36,7 @@ interface GetContentBackend {
     Response getContent(
         @Header("token") AuthenticationToken token,
         @Query("index_reference") List<String> indexReference,
-        @Query("indexes") String indexes,
+        @Query("indexes") ResourceIdentifier indexes,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }

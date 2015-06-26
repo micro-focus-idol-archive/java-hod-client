@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -30,7 +31,7 @@ public interface AddToTextIndexService {
      */
     void addJsonToTextIndex(
         Documents<?> documents,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -49,7 +50,7 @@ public interface AddToTextIndexService {
     void addJsonToTextIndex(
         TokenProxy tokenProxy,
         Documents<?> documents,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -68,7 +69,7 @@ public interface AddToTextIndexService {
      */
     void addUrlToTextIndex(
         String url,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -88,7 +89,7 @@ public interface AddToTextIndexService {
     void addUrlToTextIndex(
         TokenProxy tokenProxy,
         String url,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -107,7 +108,7 @@ public interface AddToTextIndexService {
      */
     void addReferenceToTextIndex(
         String reference,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -126,7 +127,7 @@ public interface AddToTextIndexService {
     void addReferenceToTextIndex(
         TokenProxy tokenProxy,
         String reference,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -145,7 +146,7 @@ public interface AddToTextIndexService {
      */
     void addFileToTextIndex(
         File file,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -164,7 +165,7 @@ public interface AddToTextIndexService {
     void addFileToTextIndex(
         TokenProxy tokenProxy,
         File file,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -183,7 +184,7 @@ public interface AddToTextIndexService {
      */
     void addFileToTextIndex(
         byte[] bytes,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -202,7 +203,7 @@ public interface AddToTextIndexService {
     void addFileToTextIndex(
         TokenProxy tokenProxy,
         byte[] bytes,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -221,7 +222,7 @@ public interface AddToTextIndexService {
      */
     void addFileToTextIndex(
         InputStream inputStream,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
@@ -240,7 +241,7 @@ public interface AddToTextIndexService {
     void addFileToTextIndex(
         TokenProxy tokenProxy,
         InputStream inputStream,
-        String index,
+        ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
         HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException;
