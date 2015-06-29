@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.error;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
@@ -59,7 +60,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     public void testHodReturnsJobError() {
         try {
             final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes(WIKI_ENG);
+                .addIndexes(ResourceIdentifier.WIKI_ENG);
 
             queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
             fail("HodErrorException not thrown");

@@ -24,8 +24,6 @@ public abstract class AbstractHodClientIntegrationTest {
     protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
     protected static final String DOMAIN_NAME = "IOD-TEST-DOMAIN";
 
-    protected static final ResourceIdentifier WIKI_ENG = new ResourceIdentifier("PUBLIC_INDEXES", "wiki_eng");
-    protected static final ResourceIdentifier WIKI_GER = new ResourceIdentifier("PUBLIC_INDEXES", "wiki_ger");
     protected static final ResourceIdentifier PRIVATE_INDEX = new ResourceIdentifier(DOMAIN_NAME, "java-iod-client-integration-tests");
 
     protected final Endpoint endpoint;

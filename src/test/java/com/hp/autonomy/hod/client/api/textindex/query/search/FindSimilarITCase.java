@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexPollingService;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexResponse;
@@ -54,7 +55,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testFindSimilarWithText() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes(WIKI_ENG);
+                .addIndexes(ResourceIdentifier.WIKI_ENG);
 
         final Documents documents = findSimilarService.findSimilarDocumentsToText(getTokenProxy(), "cats", params);
 
@@ -67,7 +68,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
     public void testFindSimilarWithFile() throws HodErrorException {
         final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/formatconversion/test-file.txt");
         final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes(WIKI_ENG);
+                .addIndexes(ResourceIdentifier.WIKI_ENG);
 
         final Documents documents = findSimilarService.findSimilarDocumentsToFile(getTokenProxy(), file, params);
 

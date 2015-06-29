@@ -11,6 +11,23 @@ import java.util.regex.Pattern;
 @Data
 @DoNotConvert
 public class ResourceIdentifier {
+
+    public static final String PUBLIC_INDEXES_DOMAIN = "PUBLIC_INDEXES";
+
+    public static ResourceIdentifier WIKI_CHI = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_chi");
+    public static ResourceIdentifier WIKI_ENG = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_eng");
+    public static ResourceIdentifier WIKI_FRA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_fra");
+    public static ResourceIdentifier WIKI_GER = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_ger");
+    public static ResourceIdentifier WIKI_ITA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_ita");
+    public static ResourceIdentifier WIKI_SPA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_spa");
+    public static ResourceIdentifier WORLD_FACTBOOK = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "world_factbook");
+    public static ResourceIdentifier NEWS_ENG = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_eng");
+    public static ResourceIdentifier NEWS_FRA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_fra");
+    public static ResourceIdentifier NEWS_GER = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_ger");
+    public static ResourceIdentifier NEWS_ITA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_ita");
+    public static ResourceIdentifier ARXIV = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "arxiv");
+    public static ResourceIdentifier PATENTS = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "patents");
+
     private static final String SEPARATOR = ":";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile("([\\\\:])");
 

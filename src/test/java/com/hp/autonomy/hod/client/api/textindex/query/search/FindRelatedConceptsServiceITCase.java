@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
     @Test
     public void testFindForText() throws HodErrorException {
         final FindRelatedConceptsRequestBuilder params = new FindRelatedConceptsRequestBuilder()
-            .setIndexes(Collections.singleton(WIKI_ENG));
+            .setIndexes(Collections.singleton(ResourceIdentifier.WIKI_ENG));
 
         final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithText(getTokenProxy(), "Hewlett", params);
 
@@ -57,7 +58,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
         final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt");
 
         final FindRelatedConceptsRequestBuilder params = new FindRelatedConceptsRequestBuilder()
-            .setIndexes(Collections.singleton(WIKI_ENG));
+            .setIndexes(Collections.singleton(ResourceIdentifier.WIKI_ENG));
 
         final List<Entity> entities = findRelatedConceptsService.findRelatedConceptsWithFile(getTokenProxy(), file, params);
 
