@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,10 +42,14 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
         final String wikiEngField = "content";
 
         final RetrieveIndexFieldsRequestBuilder params = new RetrieveIndexFieldsRequestBuilder()
-                .setFieldType(FieldType.index)
-                .setGroupFieldsByType(true);
+            .setFieldType(FieldType.index)
+            .setGroupFieldsByType(true);
 
-        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(getTokenProxy(), "wiki_eng", params);
+        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(
+            getTokenProxy(),
+            ResourceIdentifier.WIKI_ENG,
+            params
+        );
 
         assertThat(response.getAllFields(), hasItem(wikiEngField));
         assertThat(response.getTotalFields(), greaterThan(0));

@@ -5,10 +5,11 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Service representing the GetParametricValues API
@@ -27,8 +28,8 @@ public interface GetParametricValuesService {
      * with the token proxy has expired
      */
     FieldNames getParametricValues(
-        List<String> fieldNames,
-        List<String> indexes,
+        Collection<String> fieldNames,
+        Collection<ResourceIdentifier> indexes,
         GetParametricValuesRequestBuilder params
     ) throws HodErrorException;
 
@@ -44,8 +45,8 @@ public interface GetParametricValuesService {
      */
     FieldNames getParametricValues(
         TokenProxy tokenProxy,
-        List<String> fieldNames,
-        List<String> indexes,
+        Collection<String> fieldNames,
+        Collection<ResourceIdentifier> indexes,
         GetParametricValuesRequestBuilder params
     ) throws HodErrorException;
 

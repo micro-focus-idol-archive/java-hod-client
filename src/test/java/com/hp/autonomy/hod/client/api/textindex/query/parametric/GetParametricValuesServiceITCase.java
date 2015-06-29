@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -49,7 +50,12 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
                 .setSort(ParametricSort.alphabetical)
                 .setMaxValues(15);
 
-        final FieldNames fieldNames = getParametricValuesService.getParametricValues(getTokenProxy(), Arrays.asList("wikipedia_type", "person_profession"), Collections.singletonList("wiki_eng"), params);
+        final FieldNames fieldNames = getParametricValuesService.getParametricValues(
+                getTokenProxy(),
+                Arrays.asList("wikipedia_type", "person_profession"),
+                Collections.singletonList(ResourceIdentifier.WIKI_ENG),
+                params
+        );
 
         final Set<String> fieldNamesSet = fieldNames.getFieldNames();
 

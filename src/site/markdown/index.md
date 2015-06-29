@@ -20,7 +20,7 @@ java-hod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.hod</groupId>
         <artifactId>java-hod-client</artifactId>
-        <version>0.8.1</version>
+        <version>0.9.0</version>
     </dependency>
 
 java-hod-client services are configured using instances of HodServiceConfig. The easiest way to do this is to use the
@@ -65,7 +65,7 @@ You can then call the methods on queryTextIndexService with the token proxy to c
     final QueryRequestBuilder params = new QueryRequestBuilder()
         .setAbsoluteMaxResults(10)
         .setTotalResults(true)
-        .addIndexes("wiki_eng");
+        .addIndexes(index);
 
     final Documents documents = queryTextIndexService.queryTextIndexWithText(
         tokenProxy,

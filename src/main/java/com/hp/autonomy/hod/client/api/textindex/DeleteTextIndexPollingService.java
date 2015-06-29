@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -62,7 +63,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
     @Override
     public void deleteTextIndex(
-        final String index,
+        final ResourceIdentifier index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
         final DeleteTextIndexResponse response = requester.makeRequest(DeleteTextIndexResponse.class, getInitialBackendCaller(index));
@@ -75,7 +76,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
     @Override
     public void deleteTextIndex(
         final TokenProxy tokenProxy,
-        final String index,
+        final ResourceIdentifier index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
         final DeleteTextIndexResponse response = requester.makeRequest(tokenProxy, DeleteTextIndexResponse.class, getInitialBackendCaller(index));
@@ -85,7 +86,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getInitialBackendCaller(final String index) {
+    private Requester.BackendCaller getInitialBackendCaller(final ResourceIdentifier index) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
@@ -94,7 +95,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
         };
     }
 
-    private Requester.BackendCaller getDeletingBackendCaller(final String index, final DeleteTextIndexResponse response) {
+    private Requester.BackendCaller getDeletingBackendCaller(final ResourceIdentifier index, final DeleteTextIndexResponse response) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {

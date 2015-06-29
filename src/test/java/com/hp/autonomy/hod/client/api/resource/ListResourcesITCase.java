@@ -55,7 +55,7 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
             assertThat(publicResource.getResource(), is(not(nullValue())));
         }
 
-        assertThat(resources.getResources(), hasResourceWithName(getIndex()));
+        assertThat(resources.getResources(), hasResourceWithName(PRIVATE_INDEX.getName()));
     }
 
     @Test

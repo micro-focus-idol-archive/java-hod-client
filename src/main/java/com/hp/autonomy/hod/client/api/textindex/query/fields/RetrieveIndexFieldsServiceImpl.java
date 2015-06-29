@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -32,16 +33,16 @@ public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsServic
     }
     
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final String index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(RESPONSE_CLASS, getBackendCaller(index, params));
     }
 
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy tokenProxy, final String index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy tokenProxy, final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(index, params));
     }
 
-    private Requester.BackendCaller getBackendCaller(final String index, final RetrieveIndexFieldsRequestBuilder params) {
+    private Requester.BackendCaller getBackendCaller(final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {

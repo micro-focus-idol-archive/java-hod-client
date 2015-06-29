@@ -7,10 +7,14 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
-        <release version="0.8.1" date="2015-06-25">
+        <release version="0.9.0" date="2015-06-29">
             <action dev="Alex Scown" type="fix">
                 Deprecate QueryProfileService#listQueryProfiles, as it has been deprecated in HP Haven OnDemand. Use
                 ResourcesService instead.
+            </action>
+            <action dev="Matthew Gordon" type="update">
+                HP Haven OnDemand now requires indexes to be sent as DOMAIN:INDEX. Any service which took indexes now
+                takes ResourceIdentifiers.
             </action>
         </release>
         <release version="0.8.0" date="2015-06-24">

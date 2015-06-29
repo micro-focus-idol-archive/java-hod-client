@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.util;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodServiceConfigFactory;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
@@ -66,8 +67,8 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testInterceptor() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes("wiki_eng")
-                .setTotalResults(true);
+            .addIndexes(ResourceIdentifier.WIKI_ENG)
+            .setTotalResults(true);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithText("*", params);
 

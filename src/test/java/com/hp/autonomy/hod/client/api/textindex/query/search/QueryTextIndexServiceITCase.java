@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .setSummary(Summary.concept)
                 .setPrint(Print.all)
                 .setTotalResults(true)
-                .addIndexes("wiki_eng", "wiki_ger");
+                .addIndexes(ResourceIdentifier.WIKI_ENG, ResourceIdentifier.WIKI_GER);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
 
@@ -69,7 +70,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes("wiki_ger", "wiki_eng")
+                .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
                 .setSort(Sort.date);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
@@ -85,7 +86,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes("wiki_ger", "wiki_eng")
+                .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
                 .setSort(Sort.date);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);

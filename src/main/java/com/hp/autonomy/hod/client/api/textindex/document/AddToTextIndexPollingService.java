@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -68,7 +69,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     @Override
     public void addJsonToTextIndex(
         final Documents<?> documents,
-        final String index,
+        final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
@@ -81,7 +82,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     public void addJsonToTextIndex(
         final TokenProxy tokenProxy,
         final Documents<?> documents,
-        final String index,
+        final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
@@ -93,7 +94,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     @Override
     public void addUrlToTextIndex(
         final String url,
-        final String index,
+        final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
@@ -106,7 +107,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     public void addUrlToTextIndex(
         final TokenProxy tokenProxy,
         final String url,
-        final String index,
+        final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
@@ -118,7 +119,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     @Override
     public void addReferenceToTextIndex(
         final String reference,
-        final String index,
+        final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
@@ -131,7 +132,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     public void addReferenceToTextIndex(
         final TokenProxy tokenProxy,
         final String reference,
-        final String index,
+        final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
         final HodJobCallback<AddToTextIndexResponse> callback
     ) throws HodErrorException {
@@ -141,48 +142,48 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     }
 
     @Override
-    public void addFileToTextIndex(final File file, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getFileBackendCaller(file, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getFileBackendCaller(file, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final byte[] bytes, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final InputStream inputStream, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final String index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final String index, final AddToTextIndexRequestBuilder params) {
+    private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
@@ -191,7 +192,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         };
     }
 
-    private Requester.BackendCaller getUrlBackendCaller(final String url, final String index, final AddToTextIndexRequestBuilder params) {
+    private Requester.BackendCaller getUrlBackendCaller(final String url, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
@@ -200,7 +201,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         };
     }
 
-    private Requester.BackendCaller getReferenceBackendCaller(final String reference, final String index, final AddToTextIndexRequestBuilder params) {
+    private Requester.BackendCaller getReferenceBackendCaller(final String reference, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
@@ -209,7 +210,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         };
     }
 
-    private Requester.BackendCaller getFileBackendCaller(final File file, final String index, final AddToTextIndexRequestBuilder params) {
+    private Requester.BackendCaller getFileBackendCaller(final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
@@ -218,7 +219,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         };
     }
 
-    private Requester.BackendCaller getByteArrayBackendCaller(final byte[] bytes, final String index, final AddToTextIndexRequestBuilder params) {
+    private Requester.BackendCaller getByteArrayBackendCaller(final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
@@ -227,7 +228,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
         };
     }
 
-    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream, final String index, final AddToTextIndexRequestBuilder params) {
+    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {

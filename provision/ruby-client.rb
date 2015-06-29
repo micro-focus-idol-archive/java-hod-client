@@ -64,8 +64,8 @@ def make_request(api, proxy_host, proxy_port, request_method, options = {})
   end
 end
 
-def get_token(apikey, proxy_host, proxy_port)
-  json = post('/authenticate/application', proxy_host, proxy_port, :apikey => apikey, :body => 'name=IOD-TEST-APPLICATION&domain=IOD-TEST-DOMAIN&token_type=simple')
+def get_token(apikey, application, domain, proxy_host, proxy_port)
+  json = post('/authenticate/application', proxy_host, proxy_port, :apikey => apikey, :body => "name=#{application}&domain=#{domain}&token_type=simple")
 
   token = json['token']
 
