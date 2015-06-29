@@ -47,7 +47,6 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
     public void setUp() {
         super.setUp();
 
-        final RestAdapter restAdapter = getRestAdapter();
         findSimilarService = FindSimilarServiceImpl.documentsService(getConfig());
         addToTextIndexService = new AddToTextIndexPollingService(getConfig());
     }
@@ -55,7 +54,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testFindSimilarWithText() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes("wiki_eng");
+                .addIndexes(WIKI_ENG);
 
         final Documents documents = findSimilarService.findSimilarDocumentsToText(getTokenProxy(), "cats", params);
 
@@ -68,7 +67,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
     public void testFindSimilarWithFile() throws HodErrorException {
         final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/formatconversion/test-file.txt");
         final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes("wiki_eng");
+                .addIndexes(WIKI_ENG);
 
         final Documents documents = findSimilarService.findSimilarDocumentsToFile(getTokenProxy(), file, params);
 
@@ -101,12 +100,12 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
                 .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
-        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), documents, getIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), documents, PRIVATE_INDEX, params, new TestCallback<AddToTextIndexResponse>(latch) {
             @Override
             public void success(final AddToTextIndexResponse response) {
                 try {
                     final QueryRequestBuilder params = new QueryRequestBuilder()
-                            .addIndexes(getIndex());
+                            .addIndexes(PRIVATE_INDEX);
 
                     final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getTokenProxy(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
 

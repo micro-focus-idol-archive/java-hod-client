@@ -66,7 +66,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testInterceptor() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes("wiki_eng")
+                .addIndexes(WIKI_ENG)
                 .setTotalResults(true);
 
         final Documents documents = queryTextIndexService.queryTextIndexWithText("*", params);

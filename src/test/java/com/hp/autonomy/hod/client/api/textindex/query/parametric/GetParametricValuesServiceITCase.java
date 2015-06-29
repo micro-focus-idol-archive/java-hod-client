@@ -49,7 +49,12 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
                 .setSort(ParametricSort.alphabetical)
                 .setMaxValues(15);
 
-        final FieldNames fieldNames = getParametricValuesService.getParametricValues(getTokenProxy(), Arrays.asList("wikipedia_type", "person_profession"), Collections.singletonList("wiki_eng"), params);
+        final FieldNames fieldNames = getParametricValuesService.getParametricValues(
+                getTokenProxy(),
+                Arrays.asList("wikipedia_type", "person_profession"),
+                Collections.singletonList(WIKI_ENG),
+                params
+        );
 
         final Set<String> fieldNamesSet = fieldNames.getFieldNames();
 

@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -13,6 +14,7 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +136,7 @@ public class QueryRequestBuilder {
      */
     private Boolean promotions;
 
-    private List<String> indexes = new ArrayList<>();
+    private Collection<ResourceIdentifier> indexes = new ArrayList<>();
 
     /**
      * Adds indexes to the indexes parameter
@@ -142,7 +144,7 @@ public class QueryRequestBuilder {
      * @param indexes The remaining indexes
      * @return this
      */
-    public QueryRequestBuilder addIndexes(final String index0, final String... indexes) {
+    public QueryRequestBuilder addIndexes(final ResourceIdentifier index0, final ResourceIdentifier... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
 
@@ -154,7 +156,7 @@ public class QueryRequestBuilder {
      * @param indexes The indexes to query
      * @return this
      */
-    public QueryRequestBuilder setIndexes(final List<String> indexes) {
+    public QueryRequestBuilder setIndexes(final Collection<ResourceIdentifier> indexes) {
         this.indexes = indexes;
 
         return this;
@@ -186,7 +188,7 @@ public class QueryRequestBuilder {
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
 
-        for (final String index : indexes) {
+        for (final ResourceIdentifier index : indexes) {
             map.put("indexes", index);
         }
 

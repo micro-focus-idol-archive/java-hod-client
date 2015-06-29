@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import lombok.Getter;
@@ -17,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import static org.hamcrest.core.Is.is;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegrationTest {
 
-    private static final String testIndexName = "ice-cream";
+    private static final String testIndexName = "ice cream";
 
     private CreateTextIndexPollingService createTextIndexService;
     private DeleteTextIndexPollingService deleteTextIndexService;
@@ -104,7 +104,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
             try {
                 deleteTextIndexService.deleteTextIndex(
                         getTokenProxy(),
-                        testIndexName,
+                        new ResourceIdentifier(DOMAIN_NAME, testIndexName),
                         callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document", e);

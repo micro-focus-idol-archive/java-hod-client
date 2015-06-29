@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
@@ -49,16 +50,16 @@ public class GetContentServiceImpl<T> implements GetContentService<T> {
     }
     
     @Override
-    public T getContent(final List<String> indexReference, final String index, final GetContentRequestBuilder params) throws HodErrorException {
+    public T getContent(final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(returnType, getBackendCaller(indexReference, index, params));
     }
 
     @Override
-    public T getContent(final TokenProxy tokenProxy, final List<String> indexReference, final String index, final GetContentRequestBuilder params) throws HodErrorException {
+    public T getContent(final TokenProxy tokenProxy, final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(tokenProxy, returnType, getBackendCaller(indexReference, index, params));
     }
 
-    private Requester.BackendCaller getBackendCaller(final List<String> indexReference, final String indexes, final GetContentRequestBuilder params) {
+    private Requester.BackendCaller getBackendCaller(final List<String> indexReference, final ResourceIdentifier indexes, final GetContentRequestBuilder params) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {

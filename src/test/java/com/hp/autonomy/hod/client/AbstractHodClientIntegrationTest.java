@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.api.authentication.ApiKey;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -22,6 +23,10 @@ import java.util.Collections;
 public abstract class AbstractHodClientIntegrationTest {
     protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
     protected static final String DOMAIN_NAME = "IOD-TEST-DOMAIN";
+
+    protected static final ResourceIdentifier WIKI_ENG = new ResourceIdentifier("PUBLIC_INDEXES", "wiki_eng");
+    protected static final ResourceIdentifier WIKI_GER = new ResourceIdentifier("PUBLIC_INDEXES", "wiki_ger");
+    protected static final ResourceIdentifier PRIVATE_INDEX = new ResourceIdentifier(DOMAIN_NAME, "java-iod-client-integration-tests");
 
     protected final Endpoint endpoint;
     private HodServiceConfig hodServiceConfig;
@@ -57,10 +62,6 @@ public abstract class AbstractHodClientIntegrationTest {
 
     public AbstractHodClientIntegrationTest(final Endpoint endpoint) {
         this.endpoint = endpoint;
-    }
-
-    public String getIndex() {
-        return "java-iod-client-integration-tests";
     }
 
     public String getQueryManipulationIndex() {

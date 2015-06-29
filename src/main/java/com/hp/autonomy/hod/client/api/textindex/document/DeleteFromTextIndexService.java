@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -27,7 +28,7 @@ public interface DeleteFromTextIndexService {
      * with the token proxy has expired
      */
     void deleteReferencesFromTextIndex(
-        String index,
+        ResourceIdentifier index,
         List<String> references,
         HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
@@ -44,7 +45,7 @@ public interface DeleteFromTextIndexService {
      */
     void deleteReferencesFromTextIndex(
         TokenProxy tokenProxy,
-        String index,
+        ResourceIdentifier index,
         List<String> references,
         HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
@@ -60,7 +61,7 @@ public interface DeleteFromTextIndexService {
      * with the token proxy has expired
      */
     void deleteAllDocumentsFromTextIndex(
-        String index,
+        ResourceIdentifier index,
         HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -75,7 +76,7 @@ public interface DeleteFromTextIndexService {
      */
     void deleteAllDocumentsFromTextIndex(
         TokenProxy tokenProxy,
-        String index,
+        ResourceIdentifier index,
         HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException;
 }

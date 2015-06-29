@@ -65,7 +65,7 @@ You can then call the methods on queryTextIndexService with the token proxy to c
     final QueryRequestBuilder params = new QueryRequestBuilder()
         .setAbsoluteMaxResults(10)
         .setTotalResults(true)
-        .addIndexes("wiki_eng");
+        .addIndexes(index);
 
     final Documents documents = queryTextIndexService.queryTextIndexWithText(
         tokenProxy,

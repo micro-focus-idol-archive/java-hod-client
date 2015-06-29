@@ -44,7 +44,11 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
                 .setFieldType(FieldType.index)
                 .setGroupFieldsByType(true);
 
-        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(getTokenProxy(), "wiki_eng", params);
+        final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(
+                getTokenProxy(),
+                WIKI_ENG,
+                params
+        );
 
         assertThat(response.getAllFields(), hasItem(wikiEngField));
         assertThat(response.getTotalFields(), greaterThan(0));
