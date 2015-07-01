@@ -72,59 +72,8 @@ public interface AuthenticationService {
      * @return A response containing an unbound application token and a list of applications
      * @throws HodErrorException
      */
-    ApplicationUnboundResponse authenticateApplicationUnbound(
-         ApiKey apiKey
-    ) throws HodErrorException;
-
-    /**
-     * Acquire an unbound user token for use with HP Haven OnDemand. This must be combined with an unbound application
-     * token before it can be used to query HP Haven OnDemand
-     * @param apiKey The user API key
-     * @return A response containing an unbound user token and a list of users
-     * @throws HodErrorException
-     */
-    UserUnboundResponse authenticateUserUnbound(
-         ApiKey apiKey
-    ) throws HodErrorException;
-
-    /**
-     * Combines an unbound application token with an unbound user token
-     * @param applicationToken An unbound application token
-     * @param userToken An unbound user token
-     * @param application The application name
-     * @param domain The domain name
-     * @param tokenType The type of the resulting token
-     * @return A token which can be used to call HP Haven OnDemand
-     * @throws HodErrorException
-     */
-    TokenProxy combineTokens(
-        AuthenticationToken applicationToken,
-        AuthenticationToken userToken,
-        String application,
-        String domain,
-        TokenType tokenType
-    ) throws HodErrorException;
-
-    /**
-     * Combines an unbound application token with an unbound user token for a given user store
-     * @param applicationToken A unbound application token
-     * @param userToken An unbound user token
-     * @param application The application name
-     * @param domain The application domain name
-     * @param tokenType The resulting token type
-     * @param userStore The name of the user store
-     * @param storeDomain The name of the user store
-     * @return A token which can be used to call HP Haven OnDemand
-     * @throws HodErrorException
-     */
-    TokenProxy combineTokens(
-        AuthenticationToken applicationToken,
-        AuthenticationToken userToken,
-        String application,
-        String domain,
-        TokenType tokenType,
-        String userStore,
-        String storeDomain
+    UnboundResponse authenticateUnbound(
+            ApiKey apiKey
     ) throws HodErrorException;
 
 }

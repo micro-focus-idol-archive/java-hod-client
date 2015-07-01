@@ -28,8 +28,6 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
-    private static final String USER_STORE = "IOD-TEST-USER-STORE";
-
     private AuthenticationServiceImpl authenticationService;
     private ApiKey apiKey;
 
@@ -48,10 +46,10 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
         final TokenProxy tokenProxy = authenticationService.authenticateApplication(
-            apiKey,
-            APPLICATION_NAME,
-            DOMAIN_NAME,
-            TokenType.simple
+                apiKey,
+                APPLICATION_NAME,
+                DOMAIN_NAME,
+                TokenType.simple
         );
 
         assertThat(tokenProxy, is(notNullValue()));
@@ -65,41 +63,23 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     }
 
     @Test
-    public void testCombinedAuthentication() throws HodErrorException {
-        final ApplicationUnboundResponse applicationUnboundResponse = authenticationService.authenticateApplicationUnbound(apiKey);
-
-        final AuthenticationToken applicationUnboundToken = applicationUnboundResponse.getToken();
+    public void unboundAuthentication() throws HodErrorException {
+        final UnboundResponse response = authenticationService.authenticateUnbound(apiKey);
+        final AuthenticationToken applicationUnboundToken = response.getToken();
         assertThat(applicationUnboundToken, is(notNullValue()));
 
-        final List<Application> applications = applicationUnboundResponse.getApplications();
+        final List<Application> applications = response.getApplications();
         assertThat(applications, hasSize(1));
         assertThat(applications.get(0).getName(), is(APPLICATION_NAME));
         assertThat(applications.get(0).getDomain(), is(DOMAIN_NAME));
-
-        final UserUnboundResponse userUnboundResponse = authenticationService.authenticateUserUnbound(apiKey);
-
-        final AuthenticationToken userUnboundToken = userUnboundResponse.getToken();
-        assertThat(userUnboundToken, is(notNullValue()));
-
-        final List<User> users = userUnboundResponse.getUsers();
-        assertThat(users, hasSize(1));
-        assertThat(users.get(0).getUsername(), is(notNullValue()));
-        assertThat(users.get(0).getUserStore(), is(DOMAIN_NAME + ':' + USER_STORE));
-
-        final TokenProxy combinedTokenProxy = authenticationService.combineTokens(applicationUnboundToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
-
-        assertThat(combinedTokenProxy, is(notNullValue()));
     }
 
     @Test
-    public void failsWithInvalidToken() throws HodErrorException {
-        final AuthenticationToken userUnboundToken = authenticationService.authenticateUserUnbound(apiKey).getToken();
-        final AuthenticationToken madeUpApplicationToken = new AuthenticationToken(1431357140457L, "InvalidId!!!", "InvalidSecret!", "InvalidType", 1431357140457L);
-
+    public void failsWithInvalidApiKey() {
         HodErrorCode errorCode = null;
 
         try {
-            authenticationService.combineTokens(madeUpApplicationToken, userUnboundToken, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
+            authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"));
         } catch (final HodErrorException e) {
             errorCode = e.getErrorCode();
         }

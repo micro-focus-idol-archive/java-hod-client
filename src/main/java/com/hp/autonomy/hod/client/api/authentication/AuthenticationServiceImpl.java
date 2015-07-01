@@ -69,41 +69,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ApplicationUnboundResponse authenticateApplicationUnbound(final ApiKey apiKey) throws HodErrorException {
+    public UnboundResponse authenticateUnbound(final ApiKey apiKey) throws HodErrorException {
         return authenticationBackend.authenticateApplicationUnbound(apiKey);
-    }
-
-    @Override
-    public UserUnboundResponse authenticateUserUnbound(final ApiKey apiKey) throws HodErrorException {
-        return authenticationBackend.authenticateUserUnbound(apiKey);
-    }
-
-    @Override
-    public TokenProxy combineTokens(
-        final AuthenticationToken applicationToken,
-        final AuthenticationToken userToken,
-        final String application,
-        final String domain,
-        final TokenType tokenType
-    ) throws HodErrorException {
-        final AuthenticationToken token = authenticationBackend.combineTokens(applicationToken, userToken, application, domain, tokenType).getToken();
-
-        return insertToken(token);
-    }
-
-    @Override
-    public TokenProxy combineTokens(
-        final AuthenticationToken applicationToken,
-        final AuthenticationToken userToken,
-        final String application,
-        final String domain,
-        final TokenType tokenType,
-        final String userStore,
-        final String storeDomain
-    ) throws HodErrorException {
-        final AuthenticationToken token = authenticationBackend.combineTokens(applicationToken, userToken, application, domain, tokenType, userStore, storeDomain).getToken();
-
-        return insertToken(token);
     }
 
     private TokenProxy insertToken(final AuthenticationToken token) {

@@ -6,15 +6,15 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UserUnboundResponse {
+public class UnboundResponse {
     private final AuthenticationToken token;
-    private final List<User> users;
+    private final List<Application> applications;
 
-    public UserUnboundResponse(
+    public UnboundResponse(
             @JsonProperty("token") final AuthenticationToken token,
-            @JsonProperty("users") final List<User> users
+            @JsonProperty("applications") final List<Application> applications
     ) {
         this.token = token;
-        this.users = users;
+        this.applications = applications;
     }
 }

@@ -24,11 +24,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUser(final AuthenticationToken userUnboundToken) throws HodErrorException {
-        return userBackend.getUser(userUnboundToken).getUsers();
-    }
-
-    @Override
     public List<User> getUser(final TokenProxy tokenProxy) throws HodErrorException {
         return requester.makeRequest(tokenProxy, GetUserResponse.class, new Requester.BackendCaller() {
             @Override
