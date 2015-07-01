@@ -58,32 +58,41 @@ public class Hmac {
         return StringUtils.join(components, NEW_LINE);
     }
 
-    private List<String> encodeQueryParameters(final Map<String, List<String>> queryParameters) {
+    private List<String> encodeQueryParameters(final Map<String, List<?>> queryParameters) {
         if (queryParameters == null || queryParameters.isEmpty()) {
             return Collections.emptyList();
         } else {
             return encodeAndSpreadParameterMap(queryParameters, new ValueEncoder() {
                 @Override
-                public String encode(final String input) {
-                    return urlEncode(input);
+                public String encode(final Object input) {
+                    return urlEncode(input.toString());
                 }
             });
         }
     }
 
-    private String createBodyHash(final Map<String, List<String>> body) {
+    private String createBodyHash(final Map<String, List<?>> body) {
         if (body == null || body.isEmpty()) {
             // If no body, the body hash must be the empty string
             return EMPTY;
         } else {
             final List<String> components = encodeAndSpreadParameterMap(body, new ValueEncoder() {
                 @Override
-                public String encode(final String input) {
-                    return Base64.encodeBase64String(md5Hash(input));
+                public String encode(final Object input) {
+                    final byte[] bytes;
+
+                    if (input instanceof byte[]) {
+                        bytes = (byte[]) input;
+                    } else {
+                        bytes = bytesFromString(input.toString());
+                    }
+
+                    return Base64.encodeBase64String(md5Hash(bytes));
                 }
             });
 
-            return base64EncodeForUri(md5Hash(StringUtils.join(components, NEW_LINE)));
+            final String bodyRepresentation = StringUtils.join(components, NEW_LINE);
+            return base64EncodeForUri(md5Hash(bytesFromString(bodyRepresentation)));
         }
     }
 
@@ -97,14 +106,14 @@ public class Hmac {
 
         => [uri(key2), encode(value21), uri(key1), encode(value11), uri(key1), encode(value12)]
     */
-    private List<String> encodeAndSpreadParameterMap(final Map<String, List<String>> parameterMap, final ValueEncoder encoder) {
+    private List<String> encodeAndSpreadParameterMap(final Map<String, List<?>> parameterMap, final ValueEncoder encoder) {
         final List<Parameter> parameters = new LinkedList<>();
 
-        for (final Map.Entry<String, List<String>> entry : parameterMap.entrySet()) {
+        for (final Map.Entry<String, List<?>> entry : parameterMap.entrySet()) {
             final String encodedKey = urlEncode(entry.getKey());
-            final List<String> values = entry.getValue();
+            final List<?> values = entry.getValue();
 
-            for (final String value : values) {
+            for (final Object value : values) {
                 parameters.add(new Parameter(encodedKey, encoder.encode(value)));
             }
         }
@@ -131,6 +140,15 @@ public class Hmac {
         return verb.name();
     }
 
+    private byte[] bytesFromString(final String input) {
+        try {
+            return input.getBytes(UTF8);
+        } catch (final UnsupportedEncodingException e) {
+            // This should never happen on a sensible JVM
+            throw new AssertionError("UTF8 is not supported", e);
+        }
+    }
+
     private String base64EncodeForUri(final byte[] bytes) {
         // Some base64 characters are not valid in a URI
         return Base64.encodeBase64String(bytes).replaceAll("=", EMPTY).replaceAll("/", "-").replaceAll("[+]", "_");
@@ -145,12 +163,10 @@ public class Hmac {
         }
     }
 
-    private byte[] md5Hash(final String input) {
+    private byte[] md5Hash(final byte[] input) {
         try {
-            final MessageDigest md5Digest = MessageDigest.getInstance(MD5);
-
-            return md5Digest.digest(input.getBytes(UTF8));
-        } catch (final UnsupportedEncodingException | NoSuchAlgorithmException e) {
+            return MessageDigest.getInstance(MD5).digest(input);
+        } catch (final NoSuchAlgorithmException e) {
             // This should never happen on a sensible JVM
             throw new AssertionError("UTF8 or MD5 is not supported");
         }
@@ -159,12 +175,12 @@ public class Hmac {
     private byte[] hmacSha1(final String message, final String secret) {
         try {
             final Mac mac = Mac.getInstance(HMAC_SHA1);
-            final Key key = new SecretKeySpec(secret.getBytes(UTF8), HMAC_SHA1);
+            final Key key = new SecretKeySpec(bytesFromString(secret), HMAC_SHA1);
             mac.init(key);
-            return mac.doFinal(message.getBytes(UTF8));
-        } catch (final NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            return mac.doFinal(bytesFromString(message));
+        } catch (final NoSuchAlgorithmException e) {
             // This should never happen on a sensible JVM
-            throw new AssertionError("This JVM doesn't support required standards", e);
+            throw new AssertionError("HMAC SHA1 is not supported", e);
         } catch (final InvalidKeyException e) {
             // In practice, this means that the token secret was invalid
             throw new IllegalArgumentException("Invalid token secret", e);
@@ -187,6 +203,6 @@ public class Hmac {
     }
 
     private interface ValueEncoder {
-        String encode(String input);
+        String encode(Object input);
     }
 }

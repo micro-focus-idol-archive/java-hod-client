@@ -9,10 +9,10 @@ import java.util.Map;
 public class Request {
     private final Verb verb;
     private final String path;
-    private final Map<String, List<String>> queryParameters;
-    private final Map<String, List<String>> body;
+    private final Map<String, List<?>> queryParameters;
+    private final Map<String, List<?>> body;
 
-    public Request(final Verb verb, final String path, final Map<String, List<String>> queryParameters, final Map<String, List<String>> body) {
+    public Request(final Verb verb, final String path, final Map<String, List<?>> queryParameters, final Map<String, List<?>> body) {
         if (verb == null || path == null) {
             throw new IllegalArgumentException("Verb and path are mandatory");
         }
@@ -24,7 +24,7 @@ public class Request {
     }
 
     public enum Verb {
-        // these must be uppercase or HMAC signing will fail
+        // These must be uppercase or HMAC signing will fail
         GET, POST, PUT, DELETE
     }
 }
