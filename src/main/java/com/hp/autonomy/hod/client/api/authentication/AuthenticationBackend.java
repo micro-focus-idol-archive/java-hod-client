@@ -82,8 +82,10 @@ public interface AuthenticationBackend {
      * @throws HodErrorException
      */
     @POST("/2/authenticate/unbound")
+    @Multipart
     AuthenticationTokenResponse authenticateApplicationUnbound(
-            @Header("apiKey") ApiKey apiKey
+            @Header("apiKey") ApiKey apiKey,
+            @Part("token_type") TokenType tokenType
     ) throws HodErrorException;
 
 }
