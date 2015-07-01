@@ -64,14 +64,8 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void unboundAuthentication() throws HodErrorException {
-        final UnboundResponse response = authenticationService.authenticateUnbound(apiKey);
-        final AuthenticationToken applicationUnboundToken = response.getToken();
-        assertThat(applicationUnboundToken, is(notNullValue()));
-
-        final List<Application> applications = response.getApplications();
-        assertThat(applications, hasSize(1));
-        assertThat(applications.get(0).getName(), is(APPLICATION_NAME));
-        assertThat(applications.get(0).getDomain(), is(DOMAIN_NAME));
+        final AuthenticationToken token = authenticationService.authenticateUnbound(apiKey);
+        assertThat(token, is(notNullValue()));
     }
 
     @Test

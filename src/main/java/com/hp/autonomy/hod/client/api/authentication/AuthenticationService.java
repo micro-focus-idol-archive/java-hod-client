@@ -72,7 +72,7 @@ public interface AuthenticationService {
      * @return A response containing an unbound application token and a list of applications
      * @throws HodErrorException
      */
-    UnboundResponse authenticateUnbound(
+    AuthenticationToken authenticateUnbound(
             ApiKey apiKey
     ) throws HodErrorException;
 

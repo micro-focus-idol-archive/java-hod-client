@@ -78,11 +78,11 @@ public interface AuthenticationBackend {
      * Acquire an unbound token for use with HP Haven OnDemand. This must be combined with user authentication in a
      * user's browser.
      * @param apiKey The application API key
-     * @return A response containing an unbound application token and a list of applications
+     * @return A response containing an unbound application token
      * @throws HodErrorException
      */
     @POST("/2/authenticate/unbound")
-    UnboundResponse authenticateApplicationUnbound(
+    AuthenticationTokenResponse authenticateApplicationUnbound(
             @Header("apiKey") ApiKey apiKey
     ) throws HodErrorException;
 

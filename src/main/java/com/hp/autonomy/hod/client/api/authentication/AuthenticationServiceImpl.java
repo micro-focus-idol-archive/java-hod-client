@@ -69,8 +69,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public UnboundResponse authenticateUnbound(final ApiKey apiKey) throws HodErrorException {
-        return authenticationBackend.authenticateApplicationUnbound(apiKey);
+    public AuthenticationToken authenticateUnbound(final ApiKey apiKey) throws HodErrorException {
+        return authenticationBackend.authenticateApplicationUnbound(apiKey).getToken();
     }
 
     private TokenProxy insertToken(final AuthenticationToken token) {
