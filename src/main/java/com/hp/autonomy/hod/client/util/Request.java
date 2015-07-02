@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a request to HP Haven OnDemand.
+ */
 @Data
 public class Request {
     private final Verb verb;
