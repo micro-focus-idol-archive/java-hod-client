@@ -2,6 +2,7 @@ package com.hp.autonomy.hod.client.util;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 
 import javax.crypto.Mac;
@@ -87,7 +88,7 @@ public class Hmac {
                         bytes = bytesFromString(input.toString());
                     }
 
-                    return Base64.encodeBase64String(md5Hash(bytes));
+                    return Hex.encodeHexString(md5Hash(bytes));
                 }
             });
 
