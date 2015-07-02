@@ -7,6 +7,11 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.9.1" date="2015-07-01">
+            <action dev="Alex Scown" type="fix">
+                Make ResourceIdentifier constants final
+            </action>
+        </release>
         <release version="0.9.0" date="2015-06-29">
             <action dev="Alex Scown" type="fix">
                 Deprecate QueryProfileService#listQueryProfiles, as it has been deprecated in HP Haven OnDemand. Use
