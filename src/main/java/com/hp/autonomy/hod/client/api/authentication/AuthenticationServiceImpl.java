@@ -10,16 +10,29 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.token.TokenRepository;
 import com.hp.autonomy.hod.client.token.TokenRepositoryException;
+import com.hp.autonomy.hod.client.util.Hmac;
+import com.hp.autonomy.hod.client.util.Request;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Default implementation of {@link AuthenticationService}
  */
 public class AuthenticationServiceImpl implements AuthenticationService {
+    private static final String COMBINED_PATH = "/2/authenticate/combined";
+    private static final String ALLOWED_ORIGINS = "allowed_origins";
 
     private final AuthenticationBackend authenticationBackend;
     private final TokenRepository tokenRepository;
+    private final String endpoint;
+
+    private final Hmac hmac = new Hmac();
 
     /**
      * Creates a new AuthenticationServiceImpl with the given configuration
@@ -28,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationServiceImpl(final HodServiceConfig hodServiceConfig) {
         authenticationBackend = hodServiceConfig.getRestAdapter().create(AuthenticationBackend.class);
         tokenRepository = hodServiceConfig.getTokenRepository();
+        endpoint = hodServiceConfig.getEndpoint();
     }
 
     @Override
@@ -71,6 +85,35 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationToken authenticateUnbound(final ApiKey apiKey) throws HodErrorException {
         return authenticationBackend.authenticateApplicationUnbound(apiKey, TokenType.hmac_sha1).getToken();
+    }
+
+    @Override
+    public SignedRequest combinedGetRequest(final Collection<String> allowedOrigins, final AuthenticationToken token) {
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+
+        final Request<String, String> request = new Request<>(Request.Verb.GET, COMBINED_PATH, queryParameters, null);
+        return SignedRequest.sign(hmac, endpoint, token, request);
+    }
+
+    @Override
+    public SignedRequest combinedRequest(
+            final Collection<String> allowedOrigins,
+            final AuthenticationToken token,
+            final String applicationDomain,
+            final String applicationName,
+            final TokenType tokenType
+    ) {
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+
+        final Map<String, List<String>> body = new HashMap<>();
+        body.put("domain", Collections.singletonList(applicationDomain));
+        body.put("application", Collections.singletonList(applicationName));
+        body.put("token_type", Collections.singletonList(tokenType.toString()));
+
+        final Request<String, String> request = new Request<>(Request.Verb.POST, COMBINED_PATH, queryParameters, body);
+        return SignedRequest.sign(hmac, endpoint, token, request);
     }
 
     private TokenProxy insertToken(final AuthenticationToken token) {

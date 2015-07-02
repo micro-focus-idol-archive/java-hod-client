@@ -8,6 +8,8 @@ package com.hp.autonomy.hod.client.api.authentication;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
+import java.util.Collection;
+
 /**
  * Service for making authentication requests to HP Haven OnDemand
  */
@@ -73,7 +75,36 @@ public interface AuthenticationService {
      * @throws HodErrorException
      */
     AuthenticationToken authenticateUnbound(
-            ApiKey apiKey
+        ApiKey apiKey
     ) throws HodErrorException;
+
+    /**
+     * Get a representation of a request for obtaining a list of applications and domains associated with the given unbound
+     * token. This request must then be made from a browser.
+     * @param allowedOrigins Origins from which this request may be sent
+     * @param token The unbound token to use to sign the request
+     * @return A representation of an AJAX request to make from a browser
+     */
+    SignedRequest combinedGetRequest(
+        Collection<String> allowedOrigins,
+        AuthenticationToken token
+    );
+
+    /**
+     * Get a representation of a request for obtaining a combined token from Haven OnDemand. This request must be made
+     * from a browser.
+     * @param allowedOrigins Origins from which this request may be sent
+     * @param token The unbound token to use to sign the request
+     * @param applicationDomain
+     *@param applicationName
+     * @param tokenType @return A representation of an AJAX request to make from a browser
+     */
+    SignedRequest combinedRequest(
+        Collection<String> allowedOrigins,
+        AuthenticationToken token,
+        String applicationDomain,
+        String applicationName,
+        TokenType tokenType
+    );
 
 }
