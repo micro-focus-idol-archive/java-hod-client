@@ -27,15 +27,15 @@ public class HmacTest {
         final String tokenSecret = "Ba90fFmxdioyouz06xr1fhn6Nxq4nB90jWEQ2UzDQr8";
         final AuthenticationToken token = new AuthenticationToken(123, tokenId, tokenSecret, "UNB:HMAC_SHA1", 456);
 
-        final Map<String, List<?>> queryParameters = new HashMap<>();
+        final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put("allowed_origins", Collections.singletonList("http://localhost:8080"));
 
-        final Map<String, List<?>> body = new HashMap<>();
-        body.put("domain", Collections.singletonList("IOD-TEST-DOMAIN"));
-        body.put("application", Collections.singletonList("IOD-TEST-APPLICATION"));
-        body.put("token_type", Collections.singletonList(TokenType.simple));
+        final Map<String, List<Object>> body = new HashMap<>();
+        body.put("domain", Collections.<Object>singletonList("IOD-TEST-DOMAIN"));
+        body.put("application", Collections.<Object>singletonList("IOD-TEST-APPLICATION"));
+        body.put("token_type", Collections.<Object>singletonList(TokenType.simple));
 
-        final Request request = new Request(Request.Verb.POST, "/2/authenticate/combined", queryParameters, body);
+        final Request<String, Object> request = new Request<>(Request.Verb.POST, "/2/authenticate/combined", queryParameters, body);
         final String hmacToken = hmac.generateToken(request, token);
         final String expectedHmacToken = "UNB:HMAC_SHA1:DF7aRd8VEeSiCdSFZKbA7w:-UTk_c6xZSCH2-MMLPiLJg:cPJN8CsxX6chmGif3TLdTLEpMd8";
 

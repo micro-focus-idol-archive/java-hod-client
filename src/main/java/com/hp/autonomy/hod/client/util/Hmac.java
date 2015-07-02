@@ -34,7 +34,7 @@ public class Hmac {
      * @param token The HMAC SHA1 authentication token
      * @return The token parameter for the request
      */
-    public String generateToken(final Request request, final AuthenticationToken token) {
+    public <Q, B> String generateToken(final Request<Q, B> request, final AuthenticationToken token) {
         final String bodyHash = createBodyHash(request.getBody());
         final String message = createMessage(request, bodyHash);
         final String signature = base64EncodeForUri(hmacSha1(message, token.getSecret()));
@@ -50,7 +50,7 @@ public class Hmac {
     }
 
     // Creates the representation of the request for HMAC signing, given a request and it's body hash
-    private String createMessage(final Request request, final String bodyHash) {
+    private <Q, B> String createMessage(final Request<Q, B> request, final String bodyHash) {
         final List<String> components = new LinkedList<>();
         components.add(encodeVerb(request.getVerb()));
         components.add(encodePath(request.getPath()));
@@ -59,7 +59,7 @@ public class Hmac {
         return StringUtils.join(components, NEW_LINE);
     }
 
-    private List<String> encodeQueryParameters(final Map<String, List<?>> queryParameters) {
+    private <T> List<String> encodeQueryParameters(final Map<String, List<T>> queryParameters) {
         if (queryParameters == null || queryParameters.isEmpty()) {
             return Collections.emptyList();
         } else {
@@ -72,7 +72,7 @@ public class Hmac {
         }
     }
 
-    private String createBodyHash(final Map<String, List<?>> body) {
+    private <T> String createBodyHash(final Map<String, List<T>> body) {
         if (body == null || body.isEmpty()) {
             // If no body, the body hash must be the empty string
             return EMPTY;
@@ -107,10 +107,10 @@ public class Hmac {
 
         => [uri(key2), encode(value21), uri(key1), encode(value11), uri(key1), encode(value12)]
     */
-    private List<String> encodeAndSpreadParameterMap(final Map<String, List<?>> parameterMap, final ValueEncoder encoder) {
+    private <T> List<String> encodeAndSpreadParameterMap(final Map<String, List<T>> parameterMap, final ValueEncoder encoder) {
         final List<Parameter> parameters = new LinkedList<>();
 
-        for (final Map.Entry<String, List<?>> entry : parameterMap.entrySet()) {
+        for (final Map.Entry<String, List<T>> entry : parameterMap.entrySet()) {
             final String encodedKey = urlEncode(entry.getKey());
             final List<?> values = entry.getValue();
 
