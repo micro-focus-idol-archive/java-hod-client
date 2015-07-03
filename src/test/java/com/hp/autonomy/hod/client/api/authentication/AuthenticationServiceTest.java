@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -53,11 +53,10 @@ public class AuthenticationServiceTest {
 
         checkUrl(request);
 
-        final Map<String, List<String>> body = request.getBody();
-        assertThat(body.size(), is(3));
-        assertThat(body.get("domain"), contains(domain));
-        assertThat(body.get("application"), contains(application));
-        assertThat(body.get("token_type"), contains(TokenType.simple.toString()));
+        final List<NameValuePair> pairs = URLEncodedUtils.parse(request.getBody(), StandardCharsets.UTF_8);
+        checkParameterPair(pairs, "domain", domain);
+        checkParameterPair(pairs, "application", application);
+        checkParameterPair(pairs, "token_type", TokenType.simple.toString());
 
         assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id:_emvv9HVicQYc2OOlKeeOg:mAH-zkK-OvMq7xHFbN5o4ZKd0Nw"));
     }
@@ -75,6 +74,23 @@ public class AuthenticationServiceTest {
 
         assertThat(pairs.get(1).getName(), is("allowed_origins"));
         assertThat(pairs.get(1).getValue(), is(ALLOWED_ORIGINS.get(1)));
+    }
+
+    private void checkParameterPair(final List<NameValuePair> pairs, final String name, final String value) {
+        NameValuePair expectedPair = null;
+
+        for (final NameValuePair pair : pairs) {
+            if (pair.getName().equals(name)) {
+                expectedPair = pair;
+                break;
+            }
+        }
+
+        assertThat(expectedPair, is(notNullValue()));
+
+        if (expectedPair != null) {
+            assertThat(expectedPair.getValue(), is(value));
+        }
     }
 }
 
