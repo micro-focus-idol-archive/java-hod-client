@@ -79,6 +79,16 @@ public interface AuthenticationService {
     ) throws HodErrorException;
 
     /**
+     * Verify a combined token and retrieve details for the application and the user.
+     * @param token The combined token
+     * @return Details about the application and user
+     * @throws HodErrorException
+     */
+    VerifyCombinedResponse verifyCombined(
+            AuthenticationToken token
+    ) throws HodErrorException;
+
+    /**
      * Get a representation of a request for obtaining a list of applications and domains associated with the given unbound
      * token. This request must then be made from a browser.
      * @param allowedOrigins Origins from which this request may be sent
@@ -95,8 +105,8 @@ public interface AuthenticationService {
      * from a browser.
      * @param allowedOrigins Origins from which this request may be sent
      * @param token The unbound token to use to sign the request
-     * @param applicationDomain
-     *@param applicationName
+     * @param applicationDomain Domain of the application
+     *@param applicationName Name of the application
      * @param tokenType @return A representation of an AJAX request to make from a browser
      */
     SignedRequest combinedRequest(

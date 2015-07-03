@@ -88,6 +88,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    public VerifyCombinedResponse verifyCombined(final AuthenticationToken token) throws HodErrorException {
+        return authenticationBackend.verifyCombined(token);
+    }
+
+    @Override
     public SignedRequest combinedGetRequest(final Collection<String> allowedOrigins, final AuthenticationToken token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));

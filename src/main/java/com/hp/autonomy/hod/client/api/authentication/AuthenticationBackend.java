@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -86,6 +87,11 @@ public interface AuthenticationBackend {
     AuthenticationTokenResponse authenticateApplicationUnbound(
             @Header("apiKey") ApiKey apiKey,
             @Part("token_type") TokenType tokenType
+    ) throws HodErrorException;
+
+    @GET("/2/combined")
+    VerifyCombinedResponse verifyCombined(
+            @Header("token") AuthenticationToken token
     ) throws HodErrorException;
 
 }
