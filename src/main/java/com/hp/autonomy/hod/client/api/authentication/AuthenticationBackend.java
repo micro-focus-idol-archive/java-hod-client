@@ -90,7 +90,7 @@ public interface AuthenticationBackend {
     ) throws HodErrorException;
 
     @GET("/2/combined")
-    VerifyCombinedResponse verifyCombined(
+    CombinedTokenDetails getCombinedTokenDetails(
             @Header("token") AuthenticationToken token
     ) throws HodErrorException;
 

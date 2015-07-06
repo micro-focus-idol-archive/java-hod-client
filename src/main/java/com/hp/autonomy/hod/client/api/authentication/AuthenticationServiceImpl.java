@@ -88,8 +88,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public VerifyCombinedResponse verifyCombined(final AuthenticationToken token) throws HodErrorException {
-        return authenticationBackend.verifyCombined(token);
+    public CombinedTokenDetails getCombinedTokenDetails(final AuthenticationToken token) throws HodErrorException {
+        return authenticationBackend.getCombinedTokenDetails(token);
     }
 
     @Override

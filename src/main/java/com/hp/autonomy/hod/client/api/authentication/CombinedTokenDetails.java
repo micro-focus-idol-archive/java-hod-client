@@ -5,13 +5,13 @@ import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Data;
 
 @Data
-public class VerifyCombinedResponse {
+public class CombinedTokenDetails {
     private final ResourceIdentifier application;
     private final User user;
 
-    public VerifyCombinedResponse(
-        @JsonProperty("application") final ResourceIdentifier application,
-        @JsonProperty("user") final User user
+    public CombinedTokenDetails(
+            @JsonProperty("application") final ResourceIdentifier application,
+            @JsonProperty("user") final User user
     ) {
         this.application = application;
         this.user = user;

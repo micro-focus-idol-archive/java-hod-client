@@ -84,7 +84,7 @@ public interface AuthenticationService {
      * @return Details about the application and user
      * @throws HodErrorException
      */
-    VerifyCombinedResponse verifyCombined(
+    CombinedTokenDetails getCombinedTokenDetails(
             AuthenticationToken token
     ) throws HodErrorException;
 
