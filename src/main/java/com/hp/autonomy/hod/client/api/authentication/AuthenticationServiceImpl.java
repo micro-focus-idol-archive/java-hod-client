@@ -107,6 +107,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final AuthenticationToken token,
             final String applicationDomain,
             final String applicationName,
+            final String userStoreDomain,
+            final String userStoreName,
             final TokenType tokenType
     ) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
@@ -115,6 +117,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final Map<String, List<String>> body = new HashMap<>();
         body.put("domain", Collections.singletonList(applicationDomain));
         body.put("application", Collections.singletonList(applicationName));
+        body.put("userstore_domain", Collections.singletonList(userStoreDomain));
+        body.put("userstore_name", Collections.singletonList(userStoreName));
         body.put("token_type", Collections.singletonList(tokenType.toString()));
 
         final Request<String, String> request = new Request<>(Request.Verb.POST, COMBINED_PATH, queryParameters, body);

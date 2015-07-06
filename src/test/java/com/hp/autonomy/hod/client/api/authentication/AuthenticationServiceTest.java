@@ -47,7 +47,9 @@ public class AuthenticationServiceTest {
     public void generatesCombinedSignedRequest() throws URISyntaxException {
         final String domain = "MY-APPLICATION-DOMAIN";
         final String application = "MY-APPLICATION-NAME";
-        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, domain, application, TokenType.simple);
+        final String userStoreDomain = "MY-STORE-DOMAIN";
+        final String userStoreName = "MY-STORE-NAME";
+        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, domain, application, userStoreDomain, userStoreName, TokenType.simple);
 
         assertThat(request.getVerb(), is(Request.Verb.POST));
 
@@ -56,9 +58,11 @@ public class AuthenticationServiceTest {
         final List<NameValuePair> pairs = URLEncodedUtils.parse(request.getBody(), StandardCharsets.UTF_8);
         checkParameterPair(pairs, "domain", domain);
         checkParameterPair(pairs, "application", application);
+        checkParameterPair(pairs, "userstore_domain", userStoreDomain);
+        checkParameterPair(pairs, "userstore_name", userStoreName);
         checkParameterPair(pairs, "token_type", TokenType.simple.toString());
 
-        assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id:_emvv9HVicQYc2OOlKeeOg:mAH-zkK-OvMq7xHFbN5o4ZKd0Nw"));
+        assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id:wJkMexQxgEhW13IAeN6i6A:R9XBlyBildIbslAWyxDwQ5O-8WQ"));
     }
 
     private void checkUrl(final SignedRequest request) throws URISyntaxException {

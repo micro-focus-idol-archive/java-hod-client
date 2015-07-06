@@ -106,7 +106,9 @@ public interface AuthenticationService {
      * @param allowedOrigins Origins from which this request may be sent
      * @param token The unbound token to use to sign the request
      * @param applicationDomain Domain of the application
-     *@param applicationName Name of the application
+     * @param applicationName Name of the application
+     * @param userStoreDomain Domain of the user store
+     * @param userStoreName Name of the user store
      * @param tokenType @return A representation of an AJAX request to make from a browser
      */
     SignedRequest combinedRequest(
@@ -114,6 +116,8 @@ public interface AuthenticationService {
         AuthenticationToken token,
         String applicationDomain,
         String applicationName,
+        String userStoreDomain,
+        String userStoreName,
         TokenType tokenType
     );
 
