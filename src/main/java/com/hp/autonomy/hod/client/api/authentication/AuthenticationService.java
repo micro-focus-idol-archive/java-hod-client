@@ -102,14 +102,33 @@ public interface AuthenticationService {
 
     /**
      * Get a representation of a request for obtaining a combined token from Haven OnDemand. This request must be made
-     * from a browser.
+     * from a browser. No nonce is included.
+     * @param allowedOrigins Origins from which this request may be sent
+     * @param token The unbound token to use to sign the request
+     * @param applicationDomain Domain of the application
+     * @param applicationName Name of the application
+     * @param tokenType The type of the returned token
+     * @return A representation of an AJAX request to make from a browser
+     */
+    SignedRequest combinedRequest(
+        Collection<String> allowedOrigins,
+        AuthenticationToken token,
+        String applicationDomain,
+        String applicationName,
+        TokenType tokenType
+    );
+
+    /**
+     * Get a representation of a request for obtaining a combined token from Haven OnDemand, specifying a user store. This
+     * request must be made from a browser. No nonce is included.
      * @param allowedOrigins Origins from which this request may be sent
      * @param token The unbound token to use to sign the request
      * @param applicationDomain Domain of the application
      * @param applicationName Name of the application
      * @param userStoreDomain Domain of the user store
      * @param userStoreName Name of the user store
-     * @param tokenType @return A representation of an AJAX request to make from a browser
+     * @param tokenType The type of the returned token
+     * @return A representation of an AJAX request to make from a browser
      */
     SignedRequest combinedRequest(
         Collection<String> allowedOrigins,
@@ -119,6 +138,30 @@ public interface AuthenticationService {
         String userStoreDomain,
         String userStoreName,
         TokenType tokenType
+    );
+
+    /**
+     * Get a representation of a request for obtaining a combined token from Haven OnDemand, specifying a user store. This
+     * request must be made from a browser. A random unique nonce is included if useNonce is true.
+     * @param allowedOrigins Origins from which this request may be sent
+     * @param token The unbound token to use to sign the request
+     * @param applicationDomain Domain of the application
+     * @param applicationName Name of the application
+     * @param userStoreDomain Domain of the user store
+     * @param userStoreName Name of the user store
+     * @param tokenType The type of the returned token
+     * @param useNonce If true, a nonce will be generated and included in the request
+     * @return A representation of an AJAX request to make from a browser
+     */
+    SignedRequest combinedRequest(
+            Collection<String> allowedOrigins,
+            AuthenticationToken token,
+            String applicationDomain,
+            String applicationName,
+            String userStoreDomain,
+            String userStoreName,
+            TokenType tokenType,
+            boolean useNonce
     );
 
 }

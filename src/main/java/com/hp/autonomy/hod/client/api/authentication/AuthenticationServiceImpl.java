@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Default implementation of {@link AuthenticationService}
@@ -107,22 +108,82 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final AuthenticationToken token,
             final String applicationDomain,
             final String applicationName,
+            final TokenType tokenType
+    ) {
+        final Map<String, List<String>> body = createBaseCombinedBody(applicationName, applicationDomain, tokenType);
+        return createCombinedRequest(token, allowedOrigins, body);
+    }
+
+    @Override
+    public SignedRequest combinedRequest(
+            final Collection<String> allowedOrigins,
+            final AuthenticationToken token,
+            final String applicationDomain,
+            final String applicationName,
             final String userStoreDomain,
             final String userStoreName,
             final TokenType tokenType
     ) {
+        final Map<String, List<String>> body = createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userStoreDomain, userStoreName);
+        return createCombinedRequest(token, allowedOrigins, body);
+    }
+
+    @Override
+    public SignedRequest combinedRequest(
+            final Collection<String> allowedOrigins,
+            final AuthenticationToken token,
+            final String applicationDomain,
+            final String applicationName,
+            final String userStoreDomain,
+            final String userStoreName,
+            final TokenType tokenType,
+            final boolean useNonce
+    ) {
+        final Map<String, List<String>> body = createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userStoreDomain, userStoreName);
+
+        if (useNonce) {
+            final String nonce = UUID.randomUUID().toString();
+            body.put("nonce", Collections.singletonList(nonce));
+        }
+
+        return createCombinedRequest(token, allowedOrigins, body);
+    }
+
+    private SignedRequest createCombinedRequest(
+            final AuthenticationToken token,
+            final Collection<String> allowedOrigins,
+            final Map<String, List<String>> body
+    ) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
 
+        final Request<String, String> request = new Request<>(Request.Verb.POST, COMBINED_PATH, queryParameters, body);
+        return SignedRequest.sign(hmac, endpoint, token, request);
+    }
+
+    private Map<String, List<String>> createBaseCombinedBody(
+            final String applicationName,
+            final String applicationDomain,
+            final TokenType tokenType
+    ) {
         final Map<String, List<String>> body = new HashMap<>();
         body.put("domain", Collections.singletonList(applicationDomain));
         body.put("application", Collections.singletonList(applicationName));
+        body.put("token_type", Collections.singletonList(tokenType.toString()));
+        return body;
+    }
+
+    private Map<String, List<String>> createUserStoreCombinedBody(
+            final String applicationName,
+            final String applicationDomain,
+            final TokenType tokenType,
+            final String userStoreDomain,
+            final String userStoreName
+    ) {
+        final Map<String, List<String>> body = createBaseCombinedBody(applicationName, applicationDomain, tokenType);
         body.put("userstore_domain", Collections.singletonList(userStoreDomain));
         body.put("userstore_name", Collections.singletonList(userStoreName));
-        body.put("token_type", Collections.singletonList(tokenType.toString()));
-
-        final Request<String, String> request = new Request<>(Request.Verb.POST, COMBINED_PATH, queryParameters, body);
-        return SignedRequest.sign(hmac, endpoint, token, request);
+        return body;
     }
 
     private TokenProxy insertToken(final AuthenticationToken token) {

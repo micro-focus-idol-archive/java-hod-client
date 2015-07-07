@@ -23,6 +23,11 @@ public class AuthenticationServiceTest {
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList("https://example.idolondemand.com", "http://example2.idolondemna.com");
     private static final AuthenticationToken TOKEN = new AuthenticationToken(123, "my-token-id", "my-token-secret", "UNB:HMAC_SHA1", 456);
 
+    private static final String DOMAIN = "MY-APPLICATION-DOMAIN";
+    private static final String APPLICATION = "MY-APPLICATION-NAME";
+    private static final String USER_STORE_DOMAIN = "MY-STORE-DOMAIN";
+    private static final String USER_STORE_NAME = "MY-STORE-NAME";
+
     private AuthenticationService service;
 
     @Before
@@ -45,24 +50,30 @@ public class AuthenticationServiceTest {
 
     @Test
     public void generatesCombinedSignedRequest() throws URISyntaxException {
-        final String domain = "MY-APPLICATION-DOMAIN";
-        final String application = "MY-APPLICATION-NAME";
-        final String userStoreDomain = "MY-STORE-DOMAIN";
-        final String userStoreName = "MY-STORE-NAME";
-        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, domain, application, userStoreDomain, userStoreName, TokenType.simple);
+        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, DOMAIN, APPLICATION, USER_STORE_DOMAIN, USER_STORE_NAME, TokenType.simple);
 
         assertThat(request.getVerb(), is(Request.Verb.POST));
 
         checkUrl(request);
 
         final List<NameValuePair> pairs = URLEncodedUtils.parse(request.getBody(), StandardCharsets.UTF_8);
-        checkParameterPair(pairs, "domain", domain);
-        checkParameterPair(pairs, "application", application);
-        checkParameterPair(pairs, "userstore_domain", userStoreDomain);
-        checkParameterPair(pairs, "userstore_name", userStoreName);
+        checkParameterPair(pairs, "domain", DOMAIN);
+        checkParameterPair(pairs, "application", APPLICATION);
+        checkParameterPair(pairs, "userstore_domain", USER_STORE_DOMAIN);
+        checkParameterPair(pairs, "userstore_name", USER_STORE_NAME);
         checkParameterPair(pairs, "token_type", TokenType.simple.toString());
 
         assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id:wJkMexQxgEhW13IAeN6i6A:R9XBlyBildIbslAWyxDwQ5O-8WQ"));
+    }
+
+    @Test
+    public void generatesANonce() {
+        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, DOMAIN, APPLICATION, USER_STORE_DOMAIN, USER_STORE_NAME, TokenType.simple, true);
+        final List<NameValuePair> bodyPairs = URLEncodedUtils.parse(request.getBody(), StandardCharsets.UTF_8);
+        final NameValuePair noncePair = getParameterPair(bodyPairs, "nonce");
+        assertThat(noncePair, notNullValue());
+        final String nonce = noncePair.getValue();
+        assertThat(nonce, notNullValue());
     }
 
     private void checkUrl(final SignedRequest request) throws URISyntaxException {
@@ -81,20 +92,23 @@ public class AuthenticationServiceTest {
     }
 
     private void checkParameterPair(final List<NameValuePair> pairs, final String name, final String value) {
-        NameValuePair expectedPair = null;
-
-        for (final NameValuePair pair : pairs) {
-            if (pair.getName().equals(name)) {
-                expectedPair = pair;
-                break;
-            }
-        }
+        final NameValuePair expectedPair = getParameterPair(pairs, name);
 
         assertThat(expectedPair, is(notNullValue()));
 
         if (expectedPair != null) {
             assertThat(expectedPair.getValue(), is(value));
         }
+    }
+
+    private NameValuePair getParameterPair(final List<NameValuePair> pairs, final String name) {
+        for (final NameValuePair pair : pairs) {
+            if (pair.getName().equals(name)) {
+                return pair;
+            }
+        }
+
+        return null;
     }
 }
 
