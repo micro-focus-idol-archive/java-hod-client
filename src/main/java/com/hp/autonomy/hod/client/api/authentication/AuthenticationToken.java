@@ -58,11 +58,11 @@ public class AuthenticationToken implements Serializable {
             @JsonProperty("type") final String type,
             @JsonProperty("startRefresh") final long startRefresh
     ) {
-        this.expiry = new DateTime(expiry);
+        this.expiry = new DateTime(expiry * 1000L);
         this.id = id;
         this.secret = secret;
         this.type = type;
-        this.startRefresh = new DateTime(startRefresh);
+        this.startRefresh = new DateTime(startRefresh * 1000L);
     }
 
     /**
