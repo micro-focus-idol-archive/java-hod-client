@@ -73,7 +73,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testHodReturnsApiKeyError() throws IOException {
         final TokenProxy tokenProxy = getConfig().getTokenRepository().insert(new AuthenticationToken(
-            DateTime.now().plus(Hours.ONE).getMillis() / 1000L,
+            DateTime.now().plus(Hours.ONE).getMillis(),
             "ID",
             "SECRET",
             "simple",

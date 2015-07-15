@@ -30,6 +30,7 @@ public class HodServiceConfig {
     private final RestAdapter restAdapter;
     private final TokenRepository tokenRepository;
     private final Requester requester;
+    private final String endpoint;
 
     private HodServiceConfig(final Builder builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
@@ -56,6 +57,7 @@ public class HodServiceConfig {
         tokenRepository = builder.tokenRepository;
 
         requester = new Requester(tokenRepository, new ResponseParser(tokenRepository, converter), builder.tokenProxyService);
+        endpoint = builder.endpoint;
     }
 
     /**

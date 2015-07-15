@@ -55,8 +55,8 @@ public abstract class AbstractQueryProfileIntegrationTest extends AbstractHodCli
     }
 
     /**
-     * Creates a Query Profile in IDOL OnDemand.  Note that the nameSuffix passed in will not be the same as the
-     * name IDOL OnDemand uses.  See the response object for that.
+     * Creates a Query Profile in HP Haven OnDemand.  Note that the nameSuffix passed in will not be the same as the
+     * name HP Haven OnDemand uses.  See the response object for that.
      * @param nameSuffix  Suffix to append to the query profile name.
      * @return  A QueryProfile with the name and config used.
      * @throws HodErrorException

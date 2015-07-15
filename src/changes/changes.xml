@@ -7,6 +7,14 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.10.0" date="2015-07-15">
+            <action dev="Matthew Gordon" type="add">
+                New HOD SSO process including HMAC signing of application unbound tokens.
+            </action>
+            <action dev="Matthew Gordon" type="update">
+                HOD AuthenticationTokens now specify expiry times in milliseconds not seconds.
+            </action>
+        </release>
         <release version="0.9.1" date="2015-07-01">
             <action dev="Alex Scown" type="fix">
                 Make ResourceIdentifier constants final

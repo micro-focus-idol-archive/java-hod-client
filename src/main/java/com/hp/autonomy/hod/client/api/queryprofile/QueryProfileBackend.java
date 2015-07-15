@@ -84,7 +84,7 @@ interface QueryProfileBackend {
 
     /**
      * Gets the names of the query profiles that currently exist using the given token
-     * @param token  The token to use to access IDOL OnDemand.
+     * @param token  The token to use to access HP Haven OnDemand.
      * @return  A QueryProfiles response object, that has a util method on it for getting the actual names.
      * @throws HodErrorException
      */

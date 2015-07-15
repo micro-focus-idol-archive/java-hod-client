@@ -1,5 +1,6 @@
 package com.hp.autonomy.hod.client.api.resource;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.converter.DoNotConvert;
 import lombok.Data;
 
@@ -34,7 +35,10 @@ public class ResourceIdentifier {
     private final String domain;
     private final String name;
 
-    public ResourceIdentifier(final String domain, final String name) {
+    public ResourceIdentifier(
+            @JsonProperty("domain") final String domain,
+            @JsonProperty("name") final String name
+    ) {
         this.domain = domain;
         this.name = name;
     }
