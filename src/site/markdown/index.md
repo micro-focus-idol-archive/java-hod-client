@@ -43,7 +43,7 @@ It is also possible to override the default configuration:
 Once a config object has been created, it can be used to construct services. To ensure the TokenRepository works
 correctly, the same configuration object should be used for all services.
 
-    final AuthenticationService authenticationService = new AuthenticationServiceImp(config);
+    final AuthenticationService authenticationService = new AuthenticationServiceImpl(config);
 
     final QueryTextIndexService<Documents> queryTextIndexService = QueryTextIndexService.documentsService(config);
     
