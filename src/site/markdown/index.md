@@ -20,7 +20,7 @@ java-hod-client is available from the central Maven repository.
     <dependency>
         <groupId>com.hp.autonomy.hod</groupId>
         <artifactId>java-hod-client</artifactId>
-        <version>0.10.0</version>
+        <version>0.11.0</version>
     </dependency>
 
 java-hod-client services are configured using instances of HodServiceConfig. The easiest way to do this is to use the
@@ -43,7 +43,7 @@ It is also possible to override the default configuration:
 Once a config object has been created, it can be used to construct services. To ensure the TokenRepository works
 correctly, the same configuration object should be used for all services.
 
-    final AuthenticationService authenticationService = new AuthenticationServiceImp(config);
+    final AuthenticationService authenticationService = new AuthenticationServiceImpl(config);
 
     final QueryTextIndexService<Documents> queryTextIndexService = QueryTextIndexService.documentsService(config);
     
