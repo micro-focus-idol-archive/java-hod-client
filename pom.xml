@@ -70,6 +70,15 @@
         </developer>
     </developers>
 
+    <contributors>
+        <contributor>
+            <name>Will Byrne</name>
+            <email>will.byrne@hp.com</email>
+            <organization>HP</organization>
+            <organizationUrl>http://www.hp.com</organizationUrl>
+        </contributor>
+    </contributors>
+
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
