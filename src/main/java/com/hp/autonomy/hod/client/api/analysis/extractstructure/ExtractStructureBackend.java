@@ -3,7 +3,12 @@ package com.hp.autonomy.hod.client.api.analysis.extractstructure;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
-import retrofit.http.*;
+import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.http.Query;
 import retrofit.mime.TypedOutput;
 
 import java.util.LinkedHashMap;
@@ -12,8 +17,7 @@ import java.util.List;
 /**
  * Interface representing the extract structure API.
  */
-public interface ExtractStructureBackend
-{
+public interface ExtractStructureBackend {
     String URL = "/2/api/sync/analysis/extractcontent/v1";
 
     /**

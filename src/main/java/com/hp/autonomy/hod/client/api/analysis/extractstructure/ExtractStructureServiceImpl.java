@@ -9,7 +9,6 @@ import com.hp.autonomy.hod.client.util.TypedByteArrayWithFilename;
 import org.apache.commons.io.IOUtils;
 import retrofit.client.Response;
 import retrofit.mime.TypedFile;
-import retrofit.mime.TypedInput;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +16,7 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ExtractStructureServiceImpl implements ExtractStructureService
-{
+public class ExtractStructureServiceImpl implements ExtractStructureService {
     private final ExtractStructureBackend extractStructureBackend;
     private final Requester requester;
 
@@ -32,71 +30,61 @@ public class ExtractStructureServiceImpl implements ExtractStructureService
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromFile(final byte[] bytes) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromFile(final byte[] bytes) throws HodErrorException {
         final Structure structure = requester.makeRequest(Structure.class, getByteArrayBackendCaller(bytes));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromFile(final TokenProxy tokenProxy, final byte[] bytes) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromFile(final TokenProxy tokenProxy, final byte[] bytes) throws HodErrorException {
         final Structure structure = requester.makeRequest(tokenProxy, Structure.class, getByteArrayBackendCaller(bytes));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromFile(final InputStream inputStream) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromFile(final InputStream inputStream) throws HodErrorException {
         final Structure structure = requester.makeRequest(Structure.class, getInputStreamBackendCaller(inputStream));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromFile(final TokenProxy tokenProxy, final InputStream inputStream) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromFile(final TokenProxy tokenProxy, final InputStream inputStream) throws HodErrorException {
         final Structure structure = requester.makeRequest(tokenProxy, Structure.class, getInputStreamBackendCaller(inputStream));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromFile(final File file) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromFile(final File file) throws HodErrorException {
         final Structure structure = requester.makeRequest(Structure.class, getFileBackendCaller(file));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromFile(final TokenProxy tokenProxy, final File file) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromFile(final TokenProxy tokenProxy, final File file) throws HodErrorException {
         final Structure structure = requester.makeRequest(tokenProxy, Structure.class, getFileBackendCaller(file));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromReference(final TokenProxy tokenProxy, final String reference) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromReference(final TokenProxy tokenProxy, final String reference) throws HodErrorException {
         final Structure structure = requester.makeRequest(tokenProxy, Structure.class, getReferenceBackendCaller(reference));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromReference(final String reference) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromReference(final String reference) throws HodErrorException {
         final Structure structure = requester.makeRequest(Structure.class, getReferenceBackendCaller(reference));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromUrl(final TokenProxy tokenProxy, final String url) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromUrl(final TokenProxy tokenProxy, final String url) throws HodErrorException {
         final Structure structure = requester.makeRequest(tokenProxy, Structure.class, getUrlBackendCaller(url));
         return structure.getContent();
     }
 
     @Override
-    public List<LinkedHashMap<String, String>> extractFromUrl(final String url) throws HodErrorException
-    {
+    public List<LinkedHashMap<String, String>> extractFromUrl(final String url) throws HodErrorException {
         final Structure structure = requester.makeRequest(Structure.class, getUrlBackendCaller(url));
         return structure.getContent();
     }
@@ -110,18 +98,13 @@ public class ExtractStructureServiceImpl implements ExtractStructureService
         };
     }
 
-    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream)
-    {
-        return new Requester.BackendCaller()
-        {
+    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream) {
+        return new Requester.BackendCaller() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException
-            {
-                try
-                {
+            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+                try {
                     return extractStructureBackend.extractFromFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(inputStream)));
-                } catch (final IOException e)
-                {
+                } catch (final IOException e) {
                     throw new RuntimeException("Error reading bytes from stream", e);
                 }
             }

@@ -15,20 +15,20 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-public class ExtractStructureServiceITCase  extends AbstractHodClientIntegrationTest {
+public class ExtractStructureServiceITCase extends AbstractHodClientIntegrationTest {
 
     private ExtractStructureService extractStructureService;
 
     public static final String TEST_STRING = "Column1,Column2,Column3,Column4\n" +
-            "R1C1,R1C2,R1C3,R1C4\n" +
-            "R2C1,R2C2,R2C3,R2C4\n" +
-            "R3C1,R3C2,R3C3,R3C4\n" +
-            "R4C1,R4C2,R4C3,R4C4\n" +
-            "R5C1,R5C2,R5C3,R5C4\n" +
-            "R6C1,R6C2,R6C3,R6C4";
+        "R1C1,R1C2,R1C3,R1C4\n" +
+        "R2C1,R2C2,R2C3,R2C4\n" +
+        "R3C1,R3C2,R3C3,R3C4\n" +
+        "R4C1,R4C2,R4C3,R4C4\n" +
+        "R5C1,R5C2,R5C3,R5C4\n" +
+        "R6C1,R6C2,R6C3,R6C4";
 
     public ExtractStructureServiceITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -41,7 +41,7 @@ public class ExtractStructureServiceITCase  extends AbstractHodClientIntegration
 
         extractStructureService = new ExtractStructureServiceImpl(getConfig());
     }
-    
+
     @Test
     public void testExtractStructureForByteArray() throws HodErrorException {
         final List<LinkedHashMap<String, String>> result = extractStructureService.extractFromFile(getTokenProxy(), TEST_STRING.getBytes());

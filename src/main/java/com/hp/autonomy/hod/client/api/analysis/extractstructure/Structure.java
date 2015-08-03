@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @Data
-class Structure
-{
-    @JsonProperty("content") private List<LinkedHashMap<String, String>> content;
+class Structure {
+    @JsonProperty("content")
+    private List<LinkedHashMap<String, String>> content;
 }
