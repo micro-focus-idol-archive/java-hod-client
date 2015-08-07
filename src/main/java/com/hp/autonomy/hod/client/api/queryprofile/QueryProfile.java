@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -63,6 +64,8 @@ public class QueryProfile {
      */
     private final List<String> blacklistCategories;
 
+    private final String description;
+
     private QueryProfile(final Builder builder) {
         name = builder.name;
         queryManipulationIndex = builder.queryManipulationIndex;
@@ -73,11 +76,13 @@ public class QueryProfile {
         synonymCategories = builder.synonymCategories;
         blacklistsEnabled = builder.blacklistsEnabled;
         blacklistCategories = builder.blacklistCategories;
+        description = builder.description;
     }
 
     @JsonPOJOBuilder(withPrefix = "set")
     @Setter
     @Accessors(chain = true)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
 
         /** The name of the Query Profile */
@@ -107,6 +112,8 @@ public class QueryProfile {
 
         @JsonProperty("blacklist_categories")
         private List<String> blacklistCategories = Collections.emptyList();
+
+        private String description;
 
         // TODO: this is a stop gap until HOD catches up with the documentation
         private Builder setConfig(final QueryProfile config) {
