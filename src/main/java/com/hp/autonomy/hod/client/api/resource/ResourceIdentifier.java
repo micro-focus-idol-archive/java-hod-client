@@ -4,14 +4,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.converter.DoNotConvert;
 import lombok.Data;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
  * Represents a domain-qualified resource identifier; for example the identifier for a text index or user store.
+ *
+ * This class implements {@link Serializable} to facilitate easier caching
  */
 @Data
 @DoNotConvert
-public class ResourceIdentifier {
+public class ResourceIdentifier implements Serializable {
 
     public static final String PUBLIC_INDEXES_DOMAIN = "PUBLIC_INDEXES";
 
@@ -32,13 +37,26 @@ public class ResourceIdentifier {
     private static final String SEPARATOR = ":";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile("([\\\\:])");
 
+    private static final long serialVersionUID = -3170086101527611633L;
+
+    /**
+     * The domain of the resource. Must be non-null
+     * @serial
+     */
     private final String domain;
+
+    /**
+     * The name of the resource. Must be non-null
+     * @serial
+     */
     private final String name;
 
     public ResourceIdentifier(
             @JsonProperty("domain") final String domain,
             @JsonProperty("name") final String name
     ) {
+        validate(domain, name);
+
         this.domain = domain;
         this.name = name;
     }
@@ -60,5 +78,21 @@ public class ResourceIdentifier {
      */
     private static String escapeComponent(final String input) {
         return ESCAPE_PATTERN.matcher(input).replaceAll("\\\\$1");
+    }
+
+    private void readObject(final ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        objectInputStream.defaultReadObject();
+
+        validate(domain, name);
+    }
+
+    private void validate(final String domain, final String name) {
+        if(domain == null) {
+            throw new IllegalArgumentException("domain must not be null");
+        }
+
+        if(name == null) {
+            throw new IllegalArgumentException("name must not be null");
+        }
     }
 }
