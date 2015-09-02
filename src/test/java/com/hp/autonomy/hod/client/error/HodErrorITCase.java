@@ -65,8 +65,8 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
             queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
             fail("HodErrorException not thrown");
         } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.BACKEND_REQUEST_FAILED));
-            assertThat(e.getMessage(), is("Backend request failed"));
+            assertThat(e.getErrorCode(), is(HodErrorCode.NO_IGNORE_SPECIALS));
+            assertThat(e.getMessage(), is("Invalid query text"));
         }
     }
 
