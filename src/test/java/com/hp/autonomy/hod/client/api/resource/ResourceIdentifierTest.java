@@ -2,6 +2,12 @@ package com.hp.autonomy.hod.client.api.resource;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -59,6 +65,31 @@ public class ResourceIdentifierTest {
     @Test
     public void toStringWithNonLatinCharacters() {
         testToString("!latin", "𡁜\\𡃁:𢞵𦟌", "!latin:𡁜\\\\𡃁\\:𢞵𦟌");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructionWithNullDomainThrowsIllegalArgumentException() {
+        new ResourceIdentifier(null, "foo");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructionWithNullNameThrowsIllegalArgumentException() {
+        new ResourceIdentifier("foo", null);
+    }
+
+    @Test
+    public void testSerialization() throws IOException, ClassNotFoundException {
+        final ResourceIdentifier resourceIdentifier = new ResourceIdentifier("domain", "name");
+
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(resourceIdentifier);
+
+        final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+        final ResourceIdentifier resourceIdentifierOut = (ResourceIdentifier) objectInputStream.readObject();
+
+        assertThat(resourceIdentifierOut.getDomain(), is("domain"));
+        assertThat(resourceIdentifierOut.getName(), is("name"));
     }
 
     private void testToString(final String domain, final String name, final String expected) {

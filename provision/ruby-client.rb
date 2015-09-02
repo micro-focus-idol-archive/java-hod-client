@@ -30,7 +30,7 @@ def delete(api, proxy_host, proxy_port, options = {})
 end
 
 def make_request(api, proxy_host, proxy_port, request_method, options = {})
-  uri = URI.parse("https://api.dev.idolondemand.com/2#{api}")
+  uri = URI.parse("https://api.int.havenondemand.com/2#{api}")
 
   if options[:params]
     uri.query = URI.encode_www_form(options[:params])
