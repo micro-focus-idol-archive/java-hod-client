@@ -3,7 +3,7 @@
 require_relative 'ruby-client'
 
 def create_text_index(token, index_name, index_flavor, proxy_host, proxy_port)
-  json = post("/api/async/textindex/#{index_name}/v1", proxy_host, proxy_port, :params => {:flavor => index_flavor}, :token => token)
+  json = post("/api/async/textindex/#{index_name}/v2", proxy_host, proxy_port, :params => {:flavor => index_flavor}, :token => token)
 
   job_id = json['jobID']
 

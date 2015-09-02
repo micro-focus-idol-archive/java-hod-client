@@ -27,7 +27,7 @@ import java.util.Map;
  */
 interface CreateTextIndexBackend {
 
-    String URL = "/2/api/async/textindex/{indexName}/v1";
+    String URL = "/2/api/async/textindex/{indexName}/v2";
 
     /**
      * Create a text index using the given token
