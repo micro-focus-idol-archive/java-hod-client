@@ -12,9 +12,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,21 +24,24 @@ import java.util.List;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = Documents.Builder.class)
-public class Documents {
+public class Documents implements Serializable {
+
+    private static final long serialVersionUID = 7657511117355673864L;
 
     /**
-     * @returns The list of documents returned by HP Haven OnDemand
+     * @return The list of documents returned by HP Haven OnDemand
+     * @serial The list of documents returned by HP Haven OnDemand
      */
     private final List<Document> documents;
 
     /**
-     * @returns The total number of results found by HP Haven OnDemand. If the total_results parameter was not specified,
+     * @return The total number of results found by HP Haven OnDemand. If the total_results parameter was not specified,
+     * this will be null.
+     * @serial The total number of results found by HP Haven OnDemand. If the total_results parameter was not specified,
      * this will be null.
      */
     private final Integer totalResults;
 
-    @Setter
-    @Accessors(chain = true)
     @JsonPOJOBuilder(withPrefix = "set")
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
@@ -47,6 +50,14 @@ public class Documents {
         private List<Document> documents = Collections.emptyList();
 
         private Integer totalResults;
+
+        public Builder setDocuments(final List<Document> documents) {
+            if (documents != null) {
+                this.documents = new ArrayList<>(documents);
+            }
+
+            return this;
+        }
 
         @JsonProperty("totalhits")
         public Builder setTotalResults(final Integer totalResults) {

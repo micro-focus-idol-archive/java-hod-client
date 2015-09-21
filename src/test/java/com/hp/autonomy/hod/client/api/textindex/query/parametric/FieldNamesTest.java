@@ -10,7 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.LinkedHashMap;
@@ -103,5 +107,22 @@ public class FieldNamesTest {
         final String json = output.toString();
 
         assertThat(json, is("{\"zero\":[{\"value\":\"1\",\"count\":1},{\"value\":\"2\",\"count\":2}],\"one\":[{\"value\":\"3\",\"count\":3},{\"value\":\"4\",\"count\":4},{\"value\":\"5\",\"count\":5}]}"));
+    }
+
+    @Test
+    public void testSerialization() throws IOException, ClassNotFoundException {
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        try(final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+            objectOutputStream.writeObject(fieldNames);
+        }
+
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+
+        try(final ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            final FieldNames fieldNamesFromStream = (FieldNames) objectInputStream.readObject();
+
+            assertThat(fieldNamesFromStream, is(fieldNames));
+        }
     }
 }

@@ -17,6 +17,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -28,9 +32,11 @@ import java.util.Set;
 @EqualsAndHashCode
 @ToString
 @JsonDeserialize(builder = FieldNames.Builder.class)
-public class FieldNames implements Iterable<FieldNames.ParametricValue> {
+public class FieldNames implements Iterable<FieldNames.ParametricValue>, Serializable {
 
-    private final Map<String, Map<String, Integer>> parametricValuesMap;
+    private static final long serialVersionUID = 2336751244628886019L;
+
+    private transient Map<String, Map<String, Integer>> parametricValuesMap;
 
     private FieldNames(final Builder builder) {
         this.parametricValuesMap = builder.parametricValuesMap;
@@ -111,6 +117,52 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue> {
         return map;
     }
 
+    /**
+     * @param objectOutputStream The output stream
+     * @serialData Writes out the number of fields {@code int}, then for each field, writes out the field name
+     * {@code String}, the number of the values {@code int}, then writes out each value {@code String} and the count
+     * {@code int}
+     */
+    private void writeObject(final ObjectOutputStream objectOutputStream) throws IOException {
+        objectOutputStream.defaultWriteObject();
+
+        objectOutputStream.writeInt(parametricValuesMap.size());
+
+        for(final Map.Entry<String, Map<String, Integer>> entry : parametricValuesMap.entrySet()) {
+            objectOutputStream.writeObject(entry.getKey());
+            objectOutputStream.writeInt(entry.getValue().size());
+
+            for(final Map.Entry<String, Integer> valueCount : entry.getValue().entrySet()) {
+                objectOutputStream.writeObject(valueCount.getKey());
+                objectOutputStream.writeInt(valueCount.getValue());
+            }
+        }
+    }
+
+    private void readObject(final ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        objectInputStream.defaultReadObject();
+
+        final int fieldCount = objectInputStream.readInt();
+
+        parametricValuesMap = new LinkedHashMap<>();
+
+        for(int i = 0; i < fieldCount; i++) {
+            final String fieldName = (String) objectInputStream.readObject();
+            final int countsCount = objectInputStream.readInt();
+
+            final LinkedHashMap<String, Integer> countsMap = new LinkedHashMap<>();
+
+            for(int j = 0; j < countsCount; j++) {
+                final String value = (String) objectInputStream.readObject();
+                final int count = objectInputStream.readInt();
+
+                countsMap.put(value, count);
+            }
+
+            parametricValuesMap.put(fieldName, countsMap);
+        }
+    }
+
     @Setter
     @Accessors(chain = true)
     @JsonPOJOBuilder(withPrefix = "set")
@@ -131,14 +183,16 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue> {
     }
 
     @Data
-    public static class ParametricValue {
+    public static class ParametricValue implements Serializable {
+        private static final long serialVersionUID = 656458301600512829L;
         private final String fieldName;
         private final String value;
         private final int count;
     }
 
     @Data
-    public static class ValueAndCount {
+    public static class ValueAndCount implements Serializable {
+        private static final long serialVersionUID = 5286493407790738300L;
         private final String value;
         private final int count;
     }
