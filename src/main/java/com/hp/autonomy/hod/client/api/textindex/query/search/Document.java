@@ -146,7 +146,7 @@ public class Document implements Serializable {
         @SuppressWarnings("FieldMayBeFinal")
         private String summary = "";
 
-        public Builder setLinks(Set<String> links) {
+        public Builder setLinks(final Set<String> links) {
             if (links != null) {
                 this.links = new HashSet<>(links);
             }
@@ -154,9 +154,16 @@ public class Document implements Serializable {
             return this;
         }
 
-        @JsonAnySetter
         public Builder addField(final String key, final Serializable value) {
             fields.put(key, value);
+            return this;
+        }
+
+        // Jackson can't convert to interfaces, so we need this helper method
+        @JsonAnySetter
+        Builder addField(final String key, final Object value) {
+            // Assume Jackson will give us a Serializable type
+            this.addField(key, (Serializable) value);
             return this;
         }
 
