@@ -161,7 +161,7 @@ public class Document implements Serializable {
 
         // Jackson can't convert to interfaces, so we need this helper method
         @JsonAnySetter
-        Builder addField(final String key, final Object value) {
+        Builder _addField(final String key, final Object value) {
             // Assume Jackson will give us a Serializable type
             this.addField(key, (Serializable) value);
             return this;
