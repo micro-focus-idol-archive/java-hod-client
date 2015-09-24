@@ -1,6 +1,5 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -222,7 +221,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class ApplicationAndUsers {
         private final String domain;
         private final String name;
@@ -238,7 +236,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             this.users = users;
         }
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
         private static class User {
             private final String storeDomain;
             private final String storeName;

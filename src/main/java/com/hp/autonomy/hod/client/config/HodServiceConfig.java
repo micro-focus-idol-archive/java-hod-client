@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.converter.HodConverter;
 import com.hp.autonomy.hod.client.error.DefaultHodErrorHandler;
@@ -41,15 +42,20 @@ public class HodServiceConfig {
             restAdapterBuilder.setClient(builder.client);
         }
 
-        final JacksonConverter jacksonConverter;
+        final ObjectMapper objectMapper;
 
         if (builder.objectMapper != null) {
-            jacksonConverter = new JacksonConverter(builder.objectMapper);
+            objectMapper = builder.objectMapper.copy();
         }
         else {
-            jacksonConverter = new JacksonConverter();
+            objectMapper = new ObjectMapper();
         }
 
+        // HP Haven OnDemand does not consider adding new properties to be a breaking change, so ignore any unknown
+        // properties
+        objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+
+        final JacksonConverter jacksonConverter = new JacksonConverter(objectMapper);
         final HodConverter converter = new HodConverter(jacksonConverter);
         restAdapterBuilder.setConverter(converter);
 

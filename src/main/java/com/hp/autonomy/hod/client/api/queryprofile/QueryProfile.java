@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -82,7 +81,6 @@ public class QueryProfile {
     @JsonPOJOBuilder(withPrefix = "set")
     @Setter
     @Accessors(chain = true)
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
 
         /** The name of the Query Profile */

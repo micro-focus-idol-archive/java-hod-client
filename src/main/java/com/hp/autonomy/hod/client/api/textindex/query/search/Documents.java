@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -43,7 +42,6 @@ public class Documents implements Serializable {
     private final Integer totalResults;
 
     @JsonPOJOBuilder(withPrefix = "set")
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
 
         @SuppressWarnings("FieldMayBeFinal")
