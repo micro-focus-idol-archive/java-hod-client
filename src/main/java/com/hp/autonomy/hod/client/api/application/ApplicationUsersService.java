@@ -3,13 +3,16 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.hod.client.api.user;
+package com.hp.autonomy.hod.client.api.application;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
 
+/**
+ * Service for getting information about which users can authenticate with an application.
+ */
 public interface ApplicationUsersService {
 
     /**
