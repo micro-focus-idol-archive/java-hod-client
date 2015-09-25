@@ -53,7 +53,7 @@ public class HodServiceConfig {
 
         // HP Haven OnDemand does not consider adding new properties to be a breaking change, so ignore any unknown
         // properties
-        objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         final JacksonConverter jacksonConverter = new JacksonConverter(objectMapper);
         final HodConverter converter = new HodConverter(jacksonConverter);
