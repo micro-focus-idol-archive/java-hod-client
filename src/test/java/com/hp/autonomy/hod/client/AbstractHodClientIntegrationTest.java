@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client;
 
-import com.hp.autonomy.hod.client.api.authentication.ApiKey;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationBackend;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
@@ -21,8 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 public abstract class AbstractHodClientIntegrationTest {
-    protected static final String APPLICATION_NAME = "IOD-TEST-APPLICATION";
-    protected static final String DOMAIN_NAME = "IOD-TEST-DOMAIN";
+    protected static final String APPLICATION_NAME = System.getProperty("hp.hod.application", "IOD-TEST-APPLICATION");
+    protected static final String DOMAIN_NAME = System.getProperty("hp.hod.domain", "IOD-TEST-DOMAIN");
 
     protected static final ResourceIdentifier PRIVATE_INDEX = new ResourceIdentifier(DOMAIN_NAME, "java-iod-client-integration-tests");
 
@@ -40,9 +39,9 @@ public abstract class AbstractHodClientIntegrationTest {
 
         try {
             token = authenticationBackend.authenticateApplication(
-                new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey")),
-                    APPLICATION_NAME,
-                    DOMAIN_NAME,
+                endpoint.getApiKey(),
+                APPLICATION_NAME,
+                DOMAIN_NAME,
                 TokenType.simple
             ).getToken();
 

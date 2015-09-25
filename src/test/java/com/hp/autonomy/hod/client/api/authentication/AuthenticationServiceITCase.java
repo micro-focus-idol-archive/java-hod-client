@@ -28,8 +28,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -59,14 +57,15 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     private static final TypeReference<List<ApplicationAndUsers>> GET_APPLICATION_RESPONSE_REFERENCE = new TypeReference<List<ApplicationAndUsers>>() {};
     private static final TypeReference<AuthenticationTokenResponse> TOKEN_RESPONSE_REFERENCE = new TypeReference<AuthenticationTokenResponse>() {};
 
+    private final ApiKey apiKey;
     private final String endpointUrl;
     private final ObjectMapper mapper = new ObjectMapper();
 
     private AuthenticationServiceImpl authenticationService;
-    private ApiKey apiKey;
 
     public AuthenticationServiceITCase(final Endpoint endpoint) {
         super(endpoint);
+        apiKey = endpoint.getApiKey();
         endpointUrl = endpoint.getUrl();
     }
 
@@ -74,7 +73,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Before
     public void setUp() {
         super.setUp();
-        apiKey = new ApiKey(System.getProperty("hp.dev.placeholder.hod.apiKey"));
         authenticationService = new AuthenticationServiceImpl(getConfig());
     }
 

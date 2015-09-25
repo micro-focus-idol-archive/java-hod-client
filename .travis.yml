@@ -4,7 +4,7 @@ jdk:
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 before_script: ruby provision/setup-test-environment.rb $DEV_API_KEY_PLACEHOLDER $HOD_APPLICATION $HOD_DOMAIN
-script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.dev.hod.apiKey=$DEV_API_KEY -Dhp.dev.placeholder.hod.apiKey=$DEV_API_KEY_PLACEHOLDER -Dhp.hod.env=DEVELOPMENT
+script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.int.hod.apiKey=$INT_API_KEY -Dhp.hod.env=INTEGRATION -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN
 after_success: bash travis.sh
 after_script: ruby provision/destroy-test-environment.rb $DEV_API_KEY_PLACEHOLDER $HOD_APPLICATION $HOD_DOMAIN
 env:
@@ -21,12 +21,10 @@ env:
   - secure: YvX/muwjVf+xQughSFMctniIg4sxpTmq6wfet6Un8x6cinKTWXQZNm0DdadRwZtkVq60Ddne2Yweb4E0xnOn86h6ACEAQcLrnTuv6UWx8u/M09Rp7FHCdMnFhoaJpeU6QDNJJkV152bU9u2gbYikLGcyanK8sU/wuGo6mkBvuAc=
   # API_KEY
   - secure: FNjOFgBF2VV3xFS769ikIWGSRvkEOohW6bm0G+qtXY6C0ApZHtfIoP4EJ39D1zWbmS7GNDOdIMGDkT2tkNwstRUgaBV49z8l5KO6LKtvMDzfq5Pd8LnZpyigRbdIyA4fSvhwkMEtIJ02yL3EzNwk2ZBNQC+jnW7HEkOmEuPwvag=
-  # DEV_API_KEY
-  - secure: HDgO4NFKo5zYhafi82WauFIZx1VJmoyzMNkoFuQ6IobXOWVwN66NP4TEuidGyepUDPObj6RO4bLUc2FYaNk18AUfFtUpMJ5anFPdZa8/yYiZxQ1lhVa3UbEw889SY2dByrMZSb9rMTrbYuo1yc1OpGS9Iwovj2MUkl+wiHjABDw=
+  # INT_API_KEY
+  - secure: PWzpD0Ac9ELCdkwIMyHf8ylq3Cp3rrFZZ4+ga3fV+/XAn2k8AJ1/X3KZuRxiLj8e7McEyGXh8AJT35xSoEwLfvLi+iQp0SqKGPIhY771SpZBQcXph8n28NoiGvFwXp0l/FQwiYg9qGfhF5pT2NwFnmavrp+h9SQ7ruZffrNo8Wc=
   # GITHUB_TOKEN
   - secure: lFlg8557sEpm61f8G/3d0bz/C/arHJxEX7ag5q8bYNtwxXFf1Roikwr7M8PfD7CKYqdwIMxrtsoMsaj2D4PeFKTJWNWA/K46yg2rU4q7qZounPJnAwXQeKyaO7KsuO3d1Cez5cQhuypfOL02+d5t2vWU3L4R1sbQGg1HokCwbwU=
-  # DEV_API_KEY_PLACEHOLDER
-  - secure: HD1gkFJe4/zCPjp5lwT3PQXCpC+LQrwvHOhFGAxerOZNOQWPAYUcwEMnJU97YlMyi/8D8cXaAXoY/+9ppwbBPHDaFWWOqExDRst2XLN7ab+UXwjbags3Bp6dkvstauPGIcYR/RLi9XOwY+g4yGtAMK/qwWFf2g2YWyV/oDRUg1Y=
   # HOD_APPLICATION
   - secure: T9pqvu/HdX9oVpwSSjeWY/DW6eoquE0Dr9om+23UVnQ27S5/NtcKKdTZfZwrDFNuNKHuwIeqWerF5yl13tkMrU++fHNhwbr7RXZAW7PZiKHX+lQ+Ny7g8yxZth6YEVJ2YtRgrbb+FSVHc2KwiEqo9O03DBmvVPEZBOyMaVNWIcA=
   # HOD_DOMAIN

@@ -5,11 +5,14 @@
 
 package com.hp.autonomy.hod.client;
 
+import com.hp.autonomy.hod.client.api.authentication.ApiKey;
+
 /**
  * Enum type representing the possible endpoints for HP Haven OnDemand
  */
 public enum Endpoint {
-    DEVELOPMENT("https://api.int.havenondemand.com", System.getProperty("hp.dev.hod.apiKey")),
+    INTEGRATION("https://api.int.havenondemand.com", System.getProperty("hp.int.hod.apiKey")),
+    PREVIEW("https://api.preview.havenondemand.com", System.getProperty("hp.preview.hod.apiKey")),
     STAGING("https://api.staging.havenondemand.com", System.getProperty("hp.staging.hod.apiKey")),
     PRODUCTION("https://api.havenondemand.com", System.getProperty("hp.hod.apiKey"));
 
@@ -25,8 +28,8 @@ public enum Endpoint {
         return url;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public ApiKey getApiKey() {
+        return new ApiKey(apiKey);
     }
 
     @Override
