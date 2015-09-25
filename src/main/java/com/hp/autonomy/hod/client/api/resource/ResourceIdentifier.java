@@ -1,12 +1,15 @@
 package com.hp.autonomy.hod.client.api.resource;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.converter.DoNotConvert;
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -37,6 +40,12 @@ public class ResourceIdentifier implements Serializable {
     private static final String SEPARATOR = ":";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile("([\\\\:])");
 
+    private static final Pattern UNESCAPE_BACKSLASH_PATTERN = Pattern.compile("\\\\");
+    private static final Pattern UNESCAPE_COLON_PATTERN = Pattern.compile("\\\\:");
+
+    // Pattern for breaking a domain:name string into a domain and a name
+    private static final Pattern SPLIT_PATTERN = Pattern.compile("((?:[^\\\\:]|\\\\[\\\\:])+):((?:[^\\\\:]|\\\\[\\\\:])+)");
+
     private static final long serialVersionUID = -3170086101527611633L;
 
     /**
@@ -51,6 +60,32 @@ public class ResourceIdentifier implements Serializable {
      */
     private final String name;
 
+    /**
+     * Construct a ResourceIdentifier from a colon-separated and escaped domain and name.
+     * @param identifier Colon-separated domain and name
+     */
+    public ResourceIdentifier(final String identifier) {
+        if (StringUtils.isEmpty(identifier)) {
+            throw new IllegalArgumentException("Identifier must not be empty");
+        }
+
+        final Matcher matcher = SPLIT_PATTERN.matcher(identifier);
+
+        // The matches method attempts to match the entire string against the pattern
+        if (matcher.matches()) {
+            domain = unescapeComponent(matcher.group(1));
+            name = unescapeComponent(matcher.group(2));
+        } else {
+            throw new IllegalArgumentException("Identifier was invalid");
+        }
+    }
+
+    /**
+     * Construct a ResourceIdentifier from a domain and a name.
+     * @param domain The resource domain
+     * @param name The resource name
+     */
+    @JsonCreator
     public ResourceIdentifier(
             @JsonProperty("domain") final String domain,
             @JsonProperty("name") final String name
@@ -70,14 +105,14 @@ public class ResourceIdentifier implements Serializable {
         return escapeComponent(domain) + SEPARATOR + escapeComponent(name);
     }
 
-    /**
-     * HOD resource names (text index names, domain names etc) must have : escaped to \: and \ escaped to \\ when
-     * combined into a resource identifier.
-     * @param input The string to escape
-     * @return The escaped string
-     */
+    // HOD resource names (text index names, domain names etc) must have : escaped to \: and \ escaped to \\ when
+    // combined into a resource identifier.
     private static String escapeComponent(final String input) {
         return ESCAPE_PATTERN.matcher(input).replaceAll("\\\\$1");
+    }
+
+    private static String unescapeComponent(final String input) {
+        return input.replace("\\:", ":").replace("\\\\", "\\");
     }
 
     private void readObject(final ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
