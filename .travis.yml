@@ -3,10 +3,10 @@ jdk:
 - oraclejdk7
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
-before_script: ruby provision/setup-test-environment.rb $DEV_API_KEY_PLACEHOLDER $HOD_APPLICATION $HOD_DOMAIN
+before_script: ruby provision/setup-test-environment.rb $INT_API_KEY $HOD_APPLICATION $HOD_DOMAIN
 script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.int.hod.apiKey=$INT_API_KEY -Dhp.hod.env=INTEGRATION -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN
 after_success: bash travis.sh
-after_script: ruby provision/destroy-test-environment.rb $DEV_API_KEY_PLACEHOLDER $HOD_APPLICATION $HOD_DOMAIN
+after_script: ruby provision/destroy-test-environment.rb $INT_API_KEY $HOD_APPLICATION $HOD_DOMAIN
 env:
   global:
   # SONATYPE_USERNAME
