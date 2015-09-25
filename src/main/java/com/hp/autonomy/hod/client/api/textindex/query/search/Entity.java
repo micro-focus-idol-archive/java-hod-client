@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
@@ -64,8 +65,12 @@ public class Entity implements Serializable {
     @JsonPOJOBuilder(withPrefix = "set")
     public static class Builder {
         private String text;
+
+        @JsonProperty("docs_with_phrase")
         private Integer docsWithPhrase;
         private Integer occurrences;
+
+        @JsonProperty("docs_with_all_terms")
         private Integer docsWithAllTerms;
         private Integer cluster;
 
