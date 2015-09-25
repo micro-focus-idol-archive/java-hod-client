@@ -2,6 +2,7 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
@@ -66,6 +67,8 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         super(endpoint);
         apiKey = endpoint.getApiKey();
         endpointUrl = endpoint.getUrl();
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override
