@@ -5,8 +5,54 @@
 
 package com.hp.autonomy.hod.client.api.resource;
 
-public enum ResourceType {
-    content,
-    connector,
-    query_profile
+import lombok.Data;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
+public class ResourceType {
+
+    public static final ResourceType CONTENT = new ResourceType("content");
+    public static final ResourceType CONNECTOR = new ResourceType("connector");
+    public static final ResourceType QUERY_PROFILE = new ResourceType("query_profile");
+
+    private final String name;
+
+    public ResourceType(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public static Set<ResourceType> allOf() {
+        return new HashSet<>(Arrays.asList(
+            CONTENT,
+            CONNECTOR,
+            QUERY_PROFILE
+        ));
+    }
+
+    public static Set<ResourceType> complementOf(final Set<ResourceType> resourceTypes) {
+        final Set<ResourceType> set = allOf();
+
+        for(final ResourceType resourceType : resourceTypes) {
+            set.remove(resourceType);
+        }
+
+        return resourceTypes;
+    }
+
+    public static Set<ResourceType> of(final ResourceType first, final ResourceType... rest) {
+        final Set<ResourceType> set = new HashSet<>();
+        set.add(first);
+        set.addAll(Arrays.asList(rest));
+
+        return set;
+    }
+
 }
