@@ -22,8 +22,10 @@ import java.util.Collections;
 public abstract class AbstractHodClientIntegrationTest {
     protected static final String APPLICATION_NAME = System.getProperty("hp.hod.application", "IOD-TEST-APPLICATION");
     protected static final String DOMAIN_NAME = System.getProperty("hp.hod.domain", "IOD-TEST-DOMAIN");
+    protected static final String USER_STORE_NAME = System.getProperty("hp.hod.userstore", "DEFAULT_USER_STORE");
 
     protected static final ResourceIdentifier PRIVATE_INDEX = new ResourceIdentifier(DOMAIN_NAME, "java-iod-client-integration-tests");
+    protected static final ResourceIdentifier USER_STORE = new ResourceIdentifier(DOMAIN_NAME, USER_STORE_NAME);
 
     protected final Endpoint endpoint;
     private HodServiceConfig hodServiceConfig;
