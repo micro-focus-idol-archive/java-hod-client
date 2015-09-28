@@ -53,6 +53,16 @@ public class ResourceIdentifierTest {
     }
 
     @Test
+    public void toStringWithDomainEndingInColon() {
+        testToString("domain:", "name", "domain\\::name");
+    }
+
+    @Test
+    public void fromStringWithDomainEndingInColon() {
+        testFromString("domain\\::name", "domain:", "name");
+    }
+
+    @Test
     public void toStringWithOneBackslash() {
         testToString("directories", "home\\matthew", "directories:home\\\\matthew");
     }

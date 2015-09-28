@@ -44,7 +44,7 @@ public class ResourceIdentifier implements Serializable {
     private static final Pattern UNESCAPE_COLON_PATTERN = Pattern.compile("\\\\:");
 
     // Pattern for breaking a domain:name string into a domain and a name
-    private static final Pattern SPLIT_PATTERN = Pattern.compile("((?:[^\\\\:]|\\\\[\\\\:])+):((?:[^\\\\:]|\\\\[\\\\:])+)");
+    private static final Pattern SPLIT_PATTERN = Pattern.compile("((?:[^\\\\:]|\\\\[\\\\:])+):(.+)");
 
     private static final long serialVersionUID = -3170086101527611633L;
 
