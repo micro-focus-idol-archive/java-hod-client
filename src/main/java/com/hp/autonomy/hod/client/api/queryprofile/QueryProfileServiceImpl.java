@@ -155,12 +155,4 @@ public class QueryProfileServiceImpl implements QueryProfileService {
         };
     }
 
-    private Requester.BackendCaller getListBackendCaller() {
-        return new Requester.BackendCaller() {
-            @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return queryProfileBackend.listQueryProfiles(authenticationToken);
-            }
-        };
-    }
 }
