@@ -7,7 +7,6 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.userstore.StatusResponse;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -69,13 +68,13 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public StatusResponse delete(final ResourceIdentifier userStore, final String name) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, deleteBackendCaller(userStore, name));
+    public void delete(final ResourceIdentifier userStore, final String name) throws HodErrorException {
+        requester.makeRequest(StatusResponse.class, deleteBackendCaller(userStore, name));
     }
 
     @Override
-    public StatusResponse delete(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, deleteBackendCaller(userStore, name));
+    public void delete(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
+        requester.makeRequest(tokenProxy, StatusResponse.class, deleteBackendCaller(userStore, name));
     }
 
     @Override
@@ -89,23 +88,23 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public StatusResponse removeUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
+    public void removeUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+        requester.makeRequest(StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
     }
 
     @Override
-    public StatusResponse removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
+    public void removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+        requester.makeRequest(tokenProxy, StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
     }
 
     @Override
-    public StatusResponse link(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, linkBackendCaller(userStore, parent, child));
+    public void link(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        requester.makeRequest(StatusResponse.class, linkBackendCaller(userStore, parent, child));
     }
 
     @Override
-    public StatusResponse link(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, linkBackendCaller(userStore, parent, child));
+    public void link(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        requester.makeRequest(tokenProxy, StatusResponse.class, linkBackendCaller(userStore, parent, child));
     }
 
     // Build the hierarchy parameters map for a create group request

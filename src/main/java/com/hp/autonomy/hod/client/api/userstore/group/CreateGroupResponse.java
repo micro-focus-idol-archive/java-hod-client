@@ -11,16 +11,13 @@ import lombok.Data;
 
 @Data
 public class CreateGroupResponse {
-    private final boolean success;
     private final ResourceIdentifier userStore;
     private final String groupName;
 
     public CreateGroupResponse(
-        @JsonProperty("success") final boolean success,
         @JsonProperty("user_store") final ResourceIdentifier userStore,
         @JsonProperty("group") final String groupName
     ) {
-        this.success = success;
         this.userStore = userStore;
         this.groupName = groupName;
     }
