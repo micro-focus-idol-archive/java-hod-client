@@ -7,12 +7,25 @@ package com.hp.autonomy.hod.client.api.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.DateTimeParser;
 
 import java.io.Serializable;
 
 @Data
 public class Resource implements Serializable {
     private static final long serialVersionUID = -2332288355411288129L;
+
+    private static final DateTimeFormatter FORMAT = new DateTimeFormatterBuilder()
+        .append(null, new DateTimeParser[]{
+            DateTimeFormat.forPattern("EEE MMM dd yyyy HH:mm:ss zZ ('UTC)").getParser(),
+            DateTimeFormat.forPattern("EEE MMM dd yyyy HH:mm:ss zZ").getParser()
+        })
+        .toFormatter();
+
     /**
      * @return The name of the resource
      */
@@ -36,7 +49,7 @@ public class Resource implements Serializable {
     /**
      * @return The date created
      */
-    private final String dateCreated;
+    private final DateTime dateCreated;
 
     public Resource(
             @JsonProperty("resource") final String resource,
@@ -49,6 +62,12 @@ public class Resource implements Serializable {
         this.description = description;
         this.type = type;
         this.flavour = flavour;
-        this.dateCreated = dateCreated;
+
+        if (dateCreated != null) {
+            this.dateCreated = FORMAT.parseDateTime(dateCreated);
+        }
+        else {
+            this.dateCreated = null;
+        }
     }
 }
