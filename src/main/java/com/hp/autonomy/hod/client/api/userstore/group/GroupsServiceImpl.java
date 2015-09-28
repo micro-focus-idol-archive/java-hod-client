@@ -38,15 +38,6 @@ public class GroupsServiceImpl implements GroupsService {
         return requester.makeRequest(tokenProxy, ListGroupsResponse.class, listBackendCaller(userStore)).getGroups();
     }
 
-    private Requester.BackendCaller listBackendCaller(final ResourceIdentifier userStore) {
-        return new Requester.BackendCaller() {
-            @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.list(token, userStore);
-            }
-        };
-    }
-
     @Override
     public GroupInfo getInfo(final ResourceIdentifier userStore, final String name) throws HodErrorException {
         return requester.makeRequest(GroupInfo.class, getInfoBackendCaller(userStore, name));
@@ -55,15 +46,6 @@ public class GroupsServiceImpl implements GroupsService {
     @Override
     public GroupInfo getInfo(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
         return requester.makeRequest(tokenProxy, GroupInfo.class, getInfoBackendCaller(userStore, name));
-    }
-
-    private Requester.BackendCaller getInfoBackendCaller(final ResourceIdentifier userStore, final String group) {
-        return new Requester.BackendCaller() {
-            @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.getInfo(token, userStore, group);
-            }
-        };
     }
 
     @Override
@@ -86,6 +68,47 @@ public class GroupsServiceImpl implements GroupsService {
         return requester.makeRequest(tokenProxy, CreateGroupResponse.class, createBackendCaller(userStore, buildHierarchyParameters(parents, children), name));
     }
 
+    @Override
+    public StatusResponse delete(final ResourceIdentifier userStore, final String name) throws HodErrorException {
+        return requester.makeRequest(StatusResponse.class, deleteBackendCaller(userStore, name));
+    }
+
+    @Override
+    public StatusResponse delete(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, StatusResponse.class, deleteBackendCaller(userStore, name));
+    }
+
+    @Override
+    public AssignUserResponse assignUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+        return requester.makeRequest(AssignUserResponse.class, assignBackendCaller(userStore, groupName, userUuid));
+    }
+
+    @Override
+    public AssignUserResponse assignUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, AssignUserResponse.class, assignBackendCaller(userStore, groupName, userUuid));
+    }
+
+    @Override
+    public StatusResponse removeUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+        return requester.makeRequest(StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
+    }
+
+    @Override
+    public StatusResponse removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
+    }
+
+    @Override
+    public StatusResponse link(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        return requester.makeRequest(StatusResponse.class, linkBackendCaller(userStore, parent, child));
+    }
+
+    @Override
+    public StatusResponse link(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, StatusResponse.class, linkBackendCaller(userStore, parent, child));
+    }
+
+    // Build the hierarchy parameters map for a create group request
     private Map<String, Object> buildHierarchyParameters(final List<String> parents, final List<String> children) {
         final MultiMap<String, Object> parameters = new MultiMap<>();
 
@@ -104,6 +127,24 @@ public class GroupsServiceImpl implements GroupsService {
         return parameters;
     }
 
+    private Requester.BackendCaller listBackendCaller(final ResourceIdentifier userStore) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+                return backend.list(token, userStore);
+            }
+        };
+    }
+
+    private Requester.BackendCaller getInfoBackendCaller(final ResourceIdentifier userStore, final String group) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+                return backend.getInfo(token, userStore, group);
+            }
+        };
+    }
+
     private Requester.BackendCaller createBackendCaller(final ResourceIdentifier userStore, final Map<String, Object> hierarchyParameters, final String group) {
         return new Requester.BackendCaller() {
             @Override
@@ -111,16 +152,6 @@ public class GroupsServiceImpl implements GroupsService {
                 return backend.create(token, userStore, group, hierarchyParameters);
             }
         };
-    }
-
-    @Override
-    public StatusResponse delete(final ResourceIdentifier userStore, final String name) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, deleteBackendCaller(userStore, name));
-    }
-
-    @Override
-    public StatusResponse delete(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, deleteBackendCaller(userStore, name));
     }
 
     private Requester.BackendCaller deleteBackendCaller(final ResourceIdentifier userStore, final String group) {
@@ -132,16 +163,6 @@ public class GroupsServiceImpl implements GroupsService {
         };
     }
 
-    @Override
-    public AssignUserResponse assignUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(AssignUserResponse.class, assignBackendCaller(userStore, groupName, userUuid));
-    }
-
-    @Override
-    public AssignUserResponse assignUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, AssignUserResponse.class, assignBackendCaller(userStore, groupName, userUuid));
-    }
-
     private Requester.BackendCaller assignBackendCaller(final ResourceIdentifier userStore, final String group, final String userUuid) {
         return new Requester.BackendCaller() {
             @Override
@@ -151,16 +172,6 @@ public class GroupsServiceImpl implements GroupsService {
         };
     }
 
-    @Override
-    public StatusResponse removeUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
-    }
-
-    @Override
-    public StatusResponse removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
-    }
-
     private Requester.BackendCaller removeBackendCaller(final ResourceIdentifier userStore, final String group, final String userUuid) {
         return new Requester.BackendCaller() {
             @Override
@@ -168,16 +179,6 @@ public class GroupsServiceImpl implements GroupsService {
                 return backend.removeUser(token, userStore, group, userUuid);
             }
         };
-    }
-
-    @Override
-    public StatusResponse link(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, linkBackendCaller(userStore, parent, child));
-    }
-
-    @Override
-    public StatusResponse link(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, linkBackendCaller(userStore, parent, child));
     }
 
     private Requester.BackendCaller linkBackendCaller(final ResourceIdentifier userStore, final String parent, final String child) {
