@@ -9,33 +9,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Data;
 
+/**
+ * Represents the result from a request to assign a user to a group in a user store.
+ */
 @Data
 public class AssignUserResponse {
-    private final boolean success;
-    private final Result result;
+    private final ResourceIdentifier userStore;
+    private final String groupName;
+    private final String userUuid;
 
     public AssignUserResponse(
-        @JsonProperty("success") final boolean success,
-        @JsonProperty("result") final Result result
+        @JsonProperty("user_store") final ResourceIdentifier userStore,
+        @JsonProperty("group") final String groupName,
+        @JsonProperty("uuid") final String userUuid
     ) {
-        this.success = success;
-        this.result = result;
-    }
-
-    @Data
-    public static class Result {
-        private final ResourceIdentifier userStore;
-        private final String groupName;
-        private final String userUuid;
-
-        public Result(
-            @JsonProperty("user_store") final ResourceIdentifier userStore,
-            @JsonProperty("group") final String groupName,
-            @JsonProperty("uuid") final String userUuid
-        ) {
-            this.userStore = userStore;
-            this.groupName = groupName;
-            this.userUuid = userUuid;
-        }
+        this.userStore = userStore;
+        this.groupName = groupName;
+        this.userUuid = userUuid;
     }
 }

@@ -80,12 +80,12 @@ public class GroupsServiceImpl implements GroupsService {
 
     @Override
     public AssignUserResponse assignUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(AssignUserResponse.class, assignBackendCaller(userStore, groupName, userUuid));
+        return requester.makeRequest(AssignUserResponseWrapper.class, assignBackendCaller(userStore, groupName, userUuid)).getResult();
     }
 
     @Override
     public AssignUserResponse assignUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, AssignUserResponse.class, assignBackendCaller(userStore, groupName, userUuid));
+        return requester.makeRequest(tokenProxy, AssignUserResponseWrapper.class, assignBackendCaller(userStore, groupName, userUuid)).getResult();
     }
 
     @Override
