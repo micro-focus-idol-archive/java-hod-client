@@ -126,7 +126,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         checkHodErrorCode(new HodErrorRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.create(getTokenProxy(), new ResourceIdentifier(DOMAIN_NAME, unique()), uniqueGroupName());
+                service.create(getTokenProxy(), new ResourceIdentifier(DOMAIN_NAME, unique()), unique());
             }
         }, HodErrorCode.STORE_NOT_FOUND);
     }
@@ -147,7 +147,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         checkHodErrorCode(new HodErrorRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.delete(getTokenProxy(), USER_STORE, uniqueGroupName());
+                service.delete(getTokenProxy(), USER_STORE, unique());
             }
         }, HodErrorCode.GROUP_NOT_FOUND);
     }
@@ -159,7 +159,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         checkHodErrorCode(new HodErrorRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), USER_STORE, groupName, unique());
+                service.assignUser(getTokenProxy(), USER_STORE, groupName, UUID.randomUUID());
             }
         }, HodErrorCode.USER_NOT_FOUND);
     }
@@ -171,7 +171,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         checkHodErrorCode(new HodErrorRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.removeUser(getTokenProxy(), USER_STORE, groupName, unique());
+                service.removeUser(getTokenProxy(), USER_STORE, groupName, UUID.randomUUID());
             }
         }, HodErrorCode.USER_NOT_FOUND);
     }
@@ -181,7 +181,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         checkHodErrorCode(new HodErrorRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), USER_STORE, unique(), unique());
+                service.assignUser(getTokenProxy(), USER_STORE, unique(), UUID.randomUUID());
             }
         }, GROUP_OR_USER_NOT_FOUND);
     }
@@ -191,7 +191,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         checkHodErrorCode(new HodErrorRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), USER_STORE, unique(), unique());
+                service.assignUser(getTokenProxy(), USER_STORE, unique(), UUID.randomUUID());
             }
         }, GROUP_OR_USER_NOT_FOUND);
     }

@@ -17,6 +17,7 @@ import retrofit.client.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class GroupsServiceImpl implements GroupsService {
     private final GroupsBackend backend;
@@ -78,22 +79,22 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public AssignUserResponse assignUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+    public AssignUserResponse assignUser(final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
         return requester.makeRequest(AssignUserResponseWrapper.class, assignBackendCaller(userStore, groupName, userUuid)).getResult();
     }
 
     @Override
-    public AssignUserResponse assignUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+    public AssignUserResponse assignUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
         return requester.makeRequest(tokenProxy, AssignUserResponseWrapper.class, assignBackendCaller(userStore, groupName, userUuid)).getResult();
     }
 
     @Override
-    public void removeUser(final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+    public void removeUser(final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
         requester.makeRequest(StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
     }
 
     @Override
-    public void removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final String userUuid) throws HodErrorException {
+    public void removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
         requester.makeRequest(tokenProxy, StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
     }
 
@@ -162,20 +163,20 @@ public class GroupsServiceImpl implements GroupsService {
         };
     }
 
-    private Requester.BackendCaller assignBackendCaller(final ResourceIdentifier userStore, final String group, final String userUuid) {
+    private Requester.BackendCaller assignBackendCaller(final ResourceIdentifier userStore, final String group, final UUID userUuid) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.assignUser(token, userStore, group, userUuid);
+                return backend.assignUser(token, userStore, group, userUuid.toString());
             }
         };
     }
 
-    private Requester.BackendCaller removeBackendCaller(final ResourceIdentifier userStore, final String group, final String userUuid) {
+    private Requester.BackendCaller removeBackendCaller(final ResourceIdentifier userStore, final String group, final UUID userUuid) {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.removeUser(token, userStore, group, userUuid);
+                return backend.removeUser(token, userStore, group, userUuid.toString());
             }
         };
     }

@@ -10,6 +10,7 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Service for controlling the groups in a user store.
@@ -124,7 +125,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    AssignUserResponse assignUser(ResourceIdentifier userStore, String groupName, String userUuid) throws HodErrorException;
+    AssignUserResponse assignUser(ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Assign a user to a group in a user store.
@@ -135,7 +136,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    AssignUserResponse assignUser(TokenProxy tokenProxy, ResourceIdentifier userStore, String groupName, String userUuid) throws HodErrorException;
+    AssignUserResponse assignUser(TokenProxy tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Remove a user from a group in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -144,7 +145,7 @@ public interface GroupsService {
      * @param userUuid The UUID of the user
      * @throws HodErrorException
      */
-    void removeUser(ResourceIdentifier userStore, String groupName, String userUuid) throws HodErrorException;
+    void removeUser(ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Remove a user from a group in a user store.
@@ -154,7 +155,7 @@ public interface GroupsService {
      * @param userUuid The UUID of the user
      * @throws HodErrorException
      */
-    void removeUser(TokenProxy tokenProxy, ResourceIdentifier userStore, String groupName, String userUuid) throws HodErrorException;
+    void removeUser(TokenProxy tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Create a hierarchical relationship between two groups in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.

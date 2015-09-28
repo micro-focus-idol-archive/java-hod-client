@@ -8,14 +8,16 @@ package com.hp.autonomy.hod.client.api.userstore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class User {
     private final String name;
-    private final String uuid;
+    private final UUID uuid;
 
     public User(
         @JsonProperty("name") final String name,
-        @JsonProperty("uuid") final String uuid
+        @JsonProperty("uuid") final UUID uuid
     ) {
         this.name = name;
         this.uuid = uuid;
