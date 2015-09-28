@@ -22,57 +22,57 @@ interface GroupsBackend {
 
     @GET(BASE_PATH + V1)
     Response list(
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @Header(TOKEN_HEADER) AuthenticationToken token,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore
     ) throws HodErrorException;
 
     @GET(BASE_PATH + "/{group}" + V1)
     Response getInfo(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
-        @Path("group") String group,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @Path("group") String group
     ) throws HodErrorException;
 
     @POST(BASE_PATH + V1)
     @Multipart
     Response create(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Part("group_name") String name,
-        @PartMap Map<String, Object> hierarchyParameters,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @PartMap Map<String, Object> hierarchyParameters
     ) throws HodErrorException;
 
     @DELETE(BASE_PATH + "/{name}" + V1)
     Response delete(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
-        @Path("name") String name,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @Path("name") String name
     ) throws HodErrorException;
 
     @POST(BASE_PATH + "/{group}/user" + V1)
     @Multipart
     Response assignUser(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("group") String group,
-        @Part("user_uuid") String userUuid,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @Part("user_uuid") String userUuid
     ) throws HodErrorException;
 
     @DELETE(BASE_PATH + "/{group}/user/{user_uuid}" + V1)
     Response removeUser(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("group") String group,
-        @Path("user_uuid") String userUuid,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @Path("user_uuid") String userUuid
     ) throws HodErrorException;
 
     @POST(BASE_PATH + "/link" + V1)
     @Multipart
     Response link(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Part("parent_group_name") String parent,
-        @Part("child_group_name") String child,
-        @Header(TOKEN_HEADER) AuthenticationToken token
+        @Part("child_group_name") String child
     ) throws HodErrorException;
 
 }

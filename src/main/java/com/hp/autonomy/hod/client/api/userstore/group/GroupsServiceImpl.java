@@ -42,7 +42,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.list(userStore, token);
+                return backend.list(token, userStore);
             }
         };
     }
@@ -61,7 +61,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.getInfo(userStore, group, token);
+                return backend.getInfo(token, userStore, group);
             }
         };
     }
@@ -108,7 +108,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.create(userStore, group, hierarchyParameters, token);
+                return backend.create(token, userStore, group, hierarchyParameters);
             }
         };
     }
@@ -127,7 +127,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.delete(userStore, group, token);
+                return backend.delete(token, userStore, group);
             }
         };
     }
@@ -146,7 +146,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.assignUser(userStore, group, userUuid, token);
+                return backend.assignUser(token, userStore, group, userUuid);
             }
         };
     }
@@ -165,7 +165,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.removeUser(userStore, group, userUuid, token);
+                return backend.removeUser(token, userStore, group, userUuid);
             }
         };
     }
@@ -184,7 +184,7 @@ public class GroupsServiceImpl implements GroupsService {
         return new Requester.BackendCaller() {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
-                return backend.link(userStore, parent, child, token);
+                return backend.link(token, userStore, parent, child);
             }
         };
     }
