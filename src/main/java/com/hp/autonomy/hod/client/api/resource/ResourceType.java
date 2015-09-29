@@ -7,12 +7,15 @@ package com.hp.autonomy.hod.client.api.resource;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class ResourceType {
+public class ResourceType implements Serializable {
+
+    private static final long serialVersionUID = 5840146896341397940L;
 
     public static final ResourceType CONTENT = new ResourceType("content");
     public static final ResourceType CONNECTOR = new ResourceType("connector");

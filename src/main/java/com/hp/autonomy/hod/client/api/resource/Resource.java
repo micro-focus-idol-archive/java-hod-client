@@ -8,8 +8,11 @@ package com.hp.autonomy.hod.client.api.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Resource {
+public class Resource implements Serializable {
+    private static final long serialVersionUID = -2332288355411288129L;
     /**
      * @return The name of the resource
      */
