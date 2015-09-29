@@ -13,6 +13,5 @@ public enum IndexFlavor {
     explorer,
     categorization,
     custom_fields,
-    web_cloud,
     querymanipulation
 }
