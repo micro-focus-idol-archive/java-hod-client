@@ -62,7 +62,11 @@ public class ResourceType implements Serializable {
         ));
     }
 
-
+    /**
+     * Returns a set containing all the known resource types, except those is the given set
+     * @param resourceTypes The resource types which will not be included in the returned set
+     * @return The complement of the given set of resource types
+     */
     public static Set<ResourceType> complementOf(final Set<ResourceType> resourceTypes) {
         final Set<ResourceType> set = allOf();
 
