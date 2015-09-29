@@ -43,9 +43,7 @@ public class ResourceType implements Serializable {
     public static Set<ResourceType> complementOf(final Set<ResourceType> resourceTypes) {
         final Set<ResourceType> set = allOf();
 
-        for(final ResourceType resourceType : resourceTypes) {
-            set.remove(resourceType);
-        }
+        set.removeAll(resourceTypes);
 
         return resourceTypes;
     }
