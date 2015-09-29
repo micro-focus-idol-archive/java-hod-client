@@ -44,7 +44,7 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void listsResources() throws HodErrorException {
         final ListResourcesRequestBuilder parameters = new ListResourcesRequestBuilder()
-                .setTypes(ResourceType.allOf());
+                .setTypes(ResourceType.of(ResourceType.CONTENT));
 
         final Resources resources = resourcesService.list(getTokenProxy(), parameters);
 
