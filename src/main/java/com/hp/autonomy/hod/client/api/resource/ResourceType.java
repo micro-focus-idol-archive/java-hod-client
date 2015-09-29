@@ -68,7 +68,7 @@ public class ResourceType implements Serializable {
 
         set.removeAll(resourceTypes);
 
-        return resourceTypes;
+        return set;
     }
 
     /**
