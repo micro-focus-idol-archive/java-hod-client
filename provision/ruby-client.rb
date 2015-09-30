@@ -55,7 +55,7 @@ def make_request(api, proxy_host, proxy_port, request_method, options = {})
 
     json = JSON.parse(response.body)
 
-    unless response.kind_of? Net::HTTPSuccess
+    if !(response.kind_of? Net::HTTPSuccess) || (json['actions'] && json['actions'][0]['errors'])
       puts response.body
       raise HodException.new(json), "Error making request #{uri}"
     end
