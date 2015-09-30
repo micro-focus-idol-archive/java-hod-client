@@ -24,12 +24,12 @@ public class ResourcesTest {
     @Test
     public void testSerializeAndDeserialize() throws IOException, ClassNotFoundException {
         final List<Resource> privateResources = Arrays.asList(
-            new Resource("foo", "bar", ResourceType.CONTENT, ResourceFlavour.explorer, "yesterday"),
-            new Resource("bar", "bar", ResourceType.CONTENT, ResourceFlavour.explorer, "yesterday")
+            new Resource("foo", "bar", ResourceType.CONTENT, ResourceFlavour.EXPLORER, "yesterday"),
+            new Resource("bar", "bar", ResourceType.CONTENT, ResourceFlavour.EXPLORER, "yesterday")
         );
 
         final List<Resource> publicResources = Collections.singletonList(
-            new Resource(ResourceIdentifier.NEWS_ENG.getName(), "bar", ResourceType.CONTENT, ResourceFlavour.explorer, "yesterday")
+            new Resource(ResourceIdentifier.NEWS_ENG.getName(), "bar", ResourceType.CONTENT, ResourceFlavour.EXPLORER, "yesterday")
         );
 
         final Resources resources = new Resources(privateResources, publicResources);
