@@ -17,16 +17,47 @@ public class ResourceFlavour implements Serializable {
 
     private static final long serialVersionUID = -1478092510670076594L;
 
+    /**
+     * The flavour of a standard text index
+     */
     public static final ResourceFlavour STANDARD = new ResourceFlavour("standard");
+
+    /**
+     * The flavour of an explorer text index
+     */
     public static final ResourceFlavour EXPLORER = new ResourceFlavour("explorer");
+
+    /**
+     * The flavour of a categorization text index
+     */
     public static final ResourceFlavour CATEGORIZATION = new ResourceFlavour("categorization");
+
+    /**
+     * The flavour of a custom fields text index
+     */
     public static final ResourceFlavour CUSTOM_FIELDS = new ResourceFlavour("custom_fields");
+
+    /**
+     * The flavour of a query manipulation text index
+     */
     public static final ResourceFlavour QUERY_MANIPULATION = new ResourceFlavour("querymanipulation");
+
+    /**
+     * The flavour of a web cloud connector
+     */
     public static final ResourceFlavour WEB_CLOUD = new ResourceFlavour("web_cloud");
+
+    /**
+     * The flavour of an on site filesystem connector
+     */
     public static final ResourceFlavour FILESYSTEM_ONSITE = new ResourceFlavour("filesystem_onsite");
 
     private final String name;
 
+    /**
+     * Creates a new ResourceFlavour with the given name
+     * @param name The name of the ResourceFlavour
+     */
     public ResourceFlavour(final String name) {
         this.name = name;
     }
