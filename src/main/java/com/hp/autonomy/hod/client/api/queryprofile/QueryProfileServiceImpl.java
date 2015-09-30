@@ -18,7 +18,6 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
 
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ public class QueryProfileServiceImpl implements QueryProfileService {
 
     private final ResourcesService resourcesService;
     private static final ListResourcesRequestBuilder LIST_RESOURCES_REQUEST_BUILDER = new ListResourcesRequestBuilder()
-        .setTypes(EnumSet.of(ResourceType.query_profile));
+        .setTypes(ResourceType.of(ResourceType.QUERY_PROFILE));
 
     /**
      * Creates a new QueryProfileServiceImpl with the given configuration
@@ -156,12 +155,4 @@ public class QueryProfileServiceImpl implements QueryProfileService {
         };
     }
 
-    private Requester.BackendCaller getListBackendCaller() {
-        return new Requester.BackendCaller() {
-            @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
-                return queryProfileBackend.listQueryProfiles(authenticationToken);
-            }
-        };
-    }
 }

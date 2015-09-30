@@ -44,14 +44,14 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void listsResources() throws HodErrorException {
         final ListResourcesRequestBuilder parameters = new ListResourcesRequestBuilder()
-                .setTypes(EnumSet.of(ResourceType.content));
+                .setTypes(ResourceType.of(ResourceType.CONTENT));
 
         final Resources resources = resourcesService.list(getTokenProxy(), parameters);
 
         assertThat(resources.getPublicResources(), is(not(empty())));
 
         for (final Resource publicResource : resources.getPublicResources()) {
-            assertThat(publicResource.getType(), is(ResourceType.content));
+            assertThat(publicResource.getType(), is(ResourceType.CONTENT));
             assertThat(publicResource.getResource(), is(not(nullValue())));
         }
 
