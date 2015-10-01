@@ -12,6 +12,7 @@ import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -25,6 +26,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 // TODO: Add assign/remove user from group tests when it is possible to create a user, or at least to get an existing user's UUID
+// TODO: Enable GroupsService tests when the APIs are deployed on int.havenondemand.com
+@Ignore
 @RunWith(Parameterized.class)
 public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     private static final EnumSet<HodErrorCode> GROUP_OR_USER_NOT_FOUND = EnumSet.of(HodErrorCode.GROUP_NOT_FOUND, HodErrorCode.USER_NOT_FOUND);

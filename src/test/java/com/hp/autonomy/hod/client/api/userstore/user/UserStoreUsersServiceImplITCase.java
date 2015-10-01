@@ -10,6 +10,7 @@ import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.userstore.User;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,6 +21,8 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
+// TODO: Enable GroupsService tests when the APIs are deployed on int.havenondemand.com
+@Ignore
 @RunWith(Parameterized.class)
 public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegrationTest {
     private UserStoreUsersService service;
