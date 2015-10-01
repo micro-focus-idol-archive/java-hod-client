@@ -11,6 +11,9 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -26,6 +29,16 @@ interface UserStoreUsersBackend {
         @Header(TOKEN_HEADER) AuthenticationToken token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Query("meta_data") boolean returnMetaData
+    ) throws HodErrorException;
+
+    @POST(BASE_PATH + "/reset" + V1)
+    @Multipart
+    Response resetAuthentication(
+        @Header(TOKEN_HEADER) final AuthenticationToken token,
+        @Path(USER_STORE_VARIABLE) final ResourceIdentifier userStore,
+        @Part("user_email") final String email,
+        @Part("on_success") final String onSuccess,
+        @Part("on_error") final String onError
     ) throws HodErrorException;
 
 }
