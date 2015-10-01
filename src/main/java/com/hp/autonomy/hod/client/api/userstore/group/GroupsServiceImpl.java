@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.userstore.StatusResponse;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -109,13 +110,13 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public StatusResponse unlink(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
-        return requester.makeRequest(StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
+    public void unlink(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        requester.makeRequest(StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
     }
 
     @Override
-    public StatusResponse unlink(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
+    public void unlink(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        requester.makeRequest(tokenProxy, StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
     }
 
     // Build the hierarchy parameters map for a create group request

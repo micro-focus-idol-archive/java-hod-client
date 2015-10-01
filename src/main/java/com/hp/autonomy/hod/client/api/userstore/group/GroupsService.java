@@ -181,10 +181,9 @@ public interface GroupsService {
      * @param userStore The resource identifier for the user store
      * @param parent The parent group name
      * @param child The child group name
-     * @return Details about the resulting action
      * @throws HodErrorException
      */
-    StatusResponse unlink(ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
+    void unlink(ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
 
     /**
      * Remove a hierarchical relationship between two groups in a user store.
@@ -192,9 +191,8 @@ public interface GroupsService {
      * @param userStore The resource identifier for the user store
      * @param parent The parent group name
      * @param child The child group name
-     * @return Details about the resulting action
      * @throws HodErrorException
      */
-    StatusResponse unlink(TokenProxy tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
+    void unlink(TokenProxy tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
 
 }

@@ -312,9 +312,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final String child = safeCreateGroup().name;
         final String parent = safeCreateGroup().name;
         service.link(getTokenProxy(), USER_STORE, parent, child);
-
-        final StatusResponse response = service.unlink(getTokenProxy(), USER_STORE, parent, child);
-        assertThat(response.isSuccess(), is(true));
+        service.unlink(getTokenProxy(), USER_STORE, parent, child);
 
         final GroupInfo childInfo = service.getInfo(getTokenProxy(), USER_STORE, child);
         final GroupInfo parentInfo = service.getInfo(getTokenProxy(), USER_STORE, parent);
