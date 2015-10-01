@@ -75,4 +75,12 @@ interface GroupsBackend {
         @Part("child_group_name") String child
     ) throws HodErrorException;
 
+    @DELETE(BASE_PATH + "/{parent_group_name}/link" + V1)
+    Response unlink(
+        @Header(TOKEN_HEADER) AuthenticationToken token,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path("parent_group_name") String parent,
+        @Query("child_group_name") String child
+    ) throws HodErrorException;
+
 }

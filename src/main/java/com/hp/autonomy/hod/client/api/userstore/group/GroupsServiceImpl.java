@@ -108,6 +108,16 @@ public class GroupsServiceImpl implements GroupsService {
         requester.makeRequest(tokenProxy, StatusResponse.class, linkBackendCaller(userStore, parent, child));
     }
 
+    @Override
+    public StatusResponse unlink(final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        return requester.makeRequest(StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
+    }
+
+    @Override
+    public StatusResponse unlink(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
+    }
+
     // Build the hierarchy parameters map for a create group request
     private Map<String, Object> buildHierarchyParameters(final List<String> parents, final List<String> children) {
         final MultiMap<String, Object> parameters = new MultiMap<>();
@@ -186,6 +196,15 @@ public class GroupsServiceImpl implements GroupsService {
             @Override
             public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
                 return backend.link(token, userStore, parent, child);
+            }
+        };
+    }
+
+    private Requester.BackendCaller unlinkBackendCaller(final ResourceIdentifier userStore, final String parent, final String child) {
+        return new Requester.BackendCaller() {
+            @Override
+            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+                return backend.unlink(token, userStore, parent, child);
             }
         };
     }

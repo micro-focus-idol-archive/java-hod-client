@@ -307,6 +307,46 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         assertThat(errorCode, is(HodErrorCode.GROUP_NOT_FOUND));
     }
 
+    @Test
+    public void unlinkAndGetInfo() throws HodErrorException {
+        final String child = safeCreateGroup().name;
+        final String parent = safeCreateGroup().name;
+        service.link(getTokenProxy(), USER_STORE, parent, child);
+
+        final StatusResponse response = service.unlink(getTokenProxy(), USER_STORE, parent, child);
+        assertThat(response.isSuccess(), is(true));
+
+        final GroupInfo childInfo = service.getInfo(getTokenProxy(), USER_STORE, child);
+        final GroupInfo parentInfo = service.getInfo(getTokenProxy(), USER_STORE, parent);
+
+        assertThat(childInfo.getParents(), is(empty()));
+        assertThat(parentInfo.getChildren(), is(empty()));
+    }
+
+    @Test
+    public void unlinkNonExistentParent() throws HodErrorException {
+        final String child = safeCreateGroup().name;
+
+        checkHodErrorCode(new HodErrorRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.unlink(getTokenProxy(), USER_STORE, unique(), child);
+            }
+        }, HodErrorCode.GROUP_NOT_FOUND);
+    }
+
+    @Test
+    public void unlinkNonExistentChild() throws HodErrorException {
+        final String parent = safeCreateGroup().name;
+
+        checkHodErrorCode(new HodErrorRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.unlink(getTokenProxy(), USER_STORE, parent, unique());
+            }
+        }, HodErrorCode.GROUP_NOT_FOUND);
+    }
+
     // Use the get info API to check that the "parent" group is the parent of the "child", and that this is the their only relationship
     private void checkGetInfoParentChildRelationship(final String parent, final String child) throws HodErrorException {
         final GroupInfo parentInfo = service.getInfo(getTokenProxy(), USER_STORE, parent);

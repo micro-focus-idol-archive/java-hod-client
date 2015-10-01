@@ -176,4 +176,25 @@ public interface GroupsService {
      */
     void link(TokenProxy tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
 
+    /**
+     * Remove a hierarchical relationship between two groups in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * @param userStore The resource identifier for the user store
+     * @param parent The parent group name
+     * @param child The child group name
+     * @return Details about the resulting action
+     * @throws HodErrorException
+     */
+    StatusResponse unlink(ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
+
+    /**
+     * Remove a hierarchical relationship between two groups in a user store.
+     * @param tokenProxy The token proxy to use for authentication
+     * @param userStore The resource identifier for the user store
+     * @param parent The parent group name
+     * @param child The child group name
+     * @return Details about the resulting action
+     * @throws HodErrorException
+     */
+    StatusResponse unlink(TokenProxy tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
+
 }
