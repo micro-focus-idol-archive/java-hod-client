@@ -8,7 +8,6 @@ package com.hp.autonomy.hod.client.api.userstore.user;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.userstore.User;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
@@ -28,6 +27,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 // TODO: Enable UserStoreUsersService tests when the APIs are deployed on int.havenondemand.com
+// TODO: Add more tests for list user in user store when it is deployed
 @Ignore
 @RunWith(Parameterized.class)
 public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegrationTest {
@@ -46,11 +46,12 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsers() throws HodErrorException {
-        final List<User> users = service.list(getTokenProxy(), USER_STORE);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE);
 
-        for (final User user : users) {
-            assertThat(user.getName(), not(nullValue()));
+        for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
+            assertThat(user.getAccounts(), not(nullValue()));
+            assertThat(user.getGroups(), not(nullValue()));
         }
     }
 

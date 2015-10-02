@@ -5,10 +5,12 @@
 
 package com.hp.autonomy.hod.client.api.userstore.user;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.userstore.StatusResponse;
-import com.hp.autonomy.hod.client.api.userstore.User;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -19,22 +21,38 @@ import java.net.URL;
 import java.util.List;
 
 public class UserStoreUsersServiceImpl implements UserStoreUsersService {
+    private static final TypeReference<ListUsersResponse<Void>> NO_METADATA_LIST_TYPE = new TypeReference<ListUsersResponse<Void>>() {};
+
     private final Requester requester;
     private final UserStoreUsersBackend backend;
+    private final TypeFactory typeFactory;
 
     public UserStoreUsersServiceImpl(final HodServiceConfig config) {
         requester = config.getRequester();
         backend = config.getRestAdapter().create(UserStoreUsersBackend.class);
+        typeFactory = config.getObjectMapper().getTypeFactory();
     }
 
     @Override
-    public List<User> list(final ResourceIdentifier userStore) throws HodErrorException {
-        return requester.makeRequest(ListUsersResponse.class, listBackendCaller(userStore, false)).getUsers();
+    public List<User<Void>> list(final ResourceIdentifier userStore) throws HodErrorException {
+        return requester.makeRequest(NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false)).getUsers();
     }
 
     @Override
-    public List<User> list(final TokenProxy tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, ListUsersResponse.class, listBackendCaller(userStore, false)).getUsers();
+    public List<User<Void>> list(final TokenProxy tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false)).getUsers();
+    }
+
+    @Override
+    public <T> List<User<T>> listWithMetadata(final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
+        final JavaType responseType = typeFactory.constructParametricType(ListUsersResponse.class, metadataType);
+        return requester.unsafeMakeRequest(responseType, listBackendCaller(userStore, true));
+    }
+
+    @Override
+    public <T> List<User<T>> listWithMetaData(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
+        final JavaType responseType = typeFactory.constructParametricType(ListUsersResponse.class, metadataType);
+        return requester.unsafeMakeRequest(tokenProxy, responseType, listBackendCaller(userStore, true));
     }
 
     @Override

@@ -6,7 +6,6 @@
 package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.userstore.User;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -22,7 +21,7 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    List<User> list(ResourceIdentifier userStore) throws HodErrorException;
+    List<User<Void>> list(ResourceIdentifier userStore) throws HodErrorException;
 
     /**
      * Get a list of the users in a user store.
@@ -31,7 +30,29 @@ public interface UserStoreUsersService {
      * @return The users in the user store
      * @throws HodErrorException
      */
-    List<User> list(TokenProxy tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
+    List<User<Void>> list(TokenProxy tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
+
+    /**
+     * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * @param userStore The resource identifier of the user store
+     * @param metadataType Class object representing the type of the user metadata
+     * @param <T> The type of the user metadata
+     * @return The users in the user store and their metadata
+     * @throws HodErrorException
+     * @throws NullPointerException If a TokenProxyService is not configured
+     */
+    <T> List<User<T>> listWithMetadata(ResourceIdentifier userStore, Class<T> metadataType) throws HodErrorException;
+
+    /**
+     * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * @param tokenProxy The token proxy to use for authentication
+     * @param userStore The resource identifier of the user store
+     * @param metadataType Class object representing the type of the user metadata
+     * @param <T> The type of the user metadata
+     * @return The users in the user store and their metadata
+     * @throws HodErrorException
+     */
+    <T> List<User<T>> listWithMetaData(TokenProxy tokenProxy, ResourceIdentifier userStore, Class<T> metadataType) throws HodErrorException;
 
     /**
      * Resets the authentication associated with the given user store and email address, using a
