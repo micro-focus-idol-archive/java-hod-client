@@ -42,52 +42,52 @@ public class ViewDocumentServiceImpl implements ViewDocumentService {
 
     @Override
     public InputStream viewFile(final File file, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(InputStream.class, getFileBackendCaller(file, params));
+        return requester.makeRequest(getFileBackendCaller(file, params));
     }
 
     @Override
     public InputStream viewFile(final TokenProxy tokenProxy, final File file, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, InputStream.class, getFileBackendCaller(file, params));
+        return requester.makeRequest(tokenProxy, getFileBackendCaller(file, params));
     }
 
     @Override
     public InputStream viewFile(final byte[] bytes, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(InputStream.class, getByteArrayBackendCaller(bytes, params));
+        return requester.makeRequest(getByteArrayBackendCaller(bytes, params));
     }
 
     @Override
     public InputStream viewFile(final TokenProxy tokenProxy, final byte[] bytes, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, InputStream.class, getByteArrayBackendCaller(bytes, params));
+        return requester.makeRequest(tokenProxy, getByteArrayBackendCaller(bytes, params));
     }
 
     @Override
     public InputStream viewFile(final InputStream inputStream, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(InputStream.class, getInputStreamBackendCaller(inputStream, params));
+        return requester.makeRequest(getInputStreamBackendCaller(inputStream, params));
     }
 
     @Override
     public InputStream viewFile(final TokenProxy tokenProxy, final InputStream inputStream, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, InputStream.class, getInputStreamBackendCaller(inputStream, params));
+        return requester.makeRequest(tokenProxy, getInputStreamBackendCaller(inputStream, params));
     }
 
     @Override
     public InputStream viewReference(final String reference, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(InputStream.class, getReferenceBackendCaller(reference, params));
+        return requester.makeRequest(getReferenceBackendCaller(reference, params));
     }
 
     @Override
     public InputStream viewReference(final TokenProxy tokenProxy, final String reference, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, InputStream.class, getReferenceBackendCaller(reference, params));
+        return requester.makeRequest(tokenProxy, getReferenceBackendCaller(reference, params));
     }
 
     @Override
     public InputStream viewUrl(final String url, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(InputStream.class, getUrlBackendCaller(url, params));
+        return requester.makeRequest(getUrlBackendCaller(url, params));
     }
 
     @Override
     public InputStream viewUrl(final TokenProxy tokenProxy, final String url, final ViewDocumentRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, InputStream.class, getUrlBackendCaller(url, params));
+        return requester.makeRequest(tokenProxy, getUrlBackendCaller(url, params));
     }
 
     @Override

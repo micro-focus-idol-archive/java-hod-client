@@ -7,12 +7,13 @@ package com.hp.autonomy.hod.client.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.hp.autonomy.hod.client.converter.HodConverter;
 import com.hp.autonomy.hod.client.error.DefaultHodErrorHandler;
 import com.hp.autonomy.hod.client.error.HodErrorHandler;
 import com.hp.autonomy.hod.client.token.InMemoryTokenRepository;
-import com.hp.autonomy.hod.client.token.TokenRepository;
 import com.hp.autonomy.hod.client.token.TokenProxyService;
+import com.hp.autonomy.hod.client.token.TokenRepository;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -32,6 +33,7 @@ public class HodServiceConfig {
     private final TokenRepository tokenRepository;
     private final Requester requester;
     private final String endpoint;
+    private final ObjectMapper objectMapper;
 
     private HodServiceConfig(final Builder builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
@@ -41,8 +43,6 @@ public class HodServiceConfig {
         if(builder.client != null) {
             restAdapterBuilder.setClient(builder.client);
         }
-
-        final ObjectMapper objectMapper;
 
         if (builder.objectMapper != null) {
             objectMapper = builder.objectMapper.copy();
@@ -62,7 +62,7 @@ public class HodServiceConfig {
         restAdapter = restAdapterBuilder.build();
         tokenRepository = builder.tokenRepository;
 
-        requester = new Requester(tokenRepository, new ResponseParser(tokenRepository, converter), builder.tokenProxyService);
+        requester = new Requester(tokenRepository, new ResponseParser(tokenRepository, objectMapper), builder.tokenProxyService);
         endpoint = builder.endpoint;
     }
 
