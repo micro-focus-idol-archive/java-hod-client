@@ -51,6 +51,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
+            assertThat(user.getDirectGroups(), not(nullValue()));
             assertThat(user.getGroups(), not(nullValue()));
         }
     }
