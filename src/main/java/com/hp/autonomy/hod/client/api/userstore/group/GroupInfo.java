@@ -9,13 +9,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.userstore.User;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.List;
 
+/**
+ * Represents the return type from the get group info API.
+ */
 @Data
 @JsonDeserialize(builder = GroupInfo.Builder.class)
 public class GroupInfo {
@@ -23,7 +25,7 @@ public class GroupInfo {
     private final ResourceIdentifier userStore;
     private final List<String> parents;
     private final List<String> children;
-    private final List<User> users;
+    private final List<GroupUser> users;
 
     private GroupInfo(final Builder builder) {
         name = builder.name;
@@ -45,7 +47,7 @@ public class GroupInfo {
 
         private List<String> parents;
         private List<String> children;
-        private List<User> users;
+        private List<GroupUser> users;
 
         public GroupInfo build() {
             return new GroupInfo(this);

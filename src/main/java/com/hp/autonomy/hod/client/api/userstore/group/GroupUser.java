@@ -3,19 +3,22 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.hod.client.api.userstore;
+package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.UUID;
 
+/**
+ * Representation of a user as returned from the get group info API.
+ */
 @Data
-public class User {
+public class GroupUser {
     private final String name;
     private final UUID uuid;
 
-    public User(
+    public GroupUser(
         @JsonProperty("name") final String name,
         @JsonProperty("uuid") final UUID uuid
     ) {
