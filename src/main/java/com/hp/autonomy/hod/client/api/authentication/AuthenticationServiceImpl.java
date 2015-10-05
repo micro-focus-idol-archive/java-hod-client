@@ -89,11 +89,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public CombinedTokenDetails getCombinedTokenDetails(final AuthenticationToken token) throws HodErrorException {
-        return authenticationBackend.getCombinedTokenDetails(token);
-    }
-
-    @Override
     public SignedRequest combinedGetRequest(final Collection<String> allowedOrigins, final AuthenticationToken token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));

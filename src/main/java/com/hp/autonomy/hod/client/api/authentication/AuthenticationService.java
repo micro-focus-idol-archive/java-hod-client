@@ -79,16 +79,6 @@ public interface AuthenticationService {
     ) throws HodErrorException;
 
     /**
-     * Verify a combined token and retrieve details for the application and the user.
-     * @param token The combined token
-     * @return Details about the application and user
-     * @throws HodErrorException
-     */
-    CombinedTokenDetails getCombinedTokenDetails(
-            AuthenticationToken token
-    ) throws HodErrorException;
-
-    /**
      * Get a representation of a request for obtaining a list of applications and domains associated with the given unbound
      * token. This request must then be made from a browser.
      * @param allowedOrigins Origins from which this request may be sent

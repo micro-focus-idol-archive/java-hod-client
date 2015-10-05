@@ -89,9 +89,4 @@ public interface AuthenticationBackend {
             @Part("token_type") TokenType tokenType
     ) throws HodErrorException;
 
-    @GET("/2/combined")
-    CombinedTokenDetails getCombinedTokenDetails(
-            @Header("token") AuthenticationToken token
-    ) throws HodErrorException;
-
 }
