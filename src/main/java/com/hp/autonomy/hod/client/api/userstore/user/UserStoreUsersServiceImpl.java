@@ -47,13 +47,13 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
 
     @Override
     public <T> List<User<T>> listWithMetadata(final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
-        final JavaType responseType = typeFactory.constructParametricType(ListUsersResponse.class, metadataType);
+        final JavaType responseType = typeFactory.constructParametrizedType(ListUsersResponse.class, ListUsersResponse.class, metadataType);
         return requester.unsafeMakeRequest(responseType, listBackendCaller(userStore, true));
     }
 
     @Override
     public <T> List<User<T>> listWithMetaData(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
-        final JavaType responseType = typeFactory.constructParametricType(ListUsersResponse.class, metadataType);
+        final JavaType responseType = typeFactory.constructParametrizedType(ListUsersResponse.class, ListUsersResponse.class, metadataType);
         return requester.unsafeMakeRequest(tokenProxy, responseType, listBackendCaller(userStore, true));
     }
 
