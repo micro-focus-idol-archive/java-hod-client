@@ -21,7 +21,6 @@ import retrofit.client.Response;
 import java.io.IOException;
 import java.io.InputStream;
 
-// TODO: Update JavaDoc with generics
 /**
  * Makes a request to HP Haven OnDemand
  */
@@ -101,6 +100,8 @@ public class Requester<E extends EntityType, T extends TokenType> {
      * @param returnType The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
      * @param <U> The desired type of the value returned by HP Haven OnDemand
+     * @param <BE> The entity type of the token proxy
+     * @param <BT> The token type of the token proxy
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
@@ -118,6 +119,8 @@ public class Requester<E extends EntityType, T extends TokenType> {
      * @param typeReference The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
      * @param <U> The desired type of the value returned by HP Haven OnDemand
+     * @param <BE> The entity type of the token proxy
+     * @param <BT> The token type of the token proxy
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
@@ -133,6 +136,8 @@ public class Requester<E extends EntityType, T extends TokenType> {
      * Makes a request to HP Haven OnDemand, returning the response body as an input stream.
      * @param tokenProxy The token proxy to use to make the request
      * @param backendCaller Makes the request to HP Haven OnDemand
+     * @param <BE> The entity type of the token proxy
+     * @param <BT> The token type of the token proxy
      * @return The response body
      * @throws HodErrorException
      */
@@ -151,6 +156,8 @@ public class Requester<E extends EntityType, T extends TokenType> {
      * @param type The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
      * @param <U> The desired type of the value returned by HP Haven OnDemand
+     * @param <BE> The entity type of the token proxy
+     * @param <BT> The token type of the token proxy
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
@@ -191,7 +198,9 @@ public class Requester<E extends EntityType, T extends TokenType> {
     }
 
     /**
-     * Exchanges an AuthenticationToken for a response from HP Haven OnDemand
+     * Exchanges an AuthenticationToken for a response from HP Haven OnDemand.
+     * @param <E> The most general authentication entity type which this backend caller accepts
+     * @param <T> The most general authentication token type which this backend caller accepts
      */
     public interface BackendCaller<E extends EntityType, T extends TokenType> {
 
