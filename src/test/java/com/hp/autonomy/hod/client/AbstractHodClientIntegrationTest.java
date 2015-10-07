@@ -35,19 +35,12 @@ public abstract class AbstractHodClientIntegrationTest {
         hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, endpoint);
         restAdapter = hodServiceConfig.getRestAdapter();
 
-        final AuthenticationBackend authenticationBackend = restAdapter.create(AuthenticationBackend.class);
+        final AuthenticationService authenticationService = new AuthenticationServiceImpl(hodServiceConfig);
 
         try {
-            final AuthenticationToken.Json rawToken = authenticationBackend.authenticateApplication(
-                endpoint.getApiKey(),
-                APPLICATION_NAME,
-                DOMAIN_NAME,
-                TokenType.Simple.INSTANCE.getParameter()
-            ).getTokenJson();
-
-            token = rawToken.buildToken(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
-            tokenProxy = hodServiceConfig.getTokenRepository().insert(token);
-        } catch (final HodErrorException | IOException e) {
+            tokenProxy = authenticationService.authenticateApplication(endpoint.getApiKey(), APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+            token = hodServiceConfig.getTokenRepository().get(tokenProxy);
+        } catch (final IOException | HodErrorException e) {
             throw new AssertionError("COULD NOT OBTAIN TOKEN");
         }
     }

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class AuthenticationTokenResponse {
+class AuthenticationTokenResponse {
     private final AuthenticationToken.Json tokenJson;
 
     @JsonCreator

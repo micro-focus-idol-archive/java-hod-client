@@ -15,7 +15,7 @@ import retrofit.http.Part;
 /**
  * Service for making authentication requests to HP Haven OnDemand
  */
-public interface AuthenticationBackend {
+interface AuthenticationBackend {
 
     /**
      * Acquire a token for an application
