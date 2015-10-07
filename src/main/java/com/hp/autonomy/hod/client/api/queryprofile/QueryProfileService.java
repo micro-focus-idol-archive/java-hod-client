@@ -140,7 +140,7 @@ public interface QueryProfileService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      * @deprecated Use {@link com.hp.autonomy.hod.client.api.resource.ResourcesService#list(ListResourcesRequestBuilder)}
-     * and use {@link com.hp.autonomy.hod.client.api.resource.ResourceType#query_profile} as the resource type
+     * and use {@link com.hp.autonomy.hod.client.api.resource.ResourceType#QUERY_PROFILE} as the resource type
      */
     @Deprecated
     QueryProfiles listQueryProfiles() throws HodErrorException;
@@ -153,7 +153,7 @@ public interface QueryProfileService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      * @deprecated Use {@link com.hp.autonomy.hod.client.api.resource.ResourcesService#list(ListResourcesRequestBuilder)}
-     * and use {@link com.hp.autonomy.hod.client.api.resource.ResourceType#query_profile} as the resource type
+     * and use {@link com.hp.autonomy.hod.client.api.resource.ResourceType#QUERY_PROFILE} as the resource type
      */
     @Deprecated
     QueryProfiles listQueryProfiles(
