@@ -18,7 +18,12 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.UUID;
 
-// TODO: Update JavaDoc
+/**
+ * A token which can be used to get an {@link com.hp.autonomy.hod.client.api.authentication.AuthenticationToken} from a
+ * {@link TokenRepository}.
+ * @param <E> The entity type of the authentication tokens which can be obtained using this proxy
+ * @param <T> The token type of the authentication tokens which can be obtained using this proxy
+ */
 @Data
 public final class TokenProxy<E extends EntityType, T extends TokenType> implements Serializable {
 
@@ -31,8 +36,14 @@ public final class TokenProxy<E extends EntityType, T extends TokenType> impleme
     @Getter(AccessLevel.NONE)
     private final UUID uuid = UUID.randomUUID();
 
+    /**
+     * Entity type for this token proxy.
+     */
     private final E entityType;
 
+    /**
+     * Token type for this token proxy.
+     */
     private final T tokenType;
 
     public TokenProxy(final E entityType, final T tokenType) {

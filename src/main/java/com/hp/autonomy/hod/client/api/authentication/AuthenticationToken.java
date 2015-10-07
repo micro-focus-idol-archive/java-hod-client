@@ -16,9 +16,11 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-// TODO: Update JavaDoc
 /**
- * A token which can be used to make API requests to HP Haven OnDemand
+ * A token which can be used to authorise requests to Haven OnDemand. It is parametrised in the type of the entity being
+ * authorised and the type of the token.
+ * @param <E> The type of the entity (user, developer, etc)
+ * @param <T> The type of the token (simple, HMAC, etc)
  */
 @Getter
 @EqualsAndHashCode
@@ -26,8 +28,14 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
 
     private static final long serialVersionUID = 2L;
 
+    /**
+     * @return The entity type authorised by this token
+     */
     private final E entityType;
 
+    /**
+     * The type of the token, which affects how requests should be made
+     */
     private final T tokenType;
 
     /**
@@ -103,6 +111,9 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
         }
     }
 
+    /**
+     * Type representing the JSON representation of an authentication token as returned from Haven OnDemand.
+     */
     @Data
     public static class Json {
         private final DateTime expiry;
@@ -125,6 +136,16 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
             this.startRefresh = new DateTime(startRefresh);
         }
 
+        /**
+         * Build an AuthenticationToken of the given entity and token types from this object. This will fail if the
+         * {@link #type} field is not compatible with the given entity and token types.
+         * @param entityType The entity type
+         * @param tokenType The token type
+         * @param <E> The type of entity authorised by the new token
+         * @param <T> The type of the new token
+         * @throws {IllegalArgumentException} If the given entity and token types are not compatible with this object
+         * @return The new authentication token
+         */
         public <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> buildToken(final E entityType, final T tokenType) {
             return new AuthenticationToken<>(this, entityType, tokenType);
         }

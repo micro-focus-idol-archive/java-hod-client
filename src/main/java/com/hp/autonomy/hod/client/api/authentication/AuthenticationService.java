@@ -21,6 +21,7 @@ public interface AuthenticationService {
      * @param applicationName The name of the application
      * @param domain The domain of the application
      * @param tokenType The type of the resulting token
+     * @param <T> The type of the required token type
      * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
@@ -37,6 +38,7 @@ public interface AuthenticationService {
      * @param applicationName The name of the application
      * @param applicationDomain The domain of the application
      * @param tokenType The type of the resulting token
+     * @param <T> The type of the required token type
      * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
@@ -55,6 +57,7 @@ public interface AuthenticationService {
      * @param tokenType The type of the resulting token
      * @param userStore The name of the user store
      * @param storeDomain The domain of the user store
+     * @param <T> The type of the required token type
      * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */

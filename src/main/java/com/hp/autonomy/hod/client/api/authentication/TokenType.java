@@ -7,10 +7,27 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import java.io.Serializable;
 
+/**
+ * Interface representing possible types for an {@link AuthenticationToken}.
+ *
+ * The static implementations declared in this interface are all enums with one instance so we get final and sensible
+ * Serializable behaviour for free.
+ */
 public interface TokenType extends Serializable {
+    /**
+     * @return The name of this token type as returned from Haven OnDemand
+     */
     String getName();
+
+    /**
+     * @return The value of the "token_type" parameter which must be set for authentication requests to Haven OnDemand to
+     * return this token type.
+     */
     String getParameter();
 
+    /**
+     * Token type for simple tokens which do not need signing.
+     */
     enum Simple implements TokenType {
         INSTANCE;
 
@@ -25,6 +42,9 @@ public interface TokenType extends Serializable {
         }
     }
 
+    /**
+     * Token type for tokens which must be used as part of an HMAC SHA1 signed request.
+     */
     enum HmacSha1 implements TokenType {
         INSTANCE;
 

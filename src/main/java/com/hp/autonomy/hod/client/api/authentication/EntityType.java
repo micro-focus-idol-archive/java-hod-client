@@ -7,9 +7,21 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import java.io.Serializable;
 
+/**
+ * Interface representing possible entities which could be authenticated by an {@link AuthenticationToken}.
+ *
+ * The static implementations declared in this interface are all enums with one instance so we get final and sensible
+ * Serializable behaviour for free.
+ */
 public interface EntityType extends Serializable {
+    /**
+     * @return The name of this entity type as returned from Haven OnDemand
+     */
     String getName();
 
+    /**
+     * Entity type for combined tokens.
+     */
     enum Combined implements EntityType {
         INSTANCE;
 
@@ -19,6 +31,9 @@ public interface EntityType extends Serializable {
         }
     }
 
+    /**
+     * Entity type for application tokens.
+     */
     enum Application implements EntityType {
         INSTANCE;
 
@@ -28,6 +43,9 @@ public interface EntityType extends Serializable {
         }
     }
 
+    /**
+     * Entity type for user tokens.
+     */
     enum User implements EntityType {
         INSTANCE;
 
@@ -37,6 +55,9 @@ public interface EntityType extends Serializable {
         }
     }
 
+    /**
+     * Entity type for developer tokens.
+     */
     enum Developer implements EntityType {
         INSTANCE;
 
@@ -46,6 +67,9 @@ public interface EntityType extends Serializable {
         }
     }
 
+    /**
+     * Entity type for unbound tokens.
+     */
     enum Unbound implements EntityType {
         INSTANCE;
 
