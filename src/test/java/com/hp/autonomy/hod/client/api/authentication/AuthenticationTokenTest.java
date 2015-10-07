@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -20,7 +21,14 @@ public class AuthenticationTokenTest {
 
     @Test
     public void testSerialization() throws IOException, ClassNotFoundException {
-        final AuthenticationToken token = new AuthenticationToken(1234567890L, "foo", "bar", "baz", 1234567890L);
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token = new AuthenticationToken<>(
+            EntityType.Combined.INSTANCE,
+            TokenType.Simple.INSTANCE,
+            new DateTime(1234567890L),
+            "foo",
+            "bar",
+            new DateTime(1234567890L)
+        );
 
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
@@ -28,7 +36,7 @@ public class AuthenticationTokenTest {
 
         final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
 
-        final AuthenticationToken result = (AuthenticationToken) objectInputStream.readObject();
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> result = (AuthenticationToken<EntityType.Combined, TokenType.Simple>) objectInputStream.readObject();
 
         assertThat(result, is(token));
     }

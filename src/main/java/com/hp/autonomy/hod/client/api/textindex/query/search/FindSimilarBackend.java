@@ -37,7 +37,7 @@ interface FindSimilarBackend {
      */
     @GET(URL)
     Response findSimilarDocumentsToText(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("text") String text,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -52,7 +52,7 @@ interface FindSimilarBackend {
      */
     @GET(URL)
     Response findSimilarDocumentsToReference(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("reference") String reference,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -66,7 +66,7 @@ interface FindSimilarBackend {
      */
     @GET(URL)
     Response findSimilarDocumentsToUrl(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("url") String url,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -80,7 +80,7 @@ interface FindSimilarBackend {
      */
     @GET(URL)
     Response findSimilarDocumentsToIndexReference(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("index_reference") String indexReference,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -95,7 +95,7 @@ interface FindSimilarBackend {
     @Multipart
     @POST(URL)
     Response findSimilarDocumentsToFile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;

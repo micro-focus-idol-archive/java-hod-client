@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ListResourcesRequestBuilder;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -40,7 +41,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfileStatusResponse createQueryProfile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String name,
         String queryManipulationIndex,
         QueryProfileRequestBuilder params
@@ -69,7 +70,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfile retrieveQueryProfile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String name
     ) throws HodErrorException;
 
@@ -99,7 +100,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfileStatusResponse updateQueryProfile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String name,
         String queryManipulationIndex,
         QueryProfileRequestBuilder params
@@ -127,7 +128,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfileStatusResponse deleteQueryProfile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String name
     ) throws HodErrorException;
 
@@ -157,7 +158,7 @@ public interface QueryProfileService {
      */
     @Deprecated
     QueryProfiles listQueryProfiles(
-        TokenProxy tokenProxy
+        TokenProxy<?, TokenType.Simple> tokenProxy
     ) throws HodErrorException;
 
 }

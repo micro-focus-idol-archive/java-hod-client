@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.token.TokenRepository;
 import com.hp.autonomy.hod.client.token.TokenRepositoryException;
@@ -48,7 +50,7 @@ class ResponseParser {
      * @param response The response to parse
      * @return An object representing the result from HP Haven OnDemand
      */
-    <T> T parseResponse(final TokenProxy tokenProxy, final Class<T> clazz, final Response response) {
+    <T> T parseResponse(final TokenProxy<?, ?> tokenProxy, final Class<T> clazz, final Response response) {
         return unsafeParseResponse(tokenProxy, objectMapper.constructType(clazz), response);
     }
 
@@ -61,7 +63,7 @@ class ResponseParser {
      * @param response The response to parse
      * @return An object representing the result from HP Haven OnDemand
      */
-    <T> T parseResponse(final TokenProxy tokenProxy, final TypeReference<T> typeReference, final Response response) {
+    <T> T parseResponse(final TokenProxy<?, ?> tokenProxy, final TypeReference<T> typeReference, final Response response) {
         return unsafeParseResponse(tokenProxy, objectMapper.getTypeFactory().constructType(typeReference), response);
     }
 
@@ -75,7 +77,7 @@ class ResponseParser {
      * @param response The response to parse
      * @return An object representing the result from HP Haven OnDemand
      */
-    <T> T unsafeParseResponse(final TokenProxy tokenProxy, final JavaType type, final Response response) {
+    <T> T unsafeParseResponse(final TokenProxy<?, ?> tokenProxy, final JavaType type, final Response response) {
         checkRefresh(tokenProxy, response);
 
         try {
@@ -91,7 +93,7 @@ class ResponseParser {
      * @param response The response to read
      * @return The response body as an input stream
      */
-    InputStream parseResponse(final TokenProxy tokenProxy, final Response response) {
+    InputStream parseResponse(final TokenProxy<?, ?> tokenProxy, final Response response) {
         checkRefresh(tokenProxy, response);
 
         try {
@@ -101,13 +103,14 @@ class ResponseParser {
         }
     }
 
-    private void checkRefresh(final TokenProxy tokenProxy, final Response response) {
+    private <E extends EntityType, T extends TokenType> void checkRefresh(final TokenProxy<E, T> tokenProxy, final Response response) {
         final List<Header> headers = response.getHeaders();
 
         for(final Header header : headers) {
             if(TOKEN_HEADER_NAME.equals(header.getName())) {
                 try {
-                    final AuthenticationToken token = objectMapper.readValue(header.getValue(), AuthenticationToken.class);
+                    final AuthenticationToken.Json parsedHeader = objectMapper.readValue(header.getValue(), AuthenticationToken.Json.class);
+                    final AuthenticationToken<E, T> token = parsedHeader.buildToken(tokenProxy.getEntityType(), tokenProxy.getTokenType());
                     tokenRepository.update(tokenProxy, token);
                 } catch (final IOException e) {
                     throw new TokenRepositoryException(e);

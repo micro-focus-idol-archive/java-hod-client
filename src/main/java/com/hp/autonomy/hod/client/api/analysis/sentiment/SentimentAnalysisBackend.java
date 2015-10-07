@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.analysis.sentiment;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
@@ -32,7 +33,7 @@ interface SentimentAnalysisBackend {
      */
     @GET(URL)
     Response analyzeSentimentForText(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("text") String text,
         @Query("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -47,7 +48,7 @@ interface SentimentAnalysisBackend {
     @POST(URL)
     @Multipart
     Response analyzeSentimentForFile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
         @Part("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -61,7 +62,7 @@ interface SentimentAnalysisBackend {
      */
     @GET(URL)
     Response analyzeSentimentForReference(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("reference") String reference,
         @Query("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -75,7 +76,7 @@ interface SentimentAnalysisBackend {
      */
     @GET(URL)
     Response analyzeSentimentForUrl(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("url") String url,
         @Query("language") SentimentAnalysisLanguage language
     ) throws HodErrorException;

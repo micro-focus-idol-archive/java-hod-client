@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.application;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -28,6 +29,6 @@ public interface ApplicationUsersService {
      * @return The users associated with the application
      * @throws HodErrorException
      */
-    List<User> getUsers(TokenProxy tokenProxy) throws HodErrorException;
+    List<User> getUsers(TokenProxy<?, TokenType.Simple> tokenProxy) throws HodErrorException;
 
 }

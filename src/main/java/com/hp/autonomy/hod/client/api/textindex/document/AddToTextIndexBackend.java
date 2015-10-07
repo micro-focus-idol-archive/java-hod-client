@@ -46,7 +46,7 @@ interface AddToTextIndexBackend {
     @POST(URL)
     @Multipart
     Response addJsonToTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("json") Documents<?> documents,
         @Path("indexName") ResourceIdentifier indexName,
         @PartMap Map<String, Object> params
@@ -64,7 +64,7 @@ interface AddToTextIndexBackend {
     @POST(URL)
     @Multipart
     Response addFileToTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
         @Path("indexName") ResourceIdentifier index,
         @PartMap Map<String, Object> params
@@ -82,7 +82,7 @@ interface AddToTextIndexBackend {
     @POST(URL)
     @Multipart
     Response addReferenceToTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("reference") String reference,
         @Path("indexName") ResourceIdentifier index,
         @PartMap Map<String, Object> params
@@ -100,7 +100,7 @@ interface AddToTextIndexBackend {
     @POST(URL)
     @Multipart
     Response addUrlToTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("url") String url,
         @Path("indexName") ResourceIdentifier index,
         @PartMap Map<String, Object> params
@@ -126,7 +126,7 @@ interface AddToTextIndexBackend {
      */
     @GET("/2/job/{jobId}/status")
     Response getJobStatus(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
 
@@ -150,7 +150,7 @@ interface AddToTextIndexBackend {
      */
     @GET("/2/job/{jobId}/result")
     Response getJobResult(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
 

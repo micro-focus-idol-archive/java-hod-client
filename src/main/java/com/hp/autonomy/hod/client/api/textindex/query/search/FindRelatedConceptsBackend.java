@@ -32,7 +32,7 @@ interface FindRelatedConceptsBackend {
      */
     @GET(URL)
     Response findRelatedConceptsWithText(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("text") String text,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -47,7 +47,7 @@ interface FindRelatedConceptsBackend {
      */
     @GET(URL)
     Response findRelatedConceptsWithReference(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("reference") String reference,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -61,7 +61,7 @@ interface FindRelatedConceptsBackend {
      */
     @GET(URL)
     Response findRelatedConceptsWithUrl(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("url") String url,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -76,7 +76,7 @@ interface FindRelatedConceptsBackend {
     @Multipart
     @POST(URL)
     Response findRelatedConceptsWithFile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;

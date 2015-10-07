@@ -80,11 +80,11 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
-        final TokenProxy tokenProxy = authenticationService.authenticateApplication(
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(
                 apiKey,
                 APPLICATION_NAME,
                 DOMAIN_NAME,
-                TokenType.simple
+                TokenType.Simple.INSTANCE
         );
 
         assertThat(tokenProxy, is(notNullValue()));
@@ -92,14 +92,14 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAuthenticateUser() throws HodErrorException {
-        final TokenProxy tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.simple);
+        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
 
         assertThat(tokenProxy, is(notNullValue()));
     }
 
     @Test
     public void unboundAuthentication() throws HodErrorException {
-        final AuthenticationToken token = authenticationService.authenticateUnbound(apiKey);
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey);
         assertThat(token, is(notNullValue()));
     }
 
@@ -130,7 +130,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
         // Authenticate the application
         // TODO: The API key used to authenticate the application should be configurable
-        final AuthenticationToken unboundToken = authenticationService.authenticateUnbound(apiKey);
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> unboundToken = authenticationService.authenticateUnbound(apiKey);
 
         // Get a list of applications and users which match the application and user authentications by executing a
         // signed request in the browser
@@ -156,13 +156,17 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
                 applicationAndUsers.name,
                 user.storeDomain,
                 user.storeName,
-                TokenType.simple,
+                TokenType.Simple.INSTANCE,
                 true
         );
 
         // Get the combined token
         final AuthenticationTokenResponse authenticationTokenResponse = makeSignedRequest(browser, combinedRequest, origin, TOKEN_RESPONSE_REFERENCE);
-        final AuthenticationToken combinedToken = authenticationTokenResponse.getToken();
+
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> combinedToken = authenticationTokenResponse.getTokenJson().buildToken(
+            EntityType.Combined.INSTANCE,
+            TokenType.Simple.INSTANCE
+        );
 
         assertThat(combinedToken, notNullValue());
     }
@@ -189,7 +193,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
         final List<NameValuePair> bodyPairs = new LinkedList<>();
         bodyPairs.add(new BasicNameValuePair("enable_sso", "true"));
-        bodyPairs.add(new BasicNameValuePair("token_type", TokenType.simple.toString()));
+        bodyPairs.add(new BasicNameValuePair("token_type", TokenType.Simple.INSTANCE.getParameter()));
         final String bodyString = URLEncodedUtils.format(bodyPairs, StandardCharsets.UTF_8);
 
         final HttpEntity body = new ByteArrayEntity(bodyString.getBytes(StandardCharsets.UTF_8));

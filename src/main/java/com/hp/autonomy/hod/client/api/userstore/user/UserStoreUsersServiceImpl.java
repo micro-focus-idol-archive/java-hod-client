@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.userstore.StatusResponse;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
@@ -23,11 +25,11 @@ import java.util.List;
 public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     private static final TypeReference<ListUsersResponse<Void>> NO_METADATA_LIST_TYPE = new TypeReference<ListUsersResponse<Void>>() {};
 
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
     private final UserStoreUsersBackend backend;
     private final TypeFactory typeFactory;
 
-    public UserStoreUsersServiceImpl(final HodServiceConfig config) {
+    public UserStoreUsersServiceImpl(final HodServiceConfig<?, TokenType.Simple> config) {
         requester = config.getRequester();
         backend = config.getRestAdapter().create(UserStoreUsersBackend.class);
         typeFactory = config.getObjectMapper().getTypeFactory();
@@ -39,7 +41,7 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public List<User<Void>> list(final TokenProxy tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
+    public List<User<Void>> list(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
         return requester.makeRequest(tokenProxy, NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false)).getUsers();
     }
 
@@ -50,7 +52,7 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public <T> List<User<T>> listWithMetaData(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
+    public <T> List<User<T>> listWithMetaData(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
         final JavaType responseType = typeFactory.constructParametricType(ListUsersResponse.class, metadataType);
         return requester.unsafeMakeRequest(tokenProxy, responseType, listBackendCaller(userStore, true));
     }
@@ -61,23 +63,23 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public void resetAuthentication(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) throws HodErrorException {
+    public void resetAuthentication(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) throws HodErrorException {
         requester.makeRequest(tokenProxy, StatusResponse.class, getResetBackendCaller(userStore, email, onSuccess, onError));
     }
 
-    private Requester.BackendCaller listBackendCaller(final ResourceIdentifier userStore, final boolean returnMetaData) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore, final boolean returnMetaData) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.list(token, userStore, returnMetaData);
             }
         };
     }
 
-    private Requester.BackendCaller getResetBackendCaller(final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getResetBackendCaller(final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return backend.resetAuthentication(authenticationToken, userStore, email, onSuccess.toString(), onError.toString());
             }
         };

@@ -7,6 +7,8 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
@@ -33,14 +35,14 @@ import java.util.concurrent.ScheduledExecutorService;
 public class DeleteTextIndexPollingService extends AbstractPollingService implements DeleteTextIndexService {
 
     private final DeleteTextIndexBackend deleteTextIndexBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
     private final JobService<? extends JobStatus<DeleteTextIndexResponse>> jobService;
 
     /**
      * Creates a new DeleteTextIndexPollingService
      * @param hodServiceConfig The configuration to use
      */
-    public DeleteTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
+    public DeleteTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         super();
 
         deleteTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteTextIndexBackend.class);
@@ -53,7 +55,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
      * @param hodServiceConfig The configuration to use
      * @param executorService The executor service to use while polling for status updates
      */
-    public DeleteTextIndexPollingService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
+    public DeleteTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
         deleteTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteTextIndexBackend.class);
@@ -75,7 +77,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
     @Override
     public void deleteTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
@@ -86,19 +88,19 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getInitialBackendCaller(final ResourceIdentifier index) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceIdentifier index) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return deleteTextIndexBackend.initialDeleteTextIndex(authenticationToken, index);
             }
         };
     }
 
-    private Requester.BackendCaller getDeletingBackendCaller(final ResourceIdentifier index, final DeleteTextIndexResponse response) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeletingBackendCaller(final ResourceIdentifier index, final DeleteTextIndexResponse response) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return deleteTextIndexBackend.deleteTextIndex(authenticationToken, index, response.getConfirm());
             }
         };

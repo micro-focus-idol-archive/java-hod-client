@@ -29,10 +29,10 @@ public interface AuthenticationBackend {
     @POST("/2/authenticate/application")
     @Multipart
     AuthenticationTokenResponse authenticateApplication(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("name") String applicationName,
-            @Part("domain") String domain,
-            @Part("token_type") TokenType tokenType
+        @Header("apiKey") ApiKey apiKey,
+        @Part("name") String applicationName,
+        @Part("domain") String domain,
+        @Part("token_type") String tokenType
     ) throws HodErrorException;
 
     /**
@@ -47,10 +47,10 @@ public interface AuthenticationBackend {
     @POST("/2/authenticate/user")
     @Multipart
     AuthenticationTokenResponse authenticateUser(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("application_name") String applicationName,
-            @Part("application_domain") String applicationDomain,
-            @Part("token_type") TokenType tokenType
+        @Header("apiKey") ApiKey apiKey,
+        @Part("application_name") String applicationName,
+        @Part("application_domain") String applicationDomain,
+        @Part("token_type") String tokenType
     ) throws HodErrorException;
 
     /**
@@ -67,12 +67,12 @@ public interface AuthenticationBackend {
     @POST("/2/authenticate/user")
     @Multipart
     AuthenticationTokenResponse authenticateUser(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("application_name") String applicationName,
-            @Part("application_domain") String applicationDomain,
-            @Part("token_type") TokenType tokenType,
-            @Part("user_store_name") String userStore,
-            @Part("user_store_domain") String storeDomain
+        @Header("apiKey") ApiKey apiKey,
+        @Part("application_name") String applicationName,
+        @Part("application_domain") String applicationDomain,
+        @Part("token_type") String tokenType,
+        @Part("user_store_name") String userStore,
+        @Part("user_store_domain") String storeDomain
     ) throws HodErrorException;
 
     /**
@@ -84,9 +84,9 @@ public interface AuthenticationBackend {
      */
     @POST("/2/authenticate/unbound")
     @Multipart
-    AuthenticationTokenResponse authenticateApplicationUnbound(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("token_type") TokenType tokenType
+    AuthenticationTokenResponse authenticateUnbound(
+        @Header("apiKey") ApiKey apiKey,
+        @Part("token_type") String tokenType
     ) throws HodErrorException;
 
 }

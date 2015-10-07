@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.token.TokenRepository;
 import org.junit.Before;
@@ -58,12 +60,16 @@ public class ResponseParserTest {
         when(objectMapper.constructType(eq(Object.class))).thenReturn(objectType);
 
         final Object expectedReturnValue = new Object();
-        final AuthenticationToken newToken = mock(AuthenticationToken.class);
 
-        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.class))).thenReturn(newToken);
+        @SuppressWarnings("unchecked")
+        final AuthenticationToken<EntityType.Application, TokenType.Simple> newToken = mock(AuthenticationToken.class);
+        final AuthenticationToken.Json newTokenJson = mock(AuthenticationToken.Json.class);
+        when(newTokenJson.buildToken(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE)).thenReturn(newToken);
+
+        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.Json.class))).thenReturn(newTokenJson);
         when(objectMapper.readValue(eq(responseAndBody.body), eq(objectType))).thenReturn(expectedReturnValue);
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
 
         final Object returnValue = responseParser.parseResponse(tokenProxy, Object.class, responseAndBody.response);
 
@@ -81,7 +87,7 @@ public class ResponseParserTest {
 
         when(objectMapper.readValue(eq(responseAndBody.body), eq(objectType))).thenReturn(expectedReturnValue);
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
 
         final Object returnValue = responseParser.parseResponse(tokenProxy, Object.class, responseAndBody.response);
 
@@ -94,14 +100,18 @@ public class ResponseParserTest {
         final ResponseAndBody responseAndBody = createTestRefreshResponse();
 
         final Object expectedReturnValue = new Object();
-        final AuthenticationToken newToken = mock(AuthenticationToken.class);
+
+        @SuppressWarnings("unchecked")
+        final AuthenticationToken<EntityType.Application, TokenType.Simple> newToken = mock(AuthenticationToken.class);
+        final AuthenticationToken.Json newTokenJson = mock(AuthenticationToken.Json.class);
+        when(newTokenJson.buildToken(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE)).thenReturn(newToken);
 
         final JavaType objectType = typeFactory.uncheckedSimpleType(Object.class);
 
-        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.class))).thenReturn(newToken);
+        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.Json.class))).thenReturn(newTokenJson);
         when(objectMapper.readValue(eq(responseAndBody.body), eq(objectType))).thenReturn(expectedReturnValue);
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
 
         final Object returnValue = responseParser.unsafeParseResponse(tokenProxy, objectType, responseAndBody.response);
 
@@ -113,7 +123,7 @@ public class ResponseParserTest {
     public void parseResponseToJavaTypeWithoutRefreshedToken() throws IOException {
         final ResponseAndBody responseAndBody = createTestResponse();
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
         final Object expectedReturnValue = new Object();
 
         final JavaType objectType = TypeFactory.defaultInstance().uncheckedSimpleType(Object.class);
@@ -129,14 +139,18 @@ public class ResponseParserTest {
     public void parseResponseToTypeReferenceWithRefreshedToken() throws IOException {
         final ResponseAndBody responseAndBody = createTestRefreshResponse();
 
-        final AuthenticationToken newToken = mock(AuthenticationToken.class);
+        @SuppressWarnings("unchecked")
+        final AuthenticationToken<EntityType.Application, TokenType.Simple> newToken = mock(AuthenticationToken.class);
+        final AuthenticationToken.Json newTokenJson = mock(AuthenticationToken.Json.class);
+        when(newTokenJson.buildToken(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE)).thenReturn(newToken);
+
         final List<Object> expectedReturnValue = new ArrayList<>();
 
         final JavaType listType = typeFactory.constructType(LIST_TYPE_REFERENCE);
-        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.class))).thenReturn(newToken);
+        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.Json.class))).thenReturn(newTokenJson);
         when(objectMapper.readValue(eq(responseAndBody.body), eq(listType))).thenReturn(expectedReturnValue);
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
 
         final List<Object> returnValue = responseParser.parseResponse(tokenProxy, LIST_TYPE_REFERENCE, responseAndBody.response);
 
@@ -153,7 +167,7 @@ public class ResponseParserTest {
         final JavaType listType = typeFactory.constructType(LIST_TYPE_REFERENCE);
         when(objectMapper.readValue(eq(responseAndBody.body), eq(listType))).thenReturn(expectedReturnValue);
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
 
         final List<Object> returnValue = responseParser.parseResponse(tokenProxy, LIST_TYPE_REFERENCE, responseAndBody.response);
 
@@ -163,12 +177,16 @@ public class ResponseParserTest {
 
     @Test
     public void parseResponseToInputStreamWithRefreshedToken() throws IOException {
-        final AuthenticationToken newToken = mock(AuthenticationToken.class);
+        @SuppressWarnings("unchecked")
+        final AuthenticationToken<EntityType.Application, TokenType.Simple> newToken = mock(AuthenticationToken.class);
+        final AuthenticationToken.Json newTokenJson = mock(AuthenticationToken.Json.class);
+        when(newTokenJson.buildToken(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE)).thenReturn(newToken);
+
         final ResponseAndBody responseAndBody = createTestRefreshResponse();
 
-        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.class))).thenReturn(newToken);
+        when(objectMapper.readValue(isA(String.class), eq(AuthenticationToken.Json.class))).thenReturn(newTokenJson);
 
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
 
         final InputStream returnValue = responseParser.parseResponse(tokenProxy, responseAndBody.response);
 
@@ -179,7 +197,7 @@ public class ResponseParserTest {
     @Test
     public void parseResponseToInputStreamWithoutRefreshedToken() throws IOException {
         final ResponseAndBody responseAndBody = createTestResponse();
-        final TokenProxy tokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE);
         final InputStream returnValue = responseParser.parseResponse(tokenProxy, responseAndBody.response);
 
         verify(tokenRepository, never()).update(isA(TokenProxy.class), isA(AuthenticationToken.class));

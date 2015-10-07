@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
@@ -25,7 +27,7 @@ import java.util.List;
 public class GetContentServiceImpl<T> implements GetContentService<T> {
     
     private final GetContentBackend getContentBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
     private final Class<T> returnType;
 
     /**
@@ -34,7 +36,7 @@ public class GetContentServiceImpl<T> implements GetContentService<T> {
      * @param returnType The desired return type for service methods. This type must have the correct Jackson annotations
      * to read HP Haven OnDemand responses
      */
-    public GetContentServiceImpl(final HodServiceConfig hodServiceConfig, final Class<T> returnType) {
+    public GetContentServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final Class<T> returnType) {
         getContentBackend = hodServiceConfig.getRestAdapter().create(GetContentBackend.class);
         requester = hodServiceConfig.getRequester();
         this.returnType = returnType;
@@ -45,7 +47,7 @@ public class GetContentServiceImpl<T> implements GetContentService<T> {
      * @param hodServiceConfig The configuration to use
      * @return A new {@literal GetContentService<Documents>}
      */
-    public static GetContentServiceImpl<Documents> documentsService(final HodServiceConfig hodServiceConfig) {
+    public static GetContentServiceImpl<Documents> documentsService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         return new GetContentServiceImpl<>(hodServiceConfig, Documents.class);
     }
     
@@ -55,14 +57,14 @@ public class GetContentServiceImpl<T> implements GetContentService<T> {
     }
 
     @Override
-    public T getContent(final TokenProxy tokenProxy, final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
+    public T getContent(final TokenProxy<?, TokenType.Simple> tokenProxy, final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(tokenProxy, returnType, getBackendCaller(indexReference, index, params));
     }
 
-    private Requester.BackendCaller getBackendCaller(final List<String> indexReference, final ResourceIdentifier indexes, final GetContentRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final List<String> indexReference, final ResourceIdentifier indexes, final GetContentRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return getContentBackend.getContent(authenticationToken, indexReference, indexes, params.build());
             }
         };

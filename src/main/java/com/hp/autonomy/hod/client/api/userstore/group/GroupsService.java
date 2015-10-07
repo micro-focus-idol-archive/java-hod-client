@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.userstore.group;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -32,7 +33,7 @@ public interface GroupsService {
      * @return The groups in the user store and their relationships
      * @throws HodErrorException
      */
-    List<Group> list(TokenProxy tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
+    List<Group> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
 
     /**
      * Get information about the given group in the given user store, including its members, using a token proxy from a
@@ -52,7 +53,7 @@ public interface GroupsService {
      * @return Information about the group
      * @throws HodErrorException
      */
-    GroupInfo getInfo(TokenProxy tokenProxy, ResourceIdentifier userStore, String name) throws HodErrorException;
+    GroupInfo getInfo(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String name) throws HodErrorException;
 
     /**
      * Create a group in the given user store, using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -72,7 +73,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    CreateGroupResponse create(TokenProxy tokenProxy, ResourceIdentifier userStore, String name) throws HodErrorException;
+    CreateGroupResponse create(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String name) throws HodErrorException;
 
     /**
      * Create a group in the given user store using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -98,7 +99,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    CreateGroupResponse createWithHierarchy(TokenProxy tokenProxy, ResourceIdentifier userStore, String name, List<String> parents, List<String> children) throws HodErrorException;
+    CreateGroupResponse createWithHierarchy(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String name, List<String> parents, List<String> children) throws HodErrorException;
 
     /**
      * Delete a group from the given user store using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -115,7 +116,7 @@ public interface GroupsService {
      * @param name The group name
      * @throws HodErrorException
      */
-    void delete(TokenProxy tokenProxy, ResourceIdentifier userStore, String name) throws HodErrorException;
+    void delete(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String name) throws HodErrorException;
 
     /**
      * Assign a user to a group in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -136,7 +137,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    AssignUserResponse assignUser(TokenProxy tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
+    AssignUserResponse assignUser(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Remove a user from a group in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -155,7 +156,7 @@ public interface GroupsService {
      * @param userUuid The UUID of the user
      * @throws HodErrorException
      */
-    void removeUser(TokenProxy tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
+    void removeUser(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Create a hierarchical relationship between two groups in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -174,7 +175,7 @@ public interface GroupsService {
      * @param child The child group name
      * @throws HodErrorException
      */
-    void link(TokenProxy tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
+    void link(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
 
     /**
      * Remove a hierarchical relationship between two groups in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -193,6 +194,6 @@ public interface GroupsService {
      * @param child The child group name
      * @throws HodErrorException
      */
-    void unlink(TokenProxy tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
+    void unlink(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String parent, String child) throws HodErrorException;
 
 }

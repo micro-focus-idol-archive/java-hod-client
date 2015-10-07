@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -40,7 +41,7 @@ public interface RetrieveIndexFieldsService {
      * with the token proxy has expired
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         ResourceIdentifier index,
         RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;

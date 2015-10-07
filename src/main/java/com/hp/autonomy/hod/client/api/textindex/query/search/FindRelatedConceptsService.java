@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -42,7 +43,7 @@ public interface FindRelatedConceptsService {
      * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithText(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String text,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
@@ -74,7 +75,7 @@ public interface FindRelatedConceptsService {
      * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithReference(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
@@ -104,7 +105,7 @@ public interface FindRelatedConceptsService {
      * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithUrl(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
@@ -134,7 +135,7 @@ public interface FindRelatedConceptsService {
      * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
@@ -164,7 +165,7 @@ public interface FindRelatedConceptsService {
      * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;
@@ -194,7 +195,7 @@ public interface FindRelatedConceptsService {
      * with the token proxy has expired
      */
     List<Entity> findRelatedConceptsWithFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         FindRelatedConceptsRequestBuilder params
     ) throws HodErrorException;

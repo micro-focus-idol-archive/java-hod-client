@@ -24,11 +24,11 @@ public interface AuthenticationService {
      * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    TokenProxy authenticateApplication(
+    <T extends TokenType> TokenProxy<EntityType.Application, T> authenticateApplication(
         ApiKey apiKey,
         String applicationName,
         String domain,
-        TokenType tokenType
+        T tokenType
     ) throws HodErrorException;
 
     /**
@@ -40,11 +40,11 @@ public interface AuthenticationService {
      * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    TokenProxy authenticateUser(
+    <T extends TokenType> TokenProxy<EntityType.User, T> authenticateUser(
         ApiKey apiKey,
         String applicationName,
         String applicationDomain,
-        TokenType tokenType
+        T tokenType
     ) throws HodErrorException;
 
     /**
@@ -58,11 +58,11 @@ public interface AuthenticationService {
      * @return A token for use with HP Haven OnDemand
      * @throws HodErrorException
      */
-    TokenProxy authenticateUser(
+    <T extends TokenType> TokenProxy<EntityType.User, T> authenticateUser(
         ApiKey apiKey,
         String applicationName,
         String applicationDomain,
-        TokenType tokenType,
+        T tokenType,
         String userStore,
         String storeDomain
     ) throws HodErrorException;
@@ -74,7 +74,7 @@ public interface AuthenticationService {
      * @return A response containing an unbound application token and a list of applications
      * @throws HodErrorException
      */
-    AuthenticationToken authenticateUnbound(
+    AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> authenticateUnbound(
         ApiKey apiKey
     ) throws HodErrorException;
 
@@ -87,7 +87,7 @@ public interface AuthenticationService {
      */
     SignedRequest combinedGetRequest(
         Collection<String> allowedOrigins,
-        AuthenticationToken token
+        AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token
     );
 
     /**
@@ -102,7 +102,7 @@ public interface AuthenticationService {
      */
     SignedRequest combinedRequest(
         Collection<String> allowedOrigins,
-        AuthenticationToken token,
+        AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
         String applicationDomain,
         String applicationName,
         TokenType tokenType
@@ -122,7 +122,7 @@ public interface AuthenticationService {
      */
     SignedRequest combinedRequest(
         Collection<String> allowedOrigins,
-        AuthenticationToken token,
+        AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
         String applicationDomain,
         String applicationName,
         String userStoreDomain,
@@ -144,14 +144,14 @@ public interface AuthenticationService {
      * @return A representation of an AJAX request to make from a browser
      */
     SignedRequest combinedRequest(
-            Collection<String> allowedOrigins,
-            AuthenticationToken token,
-            String applicationDomain,
-            String applicationName,
-            String userStoreDomain,
-            String userStoreName,
-            TokenType tokenType,
-            boolean useNonce
+        Collection<String> allowedOrigins,
+        AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
+        String applicationDomain,
+        String applicationName,
+        String userStoreDomain,
+        String userStoreName,
+        TokenType tokenType,
+        boolean useNonce
     );
 
 }

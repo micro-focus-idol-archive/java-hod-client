@@ -33,7 +33,7 @@ public class SignedRequest {
         this.token = token;
     }
 
-    static SignedRequest sign(final Hmac hmac, final String endpoint, final AuthenticationToken token, final Request<String, String> request) {
+    static SignedRequest sign(final Hmac hmac, final String endpoint, final AuthenticationToken<?, TokenType.HmacSha1> token, final Request<String, String> request) {
         final URIBuilder uriBuilder;
 
         try {

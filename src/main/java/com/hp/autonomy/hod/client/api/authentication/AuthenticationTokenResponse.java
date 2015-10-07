@@ -7,25 +7,14 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
-/**
- * Response containing a token from HP Haven OnDemand
- */
-@Getter
-@EqualsAndHashCode
-@ToString
+@Data
 public class AuthenticationTokenResponse {
-
-    /**
-     * @return The token from HP Haven OnDemand
-     */
-    private final AuthenticationToken token;
+    private final AuthenticationToken.Json tokenJson;
 
     @JsonCreator
-    AuthenticationTokenResponse(@JsonProperty("token") final AuthenticationToken token) {
-        this.token = token;
+    AuthenticationTokenResponse(@JsonProperty("token") final AuthenticationToken.Json tokenJson) {
+        this.tokenJson = tokenJson;
     }
 }

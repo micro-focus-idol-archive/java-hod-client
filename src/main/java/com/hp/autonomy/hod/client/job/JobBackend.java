@@ -23,7 +23,7 @@ interface JobBackend {
      */
     @GET("/2/job/{jobId}/status")
     Response getJobStatus(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
 
@@ -36,7 +36,7 @@ interface JobBackend {
      */
     @GET("/2/job/{jobId}/result")
     Response getJobResult(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("jobId") JobId jobId
     ) throws HodErrorException;
 

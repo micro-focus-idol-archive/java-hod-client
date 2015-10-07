@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.job;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -29,7 +30,7 @@ public interface JobService<T extends JobStatus<?>> {
      * @return The status of the job
      * @throws HodErrorException
      */
-    T getJobStatus(TokenProxy tokenProxy, JobId jobId) throws HodErrorException;
+    T getJobStatus(TokenProxy<?, TokenType.Simple> tokenProxy, JobId jobId) throws HodErrorException;
 
     /**
      * Retrieve the status of a job using a token proxy provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
@@ -46,6 +47,6 @@ public interface JobService<T extends JobStatus<?>> {
      * @return The status of the job
      * @throws HodErrorException
      */
-    T getJobResult(TokenProxy tokenProxy, JobId jobId) throws HodErrorException;
+    T getJobResult(TokenProxy<?, TokenType.Simple> tokenProxy, JobId jobId) throws HodErrorException;
 
 }

@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
@@ -48,7 +49,7 @@ public interface AddToTextIndexService {
      * with the token proxy has expired
      */
     void addJsonToTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         Documents<?> documents,
         ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
@@ -87,7 +88,7 @@ public interface AddToTextIndexService {
      * with the token proxy has expired
      */
     void addUrlToTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
@@ -125,7 +126,7 @@ public interface AddToTextIndexService {
      * with the token proxy has expired
      */
     void addReferenceToTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
@@ -163,7 +164,7 @@ public interface AddToTextIndexService {
      * with the token proxy has expired
      */
     void addFileToTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
@@ -201,7 +202,7 @@ public interface AddToTextIndexService {
      * with the token proxy has expired
      */
     void addFileToTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,
@@ -239,7 +240,7 @@ public interface AddToTextIndexService {
      * with the token proxy has expired
      */
     void addFileToTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         ResourceIdentifier index,
         AddToTextIndexRequestBuilder params,

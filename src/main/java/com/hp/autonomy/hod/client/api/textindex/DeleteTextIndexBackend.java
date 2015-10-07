@@ -37,7 +37,7 @@ interface DeleteTextIndexBackend {
      */
     @DELETE(SYNC_URL)
     Response initialDeleteTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("indexName") ResourceIdentifier index
     ) throws HodErrorException;
 
@@ -50,7 +50,7 @@ interface DeleteTextIndexBackend {
      */
     @DELETE(ASYNC_URL)
     Response deleteTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("indexName") ResourceIdentifier index,
         @Query("confirm") String confirm
     ) throws HodErrorException;

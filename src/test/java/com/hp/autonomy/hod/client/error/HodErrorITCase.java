@@ -8,6 +8,8 @@ package com.hp.autonomy.hod.client.error;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
@@ -72,12 +74,13 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testHodReturnsApiKeyError() throws IOException {
-        final TokenProxy tokenProxy = getConfig().getTokenRepository().insert(new AuthenticationToken(
-            DateTime.now().plus(Hours.ONE).getMillis(),
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = getConfig().getTokenRepository().insert(new AuthenticationToken<>(
+            EntityType.Application.INSTANCE,
+            TokenType.Simple.INSTANCE,
+            DateTime.now().plus(Hours.ONE),
             "ID",
             "SECRET",
-            "simple",
-            1234567890L
+            new DateTime(1234567890L)
         ));
 
         try {

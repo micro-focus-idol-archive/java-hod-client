@@ -8,7 +8,9 @@ package com.hp.autonomy.hod.client.config;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.token.TokenProxyService;
@@ -19,16 +21,17 @@ import retrofit.client.Response;
 import java.io.IOException;
 import java.io.InputStream;
 
+// TODO: Update JavaDoc with generics
 /**
  * Makes a request to HP Haven OnDemand
  */
-public class Requester {
+public class Requester<E extends EntityType, T extends TokenType> {
 
     private final TokenRepository tokenRepository;
     private final ResponseParser responseParser;
-    private final TokenProxyService tokenProxyService;
+    private final TokenProxyService<? extends E, ? extends T> tokenProxyService;
 
-    Requester(final TokenRepository tokenRepository, final ResponseParser responseParser, final TokenProxyService tokenProxyService) {
+    Requester(final TokenRepository tokenRepository, final ResponseParser responseParser, final TokenProxyService<? extends E, ? extends T> tokenProxyService) {
         this.tokenRepository = tokenRepository;
         this.responseParser = responseParser;
         this.tokenProxyService = tokenProxyService;
@@ -39,12 +42,12 @@ public class Requester {
      * response body to the type specified by the Class object.
      * @param returnType The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
-     * @param <T> The desired type of the value returned by HP Haven OnDemand
+     * @param <U> The desired type of the value returned by HP Haven OnDemand
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService has not been configured
      */
-    public <T> T makeRequest(final Class<T> returnType, final BackendCaller backendCaller) throws HodErrorException {
+    public <U> U makeRequest(final Class<U> returnType, final BackendCaller<? super E, ? super T> backendCaller) throws HodErrorException {
         checkTokenProxyService();
         return makeRequest(tokenProxyService.getTokenProxy(), returnType, backendCaller);
     }
@@ -54,12 +57,12 @@ public class Requester {
      * response body to the type specified by the type reference.
      * @param typeReference The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
-     * @param <T> The desired type of the value returned by HP Haven OnDemand
+     * @param <U> The desired type of the value returned by HP Haven OnDemand
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService has not been configured
      */
-    public <T> T makeRequest(final TypeReference<T> typeReference, final BackendCaller backendCaller) throws HodErrorException {
+    public <U> U makeRequest(final TypeReference<U> typeReference, final BackendCaller<? super E, ? super T> backendCaller) throws HodErrorException {
         checkTokenProxyService();
         return makeRequest(tokenProxyService.getTokenProxy(), typeReference, backendCaller);
     }
@@ -72,22 +75,22 @@ public class Requester {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService has not been configured
      */
-    public InputStream makeRequest(final BackendCaller backendCaller) throws HodErrorException {
+    public InputStream makeRequest(final BackendCaller<? super E, ? super T> backendCaller) throws HodErrorException {
         checkTokenProxyService();
         return makeRequest(tokenProxyService.getTokenProxy(), backendCaller);
     }
 
     /**
      * Makes a request to HP Haven OnDemand using a TokenProxy provided by a {@link TokenProxyService}, converting the
-     * response body to the type specified by the JavaType. This method does not guarantee that the type parameter T
+     * response body to the type specified by the JavaType. This method does not guarantee that the type parameter U
      * represents the given JavaType. If possible, use one of the safe makeRequest methods instead.
      * @param type The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
-     * @param <T> The desired type of the value returned by HP Haven OnDemand
+     * @param <U> The desired type of the value returned by HP Haven OnDemand
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
-    public <T> T unsafeMakeRequest(final JavaType type, final BackendCaller backendCaller) throws HodErrorException {
+    public <U> U unsafeMakeRequest(final JavaType type, final BackendCaller<? super E, ? super T> backendCaller) throws HodErrorException {
         checkTokenProxyService();
         return unsafeMakeRequest(tokenProxyService.getTokenProxy(), type, backendCaller);
     }
@@ -97,13 +100,16 @@ public class Requester {
      * @param tokenProxy The token proxy to use to make the request
      * @param returnType The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
-     * @param <T> The desired type of the value returned by HP Haven OnDemand
+     * @param <U> The desired type of the value returned by HP Haven OnDemand
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
-    public <T> T makeRequest(final TokenProxy tokenProxy, final Class<T> returnType, final BackendCaller backendCaller) throws HodErrorException {
-        final AuthenticationToken authenticationToken = getAuthenticationToken(tokenProxy);
-        return responseParser.parseResponse(tokenProxy, returnType, backendCaller.makeRequest(authenticationToken));
+    public <U, BE extends EntityType, BT extends TokenType> U makeRequest(
+        final TokenProxy<BE, BT> tokenProxy,
+        final Class<U> returnType,
+        final BackendCaller<? super BE, ? super BT> backendCaller
+    ) throws HodErrorException {
+        return responseParser.parseResponse(tokenProxy, returnType, backendCaller.makeRequest(getAuthenticationToken(tokenProxy)));
     }
 
     /**
@@ -111,13 +117,16 @@ public class Requester {
      * @param tokenProxy The token proxy to use to make the request
      * @param typeReference The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
-     * @param <T> The desired type of the value returned by HP Haven OnDemand
+     * @param <U> The desired type of the value returned by HP Haven OnDemand
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
-    public <T> T makeRequest(final TokenProxy tokenProxy, final TypeReference<T> typeReference, final BackendCaller backendCaller) throws HodErrorException {
-        final AuthenticationToken authenticationToken = getAuthenticationToken(tokenProxy);
-        return responseParser.parseResponse(tokenProxy, typeReference, backendCaller.makeRequest(authenticationToken));
+    public <U, BE extends EntityType, BT extends TokenType> U makeRequest(
+        final TokenProxy<BE, BT> tokenProxy,
+        final TypeReference<U> typeReference,
+        final BackendCaller<? super BE, ? super BT> backendCaller
+    ) throws HodErrorException {
+        return responseParser.parseResponse(tokenProxy, typeReference, backendCaller.makeRequest(getAuthenticationToken(tokenProxy)));
     }
 
     /**
@@ -127,25 +136,30 @@ public class Requester {
      * @return The response body
      * @throws HodErrorException
      */
-    public InputStream makeRequest(final TokenProxy tokenProxy, final BackendCaller backendCaller) throws HodErrorException {
-        final AuthenticationToken authenticationToken = getAuthenticationToken(tokenProxy);
-        return responseParser.parseResponse(tokenProxy, backendCaller.makeRequest(authenticationToken));
+    public <BE extends EntityType, BT extends TokenType> InputStream makeRequest(
+        final TokenProxy<BE, BT> tokenProxy,
+        final BackendCaller<? super BE, ? super BT> backendCaller
+    ) throws HodErrorException {
+        return responseParser.parseResponse(tokenProxy, backendCaller.makeRequest(getAuthenticationToken(tokenProxy)));
     }
 
     /**
      * Makes a request to HP Haven OnDemand, converting the response body to the type specified by the JavaType. This
-     * method does not guarantee that the type parameter T represents the given JavaType. If possible, use one of the
+     * method does not guarantee that the type parameter U represents the given JavaType. If possible, use one of the
      * safe makeRequest methods instead.
      * @param tokenProxy The token proxy to use to make the request
      * @param type The desired type of the value returned by HP Haven OnDemand
      * @param backendCaller Makes the request to HP Haven OnDemand
-     * @param <T> The desired type of the value returned by HP Haven OnDemand
+     * @param <U> The desired type of the value returned by HP Haven OnDemand
      * @return An object representing the output from HP Haven OnDemand
      * @throws HodErrorException
      */
-    public <T> T unsafeMakeRequest(final TokenProxy tokenProxy, final JavaType type, final BackendCaller backendCaller) throws HodErrorException {
-        final AuthenticationToken authenticationToken = getAuthenticationToken(tokenProxy);
-        return responseParser.unsafeParseResponse(tokenProxy, type, backendCaller.makeRequest(authenticationToken));
+    public <U, BE extends EntityType, BT extends TokenType> U unsafeMakeRequest(
+        final TokenProxy<BE, BT> tokenProxy,
+        final JavaType type,
+        final BackendCaller<? super BE, ? super BT> backendCaller
+    ) throws HodErrorException {
+        return responseParser.unsafeParseResponse(tokenProxy, type, backendCaller.makeRequest(getAuthenticationToken(tokenProxy)));
     }
 
     private void checkTokenProxyService() {
@@ -154,8 +168,8 @@ public class Requester {
         }
     }
 
-    private AuthenticationToken getAuthenticationToken(final TokenProxy tokenProxy) {
-        final AuthenticationToken authenticationToken;
+    private <PE extends EntityType, PT extends TokenType> AuthenticationToken<PE, PT> getAuthenticationToken(final TokenProxy<PE, PT> tokenProxy) {
+        final AuthenticationToken<PE, PT> authenticationToken;
 
         try {
             authenticationToken = tokenRepository.get(tokenProxy);
@@ -179,7 +193,7 @@ public class Requester {
     /**
      * Exchanges an AuthenticationToken for a response from HP Haven OnDemand
      */
-    public interface BackendCaller {
+    public interface BackendCaller<E extends EntityType, T extends TokenType> {
 
         /**
          * Makes a request to HP Haven OnDemand
@@ -187,7 +201,7 @@ public class Requester {
          * @return A response from HP Haven OnDemand
          * @throws HodErrorException
          */
-        Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException;
+        Response makeRequest(final AuthenticationToken<? extends E, ? extends T> authenticationToken) throws HodErrorException;
 
     }
 }

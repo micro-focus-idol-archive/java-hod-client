@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.resource;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -32,6 +33,6 @@ public interface ResourcesService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Resources list(TokenProxy tokenProxy, ListResourcesRequestBuilder parameters) throws HodErrorException;
+    Resources list(TokenProxy<?, TokenType.Simple> tokenProxy, ListResourcesRequestBuilder parameters) throws HodErrorException;
 
 }
