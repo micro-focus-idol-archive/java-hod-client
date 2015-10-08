@@ -58,6 +58,9 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
      */
     private final DateTime startRefresh;
 
+    /**
+     * Construct an authentication token from the given components.
+     */
     public AuthenticationToken(
         final E entityType,
         final T tokenType,
@@ -74,12 +77,29 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
         this.startRefresh = startRefresh;
     }
 
-    private AuthenticationToken(final Json token, final E entityType, final T tokenType) {
-        this(entityType, tokenType, token.getExpiry(), token.getId(), token.getSecret(), token.getStartRefresh());
+    /**
+     * Construct an authentication token from the given components, checking that the given type string is compatible with
+     * the entity and token types.
+     * @throws IllegalArgumentException If the type string does not match the entity and token types
+     */
+    public AuthenticationToken(
+        final E entityType,
+        final T tokenType,
+        final String type,
+        final DateTime expiry,
+        final String id,
+        final String secret,
+        final DateTime startRefresh
+    ) {
+        this(entityType, tokenType, expiry, id, secret, startRefresh);
 
-        if (!getType().equals(token.getType())) {
+        if (!getType().equals(type)) {
             throw new IllegalArgumentException("Attempted to construct AuthenticationToken of type " + getType() + " from invalid response");
         }
+    }
+
+    private AuthenticationToken(final Json token, final E entityType, final T tokenType) {
+        this(entityType, tokenType, token.getType(), token.getExpiry(), token.getId(), token.getSecret(), token.getStartRefresh());
     }
 
     /**
