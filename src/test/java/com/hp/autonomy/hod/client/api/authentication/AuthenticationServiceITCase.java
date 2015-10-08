@@ -133,6 +133,20 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     }
 
     @Test
+    public void getHmacApplicationTokenInformation() throws HodErrorException {
+        final TokenProxy<EntityType.Application, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateApplication(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.HmacSha1.INSTANCE);
+        final ApplicationTokenInformation information = authenticationService.getHmacApplicationTokenInformation(tokenProxy);
+
+        assertThat(information.getTenantUuid(), not(nullValue()));
+
+        assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
+        assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
+
+        assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
+        assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
+    }
+
+    @Test
     public void getUnboundTokenInformation() throws HodErrorException {
         final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(apiKey, TokenType.Simple.INSTANCE);
         final UnboundTokenInformation information = authenticationService.getUnboundTokenInformation(token);
@@ -142,9 +156,34 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     }
 
     @Test
+    public void getHmacUnboundTokenInformation() throws HodErrorException {
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
+        final UnboundTokenInformation information = authenticationService.getHmacUnboundTokenInformation(token);
+
+        assertThat(information.getAuthentication().getType(), not(nullValue()));
+        assertThat(information.getAuthentication().getUuid(), not(nullValue()));
+    }
+
+    @Test
     public void getUserTokenInformation() throws HodErrorException, IOException {
         final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
         final UserTokenInformation information = authenticationService.getUserTokenInformation(tokenProxy);
+
+        assertThat(information.getTenantUuid(), not(nullValue()));
+
+        assertThat(information.getUser().getUuid(), not(nullValue()));
+        assertThat(information.getUser().getName(), not(nullValue()));
+        assertThat(information.getUser().getAuthentication(), not(nullValue()));
+
+        assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
+        assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
+        assertThat(information.getUserStore().getUuid(), not(nullValue()));
+    }
+
+    @Test
+    public void getHmacUserTokenInformation() throws HodErrorException, IOException {
+        final TokenProxy<EntityType.User, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.HmacSha1.INSTANCE);
+        final UserTokenInformation information = authenticationService.getHmacUserTokenInformation(tokenProxy);
 
         assertThat(information.getTenantUuid(), not(nullValue()));
 

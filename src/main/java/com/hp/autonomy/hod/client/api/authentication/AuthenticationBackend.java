@@ -14,6 +14,8 @@ import retrofit.http.*;
  */
 interface AuthenticationBackend {
 
+    String GET_TOKEN_INFORMATION_PATH = "/2/authenticate";
+
     /**
      * Acquire a token for an application
      * @param apiKey The API key of the application
@@ -86,9 +88,9 @@ interface AuthenticationBackend {
         @Part("token_type") String tokenType
     ) throws HodErrorException;
 
-    @GET("/2/authenticate")
+    @GET(GET_TOKEN_INFORMATION_PATH)
     Response getTokenInformation(
-        @Header("token") AuthenticationToken<?, ?> token
+        @Header("token") String token
     ) throws HodErrorException;
 
 }

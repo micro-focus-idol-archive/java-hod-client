@@ -84,7 +84,7 @@ public interface AuthenticationService {
     ) throws HodErrorException;
 
     /**
-     * Get information from Haven OnDemand about a combined token.
+     * Get information from Haven OnDemand about a simple combined token.
      * @param token The combined token
      * @return Information about the combined token
      * @throws HodErrorException
@@ -92,7 +92,15 @@ public interface AuthenticationService {
     CombinedTokenInformation getCombinedTokenInformation(AuthenticationToken<EntityType.Combined, TokenType.Simple> token) throws HodErrorException;
 
     /**
-     * Get information from Haven OnDemand about a developer token.
+     * Get information from Haven OnDemand about an HMAC combined token.
+     * @param token The combined token
+     * @return Information about the combined token
+     * @throws HodErrorException
+     */
+    CombinedTokenInformation getHmacCombinedTokenInformation(AuthenticationToken<EntityType.Combined, TokenType.HmacSha1> token) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about a simple developer token.
      * @param token The developer token
      * @return Information about the developer token
      * @throws HodErrorException
@@ -100,7 +108,15 @@ public interface AuthenticationService {
     DeveloperTokenInformation getDeveloperTokenInformation(AuthenticationToken<EntityType.Developer, TokenType.Simple> token) throws HodErrorException;
 
     /**
-     * Get information from Haven OnDemand about the application token represented by a token proxy.
+     * Get information from Haven OnDemand about an HMAC developer token.
+     * @param token The developer token
+     * @return Information about the developer token
+     * @throws HodErrorException
+     */
+    DeveloperTokenInformation getHmacDeveloperTokenInformation(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about the simple application token represented by the token proxy.
      * @param tokenProxy The application token proxy
      * @return Information about the application token
      * @throws HodErrorException
@@ -108,7 +124,15 @@ public interface AuthenticationService {
     ApplicationTokenInformation getApplicationTokenInformation(TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy) throws HodErrorException;
 
     /**
-     * Get information from Haven OnDemand about a user token represented by a token proxy.
+     * Get information from Haven OnDemand about the HMAC application token represented by a token proxy.
+     * @param tokenProxy The application token proxy
+     * @return Information about the application token
+     * @throws HodErrorException
+     */
+    ApplicationTokenInformation getHmacApplicationTokenInformation(TokenProxy<EntityType.Application, TokenType.HmacSha1> tokenProxy) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about the simple user token represented by a token proxy.
      * @param tokenProxy The user token proxy
      * @return Information about the user token
      * @throws HodErrorException
@@ -116,12 +140,28 @@ public interface AuthenticationService {
     UserTokenInformation getUserTokenInformation(TokenProxy<EntityType.User, TokenType.Simple> tokenProxy) throws HodErrorException;
 
     /**
-     * Get information from Haven OnDemand about an unbound token.
+     * Get information from Haven OnDemand about the HMAC user token represented by a token proxy.
+     * @param tokenProxy The user token proxy
+     * @return Information about the user token
+     * @throws HodErrorException
+     */
+    UserTokenInformation getHmacUserTokenInformation(TokenProxy<EntityType.User, TokenType.HmacSha1> tokenProxy) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about a simple unbound token.
      * @param token The about an unbound token
      * @return Information about the about an unbound token
      * @throws HodErrorException
      */
     UnboundTokenInformation getUnboundTokenInformation(AuthenticationToken<EntityType.Unbound, TokenType.Simple> token) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about an HMAC unbound token.
+     * @param token The about an unbound token
+     * @return Information about the about an unbound token
+     * @throws HodErrorException
+     */
+    UnboundTokenInformation getHmacUnboundTokenInformation(AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) throws HodErrorException;
 
     /**
      * Get a representation of a request for obtaining a list of applications and domains associated with the given unbound
