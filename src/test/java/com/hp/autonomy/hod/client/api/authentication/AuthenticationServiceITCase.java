@@ -98,9 +98,17 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     }
 
     @Test
-    public void unboundAuthentication() throws HodErrorException {
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey);
-        assertThat(token, is(notNullValue()));
+    public void unboundSimpleAuthentication() throws HodErrorException {
+        final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(apiKey, TokenType.Simple.INSTANCE);
+        assertThat(token.getEntityType(), is(EntityType.Unbound.INSTANCE));
+        assertThat(token.getTokenType(), is(TokenType.Simple.INSTANCE));
+    }
+
+    @Test
+    public void unboundHmacAuthentication() throws HodErrorException {
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
+        assertThat(token.getEntityType(), is(EntityType.Unbound.INSTANCE));
+        assertThat(token.getTokenType(), is(TokenType.HmacSha1.INSTANCE));
     }
 
     @Test
@@ -108,7 +116,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         HodErrorCode errorCode = null;
 
         try {
-            authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"));
+            authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"), TokenType.Simple.INSTANCE);
         } catch (final HodErrorException e) {
             errorCode = e.getErrorCode();
         }
@@ -130,7 +138,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
         // Authenticate the application
         // TODO: The API key used to authenticate the application should be configurable
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> unboundToken = authenticationService.authenticateUnbound(apiKey);
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> unboundToken = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
 
         // Get a list of applications and users which match the application and user authentications by executing a
         // signed request in the browser

@@ -84,9 +84,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> authenticateUnbound(final ApiKey apiKey) throws HodErrorException {
-        final AuthenticationTokenResponse response = authenticationBackend.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE.getParameter());
-        return response.getTokenJson().buildToken(EntityType.Unbound.INSTANCE, TokenType.HmacSha1.INSTANCE);
+    public <T extends TokenType> AuthenticationToken<EntityType.Unbound, T> authenticateUnbound(final ApiKey apiKey, final T tokenType) throws HodErrorException {
+        final AuthenticationTokenResponse response = authenticationBackend.authenticateUnbound(apiKey, tokenType.getParameter());
+        return response.getTokenJson().buildToken(EntityType.Unbound.INSTANCE, tokenType);
     }
 
     @Override

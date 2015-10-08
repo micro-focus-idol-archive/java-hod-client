@@ -77,8 +77,9 @@ public interface AuthenticationService {
      * @return A response containing an unbound application token and a list of applications
      * @throws HodErrorException
      */
-    AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> authenticateUnbound(
-        ApiKey apiKey
+    <T extends TokenType> AuthenticationToken<EntityType.Unbound, T> authenticateUnbound(
+        ApiKey apiKey,
+        T tokenType
     ) throws HodErrorException;
 
     /**
