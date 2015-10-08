@@ -74,6 +74,14 @@ interface AuthenticationBackend {
         @Part("user_store_domain") String storeDomain
     ) throws HodErrorException;
 
+    @POST("/2/authenticate/developer")
+    @Multipart
+    Response authenticateDeveloper(
+        @Header("apiKey") ApiKey apiKey,
+        @Part("tenant") String tenant,
+        @Part("email") String email
+    ) throws HodErrorException;
+
     /**
      * Acquire an unbound token for use with HP Haven OnDemand. This must be combined with user authentication in a
      * user's browser.

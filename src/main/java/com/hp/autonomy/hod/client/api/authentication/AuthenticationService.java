@@ -10,6 +10,7 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Service for making authentication requests to HP Haven OnDemand
@@ -71,6 +72,13 @@ public interface AuthenticationService {
         String storeDomain
     ) throws HodErrorException;
 
+    // TODO: JavaDoc
+    AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> authenticateDeveloper(
+        ApiKey apiKey,
+        UUID tenantUuid,
+        String email
+    ) throws HodErrorException;
+
     /**
      * Acquire an unbound application token for use with HP Haven OnDemand. This must be combined with an unbound user
      * token before it can be used to query HP Haven OnDemand
@@ -100,20 +108,12 @@ public interface AuthenticationService {
     CombinedTokenInformation getHmacCombinedTokenInformation(AuthenticationToken<EntityType.Combined, TokenType.HmacSha1> token) throws HodErrorException;
 
     /**
-     * Get information from Haven OnDemand about a simple developer token.
+     * Get information from Haven OnDemand about a developer token.
      * @param token The developer token
      * @return Information about the developer token
      * @throws HodErrorException
      */
-    DeveloperTokenInformation getDeveloperTokenInformation(AuthenticationToken<EntityType.Developer, TokenType.Simple> token) throws HodErrorException;
-
-    /**
-     * Get information from Haven OnDemand about an HMAC developer token.
-     * @param token The developer token
-     * @return Information about the developer token
-     * @throws HodErrorException
-     */
-    DeveloperTokenInformation getHmacDeveloperTokenInformation(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException;
+    DeveloperTokenInformation getDeveloperTokenInformation(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException;
 
     /**
      * Get information from Haven OnDemand about the simple application token represented by the token proxy.
