@@ -27,6 +27,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.fail;
 
 /*
  * $Id:$
@@ -166,6 +168,25 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         }
 
         assertThat(errorCode, is(HodErrorCode.AUTHENTICATION_FAILED));
+    }
+
+    @Test
+    public void getTokenInformationFailsWithInvalidToken() {
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> fakeToken = new AuthenticationToken<>(
+            EntityType.Combined.INSTANCE,
+            TokenType.Simple.INSTANCE,
+            new DateTime(123),
+            "not-a-real-token",
+            "not-a-real-secret",
+            new DateTime(456)
+        );
+
+        try {
+            authenticationService.getCombinedTokenInformation(fakeToken);
+            fail("HodErrorException was not thrown");
+        } catch (final HodErrorException e) {
+            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
+        }
     }
 
     @Test
