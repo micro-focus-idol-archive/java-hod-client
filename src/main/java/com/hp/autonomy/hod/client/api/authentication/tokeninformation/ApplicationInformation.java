@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.authentication.tokeninformation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Data;
 
 /**
@@ -36,5 +37,9 @@ public class ApplicationInformation {
         this.name = name;
         this.domain = domain;
         this.authentication = authentication;
+    }
+
+    public ResourceIdentifier getIdentifier() {
+        return new ResourceIdentifier(domain, name);
     }
 }
