@@ -5,6 +5,9 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -12,15 +15,10 @@ import com.hp.autonomy.hod.client.token.TokenRepository;
 import com.hp.autonomy.hod.client.token.TokenRepositoryException;
 import com.hp.autonomy.hod.client.util.Hmac;
 import com.hp.autonomy.hod.client.util.Request;
+import retrofit.client.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Default implementation of {@link AuthenticationService}
@@ -29,8 +27,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final String COMBINED_PATH = "/2/authenticate/combined";
     private static final String ALLOWED_ORIGINS = "allowed_origins";
 
+    private static final TypeReference<TokenResponse<AuthenticationToken.Json>> TOKEN_TYPE_REFERENCE = new TypeReference<TokenResponse<AuthenticationToken.Json>>() {};
+    private static final TypeReference<TokenResponse<DeveloperTokenInformation>> DEVELOPER_INFORMATION_TYPE = new TypeReference<TokenResponse<DeveloperTokenInformation>>() {};
+    private static final TypeReference<TokenResponse<CombinedTokenInformation>> COMBINED_INFORMATION_TYPE = new TypeReference<TokenResponse<CombinedTokenInformation>>() {};
+    private static final TypeReference<TokenResponse<UserTokenInformation>> USER_INFORMATION_TYPE = new TypeReference<TokenResponse<UserTokenInformation>>() {};
+    private static final TypeReference<TokenResponse<UnboundTokenInformation>> UNBOUND_INFORMATION_TYPE = new TypeReference<TokenResponse<UnboundTokenInformation>>() {};
+    private static final TypeReference<TokenResponse<ApplicationTokenInformation>> APPLICATION_INFORMATION_TYPE = new TypeReference<TokenResponse<ApplicationTokenInformation>>() {};
+
     private final AuthenticationBackend authenticationBackend;
     private final TokenRepository tokenRepository;
+    private final ObjectMapper objectMapper;
     private final String endpoint;
 
     private final Hmac hmac = new Hmac();
@@ -43,6 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authenticationBackend = hodServiceConfig.getRestAdapter().create(AuthenticationBackend.class);
         tokenRepository = hodServiceConfig.getTokenRepository();
         endpoint = hodServiceConfig.getEndpoint();
+        objectMapper = hodServiceConfig.getObjectMapper();
     }
 
     @Override
@@ -52,8 +59,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String domain,
         final T tokenType
     ) throws HodErrorException {
-        final AuthenticationTokenResponse response = authenticationBackend.authenticateApplication(apiKey, applicationName, domain, tokenType.getParameter());
-        final AuthenticationToken<EntityType.Application, T> token = response.getTokenJson().buildToken(EntityType.Application.INSTANCE, tokenType);
+        final Response response = authenticationBackend.authenticateApplication(apiKey, applicationName, domain, tokenType.getParameter());
+        final AuthenticationToken<EntityType.Application, T> token = parseToken(response, EntityType.Application.INSTANCE, tokenType);
         return insertToken(token);
     }
 
@@ -64,8 +71,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String applicationDomain,
         final T tokenType
     ) throws HodErrorException {
-        final AuthenticationTokenResponse response = authenticationBackend.authenticateUser(apiKey, applicationName, applicationDomain, tokenType.getParameter());
-        final AuthenticationToken<EntityType.User, T> token = response.getTokenJson().buildToken(EntityType.User.INSTANCE, tokenType);
+        final Response response = authenticationBackend.authenticateUser(apiKey, applicationName, applicationDomain, tokenType.getParameter());
+        final AuthenticationToken<EntityType.User, T> token = parseToken(response, EntityType.User.INSTANCE, tokenType);
         return insertToken(token);
     }
 
@@ -78,15 +85,49 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String userStore,
         final String storeDomain
     ) throws HodErrorException {
-        final AuthenticationTokenResponse response = authenticationBackend.authenticateUser(apiKey, applicationName, applicationDomain, tokenType.getParameter(), userStore, storeDomain);
-        final AuthenticationToken<EntityType.User, T> token = response.getTokenJson().buildToken(EntityType.User.INSTANCE, tokenType);
+        final Response response = authenticationBackend.authenticateUser(apiKey, applicationName, applicationDomain, tokenType.getParameter(), userStore, storeDomain);
+        final AuthenticationToken<EntityType.User, T> token = parseToken(response, EntityType.User.INSTANCE, tokenType);
         return insertToken(token);
     }
 
     @Override
     public <T extends TokenType> AuthenticationToken<EntityType.Unbound, T> authenticateUnbound(final ApiKey apiKey, final T tokenType) throws HodErrorException {
-        final AuthenticationTokenResponse response = authenticationBackend.authenticateUnbound(apiKey, tokenType.getParameter());
-        return response.getTokenJson().buildToken(EntityType.Unbound.INSTANCE, tokenType);
+        final Response response = authenticationBackend.authenticateUnbound(apiKey, tokenType.getParameter());
+        return parseToken(response, EntityType.Unbound.INSTANCE, tokenType);
+    }
+
+    @Override
+    public CombinedTokenInformation getCombinedTokenInformation(final AuthenticationToken<EntityType.Combined, TokenType.Simple> token) throws HodErrorException {
+        final Response response = authenticationBackend.getTokenInformation(token);
+        return parseTokenInformation(response, COMBINED_INFORMATION_TYPE);
+    }
+
+    @Override
+    public DeveloperTokenInformation getDeveloperTokenInformation(final AuthenticationToken<EntityType.Developer, TokenType.Simple> token) throws HodErrorException {
+        final Response response = authenticationBackend.getTokenInformation(token);
+        return parseTokenInformation(response, DEVELOPER_INFORMATION_TYPE);
+    }
+
+    @Override
+    public ApplicationTokenInformation getApplicationTokenInformation(final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy) throws HodErrorException {
+        final AuthenticationToken<EntityType.Application, TokenType.Simple> token = getToken(tokenProxy);
+
+        final Response response = authenticationBackend.getTokenInformation(token);
+        return parseTokenInformation(response, APPLICATION_INFORMATION_TYPE);
+    }
+
+    @Override
+    public UserTokenInformation getUserTokenInformation(final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy) throws HodErrorException {
+        final AuthenticationToken<EntityType.User, TokenType.Simple> token = getToken(tokenProxy);
+
+        final Response response = authenticationBackend.getTokenInformation(token);
+        return parseTokenInformation(response, USER_INFORMATION_TYPE);
+    }
+
+    @Override
+    public UnboundTokenInformation getUnboundTokenInformation(final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token) throws HodErrorException {
+        final Response response = authenticationBackend.getTokenInformation(token);
+        return parseTokenInformation(response, UNBOUND_INFORMATION_TYPE);
     }
 
     @Override
@@ -187,6 +228,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return tokenRepository.insert(token);
         } catch (final IOException e) {
             throw new TokenRepositoryException(e);
+        }
+    }
+
+    private <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> getToken(final TokenProxy<E, T> tokenProxy) {
+        try {
+            return tokenRepository.get(tokenProxy);
+        } catch (final IOException e) {
+            throw new TokenRepositoryException(e);
+        }
+    }
+
+    private <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> parseToken(final Response response, final E entityType, final T tokenType) {
+        try {
+            final TokenResponse<AuthenticationToken.Json> tokenResponse = objectMapper.readValue(response.getBody().in(), TOKEN_TYPE_REFERENCE);
+            return tokenResponse.getToken().buildToken(entityType, tokenType);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private <T> T parseTokenInformation(final Response response, final TypeReference<TokenResponse<T>> typeReference) {
+        try {
+            final TokenResponse<T> tokenResponse = objectMapper.readValue(response.getBody().in(), typeReference);
+            return tokenResponse.getToken();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

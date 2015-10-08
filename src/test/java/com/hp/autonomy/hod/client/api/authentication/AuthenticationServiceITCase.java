@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.ApplicationTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.CombinedTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UnboundTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -39,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.notNullValue;
@@ -55,7 +60,7 @@ import static org.hamcrest.core.Is.is;
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
     private static final TypeReference<List<ApplicationAndUsers>> GET_APPLICATION_RESPONSE_REFERENCE = new TypeReference<List<ApplicationAndUsers>>() {};
-    private static final TypeReference<AuthenticationTokenResponse> TOKEN_RESPONSE_REFERENCE = new TypeReference<AuthenticationTokenResponse>() {};
+    private static final TypeReference<TokenResponse<AuthenticationToken.Json>> TOKEN_RESPONSE_REFERENCE = new TypeReference<TokenResponse<AuthenticationToken.Json>>() {};
 
     private final ApiKey apiKey;
     private final String endpointUrl;
@@ -109,6 +114,45 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
         assertThat(token.getEntityType(), is(EntityType.Unbound.INSTANCE));
         assertThat(token.getTokenType(), is(TokenType.HmacSha1.INSTANCE));
+    }
+
+    @Test
+    public void getApplicationTokenInformation() throws HodErrorException, IOException {
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+        final ApplicationTokenInformation information = authenticationService.getApplicationTokenInformation(tokenProxy);
+
+        assertThat(information.getTenantUuid(), not(nullValue()));
+
+        assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
+        assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
+
+        assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
+        assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
+    }
+
+    @Test
+    public void getUnboundTokenInformation() throws HodErrorException {
+        final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(apiKey, TokenType.Simple.INSTANCE);
+        final UnboundTokenInformation information = authenticationService.getUnboundTokenInformation(token);
+
+        assertThat(information.getAuthentication().getType(), not(nullValue()));
+        assertThat(information.getAuthentication().getUuid(), not(nullValue()));
+    }
+
+    @Test
+    public void getUserTokenInformation() throws HodErrorException, IOException {
+        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+        final UserTokenInformation information = authenticationService.getUserTokenInformation(tokenProxy);
+
+        assertThat(information.getTenantUuid(), not(nullValue()));
+
+        assertThat(information.getUser().getUuid(), not(nullValue()));
+        assertThat(information.getUser().getName(), not(nullValue()));
+        assertThat(information.getUser().getAuthentication(), not(nullValue()));
+
+        assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
+        assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
+        assertThat(information.getUserStore().getUuid(), not(nullValue()));
     }
 
     @Test
@@ -169,14 +213,34 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         );
 
         // Get the combined token
-        final AuthenticationTokenResponse authenticationTokenResponse = makeSignedRequest(browser, combinedRequest, origin, TOKEN_RESPONSE_REFERENCE);
+        final TokenResponse<AuthenticationToken.Json> tokenResponse = makeSignedRequest(browser, combinedRequest, origin, TOKEN_RESPONSE_REFERENCE);
 
-        final AuthenticationToken<EntityType.Combined, TokenType.Simple> combinedToken = authenticationTokenResponse.getTokenJson().buildToken(
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> combinedToken = tokenResponse.getToken().buildToken(
             EntityType.Combined.INSTANCE,
             TokenType.Simple.INSTANCE
         );
 
         assertThat(combinedToken, notNullValue());
+
+        final CombinedTokenInformation information = authenticationService.getCombinedTokenInformation(combinedToken);
+
+        assertThat(information.getTenantUuid(), not(nullValue()));
+
+        assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
+        assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
+
+        assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
+        assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
+
+        assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
+        assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
+        assertThat(information.getUserStore().getUuid(), not(nullValue()));
+
+        assertThat(information.getUser().getName(), not(nullValue()));
+        assertThat(information.getUser().getUuid(), not(nullValue()));
+
+        assertThat(information.getUser().getAuthentication().getType(), not(nullValue()));
+        assertThat(information.getUser().getAuthentication().getUuid(), not(nullValue()));
     }
 
     private HttpClient createBrowser() {

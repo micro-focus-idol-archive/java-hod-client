@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -81,6 +82,46 @@ public interface AuthenticationService {
         ApiKey apiKey,
         T tokenType
     ) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about a combined token.
+     * @param token The combined token
+     * @return Information about the combined token
+     * @throws HodErrorException
+     */
+    CombinedTokenInformation getCombinedTokenInformation(AuthenticationToken<EntityType.Combined, TokenType.Simple> token) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about a developer token.
+     * @param token The developer token
+     * @return Information about the developer token
+     * @throws HodErrorException
+     */
+    DeveloperTokenInformation getDeveloperTokenInformation(AuthenticationToken<EntityType.Developer, TokenType.Simple> token) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about the application token represented by a token proxy.
+     * @param tokenProxy The application token proxy
+     * @return Information about the application token
+     * @throws HodErrorException
+     */
+    ApplicationTokenInformation getApplicationTokenInformation(TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about a user token represented by a token proxy.
+     * @param tokenProxy The user token proxy
+     * @return Information about the user token
+     * @throws HodErrorException
+     */
+    UserTokenInformation getUserTokenInformation(TokenProxy<EntityType.User, TokenType.Simple> tokenProxy) throws HodErrorException;
+
+    /**
+     * Get information from Haven OnDemand about an unbound token.
+     * @param token The about an unbound token
+     * @return Information about the about an unbound token
+     * @throws HodErrorException
+     */
+    UnboundTokenInformation getUnboundTokenInformation(AuthenticationToken<EntityType.Unbound, TokenType.Simple> token) throws HodErrorException;
 
     /**
      * Get a representation of a request for obtaining a list of applications and domains associated with the given unbound

@@ -6,11 +6,8 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
+import retrofit.client.Response;
+import retrofit.http.*;
 
 /**
  * Service for making authentication requests to HP Haven OnDemand
@@ -28,7 +25,7 @@ interface AuthenticationBackend {
      */
     @POST("/2/authenticate/application")
     @Multipart
-    AuthenticationTokenResponse authenticateApplication(
+    Response authenticateApplication(
         @Header("apiKey") ApiKey apiKey,
         @Part("name") String applicationName,
         @Part("domain") String domain,
@@ -46,7 +43,7 @@ interface AuthenticationBackend {
      */
     @POST("/2/authenticate/user")
     @Multipart
-    AuthenticationTokenResponse authenticateUser(
+    Response authenticateUser(
         @Header("apiKey") ApiKey apiKey,
         @Part("application_name") String applicationName,
         @Part("application_domain") String applicationDomain,
@@ -66,7 +63,7 @@ interface AuthenticationBackend {
      */
     @POST("/2/authenticate/user")
     @Multipart
-    AuthenticationTokenResponse authenticateUser(
+    Response authenticateUser(
         @Header("apiKey") ApiKey apiKey,
         @Part("application_name") String applicationName,
         @Part("application_domain") String applicationDomain,
@@ -84,9 +81,14 @@ interface AuthenticationBackend {
      */
     @POST("/2/authenticate/unbound")
     @Multipart
-    AuthenticationTokenResponse authenticateUnbound(
+    Response authenticateUnbound(
         @Header("apiKey") ApiKey apiKey,
         @Part("token_type") String tokenType
+    ) throws HodErrorException;
+
+    @GET("/2/authenticate")
+    Response getTokenInformation(
+        @Header("token") AuthenticationToken<?, ?> token
     ) throws HodErrorException;
 
 }
