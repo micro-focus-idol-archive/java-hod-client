@@ -14,34 +14,61 @@ import lombok.Data;
 @Data
 public class Account {
     private final Type type;
-    private final String value;
+    private final String account;
+    private final Status status;
     private final boolean primary;
 
     public Account(
         @JsonProperty("type") final Type type,
-        @JsonProperty("value") final String value,
+        @JsonProperty("account") final String account,
+        @JsonProperty("status") final Status status,
         @JsonProperty("is_primary") final boolean primary
     ) {
         this.type = type;
-        this.value = value;
+        this.account = account;
+        this.status = status;
         this.primary = primary;
     }
 
+    /**
+     * Represents the type of a Haven OnDemand account.
+     */
     @Data
     public static class Type {
         /**
-         * The {@link Account#value} for a developer account is the developer UUID.
+         * The {@link Account#account} for a developer account is the developer UUID.
          */
         public static final Type DEVELOPER = new Type("developer");
 
         /**
-         * The {@link Account#value} for an email account is the email address.
+         * The {@link Account#account} for an email account is the email address.
          */
         public static final Type EMAIL = new Type("email");
 
         private final String name;
 
         public Type(final String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    /**
+     * Represents the status of a Haven OnDemand account.
+     */
+    @Data
+    public static class Status {
+        public static final Status PENDING = new Status("Pending");
+        public static final Status CONFIRMED = new Status("Confirmed");
+        public static final Status DISABLED = new Status("Disabled");
+
+        private final String name;
+
+        public Status(final String name) {
             this.name = name;
         }
 
