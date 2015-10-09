@@ -36,25 +36,41 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public List<User<Void>> list(final ResourceIdentifier userStore) throws HodErrorException {
-        return requester.makeRequest(NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false)).getUsers();
+    public List<User<Void>> list(final ResourceIdentifier userStore, final boolean includeAccounts, final boolean includeGroups) throws HodErrorException {
+        return requester.makeRequest(NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
     }
 
     @Override
-    public List<User<Void>> list(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false)).getUsers();
+    public List<User<Void>> list(
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
+        final ResourceIdentifier userStore,
+        final boolean includeAccounts,
+        final boolean includeGroups
+    ) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
     }
 
     @Override
-    public <T> List<User<T>> listWithMetadata(final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
+    public <T> List<User<T>> listWithMetadata(
+        final ResourceIdentifier userStore,
+        final Class<T> metadataType,
+        final boolean includeAccounts,
+        final boolean includeGroups
+    ) throws HodErrorException {
         final JavaType responseType = typeFactory.constructParametrizedType(ListUsersResponse.class, ListUsersResponse.class, metadataType);
-        return requester.unsafeMakeRequest(responseType, listBackendCaller(userStore, true));
+        return requester.unsafeMakeRequest(responseType, listBackendCaller(userStore, true, includeAccounts, includeGroups));
     }
 
     @Override
-    public <T> List<User<T>> listWithMetaData(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final Class<T> metadataType) throws HodErrorException {
+    public <T> List<User<T>> listWithMetaData(
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
+        final ResourceIdentifier userStore,
+        final Class<T> metadataType,
+        final boolean includeAccounts,
+        final boolean includeGroups
+    ) throws HodErrorException {
         final JavaType responseType = typeFactory.constructParametrizedType(ListUsersResponse.class, ListUsersResponse.class, metadataType);
-        return requester.unsafeMakeRequest(tokenProxy, responseType, listBackendCaller(userStore, true));
+        return requester.unsafeMakeRequest(tokenProxy, responseType, listBackendCaller(userStore, true, includeAccounts, includeGroups));
     }
 
     @Override
@@ -67,11 +83,11 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         requester.makeRequest(tokenProxy, StatusResponse.class, getResetBackendCaller(userStore, email, onSuccess, onError));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore, final boolean returnMetaData) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore, final boolean includeMetadata, final boolean includeAccounts, final boolean includeGroups) {
         return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
-                return backend.list(token, userStore, returnMetaData);
+                return backend.list(token, userStore, includeMetadata, includeAccounts, includeGroups);
             }
         };
     }

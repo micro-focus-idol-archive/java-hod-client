@@ -20,7 +20,7 @@ public class Account {
     public Account(
         @JsonProperty("type") final Type type,
         @JsonProperty("value") final String value,
-        @JsonProperty("primary") final boolean primary
+        @JsonProperty("is_primary") final boolean primary
     ) {
         this.type = type;
         this.value = value;

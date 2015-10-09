@@ -45,8 +45,44 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     }
 
     @Test
-    public void listUsers() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE);
+    public void listUsersWithoutAccountsOrGroups() throws HodErrorException {
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, false);
+
+        for (final User<Void> user : users) {
+            assertThat(user.getUuid(), not(nullValue()));
+            assertThat(user.getAccounts(), nullValue());
+            assertThat(user.getDirectGroups(), nullValue());
+            assertThat(user.getGroups(), nullValue());
+        }
+    }
+
+    @Test
+    public void listUsersWithGroups() throws HodErrorException {
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, true);
+
+        for (final User<Void> user : users) {
+            assertThat(user.getUuid(), not(nullValue()));
+            assertThat(user.getAccounts(), not(nullValue()));
+            assertThat(user.getDirectGroups(), nullValue());
+            assertThat(user.getGroups(), nullValue());
+        }
+    }
+
+    @Test
+    public void listUsersWithAccounts() throws HodErrorException {
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
+
+        for (final User<Void> user : users) {
+            assertThat(user.getUuid(), not(nullValue()));
+            assertThat(user.getAccounts(), nullValue());
+            assertThat(user.getDirectGroups(), not(nullValue()));
+            assertThat(user.getGroups(), not(nullValue()));
+        }
+    }
+
+    @Test
+    public void listUsersWithAccountsAndGroups() throws HodErrorException {
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, true);
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
