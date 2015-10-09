@@ -18,42 +18,50 @@ public interface UserStoreUsersService {
     /**
      * Get a list of the users in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * @param userStore The resource identifier of the user store
+     * @param includeAccounts If true, accounts are listed for each user
+     * @param includeGroups If true, groups are listed for each user
      * @return The users in the user store
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    List<User<Void>> list(ResourceIdentifier userStore) throws HodErrorException;
+    List<User<Void>> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of the users in a user store.
      * @param tokenProxy The token proxy to use for authentication
      * @param userStore The resource identifier of the user store
+     * @param includeAccounts If true, accounts are listed for each user
+     * @param includeGroups If true, groups are listed for each user
      * @return The users in the user store
      * @throws HodErrorException
      */
-    List<User<Void>> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
+    List<User<Void>> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * @param userStore The resource identifier of the user store
      * @param metadataType Class object representing the type of the user metadata
+     * @param includeAccounts If true, accounts are listed for each user
+     * @param includeGroups If true, groups are listed for each user
      * @param <T> The type of the user metadata
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    <T> List<User<T>> listWithMetadata(ResourceIdentifier userStore, Class<T> metadataType) throws HodErrorException;
+    <T> List<User<T>> listWithMetadata(ResourceIdentifier userStore, Class<T> metadataType, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * @param tokenProxy The token proxy to use for authentication
      * @param userStore The resource identifier of the user store
      * @param metadataType Class object representing the type of the user metadata
+     * @param includeAccounts If true, accounts are listed for each user
+     * @param includeGroups If true, groups are listed for each user
      * @param <T> The type of the user metadata
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      */
-    <T> List<User<T>> listWithMetaData(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Class<T> metadataType) throws HodErrorException;
+    <T> List<User<T>> listWithMetaData(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Class<T> metadataType, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Resets the authentication associated with the given user store and email address, using a

@@ -28,7 +28,9 @@ interface UserStoreUsersBackend {
     Response list(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
-        @Query("meta_data") boolean returnMetaData
+        @Query("include_metadata") boolean includeMetadata,
+        @Query("include_accounts") boolean includeAccounts,
+        @Query("include_groups") boolean includeGroups
     ) throws HodErrorException;
 
     @POST(BASE_PATH + "/reset" + V1)
