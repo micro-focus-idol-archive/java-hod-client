@@ -43,7 +43,8 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     @Override
     public List<User<Void>> list(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceIdentifier userStore, final boolean includeAccounts,
+        final ResourceIdentifier userStore,
+        final boolean includeAccounts,
         final boolean includeGroups
     ) throws HodErrorException {
         return requester.makeRequest(tokenProxy, NO_METADATA_LIST_TYPE, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
