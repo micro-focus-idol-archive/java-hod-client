@@ -29,6 +29,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -58,6 +59,8 @@ import static org.junit.Assert.fail;
  *
  * Last modified by $Author:$ on $Date:$
  */
+// TODO: Enable AuthenticationService integration tests when the integration environment supports the token information API
+@Ignore
 @RunWith(Parameterized.class)
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
@@ -88,10 +91,10 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
         final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(
-                apiKey,
-                APPLICATION_NAME,
-                DOMAIN_NAME,
-                TokenType.Simple.INSTANCE
+            apiKey,
+            APPLICATION_NAME,
+            DOMAIN_NAME,
+            TokenType.Simple.INSTANCE
         );
 
         assertThat(tokenProxy, is(notNullValue()));
