@@ -8,6 +8,8 @@ package com.hp.autonomy.hod.client.config;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.converter.HodConverter;
 import com.hp.autonomy.hod.client.error.DefaultHodErrorHandler;
 import com.hp.autonomy.hod.client.error.HodErrorHandler;
@@ -27,15 +29,15 @@ import retrofit.converter.JacksonConverter;
  * Configuration class for a HodService
  */
 @Data
-public class HodServiceConfig {
+public class HodServiceConfig<E extends EntityType, T extends TokenType> {
 
     private final RestAdapter restAdapter;
     private final TokenRepository tokenRepository;
-    private final Requester requester;
+    private final Requester<E, T> requester;
     private final String endpoint;
     private final ObjectMapper objectMapper;
 
-    private HodServiceConfig(final Builder builder) {
+    private HodServiceConfig(final Builder<E, T> builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
             .setEndpoint(builder.endpoint)
             .setErrorHandler(new ErrorHandlerWrapper(builder.errorHandler));
@@ -62,7 +64,7 @@ public class HodServiceConfig {
         restAdapter = restAdapterBuilder.build();
         tokenRepository = builder.tokenRepository;
 
-        requester = new Requester(tokenRepository, new ResponseParser(tokenRepository, objectMapper), builder.tokenProxyService);
+        requester = new Requester<>(tokenRepository, new ResponseParser(tokenRepository, objectMapper), builder.tokenProxyService);
         endpoint = builder.endpoint;
     }
 
@@ -70,7 +72,7 @@ public class HodServiceConfig {
      * Builder for HodServiceConfig
      */
     @Accessors(chain = true)
-    public static class Builder {
+    public static class Builder<E extends EntityType, T extends TokenType> {
 
         private final String endpoint;
 
@@ -91,7 +93,7 @@ public class HodServiceConfig {
          * @param tokenProxyService Provides a TokenProxy which is used for every request
          */
         @Setter
-        private TokenProxyService tokenProxyService;
+        private TokenProxyService<E, T> tokenProxyService;
 
         private HodErrorHandler errorHandler = new DefaultHodErrorHandler();
         private Client client;
@@ -110,7 +112,7 @@ public class HodServiceConfig {
          * @param httpClient The HttpClient to use
          * @return this
          */
-        public Builder setHttpClient(final HttpClient httpClient) {
+        public Builder<E, T> setHttpClient(final HttpClient httpClient) {
             client = new ApacheClient(httpClient);
             return this;
         }
@@ -120,7 +122,7 @@ public class HodServiceConfig {
          * @param errorHandler The error handler to use
          * @return this
          */
-        public Builder setErrorHandler(final HodErrorHandler errorHandler) {
+        public Builder<E, T> setErrorHandler(final HodErrorHandler errorHandler) {
             this.errorHandler = errorHandler;
             return this;
         }
@@ -128,8 +130,8 @@ public class HodServiceConfig {
         /**
          * @return A HodServiceConfig with the given options
          */
-        public HodServiceConfig build() {
-            return new HodServiceConfig(this);
+        public HodServiceConfig<E, T> build() {
+            return new HodServiceConfig<>(this);
         }
 
     }

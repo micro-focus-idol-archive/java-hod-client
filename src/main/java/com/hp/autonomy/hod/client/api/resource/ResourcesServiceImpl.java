@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.resource;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -18,13 +20,13 @@ import retrofit.client.Response;
 public class ResourcesServiceImpl implements ResourcesService {
     
     private final ResourcesBackend resourcesBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
 
     /**
      * Create a new ResourcesServiceImpl with the give configuration
      * @param hodServiceConfig The configuration to use
      */
-    public ResourcesServiceImpl(final HodServiceConfig hodServiceConfig) {
+    public ResourcesServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         resourcesBackend = hodServiceConfig.getRestAdapter().create(ResourcesBackend.class);
         requester = hodServiceConfig.getRequester();
     }
@@ -35,14 +37,14 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
-    public Resources list(final TokenProxy tokenProxy, final ListResourcesRequestBuilder parameters) throws HodErrorException {
+    public Resources list(final TokenProxy<?, TokenType.Simple> tokenProxy, final ListResourcesRequestBuilder parameters) throws HodErrorException {
         return requester.makeRequest(tokenProxy, Resources.class, getBackendCaller(parameters));
     }
 
-    private Requester.BackendCaller getBackendCaller(final ListResourcesRequestBuilder parameters) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final ListResourcesRequestBuilder parameters) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return resourcesBackend.list(authenticationToken, parameters.build());
             }
         };

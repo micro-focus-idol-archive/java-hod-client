@@ -4,6 +4,7 @@ import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.util.Request;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +22,15 @@ public class AuthenticationServiceTest {
     private static final String ENDPOINT = "https://api.testdomain.com";
     private static final String COMBINED_PATH = "/2/authenticate/combined";
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList("https://example.idolondemand.com", "http://example2.idolondemna.com");
-    private static final AuthenticationToken TOKEN = new AuthenticationToken(123, "my-token-id", "my-token-secret", "UNB:HMAC_SHA1", 456);
+
+    private static final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> TOKEN = new AuthenticationToken<>(
+        EntityType.Unbound.INSTANCE,
+        TokenType.HmacSha1.INSTANCE,
+        new DateTime(123),
+        "my-token-id",
+        "my-token-secret",
+        new DateTime(456)
+    );
 
     private static final String DOMAIN = "MY-APPLICATION-DOMAIN";
     private static final String APPLICATION = "MY-APPLICATION-NAME";
@@ -32,7 +41,7 @@ public class AuthenticationServiceTest {
 
     @Before
     public void initialise() {
-        final HodServiceConfig config = new HodServiceConfig.Builder(ENDPOINT).build();
+        final HodServiceConfig<?, ?> config = new HodServiceConfig.Builder<>(ENDPOINT).build();
         service = new AuthenticationServiceImpl(config);
     }
 
@@ -50,7 +59,7 @@ public class AuthenticationServiceTest {
 
     @Test
     public void generatesCombinedSignedRequest() throws URISyntaxException {
-        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, DOMAIN, APPLICATION, USER_STORE_DOMAIN, USER_STORE_NAME, TokenType.simple);
+        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, DOMAIN, APPLICATION, USER_STORE_DOMAIN, USER_STORE_NAME, TokenType.Simple.INSTANCE);
 
         assertThat(request.getVerb(), is(Request.Verb.POST));
 
@@ -61,14 +70,14 @@ public class AuthenticationServiceTest {
         checkParameterPair(pairs, "application", APPLICATION);
         checkParameterPair(pairs, "userstore_domain", USER_STORE_DOMAIN);
         checkParameterPair(pairs, "userstore_name", USER_STORE_NAME);
-        checkParameterPair(pairs, "token_type", TokenType.simple.toString());
+        checkParameterPair(pairs, "token_type", TokenType.Simple.INSTANCE.getParameter());
 
         assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id:wJkMexQxgEhW13IAeN6i6A:R9XBlyBildIbslAWyxDwQ5O-8WQ"));
     }
 
     @Test
     public void generatesANonce() {
-        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, DOMAIN, APPLICATION, USER_STORE_DOMAIN, USER_STORE_NAME, TokenType.simple, true);
+        final SignedRequest request = service.combinedRequest(ALLOWED_ORIGINS, TOKEN, DOMAIN, APPLICATION, USER_STORE_DOMAIN, USER_STORE_NAME, TokenType.Simple.INSTANCE, true);
         final List<NameValuePair> bodyPairs = URLEncodedUtils.parse(request.getBody(), StandardCharsets.UTF_8);
         final NameValuePair noncePair = getParameterPair(bodyPairs, "nonce");
         assertThat(noncePair, notNullValue());

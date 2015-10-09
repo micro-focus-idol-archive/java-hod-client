@@ -1,6 +1,7 @@
 package com.hp.autonomy.hod.client.util;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
@@ -13,11 +14,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Hmac {
     private static final String HMAC_SHA1 = "HmacSHA1";
@@ -34,16 +31,21 @@ public class Hmac {
      * @param token The HMAC SHA1 authentication token
      * @return The token parameter for the request
      */
-    public <Q, B> String generateToken(final Request<Q, B> request, final AuthenticationToken token) {
+    public String generateToken(final Request<?, ?> request, final AuthenticationToken<?, TokenType.HmacSha1> token) {
+        return generateTokenHelper(request, token);
+    }
+
+    // So we don't have to expose type parameters on the generateToken interface
+    private <Q, B> String generateTokenHelper(final Request<Q, B> request, final AuthenticationToken<?, TokenType.HmacSha1> token) {
         final String bodyHash = createBodyHash(request.getBody());
         final String message = createMessage(request, bodyHash);
         final String signature = base64EncodeForUri(hmacSha1(message, token.getSecret()));
 
         final List<String> components = Arrays.asList(
-                token.getType(),
-                token.getId(),
-                bodyHash,
-                signature
+            token.getType(),
+            token.getId(),
+            bodyHash,
+            signature
         );
 
         return StringUtils.join(components, COLON);

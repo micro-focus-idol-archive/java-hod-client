@@ -28,6 +28,6 @@ interface ResourcesBackend {
      * @return Public and private resources
      */
     @GET(URL)
-    Response list(@Header("token") AuthenticationToken token, @QueryMap Map<String, Object> parameters) throws HodErrorException;
+    Response list(@Header("token") AuthenticationToken<?, ?> token, @QueryMap Map<String, Object> parameters) throws HodErrorException;
 
 }

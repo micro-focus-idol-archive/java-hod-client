@@ -26,7 +26,7 @@ interface UserStoreUsersBackend {
 
     @GET(BASE_PATH + V1)
     Response list(
-        @Header(TOKEN_HEADER) AuthenticationToken token,
+        @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Query("meta_data") boolean returnMetaData
     ) throws HodErrorException;
@@ -34,7 +34,7 @@ interface UserStoreUsersBackend {
     @POST(BASE_PATH + "/reset" + V1)
     @Multipart
     Response resetAuthentication(
-        @Header(TOKEN_HEADER) final AuthenticationToken token,
+        @Header(TOKEN_HEADER) final AuthenticationToken<?, ?> token,
         @Path(USER_STORE_VARIABLE) final ResourceIdentifier userStore,
         @Part("user_email") final String email,
         @Part("on_success") final String onSuccess,

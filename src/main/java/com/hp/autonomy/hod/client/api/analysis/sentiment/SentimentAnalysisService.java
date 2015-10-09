@@ -5,6 +5,8 @@
 
 package com.hp.autonomy.hod.client.api.analysis.sentiment;
 
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -41,7 +43,7 @@ public interface SentimentAnalysisService {
      * with the token proxy has expired
      */
     SentimentAnalysisResponse analyzeSentimentForText(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String text,
         SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -70,7 +72,7 @@ public interface SentimentAnalysisService {
      * with the token proxy has expired
      */
     SentimentAnalysisResponse analyzeSentimentForFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -99,7 +101,7 @@ public interface SentimentAnalysisService {
      * with the token proxy has expired
      */
     SentimentAnalysisResponse analyzeSentimentForFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -128,7 +130,7 @@ public interface SentimentAnalysisService {
      * with the token proxy has expired
      */
     SentimentAnalysisResponse analyzeSentimentForFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -157,7 +159,7 @@ public interface SentimentAnalysisService {
      * with the token proxy has expired
      */
     SentimentAnalysisResponse analyzeSentimentForReference(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         SentimentAnalysisLanguage language
     ) throws HodErrorException;
@@ -186,7 +188,7 @@ public interface SentimentAnalysisService {
      * with the token proxy has expired
      */
     SentimentAnalysisResponse analyzeSentimentForUrl(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         SentimentAnalysisLanguage language
     ) throws HodErrorException;

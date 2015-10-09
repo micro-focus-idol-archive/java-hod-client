@@ -6,16 +6,15 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
+import retrofit.client.Response;
+import retrofit.http.*;
 
 /**
  * Service for making authentication requests to HP Haven OnDemand
  */
-public interface AuthenticationBackend {
+interface AuthenticationBackend {
+
+    String GET_TOKEN_INFORMATION_PATH = "/2/authenticate";
 
     /**
      * Acquire a token for an application
@@ -28,11 +27,11 @@ public interface AuthenticationBackend {
      */
     @POST("/2/authenticate/application")
     @Multipart
-    AuthenticationTokenResponse authenticateApplication(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("name") String applicationName,
-            @Part("domain") String domain,
-            @Part("token_type") TokenType tokenType
+    Response authenticateApplication(
+        @Header("apiKey") ApiKey apiKey,
+        @Part("name") String applicationName,
+        @Part("domain") String domain,
+        @Part("token_type") String tokenType
     ) throws HodErrorException;
 
     /**
@@ -46,11 +45,11 @@ public interface AuthenticationBackend {
      */
     @POST("/2/authenticate/user")
     @Multipart
-    AuthenticationTokenResponse authenticateUser(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("application_name") String applicationName,
-            @Part("application_domain") String applicationDomain,
-            @Part("token_type") TokenType tokenType
+    Response authenticateUser(
+        @Header("apiKey") ApiKey apiKey,
+        @Part("application_name") String applicationName,
+        @Part("application_domain") String applicationDomain,
+        @Part("token_type") String tokenType
     ) throws HodErrorException;
 
     /**
@@ -66,13 +65,13 @@ public interface AuthenticationBackend {
      */
     @POST("/2/authenticate/user")
     @Multipart
-    AuthenticationTokenResponse authenticateUser(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("application_name") String applicationName,
-            @Part("application_domain") String applicationDomain,
-            @Part("token_type") TokenType tokenType,
-            @Part("user_store_name") String userStore,
-            @Part("user_store_domain") String storeDomain
+    Response authenticateUser(
+        @Header("apiKey") ApiKey apiKey,
+        @Part("application_name") String applicationName,
+        @Part("application_domain") String applicationDomain,
+        @Part("token_type") String tokenType,
+        @Part("user_store_name") String userStore,
+        @Part("user_store_domain") String storeDomain
     ) throws HodErrorException;
 
     /**
@@ -84,14 +83,14 @@ public interface AuthenticationBackend {
      */
     @POST("/2/authenticate/unbound")
     @Multipart
-    AuthenticationTokenResponse authenticateApplicationUnbound(
-            @Header("apiKey") ApiKey apiKey,
-            @Part("token_type") TokenType tokenType
+    Response authenticateUnbound(
+        @Header("apiKey") ApiKey apiKey,
+        @Part("token_type") String tokenType
     ) throws HodErrorException;
 
-    @GET("/2/combined")
-    CombinedTokenDetails getCombinedTokenDetails(
-            @Header("token") AuthenticationToken token
+    @GET(GET_TOKEN_INFORMATION_PATH)
+    Response getTokenInformation(
+        @Header("token") String token
     ) throws HodErrorException;
 
 }

@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.userstore.StatusResponse;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
@@ -22,9 +24,9 @@ import java.util.UUID;
 
 public class GroupsServiceImpl implements GroupsService {
     private final GroupsBackend backend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
 
-    public GroupsServiceImpl(final HodServiceConfig config) {
+    public GroupsServiceImpl(final HodServiceConfig<?, TokenType.Simple> config) {
         backend = config.getRestAdapter().create(GroupsBackend.class);
         requester = config.getRequester();
     }
@@ -35,7 +37,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public List<Group> list(final TokenProxy tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
+    public List<Group> list(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore) throws HodErrorException {
         return requester.makeRequest(tokenProxy, ListGroupsResponse.class, listBackendCaller(userStore)).getGroups();
     }
 
@@ -45,7 +47,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public GroupInfo getInfo(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
+    public GroupInfo getInfo(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
         return requester.makeRequest(tokenProxy, GroupInfo.class, getInfoBackendCaller(userStore, name));
     }
 
@@ -55,7 +57,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public CreateGroupResponse create(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
+    public CreateGroupResponse create(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
         return requester.makeRequest(tokenProxy, CreateGroupResponse.class, createBackendCaller(userStore, Collections.<String, Object>emptyMap(), name));
     }
 
@@ -65,7 +67,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public CreateGroupResponse createWithHierarchy(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name, final List<String> parents, final List<String> children) throws HodErrorException {
+    public CreateGroupResponse createWithHierarchy(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String name, final List<String> parents, final List<String> children) throws HodErrorException {
         return requester.makeRequest(tokenProxy, CreateGroupResponse.class, createBackendCaller(userStore, buildHierarchyParameters(parents, children), name));
     }
 
@@ -75,7 +77,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public void delete(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
+    public void delete(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String name) throws HodErrorException {
         requester.makeRequest(tokenProxy, StatusResponse.class, deleteBackendCaller(userStore, name));
     }
 
@@ -85,7 +87,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public AssignUserResponse assignUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
+    public AssignUserResponse assignUser(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
         return requester.makeRequest(tokenProxy, AssignUserResponseWrapper.class, assignBackendCaller(userStore, groupName, userUuid)).getResult();
     }
 
@@ -95,7 +97,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public void removeUser(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
+    public void removeUser(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String groupName, final UUID userUuid) throws HodErrorException {
         requester.makeRequest(tokenProxy, StatusResponse.class, removeBackendCaller(userStore, groupName, userUuid));
     }
 
@@ -105,7 +107,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public void link(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+    public void link(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
         requester.makeRequest(tokenProxy, StatusResponse.class, linkBackendCaller(userStore, parent, child));
     }
 
@@ -115,7 +117,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public void unlink(final TokenProxy tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
+    public void unlink(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String parent, final String child) throws HodErrorException {
         requester.makeRequest(tokenProxy, StatusResponse.class, unlinkBackendCaller(userStore, parent, child));
     }
 
@@ -138,73 +140,73 @@ public class GroupsServiceImpl implements GroupsService {
         return parameters;
     }
 
-    private Requester.BackendCaller listBackendCaller(final ResourceIdentifier userStore) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.list(token, userStore);
             }
         };
     }
 
-    private Requester.BackendCaller getInfoBackendCaller(final ResourceIdentifier userStore, final String group) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getInfoBackendCaller(final ResourceIdentifier userStore, final String group) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.getInfo(token, userStore, group);
             }
         };
     }
 
-    private Requester.BackendCaller createBackendCaller(final ResourceIdentifier userStore, final Map<String, Object> hierarchyParameters, final String group) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> createBackendCaller(final ResourceIdentifier userStore, final Map<String, Object> hierarchyParameters, final String group) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.create(token, userStore, group, hierarchyParameters);
             }
         };
     }
 
-    private Requester.BackendCaller deleteBackendCaller(final ResourceIdentifier userStore, final String group) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> deleteBackendCaller(final ResourceIdentifier userStore, final String group) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.delete(token, userStore, group);
             }
         };
     }
 
-    private Requester.BackendCaller assignBackendCaller(final ResourceIdentifier userStore, final String group, final UUID userUuid) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> assignBackendCaller(final ResourceIdentifier userStore, final String group, final UUID userUuid) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.assignUser(token, userStore, group, userUuid.toString());
             }
         };
     }
 
-    private Requester.BackendCaller removeBackendCaller(final ResourceIdentifier userStore, final String group, final UUID userUuid) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> removeBackendCaller(final ResourceIdentifier userStore, final String group, final UUID userUuid) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.removeUser(token, userStore, group, userUuid.toString());
             }
         };
     }
 
-    private Requester.BackendCaller linkBackendCaller(final ResourceIdentifier userStore, final String parent, final String child) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> linkBackendCaller(final ResourceIdentifier userStore, final String parent, final String child) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.link(token, userStore, parent, child);
             }
         };
     }
 
-    private Requester.BackendCaller unlinkBackendCaller(final ResourceIdentifier userStore, final String parent, final String child) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> unlinkBackendCaller(final ResourceIdentifier userStore, final String parent, final String child) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken token) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.unlink(token, userStore, parent, child);
             }
         };

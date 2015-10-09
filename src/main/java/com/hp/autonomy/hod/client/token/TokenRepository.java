@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.token;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 
 import java.io.IOException;
 
@@ -25,7 +27,7 @@ public interface TokenRepository {
      * @throws IOException If an IO error occurred inserting the token
      * @throws IllegalArgumentException If the token has expired
      */
-    TokenProxy insert(AuthenticationToken token) throws IOException;
+    <E extends EntityType, T extends TokenType> TokenProxy<E, T> insert(AuthenticationToken<E, T> token) throws IOException;
 
     /**
      * Update the token in the repository associated with the given key. If the key is not in the repository, the new
@@ -36,7 +38,7 @@ public interface TokenRepository {
      * @throws IOException If an IO error occurred updating the token
      * @throws IllegalArgumentException If the token has expired
      */
-    AuthenticationToken update(TokenProxy key, AuthenticationToken newToken) throws IOException;
+    <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> update(TokenProxy<E, T> key, AuthenticationToken<E, T> newToken) throws IOException;
 
     /**
      * Retrieve the token associated with the given key
@@ -44,7 +46,7 @@ public interface TokenRepository {
      * @return The token associated with the key, or null if no token is associated with the key
      * @throws IOException If an IO error occurred retrieving the token
      */
-    AuthenticationToken get(TokenProxy key) throws IOException;
+    <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> get(TokenProxy<E, T> key) throws IOException;
 
     /**
      * Removes the token associated with the given key
@@ -52,6 +54,6 @@ public interface TokenRepository {
      * @return The old token associated with the key
      * @throws IOException If an IO error occurred removing the token
      */
-    AuthenticationToken remove(TokenProxy key) throws IOException;
+    <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> remove(TokenProxy<E, T> key) throws IOException;
 
 }

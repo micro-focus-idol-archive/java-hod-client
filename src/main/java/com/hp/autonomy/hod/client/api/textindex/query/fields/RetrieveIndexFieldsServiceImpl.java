@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
@@ -21,13 +23,13 @@ public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsServic
     private static final Class<RetrieveIndexFieldsResponse> RESPONSE_CLASS = RetrieveIndexFieldsResponse.class;
 
     private final RetrieveIndexFieldsBackend retrieveIndexFieldsBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
 
     /**
      * Creates a new RetrieveIndexFieldsServiceImpl with the given configuration
      * @param hodServiceConfig The configuration to use
      */
-    public RetrieveIndexFieldsServiceImpl(final HodServiceConfig hodServiceConfig) {
+    public RetrieveIndexFieldsServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         retrieveIndexFieldsBackend = hodServiceConfig.getRestAdapter().create(RetrieveIndexFieldsBackend.class);
         requester = hodServiceConfig.getRequester();
     }
@@ -38,14 +40,14 @@ public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsServic
     }
 
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy tokenProxy, final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(index, params));
     }
 
-    private Requester.BackendCaller getBackendCaller(final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, index, params.build());
             }
         };

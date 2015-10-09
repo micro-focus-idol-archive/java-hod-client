@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.token;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,25 +31,25 @@ public class InMemoryTokenRepositoryTest {
 
     @Test
     public void testGetReturnsNullIfNoKey() {
-        assertThat(tokenRepository.get(new TokenProxy()), is(nullValue()));
+        assertThat(tokenRepository.get(new TokenProxy<>(EntityType.Application.INSTANCE, TokenType.Simple.INSTANCE)), is(nullValue()));
     }
 
     @Test
     public void testInsertedTokensCanBeRetrieved() {
-        final AuthenticationToken token = mockToken();
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token = mockToken(false);
 
-        final TokenProxy key = tokenRepository.insert(token);
+        final TokenProxy<EntityType.Combined, TokenType.Simple> key = tokenRepository.insert(token);
 
         assertThat(tokenRepository.get(key), is(token));
     }
 
     @Test
     public void testUpdate() {
-        final AuthenticationToken token = mockToken();
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token = mockToken(false);
 
-        final TokenProxy key = tokenRepository.insert(token);
+        final TokenProxy<EntityType.Combined, TokenType.Simple> key = tokenRepository.insert(token);
 
-        final AuthenticationToken newToken = mockToken();
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> newToken = mockToken(false);
         tokenRepository.update(key, newToken);
 
         assertThat(tokenRepository.get(key), is(newToken));
@@ -55,8 +57,8 @@ public class InMemoryTokenRepositoryTest {
 
     @Test
     public void testUpdateReturnsNullAndDoesNothingIfKeyNotPresent() {
-        final TokenProxy key = new TokenProxy();
-        final AuthenticationToken oldToken = tokenRepository.update(key, mockToken());
+        final TokenProxy<EntityType.Combined, TokenType.Simple> key = new TokenProxy<>(EntityType.Combined.INSTANCE, TokenType.Simple.INSTANCE);
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> oldToken = tokenRepository.update(key, mockToken(false));
 
         assertThat(oldToken, is(nullValue()));
         assertThat(tokenRepository.get(key), is(nullValue()));
@@ -64,8 +66,8 @@ public class InMemoryTokenRepositoryTest {
 
     @Test
     public void testRemove() {
-        final AuthenticationToken token = mockToken();
-        final TokenProxy key = tokenRepository.insert(token);
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token = mockToken(false);
+        final TokenProxy<EntityType.Combined, TokenType.Simple> key = tokenRepository.insert(token);
 
         assertThat(tokenRepository.remove(key), is(token));
         assertThat(tokenRepository.get(key), is(nullValue()));
@@ -73,19 +75,18 @@ public class InMemoryTokenRepositoryTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testInsertThrowsIllegalArgumentExceptionForExpiredTokens() throws IOException {
-        final AuthenticationToken token = mock(AuthenticationToken.class);
-        when(token.hasExpired()).thenReturn(true);
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token = mockToken(true);
 
         tokenRepository.insert(token);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateThrowsIllegalArgumentExceptionForExpiredTokens() throws IOException {
-        final AuthenticationToken token1 = mockToken();
-        final AuthenticationToken token2 = mock(AuthenticationToken.class);
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token1 = mockToken(false);
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token2 = mockToken(true);
         when(token2.hasExpired()).thenReturn(true);
 
-        TokenProxy key = null;
+        TokenProxy<EntityType.Combined, TokenType.Simple> key = null;
 
         try {
             key = tokenRepository.insert(token1);
@@ -96,9 +97,13 @@ public class InMemoryTokenRepositoryTest {
         tokenRepository.update(key, token2);
     }
 
-    private AuthenticationToken mockToken() {
-        final AuthenticationToken token = mock(AuthenticationToken.class);
-        when(token.hasExpired()).thenReturn(false);
+    private AuthenticationToken<EntityType.Combined, TokenType.Simple> mockToken(final boolean expired) {
+        @SuppressWarnings("unchecked")
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> token = mock(AuthenticationToken.class);
+
+        when(token.hasExpired()).thenReturn(expired);
+        when(token.getEntityType()).thenReturn(EntityType.Combined.INSTANCE);
+        when(token.getTokenType()).thenReturn(TokenType.Simple.INSTANCE);
 
         return token;
     }

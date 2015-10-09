@@ -5,6 +5,8 @@
 
 package com.hp.autonomy.hod.client;
 
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.token.TokenProxyService;
 import org.apache.http.HttpHost;
@@ -12,11 +14,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 public class HodServiceConfigFactory {
 
-    public static HodServiceConfig getHodServiceConfig(final TokenProxyService tokenProxyService) {
-        return getHodServiceConfig(tokenProxyService, Endpoint.PRODUCTION);
-    }
-
-    public static HodServiceConfig getHodServiceConfig(final TokenProxyService tokenProxyService, final Endpoint endpoint) {
+    public static HodServiceConfig<EntityType.Application, TokenType.Simple> getHodServiceConfig(
+        final TokenProxyService<EntityType.Application, TokenType.Simple> tokenProxyService,
+        final Endpoint endpoint
+    ) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
         builder.disableCookieManagement();
 
@@ -27,7 +28,7 @@ public class HodServiceConfigFactory {
             builder.setProxy(new HttpHost(proxyHost, proxyPort));
         }
 
-        final HodServiceConfig.Builder configBuilder = new HodServiceConfig.Builder(endpoint.getUrl())
+        final HodServiceConfig.Builder<EntityType.Application, TokenType.Simple> configBuilder = new HodServiceConfig.Builder<EntityType.Application, TokenType.Simple>(endpoint.getUrl())
             .setHttpClient(builder.build());
 
 

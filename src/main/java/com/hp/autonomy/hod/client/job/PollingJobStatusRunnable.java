@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.job;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -36,7 +37,7 @@ public class PollingJobStatusRunnable<T> implements Runnable {
             HodErrorCode.INVALID_JOB_ID
     );
 
-    private final TokenProxy tokenProxy;
+    private final TokenProxy<?, TokenType.Simple> tokenProxy;
     private final JobId jobId;
     private final HodJobCallback<T> callback;
     private final ScheduledExecutorService executorService;
@@ -61,7 +62,7 @@ public class PollingJobStatusRunnable<T> implements Runnable {
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final TokenProxy tokenProxy, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
+    public PollingJobStatusRunnable(final TokenProxy<?, TokenType.Simple> tokenProxy, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
         this.tokenProxy = tokenProxy;
         this.jobId = jobId;
         this.callback = callback;

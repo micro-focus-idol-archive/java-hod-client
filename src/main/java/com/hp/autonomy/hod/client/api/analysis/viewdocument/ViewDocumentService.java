@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.analysis.viewdocument;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -39,7 +40,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     InputStream viewFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -67,7 +68,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     InputStream viewFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -95,7 +96,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     InputStream viewFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -124,7 +125,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     InputStream viewReference(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -154,7 +155,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     InputStream viewUrl(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -182,7 +183,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     String viewFileAsHtmlString(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -210,7 +211,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     String viewFileAsHtmlString(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -238,7 +239,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     String viewFileAsHtmlString(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -266,7 +267,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     String viewReferenceAsHtmlString(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;
@@ -294,7 +295,7 @@ public interface ViewDocumentService {
      * @throws HodErrorException
      */
     String viewUrlAsHtmlString(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         ViewDocumentRequestBuilder params
     ) throws HodErrorException;

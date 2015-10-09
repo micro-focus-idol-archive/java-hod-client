@@ -13,6 +13,6 @@ import retrofit.http.Header;
 interface ApplicationUsersBackend {
 
     @GET("/2/api/sync/application/user/v1")
-    Response getUsers(@Header("token") AuthenticationToken token);
+    Response getUsers(@Header("token") AuthenticationToken<?, ?> token);
 
 }

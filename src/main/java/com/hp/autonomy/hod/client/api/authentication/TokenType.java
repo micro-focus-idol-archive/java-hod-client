@@ -5,22 +5,57 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
-import com.hp.autonomy.hod.client.converter.DoNotConvert;
+import java.io.Serializable;
 
 /**
- * The type of a token returned by HP Haven OnDemand
+ * Interface representing possible types for an {@link AuthenticationToken}.
+ *
+ * The static implementations declared in this interface are all enums with one instance so we get final and sensible
+ * Serializable behaviour for free.
  */
-@DoNotConvert
-public enum TokenType {
+public interface TokenType extends Serializable {
     /**
-     * A simple token to be used with normal API requests. If you are unsure which type you want, you probably want
-     * simple
+     * @return The name of this token type as returned from Haven OnDemand
      */
-    simple,
+    String getName();
 
     /**
-     * A token to be used with HMAC signed requests. API requests made with the resulting token will need to be HMAC
-     * signed in accordance with the HP Haven OnDemand documentation
+     * @return The value of the "token_type" parameter which must be set for authentication requests to Haven OnDemand to
+     * return this token type.
      */
-    hmac_sha1
+    String getParameter();
+
+    /**
+     * Token type for simple tokens which do not need signing.
+     */
+    enum Simple implements TokenType {
+        INSTANCE;
+
+        @Override
+        public String getName() {
+            return "SIMPLE";
+        }
+
+        @Override
+        public String getParameter() {
+            return "simple";
+        }
+    }
+
+    /**
+     * Token type for tokens which must be used as part of an HMAC SHA1 signed request.
+     */
+    enum HmacSha1 implements TokenType {
+        INSTANCE;
+
+        @Override
+        public String getName() {
+            return "HMAC_SHA1";
+        }
+
+        @Override
+        public String getParameter() {
+            return "hmac_sha1";
+        }
+    }
 }

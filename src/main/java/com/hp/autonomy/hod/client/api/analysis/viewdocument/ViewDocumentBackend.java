@@ -41,7 +41,7 @@ interface ViewDocumentBackend {
     @Multipart
     @Streaming
     Response viewFile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
@@ -59,7 +59,7 @@ interface ViewDocumentBackend {
     @GET(URL)
     @Streaming
     Response viewReference(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("reference") String reference,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -77,7 +77,7 @@ interface ViewDocumentBackend {
     @GET(URL)
     @Streaming
     Response viewUrl(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("url") String url,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;

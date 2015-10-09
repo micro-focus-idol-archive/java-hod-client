@@ -35,7 +35,7 @@ interface QueryProfileBackend {
     @POST(URL)
     @Multipart
     Response createQueryProfile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("queryProfileName") String name,
         @Part("query_manipulation_index") String queryManipulationIndex,
         @PartMap Map<String, Object> params
@@ -50,7 +50,7 @@ interface QueryProfileBackend {
      */
     @GET(URL)
     Response retrieveQueryProfile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("queryProfileName") String name
     ) throws HodErrorException;
 
@@ -64,7 +64,7 @@ interface QueryProfileBackend {
     @PUT(URL)
     @Multipart
     Response updateQueryProfile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("queryProfileName") String name,
         @Part("query_manipulation_index") String queryManipulationIndex,
         @PartMap Map<String, Object> params
@@ -78,7 +78,7 @@ interface QueryProfileBackend {
      */
     @DELETE(URL)
     Response deleteQueryProfile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("queryProfileName") String name
     ) throws HodErrorException;
 
@@ -90,7 +90,7 @@ interface QueryProfileBackend {
      */
     @GET(LIST_URL)
     Response listQueryProfiles(
-        @Header("token") AuthenticationToken token
+        @Header("token") AuthenticationToken<?, ?> token
     ) throws HodErrorException;
 
 }

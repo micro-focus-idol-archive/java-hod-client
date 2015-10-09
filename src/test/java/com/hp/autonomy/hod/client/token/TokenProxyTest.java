@@ -5,6 +5,8 @@
 
 package com.hp.autonomy.hod.client.token;
 
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -22,13 +24,15 @@ public class TokenProxyTest {
     public void testSerialization() throws IOException, ClassNotFoundException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-        final TokenProxy initialTokenProxy = new TokenProxy();
+        final TokenProxy<EntityType.User, TokenType.Simple> initialTokenProxy = new TokenProxy<>(EntityType.User.INSTANCE, TokenType.Simple.INSTANCE);
         objectOutputStream.writeObject(initialTokenProxy);
 
         final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
 
-        final TokenProxy result = (TokenProxy) objectInputStream.readObject();
+        @SuppressWarnings("unchecked")
+        final TokenProxy<EntityType.User, TokenType.Simple> result = (TokenProxy<EntityType.User, TokenType.Simple>) objectInputStream.readObject();
 
         assertThat(result, is(initialTokenProxy));
     }
+
 }

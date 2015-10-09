@@ -1,5 +1,7 @@
 package com.hp.autonomy.hod.client.api.analysis.extractstructure;
 
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -31,7 +33,7 @@ public interface ExtractStructureService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      *                                                                                        with the token proxy has expired
      */
-    List<LinkedHashMap<String, String>> extractFromFile(TokenProxy tokenProxy, byte[] bytes) throws HodErrorException;
+    List<LinkedHashMap<String, String>> extractFromFile(TokenProxy<?, TokenType.Simple> tokenProxy, byte[] bytes) throws HodErrorException;
 
     /**
      * Extract content from a CSV file into a JSON format using HP Haven on Demand using a token proxy
@@ -52,7 +54,7 @@ public interface ExtractStructureService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      *                                                                                        with the token proxy has expired
      */
-    List<LinkedHashMap<String, String>> extractFromFile(TokenProxy tokenProxy, InputStream inputStream) throws HodErrorException;
+    List<LinkedHashMap<String, String>> extractFromFile(TokenProxy<?, TokenType.Simple> tokenProxy, InputStream inputStream) throws HodErrorException;
 
     /**
      * Extract content from a CSV file into a JSON format using HP Haven on Demand using a token proxy
@@ -73,7 +75,7 @@ public interface ExtractStructureService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      *                                                                                        with the token proxy has expired
      */
-    List<LinkedHashMap<String, String>> extractFromFile(TokenProxy tokenProxy, File file) throws HodErrorException;
+    List<LinkedHashMap<String, String>> extractFromFile(TokenProxy<?, TokenType.Simple> tokenProxy, File file) throws HodErrorException;
 
     /**
      * Extract content from a CSV file into a JSON format using HP Haven on Demand using the given token proxy
@@ -83,7 +85,7 @@ public interface ExtractStructureService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      *                                                                                        with the token proxy has expired
      */
-    List<LinkedHashMap<String, String>> extractFromReference(TokenProxy tokenProxy, String reference) throws HodErrorException;
+    List<LinkedHashMap<String, String>> extractFromReference(TokenProxy<?, TokenType.Simple> tokenProxy, String reference) throws HodErrorException;
 
     /**
      * Extract content from a CSV file into a JSON format using HP Haven on Demand using the given token proxy
@@ -102,7 +104,7 @@ public interface ExtractStructureService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      *                                                                                        with the token proxy has expired
      */
-    List<LinkedHashMap<String, String>> extractFromUrl(TokenProxy tokenProxy, String url) throws HodErrorException;
+    List<LinkedHashMap<String, String>> extractFromUrl(TokenProxy<?, TokenType.Simple> tokenProxy, String url) throws HodErrorException;
 
     /**
      * Extract content from a CSV file into a JSON format using HP Haven on Demand using the given token proxy

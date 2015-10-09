@@ -8,6 +8,8 @@ package com.hp.autonomy.hod.client.util;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodServiceConfigFactory;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
@@ -42,14 +44,16 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
 
         // Creating the HodServiceConfig requires the TokenProxyService, but the TokenProxyService requires the
         // TokenRepository, which requires the HodServiceConfig
-        final AtomicReference<TokenProxy> tokenProxyAtomicReference = new AtomicReference<>();
+        final AtomicReference<TokenProxy<EntityType.Application, TokenType.Simple>> tokenProxyAtomicReference = new AtomicReference<>();
 
-        final HodServiceConfig hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(new TokenProxyService() {
+        final TokenProxyService<EntityType.Application, TokenType.Simple> tokenProxyService = new TokenProxyService<EntityType.Application, TokenType.Simple>() {
             @Override
-            public TokenProxy getTokenProxy() {
+            public TokenProxy<EntityType.Application, TokenType.Simple> getTokenProxy() {
                 return tokenProxyAtomicReference.get();
             }
-        }, endpoint);
+        };
+
+        final HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(tokenProxyService, endpoint);
 
         try {
             tokenProxyAtomicReference.set(hodServiceConfig.getTokenRepository().insert(getToken()));

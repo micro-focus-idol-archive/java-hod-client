@@ -34,7 +34,7 @@ interface GetContentBackend {
      */
     @GET(URL)
     Response getContent(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("index_reference") List<String> indexReference,
         @Query("indexes") ResourceIdentifier indexes,
         @QueryMap Map<String, Object> params

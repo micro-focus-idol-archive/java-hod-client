@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
@@ -31,14 +33,14 @@ import java.util.concurrent.ScheduledExecutorService;
 public class DeleteFromTextIndexPollingService extends AbstractPollingService implements DeleteFromTextIndexService {
 
     private final DeleteFromTextIndexBackend deleteFromTextIndexBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
     private final JobService<? extends JobStatus<DeleteFromTextIndexResponse>> jobService;
 
     /**
      * Creates a new DeleteFromTextIndexPollingService with a default ScheduledExecutorService
      * @param hodServiceConfig The configuration to use
      */
-    public DeleteFromTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
+    public DeleteFromTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         super();
 
         deleteFromTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteFromTextIndexBackend.class);
@@ -51,7 +53,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
      * @param hodServiceConfig The configuration to use
      * @param executorService The executor service to use while polling for status updates
      */
-    public DeleteFromTextIndexPollingService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
+    public DeleteFromTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
         deleteFromTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteFromTextIndexBackend.class);
@@ -72,7 +74,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
 
     @Override
     public void deleteReferencesFromTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier index,
         final List<String> references,
         final HodJobCallback<DeleteFromTextIndexResponse> callback
@@ -94,7 +96,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
 
     @Override
     public void deleteAllDocumentsFromTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier index,
         final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
@@ -103,19 +105,19 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getDeleteReferencesBackendCaller(final ResourceIdentifier index, final List<String> references) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteReferencesBackendCaller(final ResourceIdentifier index, final List<String> references) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
             }
         };
     }
 
-    private Requester.BackendCaller getDeleteAllBackendCaller(final ResourceIdentifier index) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteAllBackendCaller(final ResourceIdentifier index) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
             }
         };

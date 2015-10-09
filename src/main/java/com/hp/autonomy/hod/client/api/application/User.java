@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Data;
 
-// TODO: It might be possible to merge this with User class in the authentication package after IOD-7218
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {

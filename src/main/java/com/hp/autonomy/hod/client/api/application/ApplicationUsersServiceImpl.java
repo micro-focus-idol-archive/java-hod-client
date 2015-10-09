@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.application;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -16,10 +18,10 @@ import java.util.List;
 
 public class ApplicationUsersServiceImpl implements ApplicationUsersService {
     private final ApplicationUsersBackend backend;
-    private final Requester requester;
-    private final Requester.BackendCaller backendCaller;
+    private final Requester<?, TokenType.Simple> requester;
+    private final BackendCaller backendCaller;
 
-    public ApplicationUsersServiceImpl(final HodServiceConfig config) {
+    public ApplicationUsersServiceImpl(final HodServiceConfig<?, TokenType.Simple> config) {
         backend = config.getRestAdapter().create(ApplicationUsersBackend.class);
         requester = config.getRequester();
         backendCaller = new BackendCaller();
@@ -31,13 +33,13 @@ public class ApplicationUsersServiceImpl implements ApplicationUsersService {
     }
 
     @Override
-    public List<User> getUsers(final TokenProxy tokenProxy) throws HodErrorException {
+    public List<User> getUsers(final TokenProxy<?, TokenType.Simple> tokenProxy) throws HodErrorException {
         return requester.makeRequest(tokenProxy, ApplicationUsersResponse.class, backendCaller).getUsers();
     }
 
-    private class BackendCaller implements Requester.BackendCaller {
+    private class BackendCaller implements Requester.BackendCaller<EntityType, TokenType.Simple> {
         @Override
-        public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+        public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
             return backend.getUsers(authenticationToken);
         }
     }

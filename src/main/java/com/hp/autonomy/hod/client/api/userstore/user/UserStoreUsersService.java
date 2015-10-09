@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.userstore.user;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -30,7 +31,7 @@ public interface UserStoreUsersService {
      * @return The users in the user store
      * @throws HodErrorException
      */
-    List<User<Void>> list(TokenProxy tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
+    List<User<Void>> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -52,7 +53,7 @@ public interface UserStoreUsersService {
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      */
-    <T> List<User<T>> listWithMetaData(TokenProxy tokenProxy, ResourceIdentifier userStore, Class<T> metadataType) throws HodErrorException;
+    <T> List<User<T>> listWithMetaData(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Class<T> metadataType) throws HodErrorException;
 
     /**
      * Resets the authentication associated with the given user store and email address, using a
@@ -81,7 +82,7 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      */
     void resetAuthentication(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier userStore,
         final String email,
         final URL onSuccess,

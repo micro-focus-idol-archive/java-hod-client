@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -42,7 +43,7 @@ public interface QueryTextIndexService<T> {
      * with the token proxy has expired
      */
     T queryTextIndexWithText(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String text,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -74,7 +75,7 @@ public interface QueryTextIndexService<T> {
      * with the token proxy has expired
      */
     T queryTextIndexWithReference(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -104,7 +105,7 @@ public interface QueryTextIndexService<T> {
      * with the token proxy has expired
      */
     T queryTextIndexWithUrl(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -134,7 +135,7 @@ public interface QueryTextIndexService<T> {
      * with the token proxy has expired
      */
     T queryTextIndexWithFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -164,7 +165,7 @@ public interface QueryTextIndexService<T> {
      * with the token proxy has expired
      */
     T queryTextIndexWithFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -194,7 +195,7 @@ public interface QueryTextIndexService<T> {
      * with the token proxy has expired
      */
     T queryTextIndexWithFile(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         QueryRequestBuilder params
     ) throws HodErrorException;
