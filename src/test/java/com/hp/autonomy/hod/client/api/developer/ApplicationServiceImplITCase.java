@@ -11,6 +11,7 @@ import com.hp.autonomy.hod.client.api.authentication.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,6 +27,8 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+// TODO: Enable ApplicationService integration tests when the integration environment supports the application APIs
+@Ignore
 @RunWith(Parameterized.class)
 public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTest {
     public static final String APPLICATION_DESCRIPTION = "Test application for the Java HOD client";
