@@ -72,7 +72,14 @@ public interface AuthenticationService {
         String storeDomain
     ) throws HodErrorException;
 
-    // TODO: JavaDoc
+    /**
+     * Acquire a token for a developer.
+     * @param apiKey The API key to use for authentication
+     * @param tenantUuid The UUID of the developer's tenant
+     * @param email The email address of the developer
+     * @return A token to authenticate request made to Haven OnDemand
+     * @throws HodErrorException
+     */
     AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> authenticateDeveloper(
         ApiKey apiKey,
         UUID tenantUuid,
