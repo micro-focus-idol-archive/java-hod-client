@@ -93,6 +93,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    public AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> authenticateDeveloper(final ApiKey apiKey, final UUID tenantUuid, final String email) throws HodErrorException {
+        final Response response = authenticationBackend.authenticateDeveloper(apiKey, tenantUuid.toString(), email);
+        return parseToken(response, EntityType.Developer.INSTANCE, TokenType.HmacSha1.INSTANCE);
+    }
+
+    @Override
     public <T extends TokenType> AuthenticationToken<EntityType.Unbound, T> authenticateUnbound(final ApiKey apiKey, final T tokenType) throws HodErrorException {
         final Response response = authenticationBackend.authenticateUnbound(apiKey, tokenType.getParameter());
         return parseToken(response, EntityType.Unbound.INSTANCE, tokenType);
@@ -111,13 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public DeveloperTokenInformation getDeveloperTokenInformation(final AuthenticationToken<EntityType.Developer, TokenType.Simple> token) throws HodErrorException {
-        final Response response = authenticationBackend.getTokenInformation(token.toString());
-        return parseTokenInformation(response, DEVELOPER_INFORMATION_TYPE);
-    }
-
-    @Override
-    public DeveloperTokenInformation getHmacDeveloperTokenInformation(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException {
+    public DeveloperTokenInformation getDeveloperTokenInformation(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException {
         final Response response = authenticationBackend.getTokenInformation(hmac.generateToken(TOKEN_INFORMATION_REQUEST, token));
         return parseTokenInformation(response, DEVELOPER_INFORMATION_TYPE);
     }

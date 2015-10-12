@@ -179,6 +179,13 @@ public enum HodErrorCode {
 
     // Tenancy
     SEND_EMAIL_FAILED(12200),
+    INVALID_APPLICATION(12201),
+    INVALID_DOMAIN(12202),
+    TENANT_NOT_FOUND(12203),
+    INVALID_DEVELOPER(12204),
+    DOMAIN_NOTEMPTY(12205),
+    INVALID_USER(12206),
+    INVALID_AUTH(12207),
 
     /**
      * Default code used as a placeholder for codes returned by HP Haven OnDemand which are not yet enumerated

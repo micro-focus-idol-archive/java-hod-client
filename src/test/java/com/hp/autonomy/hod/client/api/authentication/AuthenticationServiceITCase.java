@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.ApplicationTokenInformation;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.CombinedTokenInformation;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UnboundTokenInformation;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -39,10 +36,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -72,6 +66,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     private final ObjectMapper mapper = new ObjectMapper();
 
     private AuthenticationServiceImpl authenticationService;
+    private UUID tenantUuid;
 
     public AuthenticationServiceITCase(final Endpoint endpoint) {
         super(endpoint);
@@ -86,6 +81,12 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     public void setUp() {
         super.setUp();
         authenticationService = new AuthenticationServiceImpl(getConfig());
+
+        try {
+            tenantUuid = authenticationService.getApplicationTokenInformation(getTokenProxy()).getTenantUuid();
+        } catch (final HodErrorException e) {
+            throw new AssertionError("Could not determine tenant UUID");
+        }
     }
 
     @Test
@@ -122,11 +123,25 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     }
 
     @Test
+    public void developerAuthentication() throws HodErrorException {
+        final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(apiKey, tenantUuid, DEVELOPER_EMAIL);
+        assertThat(token.getEntityType(), is(EntityType.Developer.INSTANCE));
+        assertThat(token.getTokenType(), is(TokenType.HmacSha1.INSTANCE));
+
+        assertThat(token.getType(), is("DEV:HMAC_SHA1"));
+
+        assertThat(token.getExpiry(), not(nullValue()));
+        assertThat(token.getId(), not(nullValue()));
+        assertThat(token.getSecret(), not(nullValue()));
+        assertThat(token.getStartRefresh(), not(nullValue()));
+    }
+
+    @Test
     public void getApplicationTokenInformation() throws HodErrorException, IOException {
         final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
         final ApplicationTokenInformation information = authenticationService.getApplicationTokenInformation(tokenProxy);
 
-        assertThat(information.getTenantUuid(), not(nullValue()));
+        assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
         assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
@@ -140,7 +155,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         final TokenProxy<EntityType.Application, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateApplication(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.HmacSha1.INSTANCE);
         final ApplicationTokenInformation information = authenticationService.getHmacApplicationTokenInformation(tokenProxy);
 
-        assertThat(information.getTenantUuid(), not(nullValue()));
+        assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
         assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
@@ -172,7 +187,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
         final UserTokenInformation information = authenticationService.getUserTokenInformation(tokenProxy);
 
-        assertThat(information.getTenantUuid(), not(nullValue()));
+        assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getUser().getUuid(), not(nullValue()));
         assertThat(information.getUser().getName(), not(nullValue()));
@@ -188,7 +203,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         final TokenProxy<EntityType.User, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.HmacSha1.INSTANCE);
         final UserTokenInformation information = authenticationService.getHmacUserTokenInformation(tokenProxy);
 
-        assertThat(information.getTenantUuid(), not(nullValue()));
+        assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getUser().getUuid(), not(nullValue()));
         assertThat(information.getUser().getName(), not(nullValue()));
@@ -197,6 +212,20 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
         assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
         assertThat(information.getUserStore().getUuid(), not(nullValue()));
+    }
+
+    @Test
+    public void getDeveloperTokenInformation() throws HodErrorException {
+        final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(apiKey, tenantUuid, DEVELOPER_EMAIL);
+        final DeveloperTokenInformation information = authenticationService.getDeveloperTokenInformation(token);
+
+        assertThat(information.getTenantUuid(), is(tenantUuid));
+
+        assertThat(information.getDeveloper().getName(), not(nullValue()));
+        assertThat(information.getDeveloper().getUuid(), not(nullValue()));
+
+        assertThat(information.getDeveloper().getAuthentication().getType(), not(nullValue()));
+        assertThat(information.getDeveloper().getAuthentication().getUuid(), not(nullValue()));
     }
 
     @Test
@@ -287,7 +316,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
         final CombinedTokenInformation information = authenticationService.getCombinedTokenInformation(combinedToken);
 
-        assertThat(information.getTenantUuid(), not(nullValue()));
+        assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
         assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
