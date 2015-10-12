@@ -4,7 +4,7 @@ jdk:
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 before_script: ruby provision/setup-test-environment.rb $INT_API_KEY $HOD_APPLICATION $HOD_DOMAIN
-script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.int.hod.apiKey=$INT_API_KEY -Dhp.hod.env=INTEGRATION -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN
+script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.int.hod.apiKey=$INT_API_KEY -Dhp.hod.env=INTEGRATION -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN -Dhp.hod.developerEmail=$HOD_DEVELOPER_EMAIL
 after_success: bash travis.sh
 after_script: ruby provision/destroy-test-environment.rb $INT_API_KEY $HOD_APPLICATION $HOD_DOMAIN
 env:
@@ -29,3 +29,5 @@ env:
   - secure: T9pqvu/HdX9oVpwSSjeWY/DW6eoquE0Dr9om+23UVnQ27S5/NtcKKdTZfZwrDFNuNKHuwIeqWerF5yl13tkMrU++fHNhwbr7RXZAW7PZiKHX+lQ+Ny7g8yxZth6YEVJ2YtRgrbb+FSVHc2KwiEqo9O03DBmvVPEZBOyMaVNWIcA=
   # HOD_DOMAIN
   - secure: PPG2bfc7BdCsMC6AU6viHTVXYZyjW8MD4iCOhjRvs/4B/BBLaIwElMNFbgLVPkmrK3ol1lM0CH4ydKg5i7stZhdjIiytX/QL9qV/LLv1XJ1ouvLpvkHyUXsYCa5MHTzK3Cqwh4szzEz3/PmAeyY92UJEym+W8vs8DbBmZl+oGn8=
+  # HOD_DEVELOPER_EMAIL
+  - secure: aWJtwYXJRdiIdgh4VvkTYQfdUcI2giq2AQSJVJEP5ad9Np4UwXTBV+1lZDwK/10vJEJ/XDXQWiHRZpyr06v/05edFV7xAto7Ur4RUL8gfR9UKBx9yiafkr/EcDNXa2zq/pDbEgmuPCYtiT3O9+3L3fuZXyhBAT2U4I9aKxrZgYM=
