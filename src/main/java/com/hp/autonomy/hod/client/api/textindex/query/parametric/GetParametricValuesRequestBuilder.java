@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -49,7 +50,7 @@ public class GetParametricValuesRequestBuilder {
     /**
      * @param queryProfile The value of the query_profile parameter
      */
-    private String queryProfile;
+    private ResourceIdentifier queryProfile;
 
     /**
      * @param minScore Sets the value of minScore
