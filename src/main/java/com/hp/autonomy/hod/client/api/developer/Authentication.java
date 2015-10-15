@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.developer;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
@@ -37,6 +38,7 @@ public class Authentication {
         private boolean active;
         private DateTime createdAt;
 
+        @JsonSetter
         public Builder setCreatedAt(final String createdAt) {
             this.createdAt = new DateTime(createdAt);
             return this;

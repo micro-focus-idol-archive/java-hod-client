@@ -26,7 +26,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-// TODO: Enable UserStoreUsersService tests when the APIs are deployed on int.havenondemand.com
+// TODO: Enable UserStoreUsersService tests when the APIs are deployed on preview.havenondemand.com
 // TODO: Add more tests for list user in user store when it is deployed
 @Ignore
 @RunWith(Parameterized.class)
