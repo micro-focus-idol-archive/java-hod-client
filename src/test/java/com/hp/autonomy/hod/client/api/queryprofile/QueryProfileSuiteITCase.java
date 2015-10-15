@@ -5,11 +5,9 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@Ignore // until we can get our own API key these tests will not be reliable because of interference from live query profiles
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CreateDeleteQueryProfileServiceSuiteChild.class,
