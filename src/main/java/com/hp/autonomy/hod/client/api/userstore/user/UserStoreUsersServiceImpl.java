@@ -21,6 +21,7 @@ import retrofit.client.Response;
 
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     private static final TypeReference<ListUsersResponse<Void>> NO_METADATA_LIST_TYPE = new TypeReference<ListUsersResponse<Void>>() {};
@@ -74,6 +75,23 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
+    public void delete(
+            final TokenProxy<?, TokenType.Simple> tokenProxy,
+            final ResourceIdentifier userStore,
+            final UUID userUuid
+    ) throws HodErrorException{
+        requester.makeRequest(tokenProxy, Void.class, deleteBackendCaller(userStore, userUuid));
+    }
+
+    @Override
+    public void delete(
+            final ResourceIdentifier userStore,
+            final UUID userUuid
+    ) throws HodErrorException{
+        requester.makeRequest(Void.class, deleteBackendCaller(userStore, userUuid));
+    }
+
+    @Override
     public void resetAuthentication(final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) throws HodErrorException {
         requester.makeRequest(StatusResponse.class, getResetBackendCaller(userStore, email, onSuccess, onError));
     }
@@ -88,6 +106,15 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.list(token, userStore, includeMetadata, includeAccounts, includeGroups);
+            }
+        };
+    }
+
+    private Requester.BackendCaller<EntityType, TokenType.Simple> deleteBackendCaller(final ResourceIdentifier userStore, final UUID userUuid) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
+            @Override
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
+                return backend.delete(token, userStore, userUuid);
             }
         };
     }

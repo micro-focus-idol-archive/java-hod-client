@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
@@ -16,6 +17,8 @@ import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Query;
+
+import java.util.UUID;
 
 interface UserStoreUsersBackend {
 
@@ -31,6 +34,13 @@ interface UserStoreUsersBackend {
         @Query("include_metadata") boolean includeMetadata,
         @Query("include_accounts") boolean includeAccounts,
         @Query("include_groups") boolean includeGroups
+    ) throws HodErrorException;
+
+    @DELETE(BASE_PATH + "/{user_uuid}" + V1)
+    Response delete(
+            @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
+            @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+            @Path("user_uuid") UUID userUuid
     ) throws HodErrorException;
 
     @POST(BASE_PATH + "/reset" + V1)
