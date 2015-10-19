@@ -65,20 +65,20 @@ public interface UserStoreUsersService {
     <T> List<User<T>> listWithMetaData(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Class<T> metadataType, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
-     * Delete a user with a uuid from a userstore, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * Delete a user with a uuid from a userstore.
      * @param tokenProxy The token proxy to use for authentication
      * @param userStore The resource identifier of the user store
      * @param userUuid The uuid of the user to be deleted
      * @throws HodErrorException
-     * @throws NullPointerException If a TokenProxyService is not configured
      */
     void delete(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, UUID userUuid) throws HodErrorException;
 
     /**
-     * Delete a user with a uuid from a userstore.
+     * Delete a user with a uuid from a userstore, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * @param userStore The resource identifier of the user store
      * @param userUuid The uuid of the user to be deleted
      * @throws HodErrorException
+     * @throws NullPointerException If a TokenProxyService is not configured
      */
     void delete(ResourceIdentifier userStore, UUID userUuid) throws HodErrorException;
 
