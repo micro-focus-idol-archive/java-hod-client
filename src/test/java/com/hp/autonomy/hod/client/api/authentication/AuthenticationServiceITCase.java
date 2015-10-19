@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -38,13 +39,13 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.fail;
 
 /*
  * $Id:$
@@ -230,15 +231,12 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void failsWithInvalidApiKey() {
-        HodErrorCode errorCode = null;
-
-        try {
-            authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"), TokenType.Simple.INSTANCE);
-        } catch (final HodErrorException e) {
-            errorCode = e.getErrorCode();
-        }
-
-        assertThat(errorCode, is(HodErrorCode.AUTHENTICATION_FAILED));
+        testErrorCode(HodErrorCode.AUTHENTICATION_FAILED, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"), TokenType.Simple.INSTANCE);
+            }
+        });
     }
 
     @Test
@@ -252,12 +250,12 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             new DateTime(456)
         );
 
-        try {
-            authenticationService.getCombinedTokenInformation(fakeToken);
-            fail("HodErrorException was not thrown");
-        } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
-        }
+        testErrorCode(HodErrorCode.AUTHENTICATION_FAILED, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                authenticationService.getCombinedTokenInformation(fakeToken);
+            }
+        });
     }
 
     @Test

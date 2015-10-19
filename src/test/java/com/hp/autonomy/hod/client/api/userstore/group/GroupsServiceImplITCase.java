@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -19,11 +20,11 @@ import org.junit.runners.Parameterized;
 
 import java.util.*;
 
+import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 // TODO: Add assign/remove user from group tests when it is possible to create a user, or at least to get an existing user's UUID
 // TODO: Enable GroupsService tests when the APIs are deployed on int.havenondemand.com
@@ -97,12 +98,12 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         safeDeleteGroup(name);
 
         // Check user has gone from the get info API
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.getInfo(getTokenProxy(), USER_STORE, name);
             }
-        }, HodErrorCode.GROUP_NOT_FOUND);
+        });
 
         // Check user has gone from the list groups API
         final List<Group> groups = service.list(getTokenProxy(), USER_STORE);
@@ -116,22 +117,22 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void createDuplicate() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.GROUP_ALREADY_EXISTS, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.create(getTokenProxy(), USER_STORE, groupName);
             }
-        }, HodErrorCode.GROUP_ALREADY_EXISTS);
+        });
     }
 
     @Test
     public void createInNonExistentUserStore() {
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.create(getTokenProxy(), new ResourceIdentifier(DOMAIN_NAME, unique()), unique());
             }
-        }, HodErrorCode.STORE_NOT_FOUND);
+        });
     }
 
     @Test
@@ -147,56 +148,56 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void deleteNonExistent() {
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.delete(getTokenProxy(), USER_STORE, unique());
             }
-        }, HodErrorCode.GROUP_NOT_FOUND);
+        });
     }
 
     @Test
     public void assignNonExistentUser() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.assignUser(getTokenProxy(), USER_STORE, groupName, UUID.randomUUID());
             }
-        }, HodErrorCode.USER_NOT_FOUND);
+        });
     }
 
     @Test
     public void removeNonExistentUser() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.removeUser(getTokenProxy(), USER_STORE, groupName, UUID.randomUUID());
             }
-        }, HodErrorCode.USER_NOT_FOUND);
+        });
     }
 
     @Test
     public void assignNonExistentUserToNonExistentGroup() {
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(GROUP_OR_USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.assignUser(getTokenProxy(), USER_STORE, unique(), UUID.randomUUID());
             }
-        }, GROUP_OR_USER_NOT_FOUND);
+        });
     }
 
     @Test
     public void removeNonExistentUserFromNonExistentGroup() {
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(GROUP_OR_USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.assignUser(getTokenProxy(), USER_STORE, unique(), UUID.randomUUID());
             }
-        }, GROUP_OR_USER_NOT_FOUND);
+        });
     }
 
     @Test
@@ -283,31 +284,25 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void linkNonExistentParent() throws HodErrorException {
         final String child = safeCreateGroup().name;
-        HodErrorCode errorCode = null;
 
-        try {
-            service.link(getTokenProxy(), USER_STORE, unique(), child);
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            errorCode = e.getErrorCode();
-        }
-
-        assertThat(errorCode, is(HodErrorCode.GROUP_NOT_FOUND));
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.link(getTokenProxy(), USER_STORE, unique(), child);
+            }
+        });
     }
 
     @Test
     public void linkNonExistentChild() throws HodErrorException {
         final String parent = safeCreateGroup().name;
-        HodErrorCode errorCode = null;
 
-        try {
-            service.link(getTokenProxy(), USER_STORE, parent, unique());
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            errorCode = e.getErrorCode();
-        }
-
-        assertThat(errorCode, is(HodErrorCode.GROUP_NOT_FOUND));
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.link(getTokenProxy(), USER_STORE, parent, unique());
+            }
+        });
     }
 
     @Test
@@ -328,24 +323,24 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void unlinkNonExistentParent() throws HodErrorException {
         final String child = safeCreateGroup().name;
 
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.unlink(getTokenProxy(), USER_STORE, unique(), child);
             }
-        }, HodErrorCode.GROUP_NOT_FOUND);
+        });
     }
 
     @Test
     public void unlinkNonExistentChild() throws HodErrorException {
         final String parent = safeCreateGroup().name;
 
-        checkHodErrorCode(new HodErrorRunnable() {
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.unlink(getTokenProxy(), USER_STORE, parent, unique());
             }
-        }, HodErrorCode.GROUP_NOT_FOUND);
+        });
     }
 
     // Use the get info API to check that the "parent" group is the parent of the "child", and that this is the their only relationship
@@ -414,25 +409,6 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         return UUID.randomUUID().toString();
     }
 
-    // Check that running the runnable causes a HodErrorException to be thrown with the given code
-    private void checkHodErrorCode(final HodErrorRunnable runnable, final HodErrorCode expectedCode) {
-        checkHodErrorCode(runnable, EnumSet.of(expectedCode));
-    }
-
-    // Check that running the runnable causes a HodErrorException to be thrown with one of the given codes
-    private void checkHodErrorCode(final HodErrorRunnable runnable, final Set<HodErrorCode> expectedCodes) {
-        HodErrorCode errorCode = null;
-
-        try {
-            runnable.run();
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            errorCode = e.getErrorCode();
-        }
-
-        assertThat(expectedCodes, hasItem(errorCode));
-    }
-
     private static class NameAndResponse {
         private final String name;
         private final CreateGroupResponse response;
@@ -441,9 +417,5 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
             this.name = name;
             this.response = response;
         }
-    }
-
-    private interface HodErrorRunnable {
-        void run() throws HodErrorException;
     }
 }
