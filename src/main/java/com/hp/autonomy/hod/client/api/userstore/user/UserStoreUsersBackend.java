@@ -17,7 +17,9 @@ import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.http.QueryMap;
 
+import java.util.Map;
 import java.util.UUID;
 
 interface UserStoreUsersBackend {
@@ -34,6 +36,17 @@ interface UserStoreUsersBackend {
         @Query("include_metadata") boolean includeMetadata,
         @Query("include_accounts") boolean includeAccounts,
         @Query("include_groups") boolean includeGroups
+    ) throws HodErrorException;
+
+    @POST(BASE_PATH + V1)
+    @Multipart
+    Response create(
+            @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
+            @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+            @Part("user_email") String email,
+            @Part("on_success") String onSuccess,
+            @Part("on_error") String onError,
+            @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     @DELETE(BASE_PATH + "/{user_uuid}" + V1)

@@ -65,6 +65,30 @@ public interface UserStoreUsersService {
     <T> List<User<T>> listWithMetaData(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Class<T> metadataType, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
+     * Create a user in a userstore.
+     * @param tokenProxy The token proxy to use for authentication
+     * @param userStore The resource identifier of the user store
+     * @param userEmail The email of the user to be created
+     * @param onSuccess The URL to redirect the user to after the create
+     * @param onError The URL to redirect the user to if the create fails
+     * @param params Additional parameters to be sent as part of the request
+     * @throws HodErrorException
+     */
+    void create(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String userEmail, URL onSuccess, URL onError, CreateUserRequestBuilder params) throws HodErrorException;
+
+    /**
+     * Create a user in a userstore, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * @param userStore The resource identifier of the user store
+     * @param userEmail The email of the user to be created
+     * @param onSuccess The URL to redirect the user to after the create
+     * @param onError The URL to redirect the user to if the create fails
+     * @param params Additional parameters to be sent as part of the request
+     * @throws HodErrorException
+     * @throws NullPointerException If a TokenProxyService is not configured
+     */
+    void create(ResourceIdentifier userStore, String userEmail, URL onSuccess, URL onError, CreateUserRequestBuilder params) throws HodErrorException;
+
+    /**
      * Delete a user with a uuid from a userstore.
      * @param tokenProxy The token proxy to use for authentication
      * @param userStore The resource identifier of the user store

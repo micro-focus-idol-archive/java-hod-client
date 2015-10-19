@@ -75,6 +75,29 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
+    public void create(
+            TokenProxy<?, TokenType.Simple> tokenProxy,
+            ResourceIdentifier userStore,
+            String userEmail,
+            URL onSuccess,
+            URL onError,
+            CreateUserRequestBuilder params
+    ) throws HodErrorException {
+        requester.makeRequest(tokenProxy, Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
+    }
+
+    @Override
+    public void create(
+            ResourceIdentifier userStore,
+            String userEmail,
+            URL onSuccess,
+            URL onError,
+            CreateUserRequestBuilder params
+    ) throws HodErrorException {
+        requester.makeRequest(Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
+    }
+
+    @Override
     public void delete(
             final TokenProxy<?, TokenType.Simple> tokenProxy,
             final ResourceIdentifier userStore,
@@ -106,6 +129,15 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
                 return backend.list(token, userStore, includeMetadata, includeAccounts, includeGroups);
+            }
+        };
+    }
+
+    private Requester.BackendCaller<EntityType, TokenType.Simple> createBackendCaller(final ResourceIdentifier userStore, final String userEmail, final URL onSuccess, final URL onError, final CreateUserRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
+            @Override
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
+                return backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString(), params.build());
             }
         };
     }
