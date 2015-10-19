@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.developer;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.authentication.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -19,6 +20,7 @@ import org.junit.runners.Parameterized;
 import java.util.List;
 import java.util.UUID;
 
+import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
@@ -93,28 +95,22 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
 
     @Test
     public void failsToCreateDuplicateApplication() {
-        HodErrorException exception = null;
-
-        try {
-            service.create(developerToken, DOMAIN_NAME, APPLICATION_NAME, APPLICATION_DESCRIPTION);
-        } catch (final HodErrorException e) {
-            exception = e;
-        }
-
-        assertThat(exception.getErrorCode(), is(HodErrorCode.INVALID_JOB_ACTION_PARAMETER));
+        testErrorCode(HodErrorCode.INVALID_JOB_ACTION_PARAMETER, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.create(developerToken, DOMAIN_NAME, APPLICATION_NAME, APPLICATION_DESCRIPTION);
+            }
+        });
     }
 
     @Test
     public void failsToDeleteNonExistentApplication() {
-        HodErrorException exception = null;
-
-        try {
-            service.delete(developerToken, DOMAIN_NAME, randomName());
-        } catch (final HodErrorException e) {
-            exception = e;
-        }
-
-        assertThat(exception.getErrorCode(), is(HodErrorCode.INVALID_APPLICATION));
+        testErrorCode(HodErrorCode.INVALID_APPLICATION, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.delete(developerToken, DOMAIN_NAME, randomName());
+            }
+        });
     }
 
     @Test

@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -20,11 +21,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
+import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 // TODO: Enable UserStoreUsersService tests when the APIs are deployed on preview.havenondemand.com
 // TODO: Add more tests for list user in user store when it is deployed
@@ -94,35 +94,31 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void testResetThrowsWhenUserNotFound() throws MalformedURLException {
-        try {
-            service.resetAuthentication(
-                getTokenProxy(),
-                USER_STORE,
-                "foo@example.com",
-                new URL("http://www.example.com"),
-                new URL("http://www.example.com")
-            );
+        final URL testUrl = new URL("http://www.example.com");
 
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.USER_NOT_FOUND));
-        }
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.resetAuthentication(getTokenProxy(), USER_STORE, "foo@example.com", testUrl, testUrl);
+            }
+        });
     }
 
     @Test
     public void testResetThrowsWhenUserStoreNotFound() throws MalformedURLException {
-        try {
-            service.resetAuthentication(
-                getTokenProxy(),
-                new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
-                "foo@example.com",
-                new URL("http://www.example.com"),
-                new URL("http://www.example.com")
-            );
+        final URL testUrl = new URL("http://www.example.com");
 
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.STORE_NOT_FOUND));
-        }
+        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.resetAuthentication(
+                    getTokenProxy(),
+                    new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
+                    "foo@example.com",
+                    testUrl,
+                    testUrl
+                );
+            }
+        });
     }
 }
