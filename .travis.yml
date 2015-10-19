@@ -3,10 +3,10 @@ jdk:
 - oraclejdk7
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
-before_script: ruby provision/setup-test-environment.rb $INT_API_KEY $HOD_APPLICATION $HOD_DOMAIN
-script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.int.hod.apiKey=$INT_API_KEY -Dhp.hod.env=INTEGRATION -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN -Dhp.hod.developerEmail=$HOD_DEVELOPER_EMAIL
+before_script: ruby provision/setup-test-environment.rb $PREVIEW_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
+script: mvn verify -Prelease -Dhp.hod.apiKey=$API_KEY -Dhp.int.hod.apiKey=$INT_API_KEY -Dhp.preview.hod.apiKey=$PREVIEW_API_KEY -Dhp.hod.env=$HOD_ENV -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN -Dhp.hod.developerEmail=$HOD_DEVELOPER_EMAIL
 after_success: bash travis.sh
-after_script: ruby provision/destroy-test-environment.rb $INT_API_KEY $HOD_APPLICATION $HOD_DOMAIN
+after_script: ruby provision/destroy-test-environment.rb $PREVIEW_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
 env:
   global:
   # SONATYPE_USERNAME
@@ -23,6 +23,8 @@ env:
   - secure: FNjOFgBF2VV3xFS769ikIWGSRvkEOohW6bm0G+qtXY6C0ApZHtfIoP4EJ39D1zWbmS7GNDOdIMGDkT2tkNwstRUgaBV49z8l5KO6LKtvMDzfq5Pd8LnZpyigRbdIyA4fSvhwkMEtIJ02yL3EzNwk2ZBNQC+jnW7HEkOmEuPwvag=
   # INT_API_KEY
   - secure: PWzpD0Ac9ELCdkwIMyHf8ylq3Cp3rrFZZ4+ga3fV+/XAn2k8AJ1/X3KZuRxiLj8e7McEyGXh8AJT35xSoEwLfvLi+iQp0SqKGPIhY771SpZBQcXph8n28NoiGvFwXp0l/FQwiYg9qGfhF5pT2NwFnmavrp+h9SQ7ruZffrNo8Wc=
+  # PREVIEW_API_KEY
+  - secure: CJ++BiYgUbXbV+T9IYkuecKO2Wlhn1ow+kJSipoJ2gypH+unEU4DmQVewesGTINXgeD8fkJq/Kbq2jd+EI8Z/+HIM3CaH4lVUaWl4PzHtKvvrrlOaoefkUhW31Z29Fv4ILVoXk8URlZJXwroPHUrrtXc+TBxevifNa7z4VgX4oI=
   # GITHUB_TOKEN
   - secure: lFlg8557sEpm61f8G/3d0bz/C/arHJxEX7ag5q8bYNtwxXFf1Roikwr7M8PfD7CKYqdwIMxrtsoMsaj2D4PeFKTJWNWA/K46yg2rU4q7qZounPJnAwXQeKyaO7KsuO3d1Cez5cQhuypfOL02+d5t2vWU3L4R1sbQGg1HokCwbwU=
   # HOD_APPLICATION
@@ -31,3 +33,4 @@ env:
   - secure: PPG2bfc7BdCsMC6AU6viHTVXYZyjW8MD4iCOhjRvs/4B/BBLaIwElMNFbgLVPkmrK3ol1lM0CH4ydKg5i7stZhdjIiytX/QL9qV/LLv1XJ1ouvLpvkHyUXsYCa5MHTzK3Cqwh4szzEz3/PmAeyY92UJEym+W8vs8DbBmZl+oGn8=
   # HOD_DEVELOPER_EMAIL
   - secure: aWJtwYXJRdiIdgh4VvkTYQfdUcI2giq2AQSJVJEP5ad9Np4UwXTBV+1lZDwK/10vJEJ/XDXQWiHRZpyr06v/05edFV7xAto7Ur4RUL8gfR9UKBx9yiafkr/EcDNXa2zq/pDbEgmuPCYtiT3O9+3L3fuZXyhBAT2U4I9aKxrZgYM=
+  - HOD_ENV=PREVIEW

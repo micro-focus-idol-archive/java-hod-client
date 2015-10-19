@@ -54,8 +54,6 @@ import static org.hamcrest.core.Is.is;
  *
  * Last modified by $Author:$ on $Date:$
  */
-// TODO: Enable AuthenticationService integration tests when the integration environment supports the token information API
-@Ignore
 @RunWith(Parameterized.class)
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {

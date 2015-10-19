@@ -27,8 +27,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 // TODO: Add assign/remove user from group tests when it is possible to create a user, or at least to get an existing user's UUID
-// TODO: Enable GroupsService tests when the APIs are deployed on int.havenondemand.com
-@Ignore
 @RunWith(Parameterized.class)
 public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     private static final EnumSet<HodErrorCode> GROUP_OR_USER_NOT_FOUND = EnumSet.of(HodErrorCode.GROUP_NOT_FOUND, HodErrorCode.USER_NOT_FOUND);
