@@ -13,7 +13,6 @@ import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.Data;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -28,9 +27,7 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-// TODO: Enable UserStoreUsersService tests when the APIs are deployed on preview.havenondemand.com
 // TODO: Add more tests for list user in user store when it is deployed
-@Ignore
 @RunWith(Parameterized.class)
 public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegrationTest {
     private UserStoreUsersService service;
