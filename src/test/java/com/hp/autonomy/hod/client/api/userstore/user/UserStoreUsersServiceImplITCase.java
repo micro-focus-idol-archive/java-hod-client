@@ -94,6 +94,13 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     }
 
     @Test
+    public void createUser() throws HodErrorException, MalformedURLException {
+        final URL testUrl = new URL("http://www.example.com");
+
+        service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl);
+    }
+
+    @Test
     public void deleteNonExistentUser() throws HodErrorException {
         testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override

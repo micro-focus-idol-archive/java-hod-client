@@ -36,6 +36,16 @@ interface UserStoreUsersBackend {
         @Query("include_groups") boolean includeGroups
     ) throws HodErrorException;
 
+    @POST(BASE_PATH + V1)
+    @Multipart
+    Response create(
+            @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
+            @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+            @Part("user_email") String email,
+            @Part("on_success") String onSuccess,
+            @Part("on_error") String onError
+    ) throws HodErrorException;
+
     @DELETE(BASE_PATH + "/{user_uuid}" + V1)
     Response delete(
             @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
