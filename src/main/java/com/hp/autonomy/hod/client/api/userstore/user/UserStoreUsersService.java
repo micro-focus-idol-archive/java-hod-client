@@ -71,9 +71,10 @@ public interface UserStoreUsersService {
      * @param userEmail The email of the user to be created
      * @param onSuccess The URL to redirect the user to after the create
      * @param onError The URL to redirect the user to if the create fails
+     * @param params Additional parameters to be sent as part of the request
      * @throws HodErrorException
      */
-    void create(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String userEmail, URL onSuccess, URL onError) throws HodErrorException;
+    void create(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String userEmail, URL onSuccess, URL onError, CreateUserRequestBuilder params) throws HodErrorException;
 
     /**
      * Create a user in a userstore, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -81,10 +82,11 @@ public interface UserStoreUsersService {
      * @param userEmail The email of the user to be created
      * @param onSuccess The URL to redirect the user to after the create
      * @param onError The URL to redirect the user to if the create fails
+     * @param params Additional parameters to be sent as part of the request
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    void create(ResourceIdentifier userStore, String userEmail, URL onSuccess, URL onError) throws HodErrorException;
+    void create(ResourceIdentifier userStore, String userEmail, URL onSuccess, URL onError, CreateUserRequestBuilder params) throws HodErrorException;
 
     /**
      * Delete a user with a uuid from a userstore.

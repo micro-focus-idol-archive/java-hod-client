@@ -80,9 +80,10 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
             ResourceIdentifier userStore,
             String userEmail,
             URL onSuccess,
-            URL onError
+            URL onError,
+            CreateUserRequestBuilder params
     ) throws HodErrorException {
-        requester.makeRequest(tokenProxy, Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError));
+        requester.makeRequest(tokenProxy, Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
     }
 
     @Override
@@ -90,9 +91,10 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
             ResourceIdentifier userStore,
             String userEmail,
             URL onSuccess,
-            URL onError
+            URL onError,
+            CreateUserRequestBuilder params
     ) throws HodErrorException {
-        requester.makeRequest(Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError));
+        requester.makeRequest(Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
     }
 
     @Override
@@ -131,11 +133,11 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         };
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> createBackendCaller(final ResourceIdentifier userStore, final String userEmail, final URL onSuccess, final URL onError) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> createBackendCaller(final ResourceIdentifier userStore, final String userEmail, final URL onSuccess, final URL onError, final CreateUserRequestBuilder params) {
         return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
-                return backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString());
+                return backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString(), params.build());
             }
         };
     }

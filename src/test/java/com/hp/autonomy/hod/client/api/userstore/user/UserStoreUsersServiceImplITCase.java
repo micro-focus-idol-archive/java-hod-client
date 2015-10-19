@@ -11,6 +11,7 @@ import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import lombok.Data;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -97,7 +98,18 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     public void createUser() throws HodErrorException, MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
-        service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl);
+        service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl, null);
+    }
+
+    @Test
+    public void createUserWithMessageAndMetadata() throws HodErrorException, MalformedURLException {
+        final URL testUrl = new URL("http://www.example.com");
+
+        final CreateUserRequestBuilder builder = new CreateUserRequestBuilder()
+                .setMetadata(new TestMetadata(54))
+                .setUserMessage("Welcome to My Super Cool App!");
+
+        service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl, builder);
     }
 
     @Test
@@ -138,5 +150,14 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                 );
             }
         });
+    }
+
+    @Data
+    private static class TestMetadata {
+        private final int age;
+
+        private TestMetadata(final int age) {
+            this.age = age;
+        }
     }
 }

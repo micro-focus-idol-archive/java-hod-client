@@ -17,7 +17,9 @@ import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.http.QueryMap;
 
+import java.util.Map;
 import java.util.UUID;
 
 interface UserStoreUsersBackend {
@@ -43,7 +45,8 @@ interface UserStoreUsersBackend {
             @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
             @Part("user_email") String email,
             @Part("on_success") String onSuccess,
-            @Part("on_error") String onError
+            @Part("on_error") String onError,
+            @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
     @DELETE(BASE_PATH + "/{user_uuid}" + V1)
