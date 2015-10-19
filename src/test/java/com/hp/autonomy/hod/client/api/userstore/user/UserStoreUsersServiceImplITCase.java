@@ -20,8 +20,10 @@ import org.junit.runners.Parameterized;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -89,6 +91,15 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
             assertThat(user.getGroups(), not(nullValue()));
+        }
+    }
+
+    @Test
+    public void deleteNonExistentUser() throws HodErrorException {
+        try {
+            service.delete(getTokenProxy(), USER_STORE, new UUID(0, 0));
+        } catch (HodErrorException e) {
+            assertThat(e.getErrorCode(), equalTo(HodErrorCode.USER_NOT_FOUND));
         }
     }
 
