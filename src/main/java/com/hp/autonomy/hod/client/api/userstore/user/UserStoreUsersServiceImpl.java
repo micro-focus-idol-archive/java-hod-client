@@ -76,23 +76,23 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
 
     @Override
     public void create(
-            TokenProxy<?, TokenType.Simple> tokenProxy,
-            ResourceIdentifier userStore,
-            String userEmail,
-            URL onSuccess,
-            URL onError,
-            CreateUserRequestBuilder params
+            final TokenProxy<?, TokenType.Simple> tokenProxy,
+            final ResourceIdentifier userStore,
+            final String userEmail,
+            final URL onSuccess,
+            final URL onError,
+            final CreateUserRequestBuilder params
     ) throws HodErrorException {
         requester.makeRequest(tokenProxy, Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
     }
 
     @Override
     public void create(
-            ResourceIdentifier userStore,
-            String userEmail,
-            URL onSuccess,
-            URL onError,
-            CreateUserRequestBuilder params
+            final ResourceIdentifier userStore,
+            final String userEmail,
+            final URL onSuccess,
+            final URL onError,
+            final CreateUserRequestBuilder params
     ) throws HodErrorException {
         requester.makeRequest(Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
     }
@@ -115,13 +115,24 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public void resetAuthentication(final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) throws HodErrorException {
-        requester.makeRequest(StatusResponse.class, getResetBackendCaller(userStore, email, onSuccess, onError));
+    public void resetAuthentication(
+        final ResourceIdentifier userStore,
+        final UUID userUuid,
+        final URL onSuccess,
+        final URL onError
+    ) throws HodErrorException {
+        requester.makeRequest(StatusResponse.class, getResetBackendCaller(userStore, userUuid, onSuccess, onError));
     }
 
     @Override
-    public void resetAuthentication(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) throws HodErrorException {
-        requester.makeRequest(tokenProxy, StatusResponse.class, getResetBackendCaller(userStore, email, onSuccess, onError));
+    public void resetAuthentication(
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
+        final ResourceIdentifier userStore,
+        final UUID userUuid,
+        final URL onSuccess,
+        final URL onError
+    ) throws HodErrorException {
+        requester.makeRequest(tokenProxy, StatusResponse.class, getResetBackendCaller(userStore, userUuid, onSuccess, onError));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore, final boolean includeMetadata, final boolean includeAccounts, final boolean includeGroups) {
@@ -151,11 +162,11 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         };
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getResetBackendCaller(final ResourceIdentifier userStore, final String email, final URL onSuccess, final URL onError) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getResetBackendCaller(final ResourceIdentifier userStore, final UUID userUuid, final URL onSuccess, final URL onError) {
         return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return backend.resetAuthentication(authenticationToken, userStore, email, onSuccess.toString(), onError.toString());
+                return backend.resetAuthentication(authenticationToken, userStore, userUuid, onSuccess.toString(), onError.toString());
             }
         };
     }
