@@ -76,23 +76,23 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
 
     @Override
     public void create(
-            TokenProxy<?, TokenType.Simple> tokenProxy,
-            ResourceIdentifier userStore,
-            String userEmail,
-            URL onSuccess,
-            URL onError,
-            CreateUserRequestBuilder params
+            final TokenProxy<?, TokenType.Simple> tokenProxy,
+            final ResourceIdentifier userStore,
+            final String userEmail,
+            final URL onSuccess,
+            final URL onError,
+            final CreateUserRequestBuilder params
     ) throws HodErrorException {
         requester.makeRequest(tokenProxy, Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
     }
 
     @Override
     public void create(
-            ResourceIdentifier userStore,
-            String userEmail,
-            URL onSuccess,
-            URL onError,
-            CreateUserRequestBuilder params
+            final ResourceIdentifier userStore,
+            final String userEmail,
+            final URL onSuccess,
+            final URL onError,
+            final CreateUserRequestBuilder params
     ) throws HodErrorException {
         requester.makeRequest(Void.class, createBackendCaller(userStore, userEmail, onSuccess, onError, params));
     }

@@ -117,10 +117,10 @@ public interface UserStoreUsersService {
      * @throws NullPointerException If a TokenProxyService is not configured
      */
     void resetAuthentication(
-        final ResourceIdentifier userStore,
-        final UUID userUuid,
-        final URL onSuccess,
-        final URL onError
+        ResourceIdentifier userStore,
+        UUID userUuid,
+        URL onSuccess,
+        URL onError
     ) throws HodErrorException;
 
     /**
@@ -133,11 +133,11 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      */
     void resetAuthentication(
-        final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceIdentifier userStore,
-        final UUID userUuid,
-        final URL onSuccess,
-        final URL onError
+        TokenProxy<?, TokenType.Simple> tokenProxy,
+        ResourceIdentifier userStore,
+        UUID userUuid,
+        URL onSuccess,
+        URL onError
     ) throws HodErrorException;
 
 }
