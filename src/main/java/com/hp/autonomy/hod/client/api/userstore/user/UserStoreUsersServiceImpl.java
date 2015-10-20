@@ -148,7 +148,7 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
-                return backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString(), params.build());
+                return backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString(), params == null ? null : params.build());
             }
         };
     }
