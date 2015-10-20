@@ -63,6 +63,12 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), nullValue());
             assertThat(user.getGroups(), nullValue());
+
+            for (final Account account : user.getAccounts()) {
+                assertThat(account.getAccount(), not(nullValue()));
+                assertThat(account.getStatus(), not(nullValue()));
+                assertThat(account.getType(), not(nullValue()));
+            }
         }
     }
 
@@ -75,6 +81,14 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), not(nullValue()));
             assertThat(user.getGroups(), not(nullValue()));
+
+            for (final String name : user.getDirectGroups()) {
+                assertThat(name, not(nullValue()));
+            }
+
+            for (final String name : user.getGroups()) {
+                assertThat(name, not(nullValue()));
+            }
         }
     }
 
@@ -87,6 +101,20 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
             assertThat(user.getGroups(), not(nullValue()));
+
+            for (final String name : user.getDirectGroups()) {
+                assertThat(name, not(nullValue()));
+            }
+
+            for (final String name : user.getGroups()) {
+                assertThat(name, not(nullValue()));
+            }
+
+            for (final Account account : user.getAccounts()) {
+                assertThat(account.getAccount(), not(nullValue()));
+                assertThat(account.getStatus(), not(nullValue()));
+                assertThat(account.getType(), not(nullValue()));
+            }
         }
     }
 
