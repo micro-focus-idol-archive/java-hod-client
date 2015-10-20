@@ -107,10 +107,10 @@ public interface UserStoreUsersService {
     void delete(ResourceIdentifier userStore, UUID userUuid) throws HodErrorException;
 
     /**
-     * Resets the authentication associated with the given user store and email address, using a
+     * Resets the authentication associated with the given user store and UUID, using a
      * {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * @param userStore The resource identifier of the user store
-     * @param email The email address associated with the authentication
+     * @param userUuid The UUID of the user
      * @param onSuccess The URL to redirect the user to after the reset
      * @param onError The URL to redirect the user to if the reset fails
      * @throws HodErrorException
@@ -118,16 +118,16 @@ public interface UserStoreUsersService {
      */
     void resetAuthentication(
         final ResourceIdentifier userStore,
-        final String email,
+        final UUID userUuid,
         final URL onSuccess,
         final URL onError
     ) throws HodErrorException;
 
     /**
-     * Resets the authentication associated with the given user store and email address, using the given {@link TokenProxy}
+     * Resets the authentication associated with the given user store and UUID, using the given {@link TokenProxy}
      * @param tokenProxy The token proxy to use to make the request
      * @param userStore The resource identifier of the user store
-     * @param email The email address associated with the authentication
+     * @param userUuid The UUID of the user
      * @param onSuccess The URL to redirect the user to after the reset
      * @param onError The URL to redirect the user to if the reset fails
      * @throws HodErrorException
@@ -135,7 +135,7 @@ public interface UserStoreUsersService {
     void resetAuthentication(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier userStore,
-        final String email,
+        final UUID userUuid,
         final URL onSuccess,
         final URL onError
     ) throws HodErrorException;

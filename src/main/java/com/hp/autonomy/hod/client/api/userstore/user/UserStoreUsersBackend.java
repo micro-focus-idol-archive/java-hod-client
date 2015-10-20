@@ -56,12 +56,12 @@ interface UserStoreUsersBackend {
             @Path("user_uuid") UUID userUuid
     ) throws HodErrorException;
 
-    @POST(BASE_PATH + "/reset" + V1)
+    @POST(BASE_PATH + "/{user_uuid}/reset" + V1)
     @Multipart
     Response resetAuthentication(
         @Header(TOKEN_HEADER) final AuthenticationToken<?, ?> token,
         @Path(USER_STORE_VARIABLE) final ResourceIdentifier userStore,
-        @Part("user_email") final String email,
+        @Path("user_uuid") final UUID userUuid,
         @Part("on_success") final String onSuccess,
         @Part("on_error") final String onError
     ) throws HodErrorException;

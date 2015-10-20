@@ -27,7 +27,6 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-// TODO: Add more tests for list user in user store when it is deployed
 @RunWith(Parameterized.class)
 public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegrationTest {
     private UserStoreUsersService service;
@@ -126,7 +125,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.resetAuthentication(getTokenProxy(), USER_STORE, "foo@example.com", testUrl, testUrl);
+                service.resetAuthentication(getTokenProxy(), USER_STORE, UUID.randomUUID(), testUrl, testUrl);
             }
         });
     }
@@ -141,7 +140,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                 service.resetAuthentication(
                     getTokenProxy(),
                     new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
-                    "foo@example.com",
+                    UUID.randomUUID(),
                     testUrl,
                     testUrl
                 );
