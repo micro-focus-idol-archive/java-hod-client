@@ -140,4 +140,32 @@ public interface UserStoreUsersService {
         URL onError
     ) throws HodErrorException;
 
+    /**
+     * List the groups associated with the given user using a configured {@link com.hp.autonomy.hod.client.token.TokenProxyService}
+     * for authentication.
+     * @param userStore The user store of the user
+     * @param userUuid The UUID of the user
+     * @return
+     * @throws HodErrorException
+     * @throws NullPointerException If a TokenProxyService is not configured
+     */
+    UserGroups listUserGroups(
+        ResourceIdentifier userStore,
+        UUID userUuid
+    ) throws HodErrorException;
+
+    /**
+     * List the groups associated with the given user using a TokenProxy.
+     * @param tokenProxy The TokenProxy to use for authentication
+     * @param userStore The user store of the user
+     * @param userUuid The UUID of the user
+     * @return
+     * @throws HodErrorException
+     */
+    UserGroups listUserGroups(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
+        ResourceIdentifier userStore,
+        UUID userUuid
+    ) throws HodErrorException;
+
 }

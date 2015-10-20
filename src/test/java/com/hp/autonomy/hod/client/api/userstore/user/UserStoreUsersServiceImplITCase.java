@@ -176,6 +176,34 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         });
     }
 
+    @Test
+    public void listUserGroupsThrowsWithNonExistentUser() {
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.listUserGroups(
+                    getTokenProxy(),
+                    USER_STORE,
+                    UUID.randomUUID()
+                );
+            }
+        });
+    }
+
+    @Test
+    public void listUserGroupsThrowsWithNonExistentUserStore() {
+        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.listUserGroups(
+                    getTokenProxy(),
+                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstorereally"),
+                    UUID.randomUUID()
+                );
+            }
+        });
+    }
+
     @Data
     private static class TestMetadata {
         private final int age;

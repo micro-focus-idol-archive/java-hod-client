@@ -12,11 +12,11 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.util.StatusResponse;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
+import com.hp.autonomy.hod.client.util.StatusResponse;
 import retrofit.client.Response;
 
 import java.net.URL;
@@ -135,6 +135,23 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         requester.makeRequest(tokenProxy, StatusResponse.class, getResetBackendCaller(userStore, userUuid, onSuccess, onError));
     }
 
+    @Override
+    public UserGroups listUserGroups(
+        final ResourceIdentifier userStore,
+        final UUID userUuid
+    ) throws HodErrorException {
+        return requester.makeRequest(UserGroups.class, listUserGroupsBackendCaller(userStore, userUuid));
+    }
+
+    @Override
+    public UserGroups listUserGroups(
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
+        final ResourceIdentifier userStore,
+        final UUID userUuid
+    ) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, UserGroups.class, listUserGroupsBackendCaller(userStore, userUuid));
+    }
+
     private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore, final boolean includeMetadata, final boolean includeAccounts, final boolean includeGroups) {
         return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
@@ -167,6 +184,15 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return backend.resetAuthentication(authenticationToken, userStore, userUuid, onSuccess.toString(), onError.toString());
+            }
+        };
+    }
+
+    private Requester.BackendCaller<EntityType, TokenType.Simple> listUserGroupsBackendCaller(final ResourceIdentifier userStore, final UUID userUuid) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
+            @Override
+            public Response makeRequest(final AuthenticationToken<? extends EntityType, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
+                return backend.listUserGroups(authenticationToken, userStore, userUuid);
             }
         };
     }

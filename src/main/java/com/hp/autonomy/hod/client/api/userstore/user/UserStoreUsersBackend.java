@@ -9,15 +9,7 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
-import retrofit.http.DELETE;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.Path;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
+import retrofit.http.*;
 
 import java.util.Map;
 import java.util.UUID;
@@ -64,6 +56,13 @@ interface UserStoreUsersBackend {
         @Path("user_uuid") UUID userUuid,
         @Part("on_success") String onSuccess,
         @Part("on_error") String onError
+    ) throws HodErrorException;
+
+    @GET(BASE_PATH + "/{user_uuid}/group" + V1)
+    Response listUserGroups(
+        @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path("user_uuid") UUID userUuid
     ) throws HodErrorException;
 
 }
