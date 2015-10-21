@@ -23,11 +23,11 @@ public class DeveloperTokenInformation {
     /**
      * @return Information about the developer authenticated by this token.
      */
-    private final UserInformation developer;
+    private final DeveloperInformation developer;
 
     public DeveloperTokenInformation(
         @JsonProperty("tenant_uuid") final UUID tenantUuid,
-        @JsonProperty("developer") final UserInformation developer
+        @JsonProperty("developer") final DeveloperInformation developer
     ) {
         this.tenantUuid = tenantUuid;
         this.developer = developer;

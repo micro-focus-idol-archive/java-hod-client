@@ -27,7 +27,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.joda.time.DateTime;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -189,7 +188,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getUser().getUuid(), not(nullValue()));
-        assertThat(information.getUser().getName(), not(nullValue()));
         assertThat(information.getUser().getAuthentication(), not(nullValue()));
 
         assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
@@ -205,7 +203,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(information.getTenantUuid(), is(tenantUuid));
 
         assertThat(information.getUser().getUuid(), not(nullValue()));
-        assertThat(information.getUser().getName(), not(nullValue()));
         assertThat(information.getUser().getAuthentication(), not(nullValue()));
 
         assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
@@ -324,7 +321,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
         assertThat(information.getUserStore().getUuid(), not(nullValue()));
 
-        assertThat(information.getUser().getName(), not(nullValue()));
         assertThat(information.getUser().getUuid(), not(nullValue()));
 
         assertThat(information.getUser().getAuthentication().getType(), not(nullValue()));

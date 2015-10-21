@@ -11,25 +11,32 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Information about the user component of an authentication token.
+ * Information about the developer component of an authentication token.
  */
 @Data
-public class UserInformation {
+public class DeveloperInformation {
     /**
-     * @return The UUID of the user
+     * @return The UUID of the tenant containing the entities associated with this token
      */
     private final UUID uuid;
 
     /**
-     * @return Information about the mechanism used to authenticate the user
+     * @return The name of the developer
+     */
+    private final String name;
+
+    /**
+     * @return Information about the mechanism used to authenticate the developer
      */
     private final AuthenticationInformation authentication;
 
-    public UserInformation(
+    public DeveloperInformation(
         @JsonProperty("uuid") final UUID uuid,
+        @JsonProperty("name") final String name,
         @JsonProperty("auth") final AuthenticationInformation authentication
     ) {
         this.uuid = uuid;
+        this.name = name;
         this.authentication = authentication;
     }
 }
