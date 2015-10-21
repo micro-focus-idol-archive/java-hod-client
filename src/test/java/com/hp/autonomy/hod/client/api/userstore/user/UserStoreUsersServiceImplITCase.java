@@ -56,7 +56,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithAccounts() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, true);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
@@ -74,7 +74,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, true);
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
