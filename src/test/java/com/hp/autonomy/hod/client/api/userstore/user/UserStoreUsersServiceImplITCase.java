@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
+import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.anEmptyMap;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -357,7 +357,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     }
 
     @Test
-    public void addGetRemoveMetadata() throws HodErrorException {
+    public void addGetRemoveMetadatum() throws HodErrorException {
         final String key = randomString();
 
         final Map<String, Object> metadata = new HashMap<>();
@@ -370,14 +370,93 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         metadataTypes.put(key, TestMetadata.class);
 
         final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        assertThat(outputMetadata, is(aMapWithSize(1)));
+
         final Object outputTestMetadata = outputMetadata.get(key);
-        assertThat(outputTestMetadata, instanceOf(TestMetadata.class));
         assertThat((TestMetadata) outputTestMetadata, is(testMetadata));
 
         service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, key);
 
         final Map<String, Object> outputMetadata2 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
         assertThat(outputMetadata2, is(anEmptyMap()));
+    }
+
+    @Test
+    public void addGetRemoveMetadata() throws HodErrorException {
+        final String integerKey = randomString();
+        final String stringKey = randomString();
+        final String testDataKey = randomString();
+
+        final Integer integer = 3;
+        final String string = "myString";
+        final TestMetadata testMetadata = new TestMetadata(13, "penny");
+
+        final Map<String, Object> metadata = new HashMap<>();
+        metadata.put(integerKey, integer);
+        metadata.put(stringKey, string);
+        metadata.put(testDataKey, testMetadata);
+
+        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        metadataTypes.put(integerKey, Integer.class);
+        metadataTypes.put(stringKey, String.class);
+        metadataTypes.put(testDataKey, TestMetadata.class);
+
+        // Add three metadata keys
+        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
+
+        // Check the correct metadata values were associated with the keys
+        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        assertThat(outputMetadata, is(aMapWithSize(3)));
+
+        assertThat((Integer) outputMetadata.get(integerKey), is(integer));
+        assertThat((String) outputMetadata.get(stringKey), is(string));
+        assertThat((TestMetadata) outputMetadata.get(testDataKey), is(testMetadata));
+
+        // Remove one of the keys
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, integerKey);
+
+        // Check the correct key was removed
+        final Map<String, Object> outputMetadata2 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        assertThat(outputMetadata2, is(aMapWithSize(2)));
+
+        assertThat((String) outputMetadata.get(stringKey), is(string));
+        assertThat((TestMetadata) outputMetadata.get(testDataKey), is(testMetadata));
+
+        // Remove all added keys
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, stringKey);
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, testDataKey);
+
+        // Check all keys were removed
+        final Map<String, Object> outputMetadata3 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        assertThat(outputMetadata3, is(anEmptyMap()));
+    }
+
+    @Test
+    public void getUserMetadataIgnoresIncorrectMetadataType() throws HodErrorException {
+        final String key = randomString();
+        final Integer value = 5;
+
+        final Map<String, Object> metadata = new HashMap<>();
+        metadata.put(key, value);
+
+        final Map<String, Class<?>> incorrectMetadataTypes = new HashMap<>();
+        metadata.put(key, TestMetadata.class);
+
+        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
+
+        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, incorrectMetadataTypes);
+        assertThat(outputMetadata, is(anEmptyMap()));
+
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, key);
+    }
+
+    @Test
+    public void getUserMetadataIgnoresMissingMetadataKey() throws HodErrorException {
+        final Map<String, Class<?>> missingMetadataTypes = new HashMap<>();
+        missingMetadataTypes.put(randomString(), Integer.class);
+
+        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, missingMetadataTypes);
+        assertThat(outputMetadata, is(anEmptyMap()));
     }
 
     private String randomString() {
