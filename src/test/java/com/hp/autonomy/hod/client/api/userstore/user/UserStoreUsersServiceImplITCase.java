@@ -19,6 +19,7 @@ import org.junit.runners.Parameterized;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -199,6 +200,96 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                     getTokenProxy(),
                     new ResourceIdentifier(DOMAIN_NAME, "notarealuserstorereally"),
                     UUID.randomUUID()
+                );
+            }
+        });
+    }
+
+    @Test
+    public void getUserMetadataThrowsWithNonExistentUser() {
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.getUserMetadata(
+                    getTokenProxy(),
+                    USER_STORE,
+                    UUID.randomUUID(),
+                    new HashMap<String, Class<?>>()
+                );
+            }
+        });
+    }
+
+    @Test
+    public void getUserMetadataThrowsWithNonExistentUserStore() {
+        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.getUserMetadata(
+                    getTokenProxy(),
+                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
+                    UUID.randomUUID(),
+                    new HashMap<String, Class<?>>()
+                );
+            }
+        });
+    }
+
+    @Test
+    public void addUserMetadataThrowsWithNonExistentUser() {
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.addUserMetadata(
+                    getTokenProxy(),
+                    USER_STORE,
+                    UUID.randomUUID(),
+                    new HashMap<String, Object>()
+                );
+            }
+        });
+    }
+
+    @Test
+    public void addUserMetadataThrowsWithNonExistentUserStore() {
+        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.addUserMetadata(
+                    getTokenProxy(),
+                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
+                    UUID.randomUUID(),
+                    new HashMap<String, Object>()
+                );
+            }
+        });
+    }
+
+    @Test
+    public void removeUserMetadataThrowsWithNonExistentUser() {
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.removeUserMetadata(
+                    getTokenProxy(),
+                    USER_STORE,
+                    UUID.randomUUID(),
+                    "metakey"
+                );
+            }
+        });
+    }
+
+    @Test
+    public void removeUserMetadataThrowsWithNonExistentUserStore() {
+        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.removeUserMetadata(
+                    getTokenProxy(),
+                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
+                    UUID.randomUUID(),
+                    "metakey"
                 );
             }
         });
