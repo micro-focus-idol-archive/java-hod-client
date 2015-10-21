@@ -5,12 +5,16 @@
 
 package com.hp.autonomy.hod.client.api.userstore.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
+import com.hp.autonomy.hod.client.api.authentication.*;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,19 +25,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
+import static org.hamcrest.Matchers.anEmptyMap;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegrationTest {
+    private final ApiKey apiKey;
+
+    private UUID userUuid;
     private UserStoreUsersService service;
 
     public UserStoreUsersServiceImplITCase(final Endpoint endpoint) {
         super(endpoint);
+        apiKey = endpoint.getApiKey();
     }
 
     @Override
@@ -41,23 +54,42 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     public void setUp() {
         super.setUp();
         service = new UserStoreUsersServiceImpl(getConfig());
+
+        final AuthenticationService authenticationService = new AuthenticationServiceImpl(getConfig());
+
+        try {
+            // This assumes that the API key is associated with a valid user
+            final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+            final UserTokenInformation information = authenticationService.getUserTokenInformation(tokenProxy);
+            userUuid = information.getUser().getUuid();
+        } catch (final HodErrorException e) {
+            throw new AssertionError("Failed to determine user UUID", e);
+        }
     }
 
     @Test
     public void listUsersWithoutAccountsOrGroups() throws HodErrorException {
         final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, false);
+        boolean foundUser = false;
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), nullValue());
             assertThat(user.getGroups(), nullValue());
+
+            if (user.getUuid().equals(userUuid)) {
+                foundUser = true;
+            }
         }
+
+        assertTrue("User associated with test API key not found", foundUser);
     }
 
     @Test
     public void listUsersWithAccounts() throws HodErrorException {
         final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
+        boolean foundUser = false;
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
@@ -70,12 +102,19 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                 assertThat(account.getStatus(), not(nullValue()));
                 assertThat(account.getType(), not(nullValue()));
             }
+
+            if (user.getUuid().equals(userUuid)) {
+                foundUser = true;
+            }
         }
+
+        assertTrue("User associated with test API key not found", foundUser);
     }
 
     @Test
     public void listUsersWithGroups() throws HodErrorException {
         final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, true);
+        boolean foundUser = false;
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
@@ -90,12 +129,19 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             for (final String name : user.getGroups()) {
                 assertThat(name, not(nullValue()));
             }
+
+            if (user.getUuid().equals(userUuid)) {
+                foundUser = true;
+            }
         }
+
+        assertTrue("User associated with test API key not found", foundUser);
     }
 
     @Test
     public void listUsersWithAccountsAndGroups() throws HodErrorException {
         final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, true);
+        boolean foundUser = false;
 
         for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
@@ -116,7 +162,13 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                 assertThat(account.getStatus(), not(nullValue()));
                 assertThat(account.getType(), not(nullValue()));
             }
+
+            if (user.getUuid().equals(userUuid)) {
+                foundUser = true;
+            }
         }
+
+        assertTrue("User associated with test API key not found", foundUser);
     }
 
     @Test
@@ -131,7 +183,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         final URL testUrl = new URL("http://www.example.com");
 
         final CreateUserRequestBuilder builder = new CreateUserRequestBuilder()
-                .setMetadata(new TestMetadata(54))
+                .setMetadata(new TestMetadata(54, "fred"))
                 .setUserMessage("Welcome to My Super Cool App!");
 
         service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl, builder);
@@ -295,12 +347,54 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         });
     }
 
+    @Test
+    public void getEmptyMetadata() throws HodErrorException {
+        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        metadataTypes.put(randomString(), TestMetadata.class);
+
+        final Map<String, Object> userMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        assertThat(userMetadata, is(anEmptyMap()));
+    }
+
+    @Test
+    public void addGetRemoveMetadata() throws HodErrorException {
+        final String key = randomString();
+
+        final Map<String, Object> metadata = new HashMap<>();
+        final TestMetadata testMetadata = new TestMetadata(7, "bobby");
+        metadata.put(key, testMetadata);
+
+        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
+
+        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        metadataTypes.put(key, TestMetadata.class);
+
+        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        final Object outputTestMetadata = outputMetadata.get(key);
+        assertThat(outputTestMetadata, instanceOf(TestMetadata.class));
+        assertThat((TestMetadata) outputTestMetadata, is(testMetadata));
+
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, key);
+
+        final Map<String, Object> outputMetadata2 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        assertThat(outputMetadata2, is(anEmptyMap()));
+    }
+
+    private String randomString() {
+        return "hod-client-" + UUID.randomUUID().toString();
+    }
+
     @Data
     private static class TestMetadata {
         private final int age;
+        private final String name;
 
-        private TestMetadata(final int age) {
+        private TestMetadata(
+            @JsonProperty("age") final int age,
+            @JsonProperty("name") final String name
+        ) {
             this.age = age;
+            this.name = name;
         }
     }
 }

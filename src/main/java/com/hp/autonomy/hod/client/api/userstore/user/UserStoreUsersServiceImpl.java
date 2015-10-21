@@ -6,9 +6,9 @@
 package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
@@ -28,7 +28,6 @@ import java.util.*;
 
 @Slf4j
 public class UserStoreUsersServiceImpl implements UserStoreUsersService {
-    private static final TypeReference<List<Metadata<TreeNode>>> LIST_OF_METADATA_TYPE = new TypeReference<List<Metadata<TreeNode>>>() {};
     private static final TypeReference<ListUsersResponse<Void>> NO_METADATA_LIST_TYPE = new TypeReference<ListUsersResponse<Void>>() {};
 
     private final ObjectMapper objectMapper;
@@ -144,13 +143,13 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
 
     @Override
     public Map<String, Object> getUserMetadata(final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<?>> metadataTypes) throws HodErrorException {
-        final List<Metadata<TreeNode>> metadataList = requester.makeRequest(LIST_OF_METADATA_TYPE, getUserMetadataBackendCaller(userStore, userUuid));
+        final List<Metadata<JsonNode>> metadataList = requester.makeRequest(GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata();
         return parseMetadata(metadataList, metadataTypes);
     }
 
     @Override
     public Map<String, Object> getUserMetadata(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<?>> metadataTypes) throws HodErrorException {
-        final List<Metadata<TreeNode>> metadataList = requester.makeRequest(tokenProxy, LIST_OF_METADATA_TYPE, getUserMetadataBackendCaller(userStore, userUuid));
+        final List<Metadata<JsonNode>> metadataList = requester.makeRequest(tokenProxy, GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata();
         return parseMetadata(metadataList, metadataTypes);
     }
 
@@ -191,10 +190,10 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         return requester.makeRequest(tokenProxy, UserGroups.class, listUserGroupsBackendCaller(userStore, userUuid));
     }
 
-    private Map<String, Object> parseMetadata(final List<Metadata<TreeNode>> metadataList, final Map<String, Class<?>> metadataTypes) {
+    private Map<String, Object> parseMetadata(final List<Metadata<JsonNode>> metadataList, final Map<String, Class<?>> metadataTypes) {
         final Map<String, Object> metadata = new HashMap<>();
 
-        for (final Metadata<TreeNode> metadataItem : metadataList) {
+        for (final Metadata<JsonNode> metadataItem : metadataList) {
             final String key = metadataItem.getKey();
             final Class<?> clazz = metadataTypes.get(key);
 
