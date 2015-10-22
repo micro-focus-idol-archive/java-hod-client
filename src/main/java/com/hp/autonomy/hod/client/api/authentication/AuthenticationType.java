@@ -7,11 +7,15 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Represents an HP Haven OnDemand authentication type. The static instances of this class should be used where possible.
  */
 @Data
-public class AuthenticationType {
+public class AuthenticationType implements Serializable {
+    private static final long serialVersionUID = 6461478828380999765L;
+
     /**
      * The legacy API key authentication type.
      */

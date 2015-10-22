@@ -9,11 +9,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Information about the application component of an authentication token.
  */
 @Data
-public class ApplicationInformation {
+public class ApplicationInformation implements Serializable {
+    private static final long serialVersionUID = 5476059811637118050L;
+
     /**
      * @return The name of the application
      */

@@ -9,13 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Information about a user store associated with an authentication token.
  */
 @Data
-public class UserStoreInformation {
+public class UserStoreInformation implements Serializable {
+    private static final long serialVersionUID = 7276817124651403883L;
+
     /**
      * @return The UUID of the user store
      */

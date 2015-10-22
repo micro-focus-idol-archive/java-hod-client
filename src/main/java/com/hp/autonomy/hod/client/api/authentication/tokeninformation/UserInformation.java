@@ -8,13 +8,16 @@ package com.hp.autonomy.hod.client.api.authentication.tokeninformation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Information about the user component of an authentication token.
  */
 @Data
-public class UserInformation {
+public class UserInformation implements Serializable {
+    private static final long serialVersionUID = -2610523494602694306L;
+
     /**
      * @return The UUID of the user
      */

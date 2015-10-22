@@ -9,13 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationType;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Information about the mechanism used to authenticate an entity associated with an authentication token.
  */
 @Data
-public class AuthenticationInformation {
+public class AuthenticationInformation implements Serializable {
+    private static final long serialVersionUID = -9123269747470387420L;
+
     /**
      * @return The UUID of the authentication
      */
