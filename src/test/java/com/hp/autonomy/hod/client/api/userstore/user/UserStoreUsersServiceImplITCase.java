@@ -364,24 +364,24 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     public void addGetRemoveMetadatum() throws HodErrorException {
         final String key = randomString();
 
-        final Map<String, Object> metadata = new HashMap<>();
+        final Map<String, TestMetadata> metadata = new HashMap<>();
         final TestMetadata testMetadata = new TestMetadata(7, "bobby");
         metadata.put(key, testMetadata);
 
-        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        final Map<String, Class<? extends TestMetadata>> metadataTypes = new HashMap<>();
         metadataTypes.put(key, TestMetadata.class);
 
         service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
 
-        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        final Map<String, TestMetadata> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
         assertThat(outputMetadata, is(aMapWithSize(1)));
 
-        final Object outputTestMetadata = outputMetadata.get(key);
-        assertThat((TestMetadata) outputTestMetadata, is(testMetadata));
+        final TestMetadata outputTestMetadata = outputMetadata.get(key);
+        assertThat(outputTestMetadata, is(testMetadata));
 
         service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, key);
 
-        final Map<String, Object> outputMetadata2 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
+        final Map<String, TestMetadata> outputMetadata2 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
         assertThat(outputMetadata2, is(anEmptyMap()));
     }
 

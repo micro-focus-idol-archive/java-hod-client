@@ -137,13 +137,13 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public Map<String, Object> getUserMetadata(final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<?>> metadataTypes) throws HodErrorException {
+    public <T> Map<String, T> getUserMetadata(final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<? extends T>> metadataTypes) throws HodErrorException {
         final List<Metadata<JsonNode>> metadataList = requester.makeRequest(GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata();
         return parseMetadata(metadataList, metadataTypes);
     }
 
     @Override
-    public Map<String, Object> getUserMetadata(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<?>> metadataTypes) throws HodErrorException {
+    public <T> Map<String, T> getUserMetadata(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<? extends T>> metadataTypes) throws HodErrorException {
         final List<Metadata<JsonNode>> metadataList = requester.makeRequest(tokenProxy, GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata();
         return parseMetadata(metadataList, metadataTypes);
     }
@@ -205,16 +205,16 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         return users;
     }
 
-    private Map<String, Object> parseMetadata(final List<Metadata<JsonNode>> metadataList, final Map<String, Class<?>> metadataTypes) {
-        final Map<String, Object> metadata = new HashMap<>();
+    private <T> Map<String, T> parseMetadata(final List<Metadata<JsonNode>> metadataList, final Map<String, Class<? extends T>> metadataTypes) {
+        final Map<String, T> metadata = new HashMap<>();
 
         for (final Metadata<JsonNode> metadataItem : metadataList) {
             final String key = metadataItem.getKey();
-            final Class<?> clazz = metadataTypes.get(key);
+            final Class<? extends T> clazz = metadataTypes.get(key);
 
             if (clazz != null) {
                 try {
-                    final Object value = objectMapper.treeToValue(metadataItem.getValue(), clazz);
+                    final T value = objectMapper.treeToValue(metadataItem.getValue(), clazz);
                     metadata.put(key, value);
                 } catch (final JsonProcessingException e) {
                     log.warn("Failed to parse metadata key " + key, e);

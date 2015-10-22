@@ -151,6 +151,7 @@ public interface UserStoreUsersService {
      * for authentication.
      * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
      * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
+     * @param <T> The type of the values in the returned metadata map
      * @param userStore The resource identifier of the user store
      * @param userUuid The UUID of the user
      * @param metadataTypes The types of values associated with metadata keys
@@ -158,16 +159,17 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    Map<String, Object> getUserMetadata(
+    <T> Map<String, T> getUserMetadata(
         ResourceIdentifier userStore,
         UUID userUuid,
-        Map<String, Class<?>> metadataTypes
+        Map<String, Class<? extends T>> metadataTypes
     ) throws HodErrorException;
 
     /**
      * Get the metadata associated with the given user, using a TokenProxy for authentication.
      * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
      * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
+     * @param <T> The type of the values in the returned metadata map
      * @param tokenProxy Used for authentication
      * @param userStore The resource identifier of the user store
      * @param userUuid The UUID of the user
@@ -175,11 +177,11 @@ public interface UserStoreUsersService {
      * @return A map of metadata keys to parsed values
      * @throws HodErrorException
      */
-    Map<String, Object> getUserMetadata(
+    <T> Map<String, T> getUserMetadata(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         ResourceIdentifier userStore,
         UUID userUuid,
-        Map<String, Class<?>> metadataTypes
+        Map<String, Class<? extends T>> metadataTypes
     ) throws HodErrorException;
 
     /**
