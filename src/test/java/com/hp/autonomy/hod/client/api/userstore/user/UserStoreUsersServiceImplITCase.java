@@ -69,14 +69,15 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithoutAccountsOrGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, false);
+        final List<User> users = service.list(getTokenProxy(), USER_STORE, false, false);
         boolean foundUser = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), nullValue());
             assertThat(user.getGroups(), nullValue());
+            assertThat(user.getMetadata(), nullValue());
 
             if (user.getUuid().equals(userUuid)) {
                 foundUser = true;
@@ -88,14 +89,15 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithAccounts() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
+        final List<User> users = service.list(getTokenProxy(), USER_STORE, true, false);
         boolean foundUser = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), nullValue());
             assertThat(user.getGroups(), nullValue());
+            assertThat(user.getMetadata(), nullValue());
 
             for (final Account account : user.getAccounts()) {
                 assertThat(account.getAccount(), not(nullValue()));
@@ -113,14 +115,15 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, true);
+        final List<User> users = service.list(getTokenProxy(), USER_STORE, false, true);
         boolean foundUser = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), not(nullValue()));
             assertThat(user.getGroups(), not(nullValue()));
+            assertThat(user.getMetadata(), nullValue());
 
             for (final String name : user.getDirectGroups()) {
                 assertThat(name, not(nullValue()));
@@ -140,14 +143,15 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithAccountsAndGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, true);
+        final List<User> users = service.list(getTokenProxy(), USER_STORE, true, true);
         boolean foundUser = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
             assertThat(user.getGroups(), not(nullValue()));
+            assertThat(user.getMetadata(), nullValue());
 
             for (final String name : user.getDirectGroups()) {
                 assertThat(name, not(nullValue()));
@@ -429,6 +433,94 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         // Check all keys were removed
         final Map<String, Object> outputMetadata3 = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
         assertThat(outputMetadata3, is(anEmptyMap()));
+    }
+
+    @Test
+    public void addUserMetadataAndList() throws HodErrorException {
+        final String key = randomString();
+
+        final Map<String, Object> metadata = new HashMap<>();
+        final TestMetadata testMetadata = new TestMetadata(7, "bobby");
+        metadata.put(key, testMetadata);
+
+        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        metadataTypes.put(key, TestMetadata.class);
+
+        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
+
+        final List<User> users = service.listWithMetadata(getTokenProxy(), USER_STORE, metadataTypes, false, false);
+        boolean foundUser = false;
+
+        for (final User user : users) {
+            assertThat(user.getUuid(), not(nullValue()));
+            assertThat(user.getAccounts(), nullValue());
+            assertThat(user.getDirectGroups(), nullValue());
+            assertThat(user.getGroups(), nullValue());
+
+            final Map<String, Object> userMetadata = user.getMetadata();
+
+            if (user.getUuid().equals(userUuid)) {
+                foundUser = true;
+                assertThat(userMetadata, is(metadata));
+            } else {
+                assertThat(userMetadata, is(anEmptyMap()));
+            }
+        }
+
+        assertTrue("User associated with test API key not found", foundUser);
+
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, key);
+    }
+
+    @Test
+    public void addUserMetadataAndListWithAccountsAndGroups() throws HodErrorException {
+        final String key = randomString();
+
+        final Map<String, Object> metadata = new HashMap<>();
+        final TestMetadata testMetadata = new TestMetadata(7, "bobby");
+        metadata.put(key, testMetadata);
+
+        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        metadataTypes.put(key, TestMetadata.class);
+
+        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
+
+        final List<User> users = service.listWithMetadata(getTokenProxy(), USER_STORE, metadataTypes, true, true);
+        boolean foundUser = false;
+
+        for (final User user : users) {
+            assertThat(user.getUuid(), not(nullValue()));
+            assertThat(user.getAccounts(), not(nullValue()));
+            assertThat(user.getDirectGroups(), not(nullValue()));
+            assertThat(user.getGroups(), not(nullValue()));
+
+            for (final String name : user.getDirectGroups()) {
+                assertThat(name, not(nullValue()));
+            }
+
+            for (final String name : user.getGroups()) {
+                assertThat(name, not(nullValue()));
+            }
+
+            for (final Account account : user.getAccounts()) {
+                assertThat(account.getAccount(), not(nullValue()));
+                assertThat(account.getStatus(), not(nullValue()));
+                assertThat(account.getType(), not(nullValue()));
+            }
+
+            final Map<String, Object> userMetadata = user.getMetadata();
+
+            if (user.getUuid().equals(userUuid)) {
+                foundUser = true;
+                assertThat(userMetadata, is(metadata));
+            } else {
+                assertThat(userMetadata, is(anEmptyMap()));
+            }
+        }
+
+        assertTrue("User associated with test API key not found", foundUser);
+
+        service.removeUserMetadata(getTokenProxy(), USER_STORE, userUuid, key);
     }
 
     @Test

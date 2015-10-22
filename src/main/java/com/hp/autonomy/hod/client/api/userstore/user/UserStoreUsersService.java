@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Service for managing users in a Haven OnDemand user store.
+ */
 public interface UserStoreUsersService {
 
     /**
@@ -26,7 +29,7 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    List<User<Void>> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of the users in a user store.
@@ -37,33 +40,35 @@ public interface UserStoreUsersService {
      * @return The users in the user store
      * @throws HodErrorException
      */
-    List<User<Void>> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
+     * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
      * @param userStore The resource identifier of the user store
-     * @param metadataType Class object representing the type of the user metadata
+     * @param metadataTypes The types of values associated with metadata keys
      * @param includeAccounts If true, accounts are listed for each user
      * @param includeGroups If true, groups are listed for each user
-     * @param <T> The type of the user metadata
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    <T> List<User<T>> listWithMetadata(ResourceIdentifier userStore, Class<T> metadataType, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> listWithMetadata(ResourceIdentifier userStore, Map<String, Class<?>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
+     * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
+     * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
      * @param tokenProxy The token proxy to use for authentication
      * @param userStore The resource identifier of the user store
-     * @param metadataType Class object representing the type of the user metadata
+     * @param metadataTypes The types of values associated with metadata keys
      * @param includeAccounts If true, accounts are listed for each user
      * @param includeGroups If true, groups are listed for each user
-     * @param <T> The type of the user metadata
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      */
-    <T> List<User<T>> listWithMetaData(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Class<T> metadataType, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> listWithMetadata(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Map<String, Class<?>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Create a user in a userstore.

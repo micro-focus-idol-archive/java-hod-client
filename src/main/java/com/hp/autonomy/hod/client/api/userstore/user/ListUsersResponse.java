@@ -11,10 +11,10 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-class ListUsersResponse<T> {
-    private final List<User<T>> users;
+class ListUsersResponse {
+    private final List<User.Json> users;
 
-    ListUsersResponse(@JsonProperty("users") final List<User<T>> users) {
+    ListUsersResponse(@JsonProperty("users") final List<User.Json> users) {
         this.users = users;
     }
 }
