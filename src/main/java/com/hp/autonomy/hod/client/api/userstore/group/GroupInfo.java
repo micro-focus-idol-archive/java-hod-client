@@ -13,7 +13,9 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents the return type from the get group info API.
@@ -25,14 +27,19 @@ public class GroupInfo {
     private final ResourceIdentifier userStore;
     private final List<String> parents;
     private final List<String> children;
-    private final List<GroupUser> users;
+    private final List<UUID> users;
 
     private GroupInfo(final Builder builder) {
         name = builder.name;
         userStore = builder.userStore;
         parents = builder.parents;
         children = builder.children;
-        users = builder.users;
+
+        users = new LinkedList<>();
+
+        for (final GroupUser groupUser : builder.users) {
+            users.add(groupUser.getUuid());
+        }
     }
 
     @JsonPOJOBuilder(withPrefix = "set")

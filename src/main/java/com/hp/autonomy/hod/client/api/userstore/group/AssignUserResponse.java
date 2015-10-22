@@ -23,7 +23,7 @@ public class AssignUserResponse {
     public AssignUserResponse(
         @JsonProperty("user_store") final ResourceIdentifier userStore,
         @JsonProperty("group") final String groupName,
-        @JsonProperty("uuid") final UUID userUuid
+        @JsonProperty("user_uuid") final UUID userUuid
     ) {
         this.userStore = userStore;
         this.groupName = groupName;

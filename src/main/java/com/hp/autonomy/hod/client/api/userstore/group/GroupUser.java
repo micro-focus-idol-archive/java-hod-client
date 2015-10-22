@@ -14,15 +14,10 @@ import java.util.UUID;
  * Representation of a user as returned from the get group info API.
  */
 @Data
-public class GroupUser {
-    private final String name;
+class GroupUser {
     private final UUID uuid;
 
-    public GroupUser(
-        @JsonProperty("name") final String name,
-        @JsonProperty("uuid") final UUID uuid
-    ) {
-        this.name = name;
+    GroupUser(@JsonProperty("uuid") final UUID uuid) {
         this.uuid = uuid;
     }
 }
