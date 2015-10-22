@@ -36,13 +36,13 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public List<User> list(final ResourceIdentifier userStore, final boolean includeAccounts, final boolean includeGroups) throws HodErrorException {
+    public List<User<Void>> list(final ResourceIdentifier userStore, final boolean includeAccounts, final boolean includeGroups) throws HodErrorException {
         final List<User.Json> rawUsers = requester.makeRequest(ListUsersResponse.class, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
         return parseRawUsers(rawUsers);
     }
 
     @Override
-    public List<User> list(
+    public List<User<Void>> list(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier userStore,
         final boolean includeAccounts,
@@ -53,9 +53,9 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public  List<User> listWithMetadata(
+    public <T> List<User<T>> listWithMetadata(
         final ResourceIdentifier userStore,
-        final Map<String, Class<?>> metadataTypes,
+        final Map<String, Class<? extends T>> metadataTypes,
         final boolean includeAccounts,
         final boolean includeGroups
     ) throws HodErrorException {
@@ -64,10 +64,10 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public List<User> listWithMetadata(
+    public <T> List<User<T>> listWithMetadata(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier userStore,
-        final Map<String, Class<?>> metadataTypes,
+        final Map<String, Class<? extends T>> metadataTypes,
         final boolean includeAccounts,
         final boolean includeGroups
     ) throws HodErrorException {
@@ -185,21 +185,21 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         return requester.makeRequest(tokenProxy, UserGroups.class, listUserGroupsBackendCaller(userStore, userUuid));
     }
 
-    private List<User> parseRawUsers(final List<User.Json> rawUsers) {
-        final List<User> users = new LinkedList<>();
+    private List<User<Void>> parseRawUsers(final List<User.Json> rawUsers) {
+        final List<User<Void>> users = new LinkedList<>();
 
         for (final User.Json rawUser : rawUsers) {
-            users.add(new User(rawUser, null));
+            users.add(new User<Void>(rawUser, null));
         }
 
         return users;
     }
 
-    private List<User> parseRawUsersWithMetadata(final List<User.Json> rawUsers, final Map<String, Class<?>> metadataTypes) {
-        final List<User> users = new LinkedList<>();
+    private <T> List<User<T>> parseRawUsersWithMetadata(final List<User.Json> rawUsers, final Map<String, Class<? extends T>> metadataTypes) {
+        final List<User<T>> users = new LinkedList<>();
 
         for (final User.Json rawUser : rawUsers) {
-            users.add(new User(rawUser, parseMetadata(rawUser.getMetadataList(), metadataTypes)));
+            users.add(new User<>(rawUser, parseMetadata(rawUser.getMetadataList(), metadataTypes)));
         }
 
         return users;

@@ -29,7 +29,7 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    List<User> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User<Void>> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of the users in a user store.
@@ -40,7 +40,7 @@ public interface UserStoreUsersService {
      * @return The users in the user store
      * @throws HodErrorException
      */
-    List<User> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User<Void>> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -54,7 +54,7 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    List<User> listWithMetadata(ResourceIdentifier userStore, Map<String, Class<?>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    <T> List<User<T>> listWithMetadata(ResourceIdentifier userStore, Map<String, Class<? extends T>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
@@ -68,7 +68,7 @@ public interface UserStoreUsersService {
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      */
-    List<User> listWithMetadata(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Map<String, Class<?>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    <T> List<User<T>> listWithMetadata(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Map<String, Class<? extends T>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Create a user in a userstore.

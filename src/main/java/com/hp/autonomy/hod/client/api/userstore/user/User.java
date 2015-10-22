@@ -15,9 +15,10 @@ import java.util.UUID;
 
 /**
  * Representation of a user as returned from the list users in a user store API.
+ * @param <T> Type of metadata values associated with the user
  */
 @Data
-public class User {
+public class User<T> {
     /**
      * The UUID of the user
      */
@@ -41,14 +42,14 @@ public class User {
     /**
      * Metadata associated with the user
      */
-    private final Map<String, Object> metadata;
+    private final Map<String, T> metadata;
 
     public User(
         final UUID uuid,
         final List<String> directGroups,
         final List<String> groups,
         final List<Account> accounts,
-        final Map<String, Object> metadata
+        final Map<String, T> metadata
     ) {
         this.uuid = uuid;
         this.directGroups = directGroups;
@@ -57,7 +58,7 @@ public class User {
         this.metadata = metadata;
     }
 
-    User(final Json json, final Map<String, Object> metadata) {
+    User(final Json json, final Map<String, T> metadata) {
         this(json.uuid, json.directGroups, json.groups, json.accounts, metadata);
     }
 

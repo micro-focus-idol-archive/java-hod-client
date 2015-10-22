@@ -69,10 +69,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithoutAccountsOrGroups() throws HodErrorException {
-        final List<User> users = service.list(getTokenProxy(), USER_STORE, false, false);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, false);
         boolean foundUser = false;
 
-        for (final User user : users) {
+        for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), nullValue());
@@ -89,10 +89,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithAccounts() throws HodErrorException {
-        final List<User> users = service.list(getTokenProxy(), USER_STORE, true, false);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
         boolean foundUser = false;
 
-        for (final User user : users) {
+        for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), nullValue());
@@ -115,10 +115,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithGroups() throws HodErrorException {
-        final List<User> users = service.list(getTokenProxy(), USER_STORE, false, true);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, false, true);
         boolean foundUser = false;
 
-        for (final User user : users) {
+        for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), not(nullValue()));
@@ -143,10 +143,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
     @Test
     public void listUsersWithAccountsAndGroups() throws HodErrorException {
-        final List<User> users = service.list(getTokenProxy(), USER_STORE, true, true);
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, true);
         boolean foundUser = false;
 
-        for (final User user : users) {
+        for (final User<Void> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
@@ -448,10 +448,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
         service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
 
-        final List<User> users = service.listWithMetadata(getTokenProxy(), USER_STORE, metadataTypes, false, false);
+        final List<User<Object>> users = service.listWithMetadata(getTokenProxy(), USER_STORE, metadataTypes, false, false);
         boolean foundUser = false;
 
-        for (final User user : users) {
+        for (final User<Object> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), nullValue());
@@ -476,19 +476,19 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     public void addUserMetadataAndListWithAccountsAndGroups() throws HodErrorException {
         final String key = randomString();
 
-        final Map<String, Object> metadata = new HashMap<>();
+        final Map<String, TestMetadata> metadata = new HashMap<>();
         final TestMetadata testMetadata = new TestMetadata(7, "bobby");
         metadata.put(key, testMetadata);
 
-        final Map<String, Class<?>> metadataTypes = new HashMap<>();
+        final Map<String, Class<? extends TestMetadata>> metadataTypes = new HashMap<>();
         metadataTypes.put(key, TestMetadata.class);
 
         service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
 
-        final List<User> users = service.listWithMetadata(getTokenProxy(), USER_STORE, metadataTypes, true, true);
+        final List<User<TestMetadata>> users = service.listWithMetadata(getTokenProxy(), USER_STORE, metadataTypes, true, true);
         boolean foundUser = false;
 
-        for (final User user : users) {
+        for (final User<TestMetadata> user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
@@ -508,7 +508,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                 assertThat(account.getType(), not(nullValue()));
             }
 
-            final Map<String, Object> userMetadata = user.getMetadata();
+            final Map<String, TestMetadata> userMetadata = user.getMetadata();
 
             if (user.getUuid().equals(userUuid)) {
                 foundUser = true;
