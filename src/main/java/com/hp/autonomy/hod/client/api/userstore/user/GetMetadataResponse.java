@@ -6,15 +6,16 @@
 package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-class ListUsersResponse {
-    private final List<User.Json> users;
+class GetMetadataResponse {
+    private final List<Metadata<JsonNode>> metadata;
 
-    ListUsersResponse(@JsonProperty("users") final List<User.Json> users) {
-        this.users = users;
+    GetMetadataResponse(@JsonProperty("metadata") final List<Metadata<JsonNode>> metadata) {
+        this.metadata = metadata;
     }
 }

@@ -8,13 +8,13 @@ package com.hp.autonomy.hod.client.api.userstore.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-class ListUsersResponse {
-    private final List<User.Json> users;
+class Metadata<T> {
+    private final String key;
+    private final T value;
 
-    ListUsersResponse(@JsonProperty("users") final List<User.Json> users) {
-        this.users = users;
+    Metadata(@JsonProperty("key") final String key, @JsonProperty("value") final T value) {
+        this.key = key;
+        this.value = value;
     }
 }
