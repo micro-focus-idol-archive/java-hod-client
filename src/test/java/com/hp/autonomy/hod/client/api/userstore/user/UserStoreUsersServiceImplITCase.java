@@ -364,10 +364,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         final TestMetadata testMetadata = new TestMetadata(7, "bobby");
         metadata.put(key, testMetadata);
 
-        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
-
         final Map<String, Class<?>> metadataTypes = new HashMap<>();
         metadataTypes.put(key, TestMetadata.class);
+
+        service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
 
         final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadataTypes);
         assertThat(outputMetadata, is(aMapWithSize(1)));
@@ -440,7 +440,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         metadata.put(key, value);
 
         final Map<String, Class<?>> incorrectMetadataTypes = new HashMap<>();
-        metadata.put(key, TestMetadata.class);
+        incorrectMetadataTypes.put(key, TestMetadata.class);
 
         service.addUserMetadata(getTokenProxy(), USER_STORE, userUuid, metadata);
 
