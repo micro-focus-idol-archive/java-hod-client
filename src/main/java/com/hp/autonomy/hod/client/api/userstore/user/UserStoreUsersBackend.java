@@ -44,7 +44,7 @@ interface UserStoreUsersBackend {
         @Part("user_email") String email,
         @Part("on_success") String onSuccess,
         @Part("on_error") String onError,
-        @QueryMap Map<String, Object> params
+        @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
     @DELETE(USER_BASE_PATH + V1)
