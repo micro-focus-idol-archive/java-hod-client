@@ -186,8 +186,11 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     public void createUserWithMessageAndMetadata() throws HodErrorException, MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
+        final Map<String, TestMetadata> metadata = new HashMap<>();
+        metadata.put("my-metadata", new TestMetadata(54, "fred"));
+
         final CreateUserRequestBuilder builder = new CreateUserRequestBuilder()
-                .setMetadata(new TestMetadata(54, "fred"))
+                .setMetadata(metadata)
                 .setUserMessage("Welcome to My Super Cool App!");
 
         service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl, builder);

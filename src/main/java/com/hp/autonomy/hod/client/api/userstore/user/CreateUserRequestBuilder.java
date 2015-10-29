@@ -5,6 +5,8 @@ import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,15 +28,24 @@ public class CreateUserRequestBuilder {
     private UserAuthMode userMode;
 
     /**
-     * @param metadata Metadata to associate with the user
+     * @param metadata Metadata keys and values to associate with the user
      */
-    private Object metadata;
+    private Map<String, ?> metadata;
 
     Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
         map.put("user_message", userMessage);
         map.put("user_mode", userMode);
-        map.put("meta_data", metadata);
+
+        if (metadata != null) {
+            final List<Metadata<?>> metadataList = new LinkedList<>();
+
+            for (final Map.Entry<String, ?> entry : metadata.entrySet()) {
+                metadataList.add(new Metadata<>(entry.getKey(), entry.getValue()));
+            }
+
+            map.put("metadata", metadataList);
+        }
 
         return map;
     }
