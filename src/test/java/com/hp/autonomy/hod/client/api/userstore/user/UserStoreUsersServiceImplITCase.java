@@ -9,7 +9,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.authentication.*;
+import com.hp.autonomy.hod.client.api.authentication.ApiKey;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationServiceImpl;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
@@ -176,14 +180,24 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
     }
 
     @Test
-    public void createUser() throws HodErrorException, MalformedURLException {
+    public void createAndDeleteUser() throws HodErrorException, MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
-        service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl, null);
+        final String userEmail = UUID.randomUUID() + "@example.com";
+
+        service.create(getTokenProxy(), USER_STORE, userEmail, testUrl, testUrl, null);
+
+        final UUID userUuid = getUserUuidFromEmail(userEmail);
+
+        assertThat(userUuid, not(nullValue()));
+
+        service.delete(getTokenProxy(), USER_STORE, userUuid);
+
+        assertThat(getUserUuidFromEmail(userEmail), nullValue());
     }
 
     @Test
-    public void createUserWithMessageAndMetadata() throws HodErrorException, MalformedURLException {
+    public void createAndDeleteUserWithMessageAndMetadata() throws HodErrorException, MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
         final Map<String, TestMetadata> metadata = new HashMap<>();
@@ -193,7 +207,11 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
                 .setMetadata(metadata)
                 .setUserMessage("Welcome to My Super Cool App!");
 
-        service.create(getTokenProxy(), USER_STORE, UUID.randomUUID() + "@example.com", testUrl, testUrl, builder);
+        final String userEmail = UUID.randomUUID() + "@example.com";
+        service.create(getTokenProxy(), USER_STORE, userEmail, testUrl, testUrl, builder);
+
+        final UUID uuid = getUserUuidFromEmail(userEmail);
+        service.delete(getTokenProxy(), USER_STORE, uuid);
     }
 
     @Test
@@ -226,11 +244,11 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.resetAuthentication(
-                    getTokenProxy(),
-                    new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
-                    UUID.randomUUID(),
-                    testUrl,
-                    testUrl
+                        getTokenProxy(),
+                        new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
+                        UUID.randomUUID(),
+                        testUrl,
+                        testUrl
                 );
             }
         });
@@ -242,9 +260,9 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.listUserGroups(
-                    getTokenProxy(),
-                    USER_STORE,
-                    UUID.randomUUID()
+                        getTokenProxy(),
+                        USER_STORE,
+                        UUID.randomUUID()
                 );
             }
         });
@@ -256,9 +274,9 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.listUserGroups(
-                    getTokenProxy(),
-                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstorereally"),
-                    UUID.randomUUID()
+                        getTokenProxy(),
+                        new ResourceIdentifier(DOMAIN_NAME, "notarealuserstorereally"),
+                        UUID.randomUUID()
                 );
             }
         });
@@ -270,10 +288,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.getUserMetadata(
-                    getTokenProxy(),
-                    USER_STORE,
-                    UUID.randomUUID(),
-                    new HashMap<String, Class<?>>()
+                        getTokenProxy(),
+                        USER_STORE,
+                        UUID.randomUUID(),
+                        new HashMap<String, Class<?>>()
                 );
             }
         });
@@ -285,10 +303,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.getUserMetadata(
-                    getTokenProxy(),
-                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
-                    UUID.randomUUID(),
-                    new HashMap<String, Class<?>>()
+                        getTokenProxy(),
+                        new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
+                        UUID.randomUUID(),
+                        new HashMap<String, Class<?>>()
                 );
             }
         });
@@ -300,10 +318,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.addUserMetadata(
-                    getTokenProxy(),
-                    USER_STORE,
-                    UUID.randomUUID(),
-                    new HashMap<String, Object>()
+                        getTokenProxy(),
+                        USER_STORE,
+                        UUID.randomUUID(),
+                        new HashMap<String, Object>()
                 );
             }
         });
@@ -315,10 +333,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.addUserMetadata(
-                    getTokenProxy(),
-                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
-                    UUID.randomUUID(),
-                    new HashMap<String, Object>()
+                        getTokenProxy(),
+                        new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
+                        UUID.randomUUID(),
+                        new HashMap<String, Object>()
                 );
             }
         });
@@ -330,10 +348,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.removeUserMetadata(
-                    getTokenProxy(),
-                    USER_STORE,
-                    UUID.randomUUID(),
-                    "metakey"
+                        getTokenProxy(),
+                        USER_STORE,
+                        UUID.randomUUID(),
+                        "metakey"
                 );
             }
         });
@@ -345,10 +363,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             @Override
             public void run() throws HodErrorException {
                 service.removeUserMetadata(
-                    getTokenProxy(),
-                    new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
-                    UUID.randomUUID(),
-                    "metakey"
+                        getTokenProxy(),
+                        new ResourceIdentifier(DOMAIN_NAME, "notarealuserstoreIhope"),
+                        UUID.randomUUID(),
+                        "metakey"
                 );
             }
         });
@@ -558,14 +576,28 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
         return "hod-client-" + UUID.randomUUID().toString();
     }
 
+    private UUID getUserUuidFromEmail(final String userEmail) throws HodErrorException {
+        final List<User<Void>> users = service.list(getTokenProxy(), USER_STORE, true, false);
+
+        for (final User<Void> user : users) {
+            for (final Account account : user.getAccounts()) {
+                if (Account.Type.EMAIL.equals(account.getType()) && userEmail.equals(account.getAccount())) {
+                    return user.getUuid();
+                }
+            }
+        }
+
+        return null;
+    }
+
     @Data
     private static class TestMetadata {
         private final int age;
         private final String name;
 
         private TestMetadata(
-            @JsonProperty("age") final int age,
-            @JsonProperty("name") final String name
+                @JsonProperty("age") final int age,
+                @JsonProperty("name") final String name
         ) {
             this.age = age;
             this.name = name;
