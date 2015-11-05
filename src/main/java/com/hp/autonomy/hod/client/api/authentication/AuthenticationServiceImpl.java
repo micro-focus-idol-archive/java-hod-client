@@ -67,32 +67,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public <T extends TokenType> TokenProxy<EntityType.User, T> authenticateUser(
-        final ApiKey apiKey,
-        final String applicationName,
-        final String applicationDomain,
-        final T tokenType
-    ) throws HodErrorException {
-        final Response response = authenticationBackend.authenticateUser(apiKey, applicationName, applicationDomain, tokenType.getParameter());
-        final AuthenticationToken<EntityType.User, T> token = parseToken(response, EntityType.User.INSTANCE, tokenType);
-        return insertToken(token);
-    }
-
-    @Override
-    public <T extends TokenType> TokenProxy<EntityType.User, T> authenticateUser(
-        final ApiKey apiKey,
-        final String applicationName,
-        final String applicationDomain,
-        final T tokenType,
-        final String userStore,
-        final String storeDomain
-    ) throws HodErrorException {
-        final Response response = authenticationBackend.authenticateUser(apiKey, applicationName, applicationDomain, tokenType.getParameter(), userStore, storeDomain);
-        final AuthenticationToken<EntityType.User, T> token = parseToken(response, EntityType.User.INSTANCE, tokenType);
-        return insertToken(token);
-    }
-
-    @Override
     public AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> authenticateDeveloper(final ApiKey apiKey, final UUID tenantUuid, final String email) throws HodErrorException {
         final Response response = authenticationBackend.authenticateDeveloper(apiKey, tenantUuid.toString(), email);
         return parseToken(response, EntityType.Developer.INSTANCE, TokenType.HmacSha1.INSTANCE);

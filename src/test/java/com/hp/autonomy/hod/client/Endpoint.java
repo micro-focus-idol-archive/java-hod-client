@@ -14,7 +14,6 @@ public enum Endpoint {
     INTEGRATION(
         "https://api.int.havenondemand.com",
         System.getProperty("hp.hod.int.applicationApiKey"),
-        System.getProperty("hp.hod.int.userApiKey"),
         System.getProperty("hp.hod.int.developerApiKey"),
         System.getProperty("hp.hod.int.developerEmail"),
         System.getProperty("hp.hod.int.application"),
@@ -24,7 +23,6 @@ public enum Endpoint {
     PREVIEW(
         "https://api.preview.havenondemand.com",
         System.getProperty("hp.hod.preview.applicationApiKey"),
-        System.getProperty("hp.hod.preview.userApiKey"),
         System.getProperty("hp.hod.preview.developerApiKey"),
         System.getProperty("hp.hod.preview.developerEmail"),
         System.getProperty("hp.hod.preview.application"),
@@ -34,7 +32,6 @@ public enum Endpoint {
     STAGING(
         "https://api.staging.havenondemand.com",
         System.getProperty("hp.hod.staging.applicationApiKey"),
-        System.getProperty("hp.hod.staging.userApiKey"),
         System.getProperty("hp.hod.staging.developerApiKey"),
         System.getProperty("hp.hod.staging.developerEmail"),
         System.getProperty("hp.hod.staging.application"),
@@ -44,7 +41,6 @@ public enum Endpoint {
     PRODUCTION(
         "https://api.havenondemand.com",
         System.getProperty("hp.hod.applicationApiKey"),
-        System.getProperty("hp.hod.userApiKey"),
         System.getProperty("hp.hod.developerApiKey"),
         System.getProperty("hp.hod.developerEmail"),
         System.getProperty("hp.hod.application"),
@@ -54,7 +50,6 @@ public enum Endpoint {
 
     private final String url;
     private final String applicationApiKey;
-    private final String userApiKey;
     private final String developerApiKey;
     private final String developerEmail;
     private final String applicationName;
@@ -64,7 +59,6 @@ public enum Endpoint {
     Endpoint(
         final String url,
         final String applicationApiKey,
-        final String userApiKey,
         final String developerApiKey,
         final String developerEmail,
         final String applicationName,
@@ -73,7 +67,6 @@ public enum Endpoint {
     ) {
         this.url = url;
         this.applicationApiKey = applicationApiKey;
-        this.userApiKey = userApiKey;
         this.developerApiKey = developerApiKey;
         this.developerEmail = developerEmail;
         this.applicationName = applicationName;
@@ -87,10 +80,6 @@ public enum Endpoint {
 
     public ApiKey getApplicationApiKey() {
         return new ApiKey(applicationApiKey);
-    }
-
-    public ApiKey getUserApiKey() {
-        return new ApiKey(userApiKey);
     }
 
     public ApiKey getDeveloperApiKey() {
