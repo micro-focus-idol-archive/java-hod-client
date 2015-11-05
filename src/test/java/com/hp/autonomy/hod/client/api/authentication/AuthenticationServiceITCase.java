@@ -1,6 +1,5 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
@@ -18,7 +17,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
@@ -229,34 +227,5 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
                 authenticationService.getCombinedTokenInformation(fakeToken);
             }
         });
-    }
-
-    private static class ApplicationAndUsers {
-        private final String domain;
-        private final String name;
-        private final List<User> users;
-
-        private ApplicationAndUsers(
-                @JsonProperty("domain") final String domain,
-                @JsonProperty("name") final String name,
-                @JsonProperty("users") final List<User> users
-        ) {
-            this.domain = domain;
-            this.name = name;
-            this.users = users;
-        }
-
-        private static class User {
-            private final String storeDomain;
-            private final String storeName;
-
-            private User(
-                    @JsonProperty("userStore") final String storeName,
-                    @JsonProperty("domain") final String storeDomain
-            ) {
-                this.storeDomain = storeDomain;
-                this.storeName = storeName;
-            }
-        }
     }
 }
