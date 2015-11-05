@@ -8,7 +8,10 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.authentication.*;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationServiceImpl;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.userstore.user.UserGroups;
@@ -35,8 +38,6 @@ import static org.junit.Assert.assertThat;
 public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     private static final EnumSet<HodErrorCode> GROUP_OR_USER_NOT_FOUND = EnumSet.of(HodErrorCode.GROUP_NOT_FOUND, HodErrorCode.USER_NOT_FOUND);
 
-    private final ApiKey apiKey;
-
     private UUID userUuid;
     private GroupsService service;
     private List<String> createdGroups;
@@ -44,7 +45,6 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
 
     public GroupsServiceImplITCase(final Endpoint endpoint) {
         super(endpoint);
-        apiKey = endpoint.getApiKey();
     }
 
     @Before
@@ -58,7 +58,13 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final AuthenticationService authenticationService = new AuthenticationServiceImpl(getConfig());
 
         try {
-            final TokenProxy<EntityType.User, TokenType.Simple> token = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+            final TokenProxy<EntityType.User, TokenType.Simple> token = authenticationService.authenticateUser(
+                endpoint.getApplicationApiKey(),
+                endpoint.getApplicationName(),
+                endpoint.getDomainName(),
+                TokenType.Simple.INSTANCE
+            );
+
             final UserTokenInformation information = authenticationService.getUserTokenInformation(token);
             userUuid = information.getUser().getUuid();
         } catch (final HodErrorException e) {
@@ -69,7 +75,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     @After
     public void tearDown() throws HodErrorException {
         for (final String name : createdGroups) {
-            service.delete(getTokenProxy(), USER_STORE, name);
+            service.delete(getTokenProxy(), getUserStore(), name);
         }
     }
 
@@ -77,7 +83,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void list() throws HodErrorException {
         // All we can currently say about the pre-existing groups is that their properties are not null since we don't
         // control the environment
-        final List<Group> groups = service.list(getTokenProxy(), USER_STORE);
+        final List<Group> groups = service.list(getTokenProxy(), getUserStore());
         assertThat(groups, notNullValue());
 
         for (final Group group : groups) {
@@ -90,13 +96,13 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void create() throws HodErrorException {
         final NameAndResponse nameAndResponse = safeCreateGroup();
         assertThat(nameAndResponse.response.getGroupName(), is(nameAndResponse.name));
-        assertThat(nameAndResponse.response.getUserStore(), is(USER_STORE));
+        assertThat(nameAndResponse.response.getUserStore(), is(getUserStore()));
     }
 
     @Test
     public void createAndList() throws HodErrorException {
         final String name = safeCreateGroup().name;
-        final List<Group> groups = service.list(getTokenProxy(), USER_STORE);
+        final List<Group> groups = service.list(getTokenProxy(), getUserStore());
 
         Group newGroup = null;
 
@@ -119,12 +125,12 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.getInfo(getTokenProxy(), USER_STORE, name);
+                service.getInfo(getTokenProxy(), getUserStore(), name);
             }
         });
 
         // Check user has gone from the list groups API
-        final List<Group> groups = service.list(getTokenProxy(), USER_STORE);
+        final List<Group> groups = service.list(getTokenProxy(), getUserStore());
 
         for (final Group group : groups) {
             assertFalse("Group was deleted but returned from the list groups API", name.equals(group.getName()));
@@ -138,7 +144,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_ALREADY_EXISTS, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.create(getTokenProxy(), USER_STORE, groupName);
+                service.create(getTokenProxy(), getUserStore(), groupName);
             }
         });
     }
@@ -148,7 +154,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.create(getTokenProxy(), new ResourceIdentifier(DOMAIN_NAME, unique()), unique());
+                service.create(getTokenProxy(), new ResourceIdentifier(endpoint.getDomainName(), unique()), unique());
             }
         });
     }
@@ -157,7 +163,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void createAndGetInfo() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        final GroupInfo info = service.getInfo(getTokenProxy(), USER_STORE, groupName);
+        final GroupInfo info = service.getInfo(getTokenProxy(), getUserStore(), groupName);
         assertThat(info.getName(), is(groupName));
         assertThat(info.getUsers(), is(empty()));
         assertThat(info.getChildren(), is(empty()));
@@ -169,7 +175,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.delete(getTokenProxy(), USER_STORE, unique());
+                service.delete(getTokenProxy(), getUserStore(), unique());
             }
         });
     }
@@ -181,7 +187,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), USER_STORE, groupName, UUID.randomUUID());
+                service.assignUser(getTokenProxy(), getUserStore(), groupName, UUID.randomUUID());
             }
         });
     }
@@ -193,7 +199,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.removeUser(getTokenProxy(), USER_STORE, groupName, UUID.randomUUID());
+                service.removeUser(getTokenProxy(), getUserStore(), groupName, UUID.randomUUID());
             }
         });
     }
@@ -203,7 +209,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(GROUP_OR_USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), USER_STORE, unique(), UUID.randomUUID());
+                service.assignUser(getTokenProxy(), getUserStore(), unique(), UUID.randomUUID());
             }
         });
     }
@@ -213,7 +219,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(GROUP_OR_USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), USER_STORE, unique(), UUID.randomUUID());
+                service.assignUser(getTokenProxy(), getUserStore(), unique(), UUID.randomUUID());
             }
         });
     }
@@ -238,7 +244,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final String parent2 = safeCreateGroup().name;
         final String child = safeCreateGroup(Arrays.asList(parent1, parent2), null).name;
 
-        final List<Group> groups = service.list(getTokenProxy(), USER_STORE);
+        final List<Group> groups = service.list(getTokenProxy(), getUserStore());
         Group parent1Group = null;
         Group parent2Group = null;
         Group childGroup = null;
@@ -285,7 +291,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final String parent = safeCreateGroup(null, Collections.singletonList(child)).name;
         safeDeleteGroup(parent);
 
-        final GroupInfo childInfo = service.getInfo(getTokenProxy(), USER_STORE, child);
+        final GroupInfo childInfo = service.getInfo(getTokenProxy(), getUserStore(), child);
         assertThat(childInfo.getParents(), is(empty()));
     }
 
@@ -294,7 +300,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final String child = safeCreateGroup().name;
         final String parent = safeCreateGroup().name;
 
-        service.link(getTokenProxy(), USER_STORE, parent, child);
+        service.link(getTokenProxy(), getUserStore(), parent, child);
 
         checkGetInfoParentChildRelationship(parent, child);
     }
@@ -306,7 +312,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.link(getTokenProxy(), USER_STORE, unique(), child);
+                service.link(getTokenProxy(), getUserStore(), unique(), child);
             }
         });
     }
@@ -318,7 +324,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.link(getTokenProxy(), USER_STORE, parent, unique());
+                service.link(getTokenProxy(), getUserStore(), parent, unique());
             }
         });
     }
@@ -327,11 +333,11 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void unlinkAndGetInfo() throws HodErrorException {
         final String child = safeCreateGroup().name;
         final String parent = safeCreateGroup().name;
-        service.link(getTokenProxy(), USER_STORE, parent, child);
-        service.unlink(getTokenProxy(), USER_STORE, parent, child);
+        service.link(getTokenProxy(), getUserStore(), parent, child);
+        service.unlink(getTokenProxy(), getUserStore(), parent, child);
 
-        final GroupInfo childInfo = service.getInfo(getTokenProxy(), USER_STORE, child);
-        final GroupInfo parentInfo = service.getInfo(getTokenProxy(), USER_STORE, parent);
+        final GroupInfo childInfo = service.getInfo(getTokenProxy(), getUserStore(), child);
+        final GroupInfo parentInfo = service.getInfo(getTokenProxy(), getUserStore(), parent);
 
         assertThat(childInfo.getParents(), is(empty()));
         assertThat(parentInfo.getChildren(), is(empty()));
@@ -344,7 +350,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.unlink(getTokenProxy(), USER_STORE, unique(), child);
+                service.unlink(getTokenProxy(), getUserStore(), unique(), child);
             }
         });
     }
@@ -356,7 +362,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.unlink(getTokenProxy(), USER_STORE, parent, unique());
+                service.unlink(getTokenProxy(), getUserStore(), parent, unique());
             }
         });
     }
@@ -365,12 +371,12 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void assignUserToGroupAndGetInfo() throws HodErrorException {
         final String group = safeCreateGroup().name;
 
-        final AssignUserResponse response = service.assignUser(getTokenProxy(), USER_STORE, group, userUuid);
+        final AssignUserResponse response = service.assignUser(getTokenProxy(), getUserStore(), group, userUuid);
         assertThat(response.getGroupName(), is(group));
-        assertThat(response.getUserStore(), is(USER_STORE));
+        assertThat(response.getUserStore(), is(getUserStore()));
         assertThat(response.getUserUuid(), is(userUuid));
 
-        final GroupInfo info = service.getInfo(getTokenProxy(), USER_STORE, group);
+        final GroupInfo info = service.getInfo(getTokenProxy(), getUserStore(), group);
         assertThat(info.getUsers(), contains(userUuid));
     }
 
@@ -378,10 +384,10 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void assignAndRemoveUser() throws HodErrorException {
         final String group = safeCreateGroup().name;
 
-        service.assignUser(getTokenProxy(), USER_STORE, group, userUuid);
-        service.removeUser(getTokenProxy(), USER_STORE, group, userUuid);
+        service.assignUser(getTokenProxy(), getUserStore(), group, userUuid);
+        service.removeUser(getTokenProxy(), getUserStore(), group, userUuid);
 
-        final GroupInfo info = service.getInfo(getTokenProxy(), USER_STORE, group);
+        final GroupInfo info = service.getInfo(getTokenProxy(), getUserStore(), group);
         assertThat(info.getUsers(), is(empty()));
     }
 
@@ -390,10 +396,10 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final String child = safeCreateGroup().name;
         final String parent = safeCreateGroup().name;
 
-        service.link(getTokenProxy(), USER_STORE, parent, child);
-        service.assignUser(getTokenProxy(), USER_STORE, child, userUuid);
+        service.link(getTokenProxy(), getUserStore(), parent, child);
+        service.assignUser(getTokenProxy(), getUserStore(), child, userUuid);
 
-        final UserGroups userGroups = userStoreUsersService.listUserGroups(getTokenProxy(), USER_STORE, userUuid);
+        final UserGroups userGroups = userStoreUsersService.listUserGroups(getTokenProxy(), getUserStore(), userUuid);
 
         assertThat(userGroups.getDirectGroups(), hasItem(child));
         assertThat(userGroups.getDirectGroups(), not(hasItem(parent)));
@@ -403,8 +409,8 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
 
     // Use the get info API to check that the "parent" group is the parent of the "child", and that this is the their only relationship
     private void checkGetInfoParentChildRelationship(final String parent, final String child) throws HodErrorException {
-        final GroupInfo parentInfo = service.getInfo(getTokenProxy(), USER_STORE, parent);
-        final GroupInfo childInfo = service.getInfo(getTokenProxy(), USER_STORE, child);
+        final GroupInfo parentInfo = service.getInfo(getTokenProxy(), getUserStore(), parent);
+        final GroupInfo childInfo = service.getInfo(getTokenProxy(), getUserStore(), child);
 
         assertThat(parentInfo.getChildren(), contains(child));
         assertThat(parentInfo.getParents(), is(empty()));
@@ -414,7 +420,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
 
     // Use the list groups API to check that the "parent" group is the parent of the "child", and that this is their only relationship
     private void checkListGroupsParentChildRelationship(final String child, final String parent) throws HodErrorException {
-        final List<Group> groups = service.list(getTokenProxy(), USER_STORE);
+        final List<Group> groups = service.list(getTokenProxy(), getUserStore());
 
         Group childGroup = null;
         Group parentGroup = null;
@@ -436,7 +442,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     // Create a group with a random name, storing it for deletion in tear down
     private NameAndResponse safeCreateGroup() throws HodErrorException {
         final String name = uniqueGroupName();
-        final CreateGroupResponse response = service.create(getTokenProxy(), USER_STORE, name);
+        final CreateGroupResponse response = service.create(getTokenProxy(), getUserStore(), name);
         createdGroups.add(name);
         return new NameAndResponse(name, response);
     }
@@ -444,7 +450,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     // Create a group with a random name and the given relationships, storing it for deletion in tear down
     private NameAndResponse safeCreateGroup(final List<String> parents, final List<String> children) throws HodErrorException {
         final String name = uniqueGroupName();
-        final CreateGroupResponse response = service.createWithHierarchy(getTokenProxy(), USER_STORE, name, parents, children);
+        final CreateGroupResponse response = service.createWithHierarchy(getTokenProxy(), getUserStore(), name, parents, children);
         createdGroups.add(name);
         return new NameAndResponse(name, response);
     }
@@ -455,7 +461,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
             throw new IllegalArgumentException("Attempted to safely delete group which was not created safely");
         }
 
-        service.delete(getTokenProxy(), USER_STORE, name);
+        service.delete(getTokenProxy(), getUserStore(), name);
         createdGroups.remove(name);
     }
 

@@ -12,7 +12,6 @@ import com.hp.autonomy.hod.client.api.authentication.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -32,11 +31,9 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Parameterized.class)
 public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTest {
     public static final String APPLICATION_DESCRIPTION = "Test application for the Java HOD client";
-    private final ApiKey apiKey;
 
     public ApplicationServiceImplITCase(final Endpoint endpoint) {
         super(endpoint);
-        apiKey = endpoint.getApiKey();
     }
 
     private AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> developerToken;
@@ -50,7 +47,12 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
 
         try {
             final UUID tenantUuid = authenticationService.getApplicationTokenInformation(getTokenProxy()).getTenantUuid();
-            developerToken = authenticationService.authenticateDeveloper(apiKey, tenantUuid, DEVELOPER_EMAIL);
+
+            developerToken = authenticationService.authenticateDeveloper(
+                endpoint.getDeveloperApiKey(),
+                tenantUuid,
+                endpoint.getDeveloperEmail()
+            );
         } catch (final HodErrorException e) {
             throw new AssertionError(e);
         }
@@ -65,32 +67,30 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
         for (final Application application : applications) {
             assertThat(application.getDomain(), not(nullValue()));
             assertThat(application.getName(), not(nullValue()));
-            assertThat(application.getDescription(), not(nullValue()));
-            assertThat(application.getDomainDescription(), not(nullValue()));
 
             assertThat(application.getPrivileges(), not(empty()));
         }
 
         assertThat("Integration test application was not found in list application response", applicationByName(
             applications,
-            DOMAIN_NAME,
-            APPLICATION_NAME
+            endpoint.getDomainName(),
+            endpoint.getApplicationName()
         ), not(nullValue()));
     }
 
     @Test
     public void createListAndDeleteApplication() throws HodErrorException {
         final String appName = randomName();
-        service.create(developerToken, DOMAIN_NAME, appName, APPLICATION_DESCRIPTION);
+        service.create(developerToken, endpoint.getDomainName(), appName, APPLICATION_DESCRIPTION);
 
         final List<Application> listPostCreate = service.list(developerToken);
-        final Application createdApplication = applicationByName(listPostCreate, DOMAIN_NAME, appName);
+        final Application createdApplication = applicationByName(listPostCreate, endpoint.getDomainName(), appName);
         assertThat(createdApplication.getDescription(), is(APPLICATION_DESCRIPTION));
 
-        service.delete(developerToken, DOMAIN_NAME, appName);
+        service.delete(developerToken, endpoint.getDomainName(), appName);
 
         final List<Application> listPostDelete = service.list(developerToken);
-        assertThat(applicationByName(listPostDelete, DOMAIN_NAME, appName), is(nullValue()));
+        assertThat(applicationByName(listPostDelete, endpoint.getDomainName(), appName), is(nullValue()));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
         testErrorCode(HodErrorCode.INVALID_JOB_ACTION_PARAMETER, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.create(developerToken, DOMAIN_NAME, APPLICATION_NAME, APPLICATION_DESCRIPTION);
+                service.create(developerToken, endpoint.getDomainName(), endpoint.getApplicationName(), APPLICATION_DESCRIPTION);
             }
         });
     }
@@ -108,14 +108,14 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
         testErrorCode(HodErrorCode.INVALID_APPLICATION, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.delete(developerToken, DOMAIN_NAME, randomName());
+                service.delete(developerToken, endpoint.getDomainName(), randomName());
             }
         });
     }
 
     @Test
     public void listAuthentications() throws HodErrorException {
-        final List<Authentication> authentications = service.listAuthentications(developerToken, DOMAIN_NAME, APPLICATION_NAME);
+        final List<Authentication> authentications = service.listAuthentications(developerToken, endpoint.getDomainName(), endpoint.getApplicationName());
 
         // The IT suite uses an API key from this application to authenticate, so at least one API key must be assigned
         boolean foundApiKey = false;
@@ -136,25 +136,25 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
     @Test
     public void createApplicationAndListAuthentications() throws HodErrorException {
         final String name = randomName();
-        service.create(developerToken, DOMAIN_NAME, name, APPLICATION_DESCRIPTION);
+        service.create(developerToken, endpoint.getDomainName(), name, APPLICATION_DESCRIPTION);
 
-        final List<Authentication> authentications = service.listAuthentications(developerToken, DOMAIN_NAME, name);
+        final List<Authentication> authentications = service.listAuthentications(developerToken, endpoint.getDomainName(), name);
         assertThat(authentications, is(empty()));
 
-        service.delete(developerToken, DOMAIN_NAME, name);
+        service.delete(developerToken, endpoint.getDomainName(), name);
     }
 
     @Test
     public void addAuthModeAndAuthentication() throws HodErrorException {
         final String name = randomName();
-        service.create(developerToken, DOMAIN_NAME, name, APPLICATION_DESCRIPTION);
+        service.create(developerToken, endpoint.getDomainName(), name, APPLICATION_DESCRIPTION);
 
-        service.addAuthenticationMode(developerToken, DOMAIN_NAME, name, ApplicationAuthMode.API_KEY, UserAuthMode.NONE, TokenType.Simple.INSTANCE);
+        service.addAuthenticationMode(developerToken, endpoint.getDomainName(), name, ApplicationAuthMode.API_KEY, UserAuthMode.NONE, TokenType.Simple.INSTANCE);
 
-        final ApiKey apiKey = service.addAuthentication(developerToken, DOMAIN_NAME, name);
+        final ApiKey apiKey = service.addAuthentication(developerToken, endpoint.getDomainName(), name);
         assertThat(apiKey, not(nullValue()));
 
-        final List<Authentication> authentications = service.listAuthentications(developerToken, DOMAIN_NAME, name);
+        final List<Authentication> authentications = service.listAuthentications(developerToken, endpoint.getDomainName(), name);
         assertThat(authentications, hasSize(1));
 
         final Authentication newAuthentication = authentications.get(0);
@@ -163,7 +163,7 @@ public class ApplicationServiceImplITCase extends AbstractHodClientIntegrationTe
 
         assertThat(newAuthentication.getMode(), is(ApplicationAuthMode.API_KEY));
 
-        service.delete(developerToken, DOMAIN_NAME, name);
+        service.delete(developerToken, endpoint.getDomainName(), name);
     }
 
     private Application applicationByName(final List<Application> applications, final String domain, final String name) {

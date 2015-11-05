@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.EnumSet;
 import java.util.List;
 
 import static com.hp.autonomy.hod.client.api.resource.ListResourcesITCase.ResourceWithNameMatcher.hasResourceWithName;
@@ -55,7 +54,7 @@ public class ListResourcesITCase extends AbstractHodClientIntegrationTest {
             assertThat(publicResource.getResource(), is(not(nullValue())));
         }
 
-        assertThat(resources.getResources(), hasResourceWithName(PRIVATE_INDEX.getName()));
+        assertThat(resources.getResources(), hasResourceWithName(getPrivateIndex().getName()));
     }
 
     @Test

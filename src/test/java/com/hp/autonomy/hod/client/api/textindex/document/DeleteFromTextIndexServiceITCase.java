@@ -59,13 +59,13 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
         final CountDownLatch latch = new CountDownLatch(1);
 
         final DeleteTestCallback callback = new DeleteTestCallback(latch, reference);
-        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), PRIVATE_INDEX, params, callback);
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), getPrivateIndex(), params, callback);
 
         latch.await();
 
         final DeleteFromTextIndexResponse innerResult = callback.getInnerResult();
         assertThat(innerResult, is(notNullValue()));
-        assertThat(innerResult.getIndex(), is(PRIVATE_INDEX.getName()));
+        assertThat(innerResult.getIndex(), is(getPrivateIndex().getName()));
         assertThat(innerResult.getDocumentsDeleted(), is(1));
     }
 
@@ -89,7 +89,7 @@ public class DeleteFromTextIndexServiceITCase extends AbstractHodClientIntegrati
             log.debug("Document indexed successfully");
 
             try {
-                deleteFromTextIndexService.deleteReferencesFromTextIndex(getTokenProxy(), PRIVATE_INDEX, Collections.singletonList(reference), callback);
+                deleteFromTextIndexService.deleteReferencesFromTextIndex(getTokenProxy(), getPrivateIndex(), Collections.singletonList(reference), callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document", e);
 

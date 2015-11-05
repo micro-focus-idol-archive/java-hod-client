@@ -59,8 +59,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     private static final TypeReference<List<ApplicationAndUsers>> GET_APPLICATION_RESPONSE_REFERENCE = new TypeReference<List<ApplicationAndUsers>>() {};
     private static final TypeReference<TokenResponse<AuthenticationToken.Json>> TOKEN_RESPONSE_REFERENCE = new TypeReference<TokenResponse<AuthenticationToken.Json>>() {};
 
-    private final ApiKey apiKey;
-    private final String endpointUrl;
     private final ObjectMapper mapper = new ObjectMapper();
 
     private AuthenticationServiceImpl authenticationService;
@@ -68,8 +66,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     public AuthenticationServiceITCase(final Endpoint endpoint) {
         super(endpoint);
-        apiKey = endpoint.getApiKey();
-        endpointUrl = endpoint.getUrl();
 
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
@@ -90,9 +86,9 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     @Test
     public void testAuthenticateApplication() throws HodErrorException {
         final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(
-            apiKey,
-            APPLICATION_NAME,
-            DOMAIN_NAME,
+            endpoint.getApplicationApiKey(),
+            endpoint.getApplicationName(),
+            endpoint.getDomainName(),
             TokenType.Simple.INSTANCE
         );
 
@@ -101,28 +97,46 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAuthenticateUser() throws HodErrorException {
-        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(
+            endpoint.getUserApiKey(),
+            endpoint.getApplicationName(),
+            endpoint.getDomainName(),
+            TokenType.Simple.INSTANCE
+        );
 
         assertThat(tokenProxy, is(notNullValue()));
     }
 
     @Test
     public void unboundSimpleAuthentication() throws HodErrorException {
-        final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(apiKey, TokenType.Simple.INSTANCE);
+        final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(
+            endpoint.getApplicationApiKey(),
+            TokenType.Simple.INSTANCE
+        );
+
         assertThat(token.getEntityType(), is(EntityType.Unbound.INSTANCE));
         assertThat(token.getTokenType(), is(TokenType.Simple.INSTANCE));
     }
 
     @Test
     public void unboundHmacAuthentication() throws HodErrorException {
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(
+            endpoint.getApplicationApiKey(),
+            TokenType.HmacSha1.INSTANCE
+        );
+
         assertThat(token.getEntityType(), is(EntityType.Unbound.INSTANCE));
         assertThat(token.getTokenType(), is(TokenType.HmacSha1.INSTANCE));
     }
 
     @Test
     public void developerAuthentication() throws HodErrorException {
-        final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(apiKey, tenantUuid, DEVELOPER_EMAIL);
+        final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(
+            endpoint.getDeveloperApiKey(),
+            tenantUuid,
+            endpoint.getDeveloperEmail()
+        );
+
         assertThat(token.getEntityType(), is(EntityType.Developer.INSTANCE));
         assertThat(token.getTokenType(), is(TokenType.HmacSha1.INSTANCE));
 
@@ -136,13 +150,22 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void getApplicationTokenInformation() throws HodErrorException, IOException {
-        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+        final String applicationName = endpoint.getApplicationName();
+        final String domainName = endpoint.getDomainName();
+
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(
+            endpoint.getApplicationApiKey(),
+            applicationName,
+            domainName,
+            TokenType.Simple.INSTANCE
+        );
+
         final ApplicationTokenInformation information = authenticationService.getApplicationTokenInformation(tokenProxy);
 
         assertThat(information.getTenantUuid(), is(tenantUuid));
 
-        assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
-        assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
+        assertThat(information.getApplication().getName(), is(applicationName));
+        assertThat(information.getApplication().getDomain(), is(domainName));
 
         assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
         assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
@@ -150,13 +173,22 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void getHmacApplicationTokenInformation() throws HodErrorException {
-        final TokenProxy<EntityType.Application, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateApplication(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.HmacSha1.INSTANCE);
+        final String applicationName = endpoint.getApplicationName();
+        final String domainName = endpoint.getDomainName();
+
+        final TokenProxy<EntityType.Application, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateApplication(
+            endpoint.getApplicationApiKey(),
+            applicationName,
+            domainName,
+            TokenType.HmacSha1.INSTANCE
+        );
+
         final ApplicationTokenInformation information = authenticationService.getHmacApplicationTokenInformation(tokenProxy);
 
         assertThat(information.getTenantUuid(), is(tenantUuid));
 
-        assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
-        assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
+        assertThat(information.getApplication().getName(), is(applicationName));
+        assertThat(information.getApplication().getDomain(), is(domainName));
 
         assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
         assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
@@ -164,7 +196,11 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void getUnboundTokenInformation() throws HodErrorException {
-        final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(apiKey, TokenType.Simple.INSTANCE);
+        final AuthenticationToken<EntityType.Unbound, TokenType.Simple> token = authenticationService.authenticateUnbound(
+            endpoint.getApplicationApiKey(),
+            TokenType.Simple.INSTANCE
+        );
+
         final UnboundTokenInformation information = authenticationService.getUnboundTokenInformation(token);
 
         assertThat(information.getAuthentication().getType(), not(nullValue()));
@@ -173,7 +209,11 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void getHmacUnboundTokenInformation() throws HodErrorException {
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token = authenticationService.authenticateUnbound(
+            endpoint.getApplicationApiKey(),
+            TokenType.HmacSha1.INSTANCE
+        );
+
         final UnboundTokenInformation information = authenticationService.getHmacUnboundTokenInformation(token);
 
         assertThat(information.getAuthentication().getType(), not(nullValue()));
@@ -182,7 +222,15 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void getUserTokenInformation() throws HodErrorException, IOException {
-        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.Simple.INSTANCE);
+        final String domainName = endpoint.getDomainName();
+
+        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(
+            endpoint.getUserApiKey(),
+            endpoint.getApplicationName(),
+            domainName,
+            TokenType.Simple.INSTANCE
+        );
+
         final UserTokenInformation information = authenticationService.getUserTokenInformation(tokenProxy);
 
         assertThat(information.getTenantUuid(), is(tenantUuid));
@@ -190,14 +238,22 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(information.getUser().getUuid(), not(nullValue()));
         assertThat(information.getUser().getAuthentication(), not(nullValue()));
 
-        assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
-        assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
+        assertThat(information.getUserStore().getDomain(), is(domainName));
+        assertThat(information.getUserStore().getName(), is(endpoint.getUserStoreName()));
         assertThat(information.getUserStore().getUuid(), not(nullValue()));
     }
 
     @Test
     public void getHmacUserTokenInformation() throws HodErrorException, IOException {
-        final TokenProxy<EntityType.User, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateUser(apiKey, APPLICATION_NAME, DOMAIN_NAME, TokenType.HmacSha1.INSTANCE);
+        final String domainName = endpoint.getDomainName();
+
+        final TokenProxy<EntityType.User, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateUser(
+            endpoint.getUserApiKey(),
+            endpoint.getApplicationName(),
+            domainName,
+            TokenType.HmacSha1.INSTANCE
+        );
+
         final UserTokenInformation information = authenticationService.getHmacUserTokenInformation(tokenProxy);
 
         assertThat(information.getTenantUuid(), is(tenantUuid));
@@ -205,14 +261,19 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         assertThat(information.getUser().getUuid(), not(nullValue()));
         assertThat(information.getUser().getAuthentication(), not(nullValue()));
 
-        assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
-        assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
+        assertThat(information.getUserStore().getDomain(), is(domainName));
+        assertThat(information.getUserStore().getName(), is(endpoint.getUserStoreName()));
         assertThat(information.getUserStore().getUuid(), not(nullValue()));
     }
 
     @Test
     public void getDeveloperTokenInformation() throws HodErrorException {
-        final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(apiKey, tenantUuid, DEVELOPER_EMAIL);
+        final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(
+            endpoint.getDeveloperApiKey(),
+            tenantUuid,
+            endpoint.getDeveloperEmail()
+        );
+
         final DeveloperTokenInformation information = authenticationService.getDeveloperTokenInformation(token);
 
         assertThat(information.getTenantUuid(), is(tenantUuid));
@@ -262,12 +323,13 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         final HttpClient browser = createBrowser();
 
         // Authenticate the user, creating a cookie in the browser on the HOD endpoint domain (replaces the SSO page)
-        // TODO: The API key used to authenticate the user should be configurable
-        authenticateUserUnbound(browser, apiKey);
+        authenticateUserUnbound(browser);
 
         // Authenticate the application
-        // TODO: The API key used to authenticate the application should be configurable
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> unboundToken = authenticationService.authenticateUnbound(apiKey, TokenType.HmacSha1.INSTANCE);
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> unboundToken = authenticationService.authenticateUnbound(
+            endpoint.getApplicationApiKey(),
+            TokenType.HmacSha1.INSTANCE
+        );
 
         // Get a list of applications and users which match the application and user authentications by executing a
         // signed request in the browser
@@ -311,14 +373,14 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
         assertThat(information.getTenantUuid(), is(tenantUuid));
 
-        assertThat(information.getApplication().getDomain(), is(DOMAIN_NAME));
-        assertThat(information.getApplication().getName(), is(APPLICATION_NAME));
+        assertThat(information.getApplication().getDomain(), is(endpoint.getDomainName()));
+        assertThat(information.getApplication().getName(), is(endpoint.getApplicationName()));
 
         assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
         assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
 
-        assertThat(information.getUserStore().getDomain(), is(DOMAIN_NAME));
-        assertThat(information.getUserStore().getName(), is(USER_STORE_NAME));
+        assertThat(information.getUserStore().getDomain(), is(endpoint.getDomainName()));
+        assertThat(information.getUserStore().getName(), is(endpoint.getUserStoreName()));
         assertThat(information.getUserStore().getUuid(), not(nullValue()));
 
         assertThat(information.getUser().getUuid(), not(nullValue()));
@@ -339,9 +401,9 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
         return browserBuilder.build();
     }
 
-    private void authenticateUserUnbound(final HttpClient browser, final ApiKey apiKey) throws URISyntaxException, IOException {
-        final URI uri = new URIBuilder(endpointUrl + "/2/authenticate/unbound")
-                .addParameter("apiKey", apiKey.toString())
+    private void authenticateUserUnbound(final HttpClient browser) throws URISyntaxException, IOException {
+        final URI uri = new URIBuilder(endpoint.getUrl() + "/2/authenticate/unbound")
+                .addParameter("apiKey", endpoint.getUserApiKey().toString())
                 .build();
 
         final HttpPost postRequest = new HttpPost(uri);

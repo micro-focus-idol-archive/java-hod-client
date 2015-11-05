@@ -104,7 +104,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
             try {
                 deleteTextIndexService.deleteTextIndex(
                         getTokenProxy(),
-                        new ResourceIdentifier(DOMAIN_NAME, testIndexName),
+                        new ResourceIdentifier(endpoint.getDomainName(), testIndexName),
                         callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document", e);

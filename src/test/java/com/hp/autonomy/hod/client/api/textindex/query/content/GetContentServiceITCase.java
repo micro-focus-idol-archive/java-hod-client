@@ -48,7 +48,7 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
         final Documents documents = getContentService.getContent(
             getTokenProxy(),
             Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"),
-            PRIVATE_INDEX,
+            getPrivateIndex(),
             params
         );
 
