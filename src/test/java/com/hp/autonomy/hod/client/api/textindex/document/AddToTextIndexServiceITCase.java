@@ -66,14 +66,14 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), PRIVATE_INDEX, params, callback);
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), new Documents<>(document), getPrivateIndex(), params, callback);
 
         latch.await();
 
         final AddToTextIndexResponse result = callback.getResult();
 
         assertThat(result, is(notNullValue()));
-        assertThat(result.getIndex(), is(PRIVATE_INDEX.getName()));
+        assertThat(result.getIndex(), is(getPrivateIndex().getName()));
         assertThat(result.getReferences(), hasSize(1));
 
         final AddToTextIndexReference referenceObject = result.getReferences().get(0);
@@ -97,14 +97,14 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<AddToTextIndexResponse> callback = new TestCallback<>(latch);
 
-        addToTextIndexService.addFileToTextIndex(getTokenProxy(), file, PRIVATE_INDEX, params, callback);
+        addToTextIndexService.addFileToTextIndex(getTokenProxy(), file, getPrivateIndex(), params, callback);
 
         latch.await();
 
         final AddToTextIndexResponse result = callback.getResult();
 
         assertThat(result, is(notNullValue()));
-        assertThat(result.getIndex(), is(PRIVATE_INDEX.getName()));
+        assertThat(result.getIndex(), is(getPrivateIndex().getName()));
         assertThat(result.getReferences(), hasSize(1));
 
         final AddToTextIndexReference referenceObject = result.getReferences().get(0);

@@ -19,11 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import retrofit.RestAdapter;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -101,12 +99,12 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         final AddToTextIndexRequestBuilder params = new AddToTextIndexRequestBuilder()
                 .setDuplicateMode(AddToTextIndexRequestBuilder.DuplicateMode.replace);
 
-        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), documents, PRIVATE_INDEX, params, new TestCallback<AddToTextIndexResponse>(latch) {
+        addToTextIndexService.addJsonToTextIndex(getTokenProxy(), documents, getPrivateIndex(), params, new TestCallback<AddToTextIndexResponse>(latch) {
             @Override
             public void success(final AddToTextIndexResponse response) {
                 try {
                     final QueryRequestBuilder params = new QueryRequestBuilder()
-                            .addIndexes(PRIVATE_INDEX);
+                            .addIndexes(getPrivateIndex());
 
                     final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getTokenProxy(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
 
