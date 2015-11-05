@@ -60,9 +60,9 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
 
         try {
             final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(
-                endpoint.getUserApiKey(),
-                endpoint.getApplicationName(),
-                endpoint.getDomainName(),
+                getEndpoint().getUserApiKey(),
+                getEndpoint().getApplicationName(),
+                getEndpoint().getDomainName(),
                 TokenType.Simple.INSTANCE
             );
 
@@ -277,7 +277,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             public void run() throws HodErrorException {
                 service.listUserGroups(
                         getTokenProxy(),
-                        new ResourceIdentifier(endpoint.getDomainName(), "notarealuserstorereally"),
+                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstorereally"),
                         UUID.randomUUID()
                 );
             }
@@ -306,7 +306,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             public void run() throws HodErrorException {
                 service.getUserMetadata(
                         getTokenProxy(),
-                        new ResourceIdentifier(endpoint.getDomainName(), "notarealuserstoreIhope"),
+                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
                         UUID.randomUUID(),
                         new HashMap<String, Class<?>>()
                 );
@@ -336,7 +336,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             public void run() throws HodErrorException {
                 service.addUserMetadata(
                         getTokenProxy(),
-                        new ResourceIdentifier(endpoint.getDomainName(), "notarealuserstoreIhope"),
+                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
                         UUID.randomUUID(),
                         new HashMap<String, Object>()
                 );
@@ -366,7 +366,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractHodClientIntegratio
             public void run() throws HodErrorException {
                 service.removeUserMetadata(
                         getTokenProxy(),
-                        new ResourceIdentifier(endpoint.getDomainName(), "notarealuserstoreIhope"),
+                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
                         UUID.randomUUID(),
                         "metakey"
                 );

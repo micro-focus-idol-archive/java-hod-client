@@ -45,7 +45,7 @@ interface ApplicationBackend {
     ) throws HodErrorException;
 
     @POST("/2/domain/{domain_name}/application/{application_name}/authentication")
-    AddAuthenticationResponse addAuthentication(
+    AddApplicationAuthenticationResponse addAuthentication(
         @Header("token") String signature,
         @Path("domain_name") String domain,
         @Path("application_name") String name

@@ -10,11 +10,11 @@ import com.hp.autonomy.hod.client.api.authentication.ApiKey;
 import lombok.Data;
 
 @Data
-class AddAuthenticationResponse {
+class AddDeveloperAuthenticationResponse {
     private final boolean success;
     private final Credentials credentials;
 
-    AddAuthenticationResponse(
+    AddDeveloperAuthenticationResponse(
         @JsonProperty("success") final boolean success,
         @JsonProperty("credentials") final Credentials credentials
     ) {
@@ -24,10 +24,10 @@ class AddAuthenticationResponse {
 
     @Data
     static class Credentials {
-        private final ApiKey applicationApiKey;
+        private final ApiKey apiKey;
 
-        Credentials(@JsonProperty("applicationAPIKey") final ApiKey applicationApiKey) {
-            this.applicationApiKey = applicationApiKey;
+        Credentials(@JsonProperty("apikey") final ApiKey apiKey) {
+            this.apiKey = apiKey;
         }
     }
 }
