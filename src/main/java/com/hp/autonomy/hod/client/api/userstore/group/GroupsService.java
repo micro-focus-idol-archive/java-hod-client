@@ -126,7 +126,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    AssignUserResponse assignUser(ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
+    void assignUser(ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Assign a user to a group in a user store.
@@ -137,7 +137,7 @@ public interface GroupsService {
      * @return Details about the resulting action
      * @throws HodErrorException
      */
-    AssignUserResponse assignUser(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
+    void assignUser(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
 
     /**
      * Remove a user from a group in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.

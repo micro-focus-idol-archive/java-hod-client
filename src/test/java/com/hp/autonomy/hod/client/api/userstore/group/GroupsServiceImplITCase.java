@@ -365,10 +365,7 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
     public void assignUserToGroupAndGetInfo() throws HodErrorException {
         final String group = safeCreateGroup().name;
 
-        final AssignUserResponse response = service.assignUser(getTokenProxy(), getUserStore(), group, developerUserUuid);
-        assertThat(response.getGroupName(), is(group));
-        assertThat(response.getUserStore(), is(getUserStore()));
-        assertThat(response.getUserUuid(), is(developerUserUuid));
+        service.assignUser(getTokenProxy(), getUserStore(), group, developerUserUuid);
 
         final GroupInfo info = service.getInfo(getTokenProxy(), getUserStore(), group);
         assertThat(info.getUsers(), contains(developerUserUuid));
