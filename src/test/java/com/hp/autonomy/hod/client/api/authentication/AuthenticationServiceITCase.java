@@ -1,30 +1,16 @@
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.ApplicationTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.DeveloperTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UnboundTokenInformation;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,17 +18,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
@@ -56,18 +38,11 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
-    private static final TypeReference<List<ApplicationAndUsers>> GET_APPLICATION_RESPONSE_REFERENCE = new TypeReference<List<ApplicationAndUsers>>() {};
-    private static final TypeReference<TokenResponse<AuthenticationToken.Json>> TOKEN_RESPONSE_REFERENCE = new TypeReference<TokenResponse<AuthenticationToken.Json>>() {};
-
-    private final ObjectMapper mapper = new ObjectMapper();
-
     private AuthenticationServiceImpl authenticationService;
     private UUID tenantUuid;
 
     public AuthenticationServiceITCase(final Endpoint endpoint) {
         super(endpoint);
-
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override
@@ -87,18 +62,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     public void testAuthenticateApplication() throws HodErrorException {
         final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = authenticationService.authenticateApplication(
             getEndpoint().getApplicationApiKey(),
-            getEndpoint().getApplicationName(),
-            getEndpoint().getDomainName(),
-            TokenType.Simple.INSTANCE
-        );
-
-        assertThat(tokenProxy, is(notNullValue()));
-    }
-
-    @Test
-    public void testAuthenticateUser() throws HodErrorException {
-        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(
-            getEndpoint().getUserApiKey(),
             getEndpoint().getApplicationName(),
             getEndpoint().getDomainName(),
             TokenType.Simple.INSTANCE
@@ -221,52 +184,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
     }
 
     @Test
-    public void getUserTokenInformation() throws HodErrorException, IOException {
-        final String domainName = getEndpoint().getDomainName();
-
-        final TokenProxy<EntityType.User, TokenType.Simple> tokenProxy = authenticationService.authenticateUser(
-            getEndpoint().getUserApiKey(),
-            getEndpoint().getApplicationName(),
-            domainName,
-            TokenType.Simple.INSTANCE
-        );
-
-        final UserTokenInformation information = authenticationService.getUserTokenInformation(tokenProxy);
-
-        assertThat(information.getTenantUuid(), is(tenantUuid));
-
-        assertThat(information.getUser().getUuid(), not(nullValue()));
-        assertThat(information.getUser().getAuthentication(), not(nullValue()));
-
-        assertThat(information.getUserStore().getDomain(), is(domainName));
-        assertThat(information.getUserStore().getName(), is(getEndpoint().getUserStoreName()));
-        assertThat(information.getUserStore().getUuid(), not(nullValue()));
-    }
-
-    @Test
-    public void getHmacUserTokenInformation() throws HodErrorException, IOException {
-        final String domainName = getEndpoint().getDomainName();
-
-        final TokenProxy<EntityType.User, TokenType.HmacSha1> tokenProxy = authenticationService.authenticateUser(
-            getEndpoint().getUserApiKey(),
-            getEndpoint().getApplicationName(),
-            domainName,
-            TokenType.HmacSha1.INSTANCE
-        );
-
-        final UserTokenInformation information = authenticationService.getHmacUserTokenInformation(tokenProxy);
-
-        assertThat(information.getTenantUuid(), is(tenantUuid));
-
-        assertThat(information.getUser().getUuid(), not(nullValue()));
-        assertThat(information.getUser().getAuthentication(), not(nullValue()));
-
-        assertThat(information.getUserStore().getDomain(), is(domainName));
-        assertThat(information.getUserStore().getName(), is(getEndpoint().getUserStoreName()));
-        assertThat(information.getUserStore().getUuid(), not(nullValue()));
-    }
-
-    @Test
     public void getDeveloperTokenInformation() throws HodErrorException {
         final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token = authenticationService.authenticateDeveloper(
             getEndpoint().getDeveloperApiKey(),
@@ -312,138 +229,6 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
                 authenticationService.getCombinedTokenInformation(fakeToken);
             }
         });
-    }
-
-    @Test
-    public void sso() throws HodErrorException, IOException, URISyntaxException {
-        final String origin = "http://example.com";
-        final Collection<String> allowedOrigins = Arrays.asList("https://another-example.com", origin);
-
-        // Use an HttpClient to represent the browser in the SSO process
-        final HttpClient browser = createBrowser();
-
-        // Authenticate the user, creating a cookie in the browser on the HOD endpoint domain (replaces the SSO page)
-        authenticateUserUnbound(browser);
-
-        // Authenticate the application
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> unboundToken = authenticationService.authenticateUnbound(
-            getEndpoint().getApplicationApiKey(),
-            TokenType.HmacSha1.INSTANCE
-        );
-
-        // Get a list of applications and users which match the application and user authentications by executing a
-        // signed request in the browser
-        final SignedRequest getApplicationRequest = authenticationService.combinedGetRequest(allowedOrigins, unboundToken);
-        final List<ApplicationAndUsers> applicationResponse = makeSignedRequest(browser, getApplicationRequest, origin, GET_APPLICATION_RESPONSE_REFERENCE);
-
-        assertThat(applicationResponse, not(empty()));
-
-        final ApplicationAndUsers applicationAndUsers = applicationResponse.get(0);
-        assertThat(applicationAndUsers.domain, notNullValue());
-        assertThat(applicationAndUsers.name, notNullValue());
-        assertThat(applicationAndUsers.users, not(empty()));
-
-        final ApplicationAndUsers.User user = applicationAndUsers.users.get(0);
-        assertThat(user.storeDomain, notNullValue());
-        assertThat(user.storeName, notNullValue());
-
-        // Sign a request to obtain a combined token from the browser
-        final SignedRequest combinedRequest = authenticationService.combinedRequest(
-                allowedOrigins,
-                unboundToken,
-                applicationAndUsers.domain,
-                applicationAndUsers.name,
-                user.storeDomain,
-                user.storeName,
-                TokenType.Simple.INSTANCE,
-                true
-        );
-
-        // Get the combined token
-        final TokenResponse<AuthenticationToken.Json> tokenResponse = makeSignedRequest(browser, combinedRequest, origin, TOKEN_RESPONSE_REFERENCE);
-
-        final AuthenticationToken<EntityType.Combined, TokenType.Simple> combinedToken = tokenResponse.getToken().buildToken(
-            EntityType.Combined.INSTANCE,
-            TokenType.Simple.INSTANCE
-        );
-
-        assertThat(combinedToken, notNullValue());
-
-        final CombinedTokenInformation information = authenticationService.getCombinedTokenInformation(combinedToken);
-
-        assertThat(information.getTenantUuid(), is(tenantUuid));
-
-        assertThat(information.getApplication().getDomain(), is(getEndpoint().getDomainName()));
-        assertThat(information.getApplication().getName(), is(getEndpoint().getApplicationName()));
-
-        assertThat(information.getApplication().getAuthentication().getType(), not(nullValue()));
-        assertThat(information.getApplication().getAuthentication().getUuid(), not(nullValue()));
-
-        assertThat(information.getUserStore().getDomain(), is(getEndpoint().getDomainName()));
-        assertThat(information.getUserStore().getName(), is(getEndpoint().getUserStoreName()));
-        assertThat(information.getUserStore().getUuid(), not(nullValue()));
-
-        assertThat(information.getUser().getUuid(), not(nullValue()));
-
-        assertThat(information.getUser().getAuthentication().getType(), not(nullValue()));
-        assertThat(information.getUser().getAuthentication().getUuid(), not(nullValue()));
-    }
-
-    private HttpClient createBrowser() {
-        final HttpClientBuilder browserBuilder = HttpClientBuilder.create();
-        final String proxyHost = System.getProperty("hp.hod.https.proxyHost");
-
-        if (proxyHost != null) {
-            final Integer proxyPort = Integer.valueOf(System.getProperty("hp.hod.https.proxyPort", "8080"));
-            browserBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
-        }
-
-        return browserBuilder.build();
-    }
-
-    private void authenticateUserUnbound(final HttpClient browser) throws URISyntaxException, IOException {
-        final URI uri = new URIBuilder(getEndpoint().getUrl() + "/2/authenticate/unbound")
-                .addParameter("apiKey", getEndpoint().getUserApiKey().toString())
-                .build();
-
-        final HttpPost postRequest = new HttpPost(uri);
-        postRequest.setHeader("Content-Type", "application-x-www-form-urlencoded");
-
-        final List<NameValuePair> bodyPairs = new LinkedList<>();
-        bodyPairs.add(new BasicNameValuePair("enable_sso", "true"));
-        bodyPairs.add(new BasicNameValuePair("token_type", TokenType.Simple.INSTANCE.getParameter()));
-        final String bodyString = URLEncodedUtils.format(bodyPairs, StandardCharsets.UTF_8);
-
-        final HttpEntity body = new ByteArrayEntity(bodyString.getBytes(StandardCharsets.UTF_8));
-        postRequest.setEntity(body);
-
-        makeRequest(browser, postRequest, TOKEN_RESPONSE_REFERENCE);
-    }
-
-    private <T> T makeSignedRequest(final HttpClient browser, final SignedRequest request, final String origin, final TypeReference<T> responseType) throws IOException {
-        final RequestBuilder uriRequestBuilder = RequestBuilder.create(request.getVerb().toString())
-                .addHeader("token", request.getToken())
-                .addHeader("Origin", origin)
-                .setUri(request.getUrl());
-
-        if (request.getBody() != null) {
-            final HttpEntity body = new ByteArrayEntity(request.getBody().getBytes(StandardCharsets.UTF_8));
-            uriRequestBuilder.setEntity(body);
-            uriRequestBuilder.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        }
-
-        return makeRequest(browser, uriRequestBuilder.build(), responseType);
-    }
-
-    private <T> T makeRequest(final HttpClient browser, final HttpUriRequest request, final TypeReference<T> responseType) throws IOException {
-        final HttpResponse response = browser.execute(request);
-        final int statusCode = response.getStatusLine().getStatusCode();
-
-        assertThat(statusCode, is(200));
-
-        try(InputStream content = response.getEntity().getContent()){
-            return mapper.readValue(content, responseType);
-        }
     }
 
     private static class ApplicationAndUsers {

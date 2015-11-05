@@ -52,27 +52,6 @@ public interface AuthenticationService {
     ) throws HodErrorException;
 
     /**
-     * Acquire a token for a user in a given user store
-     * @param apiKey The API key of the user
-     * @param applicationName The name of the application
-     * @param applicationDomain The domain of the application
-     * @param tokenType The type of the resulting token
-     * @param userStore The name of the user store
-     * @param storeDomain The domain of the user store
-     * @param <T> The type of the required token type
-     * @return A token for use with HP Haven OnDemand
-     * @throws HodErrorException
-     */
-    <T extends TokenType> TokenProxy<EntityType.User, T> authenticateUser(
-        ApiKey apiKey,
-        String applicationName,
-        String applicationDomain,
-        T tokenType,
-        String userStore,
-        String storeDomain
-    ) throws HodErrorException;
-
-    /**
      * Acquire a token for a developer.
      * @param apiKey The API key to use for authentication
      * @param tenantUuid The UUID of the developer's tenant
