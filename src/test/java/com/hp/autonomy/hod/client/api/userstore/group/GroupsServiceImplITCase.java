@@ -5,21 +5,13 @@
 
 package com.hp.autonomy.hod.client.api.userstore.group;
 
-import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
+import com.hp.autonomy.hod.client.AbstractDeveloperHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationServiceImpl;
-import com.hp.autonomy.hod.client.api.authentication.EntityType;
-import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.userstore.user.UserGroups;
-import com.hp.autonomy.hod.client.api.userstore.user.UserStoreUsersService;
-import com.hp.autonomy.hod.client.api.userstore.user.UserStoreUsersServiceImpl;
+import com.hp.autonomy.hod.client.api.userstore.user.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.token.TokenProxy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,10 +27,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
+public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrationTest {
     private static final EnumSet<HodErrorCode> GROUP_OR_USER_NOT_FOUND = EnumSet.of(HodErrorCode.GROUP_NOT_FOUND, HodErrorCode.USER_NOT_FOUND);
 
-    private UUID userUuid;
+    private UUID developerUserUuid;
     private GroupsService service;
     private List<String> createdGroups;
     private UserStoreUsersService userStoreUsersService;
@@ -55,20 +47,22 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         service = new GroupsServiceImpl(getConfig());
         userStoreUsersService = new UserStoreUsersServiceImpl(getConfig());
 
-        final AuthenticationService authenticationService = new AuthenticationServiceImpl(getConfig());
-
         try {
-            final TokenProxy<EntityType.User, TokenType.Simple> token = authenticationService.authenticateUser(
-                getEndpoint().getApplicationApiKey(),
-                getEndpoint().getApplicationName(),
-                getEndpoint().getDomainName(),
-                TokenType.Simple.INSTANCE
-            );
+            final List<User<Void>> users = userStoreUsersService.list(getTokenProxy(), getUserStore(), true, false);
 
-            final UserTokenInformation information = authenticationService.getUserTokenInformation(token);
-            userUuid = information.getUser().getUuid();
+            for (final User<Void> user : users) {
+                for (final Account account : user.getAccounts()) {
+                    if (Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())) {
+                        developerUserUuid = user.getUuid();
+                    }
+                }
+            }
+
+            if (developerUserUuid == null) {
+                throw new IllegalStateException("No user is associated with the test developer in the test user store");
+            }
         } catch (final HodErrorException e) {
-            throw new AssertionError("Failed to determine user UUID", e);
+            throw new IllegalStateException("HOD returned an error when trying to determine the UUID of the user associated with the test developer", e);
         }
     }
 
@@ -371,21 +365,21 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
     public void assignUserToGroupAndGetInfo() throws HodErrorException {
         final String group = safeCreateGroup().name;
 
-        final AssignUserResponse response = service.assignUser(getTokenProxy(), getUserStore(), group, userUuid);
+        final AssignUserResponse response = service.assignUser(getTokenProxy(), getUserStore(), group, developerUserUuid);
         assertThat(response.getGroupName(), is(group));
         assertThat(response.getUserStore(), is(getUserStore()));
-        assertThat(response.getUserUuid(), is(userUuid));
+        assertThat(response.getUserUuid(), is(developerUserUuid));
 
         final GroupInfo info = service.getInfo(getTokenProxy(), getUserStore(), group);
-        assertThat(info.getUsers(), contains(userUuid));
+        assertThat(info.getUsers(), contains(developerUserUuid));
     }
 
     @Test
     public void assignAndRemoveUser() throws HodErrorException {
         final String group = safeCreateGroup().name;
 
-        service.assignUser(getTokenProxy(), getUserStore(), group, userUuid);
-        service.removeUser(getTokenProxy(), getUserStore(), group, userUuid);
+        service.assignUser(getTokenProxy(), getUserStore(), group, developerUserUuid);
+        service.removeUser(getTokenProxy(), getUserStore(), group, developerUserUuid);
 
         final GroupInfo info = service.getInfo(getTokenProxy(), getUserStore(), group);
         assertThat(info.getUsers(), is(empty()));
@@ -397,9 +391,9 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         final String parent = safeCreateGroup().name;
 
         service.link(getTokenProxy(), getUserStore(), parent, child);
-        service.assignUser(getTokenProxy(), getUserStore(), child, userUuid);
+        service.assignUser(getTokenProxy(), getUserStore(), child, developerUserUuid);
 
-        final UserGroups userGroups = userStoreUsersService.listUserGroups(getTokenProxy(), getUserStore(), userUuid);
+        final UserGroups userGroups = userStoreUsersService.listUserGroups(getTokenProxy(), getUserStore(), developerUserUuid);
 
         assertThat(userGroups.getDirectGroups(), hasItem(child));
         assertThat(userGroups.getDirectGroups(), not(hasItem(parent)));
