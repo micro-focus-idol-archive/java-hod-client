@@ -123,7 +123,6 @@ public interface GroupsService {
      * @param userStore The resource identifier for the user store
      * @param groupName The group name
      * @param userUuid The UUID of the user
-     * @return Details about the resulting action
      * @throws HodErrorException
      */
     void assignUser(ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
@@ -134,7 +133,6 @@ public interface GroupsService {
      * @param userStore The resource identifier for the user store
      * @param groupName The group name
      * @param userUuid The UUID of the user
-     * @return Details about the resulting action
      * @throws HodErrorException
      */
     void assignUser(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, String groupName, UUID userUuid) throws HodErrorException;
