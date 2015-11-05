@@ -18,24 +18,23 @@ import java.util.Collection;
 import java.util.Collections;
 
 public abstract class AbstractHodClientIntegrationTest {
-    protected final Endpoint endpoint;
-
+    private final Endpoint endpoint;
     private HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig;
     private RestAdapter restAdapter;
     private AuthenticationToken<EntityType.Application, TokenType.Simple> token;
     private TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy;
 
-    public void setUp() {
-        hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, endpoint);
+    protected void setUp() {
+        hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, getEndpoint());
         restAdapter = hodServiceConfig.getRestAdapter();
 
         final AuthenticationService authenticationService = new AuthenticationServiceImpl(hodServiceConfig);
 
         try {
             tokenProxy = authenticationService.authenticateApplication(
-                endpoint.getApplicationApiKey(),
-                endpoint.getApplicationName(),
-                endpoint.getDomainName(),
+                getEndpoint().getApplicationApiKey(),
+                getEndpoint().getApplicationName(),
+                getEndpoint().getDomainName(),
                 TokenType.Simple.INSTANCE
             );
 
@@ -51,35 +50,39 @@ public abstract class AbstractHodClientIntegrationTest {
         return Collections.singletonList(endpoint);
     }
 
-    public AbstractHodClientIntegrationTest(final Endpoint endpoint) {
+    protected AbstractHodClientIntegrationTest(final Endpoint endpoint) {
         this.endpoint = endpoint;
     }
 
-    public String getQueryManipulationIndex() {
+    protected String getQueryManipulationIndex() {
         return "java-iod-client-integration-tests-query-manipulation";
     }
 
-    public RestAdapter getRestAdapter() {
+    protected RestAdapter getRestAdapter() {
         return restAdapter;
     }
 
-    public HodServiceConfig<EntityType.Application, TokenType.Simple> getConfig() {
+    protected HodServiceConfig<EntityType.Application, TokenType.Simple> getConfig() {
         return hodServiceConfig;
     }
 
-    public AuthenticationToken<EntityType.Application, TokenType.Simple> getToken() {
+    protected AuthenticationToken<EntityType.Application, TokenType.Simple> getToken() {
         return token;
     }
 
-    public TokenProxy<EntityType.Application, TokenType.Simple> getTokenProxy() {
+    protected TokenProxy<EntityType.Application, TokenType.Simple> getTokenProxy() {
         return tokenProxy;
     }
 
-    public ResourceIdentifier getPrivateIndex() {
-        return new ResourceIdentifier(endpoint.getDomainName(), "java-iod-client-integration-tests");
+    protected ResourceIdentifier getPrivateIndex() {
+        return new ResourceIdentifier(getEndpoint().getDomainName(), "java-iod-client-integration-tests");
     }
 
-    public ResourceIdentifier getUserStore() {
-        return new ResourceIdentifier(endpoint.getDomainName(), endpoint.getUserStoreName());
+    protected ResourceIdentifier getUserStore() {
+        return new ResourceIdentifier(getEndpoint().getDomainName(), getEndpoint().getUserStoreName());
+    }
+
+    protected Endpoint getEndpoint() {
+        return endpoint;
     }
 }

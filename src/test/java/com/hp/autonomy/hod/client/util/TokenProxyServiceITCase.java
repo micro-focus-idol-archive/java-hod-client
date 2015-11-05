@@ -53,7 +53,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
             }
         };
 
-        final HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(tokenProxyService, endpoint);
+        final HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(tokenProxyService, getEndpoint());
 
         try {
             tokenProxyAtomicReference.set(hodServiceConfig.getTokenRepository().insert(getToken()));

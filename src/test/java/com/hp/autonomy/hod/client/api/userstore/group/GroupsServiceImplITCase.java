@@ -59,9 +59,9 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
 
         try {
             final TokenProxy<EntityType.User, TokenType.Simple> token = authenticationService.authenticateUser(
-                endpoint.getApplicationApiKey(),
-                endpoint.getApplicationName(),
-                endpoint.getDomainName(),
+                getEndpoint().getApplicationApiKey(),
+                getEndpoint().getApplicationName(),
+                getEndpoint().getDomainName(),
                 TokenType.Simple.INSTANCE
             );
 
@@ -154,7 +154,7 @@ public class GroupsServiceImplITCase extends AbstractHodClientIntegrationTest {
         testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
-                service.create(getTokenProxy(), new ResourceIdentifier(endpoint.getDomainName(), unique()), unique());
+                service.create(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), unique()), unique());
             }
         });
     }
