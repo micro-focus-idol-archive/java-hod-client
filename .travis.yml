@@ -4,7 +4,7 @@ jdk:
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 before_script: ruby provision/setup-test-environment.rb $PREVIEW_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
-script: mvn verify -Prelease -Dhp.hod.env=$HOD_ENV -Dhp.hod.int.applicationApiKey=$INT_API_KEY -Dhp.hod.int.userApiKey=$INT_API_KEY -Dhp.hod.int.developerApiKey=$INT_API_KEY -Dhp.hod.int.application=$HOD_APPLICATION -Dhp.hod.int.domain=$HOD_DOMAIN -Dhp.hod.int.developerEmail=$HOD_DEVELOPER_EMAIL
+script: mvn verify -Prelease -Dhp.hod.env=$HOD_ENV -Dhp.hod.int.applicationApiKey=$INT_API_KEY -Dhp.hod.int.developerApiKey=$INT_API_KEY -Dhp.hod.int.application=$HOD_APPLICATION -Dhp.hod.int.domain=$HOD_DOMAIN -Dhp.hod.int.developerEmail=$HOD_DEVELOPER_EMAIL
 after_success: bash travis.sh
 after_script: ruby provision/destroy-test-environment.rb $PREVIEW_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
 env:
