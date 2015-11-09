@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 public abstract class AbstractHodClientIntegrationTest {
+    protected static final String QUERY_MANIPULATION_INDEX_NAME = "java-iod-client-integration-tests-query-manipulation";
+
     private final Endpoint endpoint;
     private HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig;
     private RestAdapter restAdapter;
@@ -52,10 +54,6 @@ public abstract class AbstractHodClientIntegrationTest {
 
     protected AbstractHodClientIntegrationTest(final Endpoint endpoint) {
         this.endpoint = endpoint;
-    }
-
-    protected String getQueryManipulationIndex() {
-        return "java-iod-client-integration-tests-query-manipulation";
     }
 
     protected RestAdapter getRestAdapter() {
