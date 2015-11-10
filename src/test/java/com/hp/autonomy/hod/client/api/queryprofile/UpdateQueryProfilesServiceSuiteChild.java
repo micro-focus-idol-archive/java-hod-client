@@ -5,23 +5,24 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.AbstractQueryProfileIntegrationTest;
+import com.hp.autonomy.hod.client.HodErrorTester;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Collections;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIntegrationTest {
-
-    // Service under test
-    private QueryProfileService queryProfileService;
+public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileSuiteChild {
+    private QueryProfileService service;
 
     public UpdateQueryProfilesServiceSuiteChild(final Endpoint endpoint) {
         super(endpoint);
@@ -32,35 +33,64 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileIn
     public void setUp() {
         super.setUp();
 
-        queryProfileService = new QueryProfileServiceImpl(getConfig());
+        service = new QueryProfileServiceImpl(getConfig());
     }
 
     @Test
-    public void updateQueryProfileTest() throws HodErrorException {
-        // Create a query profile, then load it back and verify that it's what we created
-        final QueryProfile originalQP = createQueryProfile("test001");
-        final String qpName = originalQP.getName();
-        final QueryProfile qpFromServer = queryProfileService.retrieveQueryProfile(getTokenProxy(), qpName);
-        assertThat(qpFromServer, is(originalQP));
+    public void updateOptionsAndRetrieve() throws HodErrorException {
+        final QueryProfileRequestBuilder createParameters = new QueryProfileRequestBuilder()
+            .setSynonymsEnabled(true);
 
-        // Create a new config, then change the query profile on the server.  Fetch it back and verify that it's changed
-        // These values are deliberately different from the ones created in the superclass
-        final QueryProfileRequestBuilder requestBuilder = new QueryProfileRequestBuilder()
-            .setPromotionsEnabled(false)
-            .setPromotionsIdentified(true)
-            .addPromotionCategories("NotPromotions");
+        final ResourceIdentifier profileIdentifier = trackedCreateProfile(createParameters).getProfile();
 
-        queryProfileService.updateQueryProfile(getTokenProxy(), qpName, getQueryManipulationIndex(), requestBuilder);
+        final String description = "My freshly updated query profile";
 
-        final QueryProfile newQPFromServer = queryProfileService.retrieveQueryProfile(getTokenProxy(), qpName);
+        final QueryProfileRequestBuilder updateParameters = new QueryProfileRequestBuilder()
+            .setDescription(description)
+            .setBlacklistsEnabled(true)
+            .setSynonymsEnabled(false)
+            .addPromotionCategories("new_category");
 
-        assertThat(newQPFromServer, is(new QueryProfile.Builder()
-            .setName(qpName)
-            .setQueryManipulationIndex(getQueryManipulationIndex())
-            .setPromotionsEnabled(false)
-            .setPromotionsIdentified(true)
-            .setPromotionCategories(Collections.singletonList("notpromotions"))
-            .build())
-        );
+        service.updateQueryProfile(getTokenProxy(), profileIdentifier, null, updateParameters);
+
+        final QueryProfile profile = service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
+
+        assertThat(profile.getName(), is(profileIdentifier.getName()));
+        assertThat(profile.getDescription(), is(description));
+        assertThat(profile.getQueryManipulationIndex(), is(QUERY_MANIPULATION_INDEX_NAME));
+        assertThat(profile.getPromotionsIdentified(), is(true));
+
+        assertThat(profile.getBlacklistsEnabled(), is(true));
+        assertThat(profile.getSynonymsEnabled(), is(false));
+        assertThat(profile.getPromotionsEnabled(), is(false));
+
+        assertThat(profile.getPromotionCategories(), contains("new_category"));
+        assertThat(profile.getBlacklistCategories(), empty());
+        assertThat(profile.getSynonymCategories(), empty());
+    }
+
+    @Test
+    public void updateNonExistentFails() {
+        final QueryProfileRequestBuilder parameters = new QueryProfileRequestBuilder()
+            .setPromotionsIdentified(true);
+
+        testErrorCode(HodErrorCode.QUERY_PROFILE_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.updateQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName()), null, parameters);
+            }
+        });
+    }
+
+    @Test
+    public void updateWithNonExistentIndexFails() throws HodErrorException {
+        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+
+        testErrorCode(HodErrorCode.INDEX_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                service.updateQueryProfile(getTokenProxy(), profileIdentifier, uniqueName(), null);
+            }
+        });
     }
 }
