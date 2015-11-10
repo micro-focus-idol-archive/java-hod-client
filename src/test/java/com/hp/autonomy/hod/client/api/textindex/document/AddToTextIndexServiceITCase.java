@@ -83,7 +83,7 @@ public class AddToTextIndexServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void testAddFileToTextIndex() throws HodErrorException, InterruptedException {
-        final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/the-end.txt");
+        final File file = new File("src/test/resources/com/hp/autonomy/hod/client/api/textindex/the-end.txt");
         final String reference = "63edb67f-c930-4b7b-8c33-2cd28e5cc670";
 
         final Map<String, Object> additionalMetadata = new HashMap<>();

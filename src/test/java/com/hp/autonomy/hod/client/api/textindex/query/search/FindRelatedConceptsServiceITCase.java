@@ -59,7 +59,7 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
 
     @Test
     public void testFindForFile() throws HodErrorException {
-        final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt");
+        final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindex/query/queryText.txt");
 
         final FindRelatedConceptsRequestBuilder params = new FindRelatedConceptsRequestBuilder()
             .setIndexes(Collections.singleton(ResourceIdentifier.WIKI_ENG));

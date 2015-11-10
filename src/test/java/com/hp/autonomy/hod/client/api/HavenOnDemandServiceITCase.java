@@ -106,7 +106,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     @Test
     public void testPost() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt")));
+        params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindex/query/queryText.txt")));
         params.put("indexes", ResourceIdentifier.WIKI_ENG);
         params.put("total_results", true);
 
