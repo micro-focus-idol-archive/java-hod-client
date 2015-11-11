@@ -48,6 +48,7 @@ public class DocumentTest {
             .setSection(0)
             .setSummary("cool stuff")
             .setWeight(99)
+            .setPromotionType(PromotionType.DYNAMIC_PROMOTION)
             .addField("string", "hello world")
             .addField("double", 42.0)
             // Arrays.asList returns List which is not serializable
@@ -72,6 +73,5 @@ public class DocumentTest {
             assertThat(documentFromStream, is(document));
         }
     }
-
 
 }

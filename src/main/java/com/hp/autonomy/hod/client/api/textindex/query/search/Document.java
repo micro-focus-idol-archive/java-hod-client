@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -75,6 +76,7 @@ public class Document implements Serializable {
     /**
      * @return A map containing any fields on the document which are not known ahead of time
      */
+    @Setter(AccessLevel.NONE)
     private transient Map<String, Serializable> fields;
 
     /**
@@ -82,6 +84,13 @@ public class Document implements Serializable {
      * @serial The section number of the result document
      */
     private final Integer section;
+
+    /**
+     * @return The type of promotion which triggered this result
+     * @serial The type of promotion which triggered this result
+     */
+    @Setter(AccessLevel.NONE)
+    private PromotionType promotionType;
 
     private Document(final Builder builder) {
         reference = builder.reference;
@@ -93,6 +102,8 @@ public class Document implements Serializable {
         fields = builder.fields;
         content = builder.content;
         section = builder.section;
+
+        promotionType = builder.promotionType == null ? PromotionType.NONE : builder.promotionType;
     }
 
     /**
@@ -105,7 +116,7 @@ public class Document implements Serializable {
 
         objectOutputStream.writeInt(fields.size());
 
-        for(final Map.Entry<String, Serializable> entry : fields.entrySet()) {
+        for (final Map.Entry<String, Serializable> entry : fields.entrySet()) {
             objectOutputStream.writeObject(entry.getKey());
             objectOutputStream.writeObject(entry.getValue());
         }
@@ -117,10 +128,15 @@ public class Document implements Serializable {
 
         final int fieldCount = objectInputStream.readInt();
 
-        for(int i = 0; i < fieldCount; i++) {
+        for (int i = 0; i < fieldCount; i++) {
             final String fieldName = (String) objectInputStream.readObject();
             final Serializable value = (Serializable) objectInputStream.readObject();
             fields.put(fieldName, value);
+        }
+
+        // For backwards compatibility of serialized form
+        if (promotionType == null) {
+            promotionType = PromotionType.NONE;
         }
     }
 
@@ -135,6 +151,7 @@ public class Document implements Serializable {
         private String index;
         private String title;
         private Integer section;
+        private PromotionType promotionType;
 
         @SuppressWarnings("FieldMayBeFinal")
         private String content = "";
