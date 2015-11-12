@@ -12,7 +12,7 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
+import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexServiceImpl;
@@ -32,7 +32,7 @@ import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCodeAndMessage;
 @RunWith(Parameterized.class)
 public class HodErrorITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexService<Documents> queryTextIndexService;
+    private QueryTextIndexService<Document> queryTextIndexService;
 
     @Override
     @Before

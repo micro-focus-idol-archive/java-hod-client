@@ -34,7 +34,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(Parameterized.class)
 public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
-    private FindSimilarService<Documents> findSimilarService;
+    private FindSimilarService<Document> findSimilarService;
     private AddToTextIndexService addToTextIndexService;
 
     public FindSimilarITCase(final Endpoint endpoint) {
@@ -55,7 +55,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .addIndexes(ResourceIdentifier.WIKI_ENG);
 
-        final Documents documents = findSimilarService.findSimilarDocumentsToText(getTokenProxy(), "cats", params);
+        final Documents<Document> documents = findSimilarService.findSimilarDocumentsToText(getTokenProxy(), "cats", params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -68,7 +68,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .addIndexes(ResourceIdentifier.WIKI_ENG);
 
-        final Documents documents = findSimilarService.findSimilarDocumentsToFile(getTokenProxy(), file, params);
+        final Documents<Document> documents = findSimilarService.findSimilarDocumentsToFile(getTokenProxy(), file, params);
 
         final List<Document> documentList = documents.getDocuments();
 
@@ -92,7 +92,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
         final com.hp.autonomy.hod.client.api.textindex.document.Documents<com.hp.autonomy.hod.client.api.textindex.document.Document> documents
                 = new com.hp.autonomy.hod.client.api.textindex.document.Documents<>(document1, document2);
 
-        final AtomicReference<Documents> result = new AtomicReference<>();
+        final AtomicReference<Documents<Document>> result = new AtomicReference<>();
 
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -106,7 +106,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
                     final QueryRequestBuilder params = new QueryRequestBuilder()
                             .addIndexes(getPrivateIndex());
 
-                    final Documents similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getTokenProxy(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
+                    final Documents<Document> similarDocuments = findSimilarService.findSimilarDocumentsToIndexReference(getTokenProxy(), "65cf2d9e-ac37-4caf-9fdc-0dc918b532af", params);
 
                     result.set(similarDocuments);
                 } catch (final HodErrorException e) {
@@ -119,7 +119,7 @@ public class FindSimilarITCase extends AbstractHodClientIntegrationTest {
 
         latch.await();
 
-        final Documents similarDocuments = result.get();
+        final Documents<Document> similarDocuments = result.get();
 
         assertThat(similarDocuments, is(notNullValue()));
 

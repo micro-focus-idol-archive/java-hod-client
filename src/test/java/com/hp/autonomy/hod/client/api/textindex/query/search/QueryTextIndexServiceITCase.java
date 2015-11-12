@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexService<Documents> queryTextIndexService;
+    private QueryTextIndexService<Document> queryTextIndexService;
 
     @Override
     @Before
@@ -51,7 +51,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .setTotalResults(true)
                 .addIndexes(ResourceIdentifier.WIKI_ENG, ResourceIdentifier.WIKI_GER);
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
+        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
 
@@ -73,7 +73,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
                 .setSort(Sort.date);
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
+        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
@@ -89,7 +89,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
                 .setSort(Sort.date);
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);
+        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));

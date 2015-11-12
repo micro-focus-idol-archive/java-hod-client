@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
@@ -20,6 +21,7 @@ import retrofit.mime.TypedFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * Default implementation of FindSimilarService
@@ -27,24 +29,24 @@ import java.io.InputStream;
  * If you don't need a custom return type use the {@link #documentsService(HodServiceConfig)} static factory
  * @param <T> The desired return type of the service
  */
-public class FindSimilarServiceImpl<T> implements FindSimilarService<T> {
+public class FindSimilarServiceImpl<T extends Serializable> implements FindSimilarService<T> {
 
     private static final String MIME_TYPE = "application/octet-stream";
 
     private final FindSimilarBackend findSimilarBackend;
     private final Requester<?, TokenType.Simple> requester;
-    private final Class<T> returnType;
+    private final JavaType returnType;
 
     /**
      * Creates a new FindSimilarServiceImpl with the given configuration and return type
      * @param hodServiceConfig The configuration to use
-     * @param returnType The desired return type of the methods of the service. This type must have the correct Jackson
+     * @param documentType The desired type of the documents returned by the service. This type must have the correct Jackson
      * annotations to read responses from HP Haven OnDemand
      */
-    public FindSimilarServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final Class<T> returnType) {
+    public FindSimilarServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final Class<T> documentType) {
         findSimilarBackend = hodServiceConfig.getRestAdapter().create(FindSimilarBackend.class);
         requester = hodServiceConfig.getRequester();
-        this.returnType = returnType;
+        returnType = hodServiceConfig.getObjectMapper().getTypeFactory().constructParametrizedType(Documents.class, Documents.class, documentType);
     }
 
     /**
@@ -52,78 +54,78 @@ public class FindSimilarServiceImpl<T> implements FindSimilarService<T> {
      * @param hodServiceConfig The configuration to use
      * @return The new service
      */
-    public static FindSimilarServiceImpl<Documents> documentsService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
-        return new FindSimilarServiceImpl<>(hodServiceConfig, Documents.class);
+    public static FindSimilarServiceImpl<Document> documentsService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
+        return new FindSimilarServiceImpl<>(hodServiceConfig, Document.class);
     }
 
     @Override
-    public T findSimilarDocumentsToText(final String text, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getTextBackendCaller(text, params));
+    public Documents<T> findSimilarDocumentsToText(final String text, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getTextBackendCaller(text, params));
     }
 
     @Override
-    public T findSimilarDocumentsToText(final TokenProxy<?, TokenType.Simple> tokenProxy, final String text, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getTextBackendCaller(text, params));
+    public Documents<T> findSimilarDocumentsToText(final TokenProxy<?, TokenType.Simple> tokenProxy, final String text, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getTextBackendCaller(text, params));
     }
 
     @Override
-    public T findSimilarDocumentsToReference(final String reference, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getReferenceBackendCaller(reference, params));
+    public Documents<T> findSimilarDocumentsToReference(final String reference, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getReferenceBackendCaller(reference, params));
     }
 
     @Override
-    public T findSimilarDocumentsToReference(final TokenProxy<?, TokenType.Simple> tokenProxy, final String reference, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getReferenceBackendCaller(reference, params));
+    public Documents<T> findSimilarDocumentsToReference(final TokenProxy<?, TokenType.Simple> tokenProxy, final String reference, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getReferenceBackendCaller(reference, params));
     }
 
     @Override
-    public T findSimilarDocumentsToUrl(final String url, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getUrlBackendCaller(url, params));
+    public Documents<T> findSimilarDocumentsToUrl(final String url, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getUrlBackendCaller(url, params));
     }
 
     @Override
-    public T findSimilarDocumentsToUrl(final TokenProxy<?, TokenType.Simple> tokenProxy, final String url, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getUrlBackendCaller(url, params));
+    public Documents<T> findSimilarDocumentsToUrl(final TokenProxy<?, TokenType.Simple> tokenProxy, final String url, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getUrlBackendCaller(url, params));
     }
 
     @Override
-    public T findSimilarDocumentsToIndexReference(final String indexReference, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getIndexReferenceBackendCaller(indexReference, params));
+    public Documents<T> findSimilarDocumentsToIndexReference(final String indexReference, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getIndexReferenceBackendCaller(indexReference, params));
     }
 
     @Override
-    public T findSimilarDocumentsToIndexReference(final TokenProxy<?, TokenType.Simple> tokenProxy, final String indexReference, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getIndexReferenceBackendCaller(indexReference, params));
+    public Documents<T> findSimilarDocumentsToIndexReference(final TokenProxy<?, TokenType.Simple> tokenProxy, final String indexReference, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getIndexReferenceBackendCaller(indexReference, params));
     }
 
     @Override
-    public T findSimilarDocumentsToFile(final File file, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getFileBackendCaller(file, params));
+    public Documents<T> findSimilarDocumentsToFile(final File file, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getFileBackendCaller(file, params));
     }
 
     @Override
-    public T findSimilarDocumentsToFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final File file, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getFileBackendCaller(file, params));
+    public Documents<T> findSimilarDocumentsToFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final File file, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getFileBackendCaller(file, params));
     }
 
     @Override
-    public T findSimilarDocumentsToFile(final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getByteArrayBackendCaller(bytes, params));
+    public Documents<T> findSimilarDocumentsToFile(final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getByteArrayBackendCaller(bytes, params));
     }
 
     @Override
-    public T findSimilarDocumentsToFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getByteArrayBackendCaller(bytes, params));
+    public Documents<T> findSimilarDocumentsToFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getByteArrayBackendCaller(bytes, params));
     }
 
     @Override
-    public T findSimilarDocumentsToFile(final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(returnType, getInputStreamBackendCaller(inputStream, params));
+    public Documents<T> findSimilarDocumentsToFile(final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(returnType, getInputStreamBackendCaller(inputStream, params));
     }
 
     @Override
-    public T findSimilarDocumentsToFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, getInputStreamBackendCaller(inputStream, params));
+    public Documents<T> findSimilarDocumentsToFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
+        return requester.unsafeMakeRequest(tokenProxy, returnType, getInputStreamBackendCaller(inputStream, params));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getTextBackendCaller(final String text, final QueryRequestBuilder params) {

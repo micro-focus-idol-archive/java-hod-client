@@ -11,10 +11,7 @@ import com.hp.autonomy.hod.client.HodServiceConfigFactory;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
-import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
-import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
-import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexServiceImpl;
+import com.hp.autonomy.hod.client.api.textindex.query.search.*;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -35,7 +32,7 @@ import static org.hamcrest.Matchers.greaterThan;
 @RunWith(Parameterized.class)
 public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexService<Documents> queryTextIndexService;
+    private QueryTextIndexService<Document> queryTextIndexService;
 
     @Override
     @Before
@@ -74,7 +71,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
             .addIndexes(ResourceIdentifier.WIKI_ENG)
             .setTotalResults(true);
 
-        final Documents documents = queryTextIndexService.queryTextIndexWithText("*", params);
+        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText("*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
     }
