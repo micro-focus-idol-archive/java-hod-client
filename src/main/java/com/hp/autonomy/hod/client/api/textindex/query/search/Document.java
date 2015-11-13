@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.AccessLevel;
@@ -151,6 +152,8 @@ public class Document implements Serializable {
         private String index;
         private String title;
         private Integer section;
+
+        @JsonProperty("promotion")
         private PromotionType promotionType;
 
         @SuppressWarnings("FieldMayBeFinal")
