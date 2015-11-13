@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
@@ -26,13 +31,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
-/*
- * $Id:$
- *
- * Copyright (c) 2015, Autonomy Systems Ltd.
- *
- * Last modified by $Author:$ on $Date:$
- */
 @RunWith(Parameterized.class)
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
