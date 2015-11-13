@@ -5,7 +5,11 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.ApplicationTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.CombinedTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.DeveloperTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UnboundTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 

@@ -14,13 +14,6 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
 
-/*
- * $Id:$
- *
- * Copyright (c) 2015, Autonomy Systems Ltd.
- *
- * Last modified by $Author:$ on $Date:$
- */
 public class JobServiceImpl<T extends JobStatus<?>> implements JobService<T> {
 
     private final Class<? extends T> returnType;

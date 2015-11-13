@@ -1,10 +1,19 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.hod.client.api.analysis.extractstructure;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
-import retrofit.http.*;
+import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.http.Query;
 import retrofit.mime.TypedOutput;
 
 import java.util.LinkedHashMap;

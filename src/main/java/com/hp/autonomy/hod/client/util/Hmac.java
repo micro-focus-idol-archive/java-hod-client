@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.hod.client.util;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
@@ -14,7 +19,11 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Hmac {
     private static final String HMAC_SHA1 = "HmacSHA1";
