@@ -7,7 +7,11 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
-import retrofit.http.*;
+import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
 
 /**
  * Service for making authentication requests to HP Haven OnDemand

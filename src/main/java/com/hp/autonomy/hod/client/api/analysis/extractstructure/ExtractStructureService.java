@@ -1,6 +1,5 @@
 package com.hp.autonomy.hod.client.api.analysis.extractstructure;
 
-import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;

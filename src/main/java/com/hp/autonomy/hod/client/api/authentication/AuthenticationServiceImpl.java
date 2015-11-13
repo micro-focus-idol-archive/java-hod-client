@@ -7,7 +7,11 @@ package com.hp.autonomy.hod.client.api.authentication;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hp.autonomy.hod.client.api.authentication.tokeninformation.*;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.ApplicationTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.CombinedTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.DeveloperTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UnboundTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UserTokenInformation;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -18,7 +22,13 @@ import com.hp.autonomy.hod.client.util.Request;
 import retrofit.client.Response;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Default implementation of {@link AuthenticationService}

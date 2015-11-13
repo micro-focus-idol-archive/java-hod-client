@@ -7,7 +7,13 @@ package com.hp.autonomy.hod.client.api.developer;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.StatusResponse;
-import retrofit.http.*;
+import retrofit.http.DELETE;
+import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.http.Path;
 
 interface ApplicationBackend {
     String APPLICATION_PATH = "/2/application";

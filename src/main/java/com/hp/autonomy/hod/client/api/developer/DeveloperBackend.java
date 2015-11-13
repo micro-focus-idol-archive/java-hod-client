@@ -6,7 +6,11 @@
 package com.hp.autonomy.hod.client.api.developer;
 
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import retrofit.http.*;
+import retrofit.http.Header;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.http.Path;
 
 import java.util.UUID;
 

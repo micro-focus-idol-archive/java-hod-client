@@ -5,7 +5,11 @@
 
 package com.hp.autonomy.hod.client;
 
-import com.hp.autonomy.hod.client.api.authentication.*;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationService;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationServiceImpl;
+import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 
 import java.util.UUID;
