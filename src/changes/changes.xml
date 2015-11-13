@@ -7,6 +7,38 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.14.0" date="2015-11-13">
+            <action dev="Matthew Gordon" type="update">
+                Tokens and token proxies are now parameterized by Entity Type and Token Type.
+            </action>
+            <action dev="Matthew Gordon" type="add">
+                Add support for token information APIs.
+            </action>
+            <action dev="Matthew Gordon" type="add">
+                Add support for application APIs.
+            </action>
+            <action dev="Daniel Grayling" type="add">
+                Add support for Create User API.
+            </action>
+            <action dev="Alex Scown" type="add">
+                Add support for Reset Authentication API.
+            </action>
+            <action dev="Matthew Gordon" type="add">
+                Add support for remaining User APIs.
+            </action>
+            <action dev="Matthew Gordon" type="add">
+                Add support for Group APIs.
+            </action>
+            <action dev="Matthew Gordon" type="add">
+                Add support for additional Authentication APIs.
+            </action>
+            <action dev="Alex Scown" type="fix">
+                Make all types ignore unknown properties when parsing JSON.
+            </action>
+            <action dev="Matthew Gordon" type="remove">
+                Remove QueryProfileService#listQueryProfiles, which was deprecated in 0.9.0.
+            </action>
+        </release>
         <release version="0.13.1" date="2015-09-23">
             <action dev="Alex Scown" type="fix">
                 Rename internal method to fix collisions when Jackson parses JSON
