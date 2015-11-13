@@ -129,7 +129,7 @@ public class QueryRequestBuilder {
     /**
      * @param queryProfile Value for the query_profile parameter
      */
-    private String queryProfile;
+    private ResourceIdentifier queryProfile;
 
     /**
      * @param promotions Value for the promotion parameter

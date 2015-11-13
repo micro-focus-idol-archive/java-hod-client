@@ -44,7 +44,7 @@ interface HavenOnDemandBackend {
      */
     @GET(SYNC_URL_ONE)
     Response get(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @QueryMap Map<String, Object> params
@@ -62,7 +62,7 @@ interface HavenOnDemandBackend {
      */
     @GET(SYNC_URL_TWO)
     Response get(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -82,7 +82,7 @@ interface HavenOnDemandBackend {
      */
     @GET(SYNC_URL_THREE)
     Response get(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -101,7 +101,7 @@ interface HavenOnDemandBackend {
      */
     @GET(ASYNC_URL_ONE)
     Response getAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @QueryMap Map<String, Object> params
@@ -119,7 +119,7 @@ interface HavenOnDemandBackend {
      */
     @GET(ASYNC_URL_TWO)
     Response getAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -138,7 +138,7 @@ interface HavenOnDemandBackend {
      */
     @GET(ASYNC_URL_THREE)
     Response getAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -158,7 +158,7 @@ interface HavenOnDemandBackend {
     @POST(SYNC_URL_ONE)
     @Multipart
     Response post(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @PartMap Map<String, Object> params
@@ -177,7 +177,7 @@ interface HavenOnDemandBackend {
     @POST(SYNC_URL_TWO)
     @Multipart
     Response post(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -198,7 +198,7 @@ interface HavenOnDemandBackend {
     @POST(SYNC_URL_THREE)
     @Multipart
     Response post(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -218,7 +218,7 @@ interface HavenOnDemandBackend {
     @POST(ASYNC_URL_ONE)
     @Multipart
     Response postAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("api") String api,
         @Path("version") int version,
         @PartMap Map<String, Object> params
@@ -237,7 +237,7 @@ interface HavenOnDemandBackend {
     @POST(ASYNC_URL_TWO)
     @Multipart
     Response postAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -258,7 +258,7 @@ interface HavenOnDemandBackend {
     @POST(ASYNC_URL_THREE)
     @Multipart
     Response postAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -278,7 +278,7 @@ interface HavenOnDemandBackend {
     @PUT(SYNC_URL_ONE)
     @Multipart
     Response put(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @PartMap Map<String, Object> params
@@ -297,7 +297,7 @@ interface HavenOnDemandBackend {
     @PUT(SYNC_URL_TWO)
     @Multipart
     Response put(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -318,7 +318,7 @@ interface HavenOnDemandBackend {
     @PUT(SYNC_URL_THREE)
     @Multipart
     Response put(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -338,7 +338,7 @@ interface HavenOnDemandBackend {
     @PUT(ASYNC_URL_ONE)
     @Multipart
     Response putAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @PartMap Map<String, Object> params
@@ -357,7 +357,7 @@ interface HavenOnDemandBackend {
     @PUT(ASYNC_URL_TWO)
     @Multipart
     Response putAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -378,7 +378,7 @@ interface HavenOnDemandBackend {
     @PUT(ASYNC_URL_THREE)
     @Multipart
     Response putAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -397,7 +397,7 @@ interface HavenOnDemandBackend {
      */
     @DELETE(SYNC_URL_ONE)
     Response delete(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @QueryMap Map<String, Object> params
@@ -415,7 +415,7 @@ interface HavenOnDemandBackend {
      */
     @DELETE(SYNC_URL_TWO)
     Response delete(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -435,7 +435,7 @@ interface HavenOnDemandBackend {
      */
     @DELETE(SYNC_URL_THREE)
     Response delete(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,
@@ -454,7 +454,7 @@ interface HavenOnDemandBackend {
      */
     @DELETE(ASYNC_URL_ONE)
     Response deleteAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String api,
         @Path("version") int version,
         @QueryMap Map<String, Object> params
@@ -472,7 +472,7 @@ interface HavenOnDemandBackend {
      */
     @DELETE(ASYNC_URL_TWO)
     Response deleteAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("version") int version,
@@ -491,7 +491,7 @@ interface HavenOnDemandBackend {
      */
     @DELETE(ASYNC_URL_THREE)
     Response deleteAsync(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("first") String first,
         @Path("second") String second,
         @Path("third") String third,

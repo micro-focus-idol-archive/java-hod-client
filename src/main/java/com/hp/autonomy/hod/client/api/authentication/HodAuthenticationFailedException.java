@@ -12,9 +12,9 @@ import lombok.Getter;
 public class HodAuthenticationFailedException extends RuntimeException {
     private static final long serialVersionUID = 4189975984173937763L;
 
-    private final TokenProxy tokenProxy;
+    private final TokenProxy<?, ?> tokenProxy;
 
-    public HodAuthenticationFailedException(final String message, final TokenProxy tokenProxy) {
+    public HodAuthenticationFailedException(final String message, final TokenProxy<?, ?> tokenProxy) {
         super(message);
 
         this.tokenProxy = tokenProxy;

@@ -13,24 +13,35 @@ class HodException < Exception
 
 end
 
-def get(api, proxy_host, proxy_port, options = {})
-  make_request(api, proxy_host, proxy_port, Net::HTTP::Get, options)
+def resolve_endpoint(environment)
+  endpoints = {
+      'INTEGRATION' => 'https://api.int.havenondemand.com',
+      'PREVIEW' => 'https://api.preview.havenondemand.com',
+      'STAGING' => 'https://api.staging.havenondemand.com',
+      'PRODUCTION' => 'https://api.havenondemand.com'
+  }
+
+  endpoints[environment]
 end
 
-def post(api, proxy_host, proxy_port, options = {})
-  make_request(api, proxy_host, proxy_port, Net::HTTP::Post, options)
-  end
-
-def put(api, proxy_host, proxy_port, options = {})
-  make_request(api, proxy_host, proxy_port, Net::HTTP::Put, options)
+def get(endpoint, api, proxy_host, proxy_port, options = {})
+  make_request(endpoint, api, proxy_host, proxy_port, Net::HTTP::Get, options)
 end
 
-def delete(api, proxy_host, proxy_port, options = {})
-  make_request(api, proxy_host, proxy_port, Net::HTTP::Delete, options)
+def post(endpoint, api, proxy_host, proxy_port, options = {})
+  make_request(endpoint, api, proxy_host, proxy_port, Net::HTTP::Post, options)
 end
 
-def make_request(api, proxy_host, proxy_port, request_method, options = {})
-  uri = URI.parse("https://api.int.havenondemand.com/2#{api}")
+def put(endpoint, api, proxy_host, proxy_port, options = {})
+  make_request(endpoint, api, proxy_host, proxy_port, Net::HTTP::Put, options)
+end
+
+def delete(endpoint, api, proxy_host, proxy_port, options = {})
+  make_request(endpoint, api, proxy_host, proxy_port, Net::HTTP::Delete, options)
+end
+
+def make_request(endpoint, api, proxy_host, proxy_port, request_method, options = {})
+  uri = URI.parse("#{endpoint}/2#{api}")
 
   if options[:params]
     uri.query = URI.encode_www_form(options[:params])
@@ -55,7 +66,7 @@ def make_request(api, proxy_host, proxy_port, request_method, options = {})
 
     json = JSON.parse(response.body)
 
-    unless response.kind_of? Net::HTTPSuccess
+    if !(response.kind_of? Net::HTTPSuccess) || (json['actions'] && json['actions'][0]['errors'])
       puts response.body
       raise HodException.new(json), "Error making request #{uri}"
     end
@@ -64,8 +75,8 @@ def make_request(api, proxy_host, proxy_port, request_method, options = {})
   end
 end
 
-def get_token(apikey, application, domain, proxy_host, proxy_port)
-  json = post('/authenticate/application', proxy_host, proxy_port, :apikey => apikey, :body => "name=#{application}&domain=#{domain}&token_type=simple")
+def get_token(endpoint, apikey, application, domain, proxy_host, proxy_port)
+  json = post(endpoint, '/authenticate/application', proxy_host, proxy_port, :apikey => apikey, :body => "name=#{application}&domain=#{domain}&token_type=simple")
 
   token = json['token']
 
@@ -79,7 +90,7 @@ def get_required_indexes
   ]
 end
 
-def list_indexes(proxy_host, proxy_port, token)
-  index_list = get("/api/sync/resource/v1", proxy_host, proxy_port, :token => token, :params => {:type => 'content'})
+def list_indexes(endpoint, proxy_host, proxy_port, token)
+  index_list = get(endpoint, '/api/sync/resource/v1', proxy_host, proxy_port, :token => token, :params => {:type => 'content'})
   index_list['private_resources'].map {|resource| resource['resource']}
 end

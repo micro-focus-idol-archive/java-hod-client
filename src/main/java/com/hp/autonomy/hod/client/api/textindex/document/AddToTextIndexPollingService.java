@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
@@ -39,13 +41,13 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
 
     private final AddToTextIndexBackend addToTextIndexBackend;
     private final JobService<? extends JobStatus<AddToTextIndexResponse>> jobService;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
 
     /**
      * Creates a new AddToTextIndexPollingService with a default ScheduledExecutorService
      * @param hodServiceConfig The configuration for the service
      */
-    public AddToTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
+    public AddToTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         super();
 
         addToTextIndexBackend = hodServiceConfig.getRestAdapter().create(AddToTextIndexBackend.class);
@@ -58,7 +60,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
      * @param hodServiceConfig The configuration for the service
      * @param executorService The executor service to use while polling for status updates
      */
-    public AddToTextIndexPollingService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
+    public AddToTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
         addToTextIndexBackend = hodServiceConfig.getRestAdapter().create(AddToTextIndexBackend.class);
@@ -80,7 +82,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
 
     @Override
     public void addJsonToTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final Documents<?> documents,
         final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
@@ -105,7 +107,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
 
     @Override
     public void addUrlToTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final String url,
         final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
@@ -130,7 +132,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
 
     @Override
     public void addReferenceToTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final String reference,
         final ResourceIdentifier index,
         final AddToTextIndexRequestBuilder params,
@@ -149,7 +151,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy<?, TokenType.Simple> tokenProxy, final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getFileBackendCaller(file, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
@@ -163,7 +165,7 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy<?, TokenType.Simple> tokenProxy, final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getByteArrayBackendCaller(bytes, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
@@ -177,61 +179,61 @@ public class AddToTextIndexPollingService extends AbstractPollingService impleme
     }
 
     @Override
-    public void addFileToTextIndex(final TokenProxy tokenProxy, final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
+    public void addFileToTextIndex(final TokenProxy<?, TokenType.Simple> tokenProxy, final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params, final HodJobCallback<AddToTextIndexResponse> callback) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getInputStreamBackendCaller(inputStream, index, params));
 
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getTextBackendCaller(final Documents<?> documents, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getTextBackendCaller(final Documents<?> documents, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return addToTextIndexBackend.addJsonToTextIndex(authenticationToken, documents, index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getUrlBackendCaller(final String url, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlBackendCaller(final String url, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return addToTextIndexBackend.addUrlToTextIndex(authenticationToken, url, index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getReferenceBackendCaller(final String reference, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceBackendCaller(final String reference, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return addToTextIndexBackend.addReferenceToTextIndex(authenticationToken, reference, index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getFileBackendCaller(final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getFileBackendCaller(final File file, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedFile("application/octet-stream", file), index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getByteArrayBackendCaller(final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayBackendCaller(final byte[] bytes, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", bytes), index, params.build());
             }
         };
     }
 
-    private Requester.BackendCaller getInputStreamBackendCaller(final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamBackendCaller(final InputStream inputStream, final ResourceIdentifier index, final AddToTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 try {
                     return addToTextIndexBackend.addFileToTextIndex(authenticationToken, new TypedByteArrayWithFilename("application/octet-stream", IOUtils.toByteArray(inputStream)), index, params.build());
                 } catch (final IOException e) {

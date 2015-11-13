@@ -8,7 +8,6 @@ package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
@@ -166,7 +165,6 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
     @Setter
     @Accessors(chain = true)
     @JsonPOJOBuilder(withPrefix = "set")
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
         private final Map<String, Map<String, Integer>> parametricValuesMap = new LinkedHashMap<>();
 

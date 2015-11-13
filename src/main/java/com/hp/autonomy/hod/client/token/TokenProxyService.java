@@ -5,14 +5,17 @@
 
 package com.hp.autonomy.hod.client.token;
 
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
+
 /**
  * Service which provides a TokenProxy, which removes the need to send a TokenProxy with every request
  */
-public interface TokenProxyService {
+public interface TokenProxyService<E extends EntityType, T extends TokenType> {
 
     /**
      * @return A TokenProxy which can be exchanged for a token to query HP Haven OnDemand
      */
-    TokenProxy getTokenProxy();
+    TokenProxy<E, T> getTokenProxy();
 
 }

@@ -11,16 +11,19 @@ import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 /**
- * Helper class for building up optional parameters for the CreateQueryProfile API and UpdateQueryProfile API. The default value
- * for all parameters is null. Null parameters will not be sent to HP Haven OnDemand
+ * Helper class for building up optional parameters for the CreateQueryProfile API and UpdateQueryProfile API. Null parameters
+ * or empty collections will not be sent to HP Haven OnDemand.
  */
 @Setter
 @Accessors(chain = true)
 public class QueryProfileRequestBuilder {
+    /**
+     * @param description Sets the value of the description parameter
+     */
+    private String description;
 
     /**
      * @param promotionsEnabled Sets the value of the promotions_enabled parameter
@@ -45,17 +48,17 @@ public class QueryProfileRequestBuilder {
     /**
      * @param promotionCategories Sets the value of the promotion_categories parameter
      */
-    private List<String> promotionCategories = new ArrayList<>();
+    private Collection<String> promotionCategories = new ArrayList<>();
 
     /**
      * @param synonymCategories Sets the value of the synonym_categories parameter
      */
-    private List<String> synonymCategories = new ArrayList<>();
+    private Collection<String> synonymCategories = new ArrayList<>();
 
     /**
      * @param blacklistCategories Sets the value of the blacklist_categories parameter
      */
-    private List<String> blacklistCategories = new ArrayList<>();
+    private Collection<String> blacklistCategories = new ArrayList<>();
 
     /**
      * Adds categories to the promotion_categories parameter
@@ -93,12 +96,9 @@ public class QueryProfileRequestBuilder {
         return this;
     }
 
-    /**
-     * @return A map of query parameters suitable for use with {@link QueryProfileService}. get is NOT supported on
-     * the resulting map
-     */
-    Map<String, Object> build() {
-        final Map<String, Object> params = new MultiMap<>();
+    MultiMap<String, Object> build() {
+        final MultiMap<String, Object> params = new MultiMap<>();
+        params.put("description", description);
         params.put("promotions_enabled", promotionsEnabled);
         params.put("promotions_identified", promotionsIdentified);
         params.put("synonyms_enabled", synonymsEnabled);

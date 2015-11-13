@@ -36,7 +36,7 @@ interface QueryTextIndexBackend {
      */
     @GET(URL)
     Response queryTextIndexWithText(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("text") String text,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -51,7 +51,7 @@ interface QueryTextIndexBackend {
      */
     @GET(URL)
     Response queryTextIndexWithReference(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("reference") String reference,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -65,7 +65,7 @@ interface QueryTextIndexBackend {
      */
     @GET(URL)
     Response queryTextIndexWithUrl(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("url") String url,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;
@@ -80,7 +80,7 @@ interface QueryTextIndexBackend {
     @Multipart
     @POST(URL)
     Response queryTextIndexWithFile(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;

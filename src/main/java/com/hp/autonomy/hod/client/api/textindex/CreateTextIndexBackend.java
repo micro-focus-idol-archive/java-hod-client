@@ -39,7 +39,7 @@ interface CreateTextIndexBackend {
      */
     @POST(URL)
     Response createTextIndex(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Path("indexName") String index,
         @Query("flavor") IndexFlavor flavor,
         @QueryMap Map<String, Object> params

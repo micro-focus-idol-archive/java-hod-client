@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.token;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -19,13 +21,13 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class InMemoryTokenRepository implements TokenRepository {
 
-    private final ConcurrentMap<TokenProxy, AuthenticationToken> map = new ConcurrentHashMap<>();
+    private final ConcurrentMap<TokenProxy<?,?>, AuthenticationToken<?,?>> map = new ConcurrentHashMap<>();
 
     @Override
-    public TokenProxy insert(final AuthenticationToken token) {
+    public <E extends EntityType, T extends TokenType> TokenProxy<E, T> insert(final AuthenticationToken<E, T> token) {
         checkTokenExpiry(token);
 
-        final TokenProxy key = new TokenProxy();
+        final TokenProxy<E, T> key = new TokenProxy<>(token.getEntityType(), token.getTokenType());
 
         map.put(key, token);
 
@@ -33,25 +35,32 @@ public class InMemoryTokenRepository implements TokenRepository {
     }
 
     @Override
-    public AuthenticationToken update(final TokenProxy key, final AuthenticationToken newToken) {
+    public <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> update(final TokenProxy<E, T> key, final AuthenticationToken<E, T> newToken) {
         checkTokenExpiry(newToken);
 
-        return map.replace(key, newToken);
+        // we only put matching pairs into the map
+        //noinspection unchecked
+        return (AuthenticationToken<E, T>) map.replace(key, newToken);
     }
 
     @Override
-    public AuthenticationToken get(final TokenProxy key) {
-        return map.get(key);
+    public <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> get(final TokenProxy<E, T> key) {
+        // we only put matching pairs into the map
+        //noinspection unchecked
+        return (AuthenticationToken<E, T>) map.get(key);
     }
 
     @Override
-    public AuthenticationToken remove(final TokenProxy key) {
-        return map.remove(key);
+    public <E extends EntityType, T extends TokenType> AuthenticationToken<E, T> remove(final TokenProxy<E, T> key) {
+        // we only put matching pairs into the map
+        //noinspection unchecked
+        return (AuthenticationToken<E, T>) map.remove(key);
     }
 
-    private void checkTokenExpiry(final AuthenticationToken token) {
+    private void checkTokenExpiry(final AuthenticationToken<?, ?> token) {
         if (token.hasExpired()) {
             throw new IllegalArgumentException("Token has already expired");
         }
     }
+
 }

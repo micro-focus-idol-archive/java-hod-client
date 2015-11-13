@@ -35,7 +35,7 @@ interface DeleteFromTextIndexBackend {
      */
     @DELETE(URL)
     Response deleteReferencesFromTextIndex(
-        @Header("token") final AuthenticationToken token,
+        @Header("token") final AuthenticationToken<?, ?> token,
         @Path("indexName") final ResourceIdentifier index,
         @Query("index_reference") final List<String> references
     ) throws HodErrorException;
@@ -49,7 +49,7 @@ interface DeleteFromTextIndexBackend {
      */
     @DELETE(URL + "?delete_all_documents=true")
     Response deleteAllDocumentsFromTextIndex(
-        @Header("token") final AuthenticationToken token,
+        @Header("token") final AuthenticationToken<?, ?> token,
         @Path("indexName") final ResourceIdentifier index
     ) throws HodErrorException;
 

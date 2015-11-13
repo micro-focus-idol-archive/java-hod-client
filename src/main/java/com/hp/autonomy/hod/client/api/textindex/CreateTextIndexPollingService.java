@@ -7,6 +7,8 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -32,14 +34,14 @@ import java.util.concurrent.ScheduledExecutorService;
 public class CreateTextIndexPollingService extends AbstractPollingService implements CreateTextIndexService {
 
     private final CreateTextIndexBackend createTextIndexBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
     private final JobService<? extends JobStatus<CreateTextIndexResponse>> jobService;
 
     /**
      * Creates a new CreateTextIndexPollingService
      * @param hodServiceConfig The configuration to use
      */
-    public CreateTextIndexPollingService(final HodServiceConfig hodServiceConfig) {
+    public CreateTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         super();
 
         this.createTextIndexBackend = hodServiceConfig.getRestAdapter().create(CreateTextIndexBackend.class);
@@ -52,7 +54,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
      * @param hodServiceConfig The configuration to use
      * @param executorService The executor service to use while polling for status updates
      */
-    public CreateTextIndexPollingService(final HodServiceConfig hodServiceConfig, final ScheduledExecutorService executorService) {
+    public CreateTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
         super(executorService);
 
         this.createTextIndexBackend = hodServiceConfig.getRestAdapter().create(CreateTextIndexBackend.class);
@@ -74,7 +76,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
 
     @Override
     public void createTextIndex(
-        final TokenProxy tokenProxy,
+        final TokenProxy<?, TokenType.Simple> tokenProxy,
         final String index,
         final IndexFlavor flavor,
         final CreateTextIndexRequestBuilder params,
@@ -85,10 +87,10 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller getBackendCaller(final String index, final IndexFlavor flavor, final CreateTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final String index, final IndexFlavor flavor, final CreateTextIndexRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return createTextIndexBackend.createTextIndex(authenticationToken, index, flavor, params.build());
             }
         };

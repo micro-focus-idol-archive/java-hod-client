@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -51,11 +52,14 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
         final Entity entity0 = entities.get(0);
 
         assertThat(entity0.getOccurrences(), is(greaterThan(0)));
+        assertThat(entity0.getDocsWithPhrase(), is(greaterThan(0)));
+        assertThat(entity0.getDocsWithAllTerms(), is(greaterThan(0)));
+        assertThat(entity0.getCluster(), is(greaterThanOrEqualTo(0)));
     }
 
     @Test
     public void testFindForFile() throws HodErrorException {
-        final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindexing/query/queryText.txt");
+        final File file =  new File("src/test/resources/com/hp/autonomy/hod/client/api/textindex/query/queryText.txt");
 
         final FindRelatedConceptsRequestBuilder params = new FindRelatedConceptsRequestBuilder()
             .setIndexes(Collections.singleton(ResourceIdentifier.WIKI_ENG));
@@ -67,6 +71,9 @@ public class FindRelatedConceptsServiceITCase extends AbstractHodClientIntegrati
         final Entity entity0 = entities.get(0);
 
         assertThat(entity0.getOccurrences(), is(greaterThan(0)));
+        assertThat(entity0.getDocsWithPhrase(), is(greaterThan(0)));
+        assertThat(entity0.getDocsWithAllTerms(), is(greaterThan(0)));
+        assertThat(entity0.getCluster(), is(greaterThanOrEqualTo(0)));
     }
 
 }

@@ -7,9 +7,12 @@ package com.hp.autonomy.hod.client.error;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
+import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexServiceImpl;
@@ -23,15 +26,13 @@ import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCodeAndMessage;
 
 
 @RunWith(Parameterized.class)
 public class HodErrorITCase extends AbstractHodClientIntegrationTest {
 
-    private QueryTextIndexService<Documents> queryTextIndexService;
+    private QueryTextIndexService<Document> queryTextIndexService;
 
     @Override
     @Before
@@ -47,46 +48,44 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testNoQueryTextError() {
-        try {
-            queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "", new QueryRequestBuilder());
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.MISSING_REQUIRED_PARAMETERS));
-            assertThat(e.getMessage(), is("Missing required parameter(s)"));
-        }
+        testErrorCodeAndMessage(HodErrorCode.MISSING_REQUIRED_PARAMETERS, "Missing required parameter(s)", new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "", new QueryRequestBuilder());
+            }
+        });
     }
 
     @Test
     public void testHodReturnsJobError() {
-        try {
-            final QueryRequestBuilder params = new QueryRequestBuilder()
-                .addIndexes(ResourceIdentifier.WIKI_ENG);
+        final QueryRequestBuilder params = new QueryRequestBuilder()
+            .addIndexes(ResourceIdentifier.WIKI_ENG);
 
-            queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.NO_IGNORE_SPECIALS));
-            assertThat(e.getMessage(), is("Invalid query text"));
-        }
+        testErrorCodeAndMessage(HodErrorCode.NO_IGNORE_SPECIALS, "Invalid query text", new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
+            }
+        });
     }
 
     @Test
     public void testHodReturnsApiKeyError() throws IOException {
-        final TokenProxy tokenProxy = getConfig().getTokenRepository().insert(new AuthenticationToken(
-            DateTime.now().plus(Hours.ONE).getMillis(),
+        final TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy = getConfig().getTokenRepository().insert(new AuthenticationToken<>(
+            EntityType.Application.INSTANCE,
+            TokenType.Simple.INSTANCE,
+            DateTime.now().plus(Hours.ONE),
             "ID",
             "SECRET",
-            "simple",
-            1234567890L
+            new DateTime(1234567890L)
         ));
 
-        try {
-            queryTextIndexService.queryTextIndexWithText(tokenProxy, "*", new QueryRequestBuilder());
-            fail("HodErrorException not thrown");
-        } catch (final HodErrorException e) {
-            assertThat(e.getErrorCode(), is(HodErrorCode.AUTHENTICATION_FAILED));
-            assertThat(e.getMessage(), is("Authentication failed"));
-        }
+        testErrorCodeAndMessage(HodErrorCode.AUTHENTICATION_FAILED, "Authentication failed", new HodErrorTester.HodExceptionRunnable() {
+            @Override
+            public void run() throws HodErrorException {
+                queryTextIndexService.queryTextIndexWithText(tokenProxy, "*", new QueryRequestBuilder());
+            }
+        });
     }
 
 }

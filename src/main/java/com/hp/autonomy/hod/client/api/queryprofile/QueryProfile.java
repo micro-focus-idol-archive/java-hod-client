@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -16,13 +15,21 @@ import lombok.experimental.Accessors;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Representation of a query profile as returned by the retrieve query profile API.
+ */
 @Data
 @JsonDeserialize(builder = QueryProfile.Builder.class)
 public class QueryProfile {
-
-    /** The name of the Query Profile */
-    @JsonProperty("query_profile")
+    /**
+     * @return The name of the Query Profile
+     */
     private final String name;
+
+    /**
+     * @return A short description of the Query Profile
+     */
+    private final String description;
 
     /**
      * @return The name of the query manipulation index the profile applies to
@@ -64,8 +71,6 @@ public class QueryProfile {
      */
     private final List<String> blacklistCategories;
 
-    private final String description;
-
     private QueryProfile(final Builder builder) {
         name = builder.name;
         queryManipulationIndex = builder.queryManipulationIndex;
@@ -82,10 +87,7 @@ public class QueryProfile {
     @JsonPOJOBuilder(withPrefix = "set")
     @Setter
     @Accessors(chain = true)
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Builder {
-
-        /** The name of the Query Profile */
         @JsonProperty("query_profile")
         private String name;
 
@@ -114,20 +116,6 @@ public class QueryProfile {
         private List<String> blacklistCategories = Collections.emptyList();
 
         private String description;
-
-        // TODO: this is a stop gap until HOD catches up with the documentation
-        private Builder setConfig(final QueryProfile config) {
-            setQueryManipulationIndex(config.getQueryManipulationIndex());
-            setPromotionsEnabled(config.getPromotionsEnabled());
-            setPromotionCategories(config.getPromotionCategories());
-            setPromotionsIdentified(config.getPromotionsIdentified());
-            setSynonymsEnabled(config.getSynonymsEnabled());
-            setSynonymCategories(config.getSynonymCategories());
-            setBlacklistsEnabled(config.getBlacklistsEnabled());
-            setBlacklistCategories(config.getBlacklistCategories());
-
-            return this;
-        }
 
         public QueryProfile build() {
             return new QueryProfile(this);

@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+import com.hp.autonomy.hod.client.api.authentication.EntityType;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
@@ -24,13 +26,13 @@ public class GetParametricValuesServiceImpl implements GetParametricValuesServic
     private static final Class<FieldNames> RESPONSE_CLASS = FieldNames.class;
     
     private final GetParametricValuesBackend getParametricValuesBackend;
-    private final Requester requester;
+    private final Requester<?, TokenType.Simple> requester;
 
     /**
      * Creates a new GetParametricValuesServiceImpl with the given configuration
      * @param hodServiceConfig The configuration to use
      */
-    public GetParametricValuesServiceImpl(final HodServiceConfig hodServiceConfig) {
+    public GetParametricValuesServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         getParametricValuesBackend = hodServiceConfig.getRestAdapter().create(GetParametricValuesBackend.class);
         requester = hodServiceConfig.getRequester();
     }
@@ -41,14 +43,14 @@ public class GetParametricValuesServiceImpl implements GetParametricValuesServic
     }
 
     @Override
-    public FieldNames getParametricValues(final TokenProxy tokenProxy, final Collection<String> fieldNames, final Collection<ResourceIdentifier> indexes, final GetParametricValuesRequestBuilder params) throws HodErrorException {
+    public FieldNames getParametricValues(final TokenProxy<?, TokenType.Simple> tokenProxy, final Collection<String> fieldNames, final Collection<ResourceIdentifier> indexes, final GetParametricValuesRequestBuilder params) throws HodErrorException {
         return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(fieldNames, indexes, params));
     }
 
-    private Requester.BackendCaller getBackendCaller(final Collection<String> fieldNames, final Collection<ResourceIdentifier> indexes, final GetParametricValuesRequestBuilder params) {
-        return new Requester.BackendCaller() {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final Collection<String> fieldNames, final Collection<ResourceIdentifier> indexes, final GetParametricValuesRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
-            public Response makeRequest(final AuthenticationToken authenticationToken) throws HodErrorException {
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
                 return getParametricValuesBackend.getParametricValues(authenticationToken, StringUtils.join(fieldNames, ','), indexes, params.build());
             }
         };

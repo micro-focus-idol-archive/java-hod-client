@@ -29,7 +29,7 @@ interface GetParametricValuesBackend {
      */
     @GET(URL)
     Response getParametricValues(
-            @Query("token") AuthenticationToken token,
+            @Query("token") AuthenticationToken<?, ?> token,
             @Query("field_name") String fieldName,
             @Query("indexes") Collection<ResourceIdentifier> indexes,
             @QueryMap Map<String, Object> params

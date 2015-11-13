@@ -5,17 +5,20 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.textindex.query.search.Documents;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Service representing the GetContent API
  * @param <T> The desired return type of the API methods
  */
-public interface GetContentService<T> {
+public interface GetContentService<T extends Serializable> {
 
     /**
      * Query HP Haven OnDemand for documents matching query text using a token proxy
@@ -28,7 +31,7 @@ public interface GetContentService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T getContent(
+    Documents<T> getContent(
         List<String> indexReference,
         ResourceIdentifier index,
         GetContentRequestBuilder params
@@ -44,8 +47,8 @@ public interface GetContentService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T getContent(
-        TokenProxy tokenProxy,
+    Documents<T> getContent(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         List<String> indexReference,
         ResourceIdentifier index,
         GetContentRequestBuilder params

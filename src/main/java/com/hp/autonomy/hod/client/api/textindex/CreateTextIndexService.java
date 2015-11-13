@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -44,7 +45,7 @@ public interface CreateTextIndexService {
      * with the token proxy has expired
      */
     void createTextIndex(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String index,
         IndexFlavor flavor,
         CreateTextIndexRequestBuilder params,

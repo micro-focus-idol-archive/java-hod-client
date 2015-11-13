@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.JobId;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -28,7 +29,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T get(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params,
@@ -48,7 +49,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T get(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -70,7 +71,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T get(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -89,7 +90,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId getAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params
@@ -106,7 +107,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId getAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -124,7 +125,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId getAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -144,7 +145,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T post(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params,
@@ -164,7 +165,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T post(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -186,7 +187,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T post(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -205,7 +206,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId postAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params
@@ -222,7 +223,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId postAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -241,7 +242,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId postAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -261,7 +262,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T put(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params,
@@ -281,7 +282,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T put(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -303,7 +304,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T put(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -322,7 +323,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId putAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params
@@ -339,7 +340,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId putAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -358,7 +359,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId putAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -378,7 +379,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T delete(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params,
@@ -398,7 +399,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T delete(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -420,7 +421,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     <T> T delete(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,
@@ -439,7 +440,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId deleteAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String api,
         int version,
         Map<String, Object> params
@@ -456,7 +457,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId deleteAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         int version,
@@ -474,7 +475,7 @@ public interface HavenOnDemandService {
      * @throws HodErrorException
      */
     JobId deleteAsync(
-        TokenProxy tokenProxy,
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String first,
         String second,
         String third,

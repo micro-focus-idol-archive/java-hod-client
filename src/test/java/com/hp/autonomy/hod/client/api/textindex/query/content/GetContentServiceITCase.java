@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
 
-    private GetContentService<Documents> getContentService;
+    private GetContentService<Document> getContentService;
 
     @Override
     @Before
@@ -43,12 +43,12 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testGetContentWithReference() throws HodErrorException {
         final GetContentRequestBuilder params = new GetContentRequestBuilder()
-                .setPrint(Print.all);
+            .setPrint(Print.all);
 
-        final Documents documents = getContentService.getContent(
+        final Documents<Document> documents = getContentService.getContent(
             getTokenProxy(),
             Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"),
-            PRIVATE_INDEX,
+            getPrivateIndex(),
             params
         );
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ */
+
 package com.hp.autonomy.hod.client.api.authentication;
 
 import com.hp.autonomy.hod.client.util.Hmac;
@@ -33,7 +38,7 @@ public class SignedRequest {
         this.token = token;
     }
 
-    static SignedRequest sign(final Hmac hmac, final String endpoint, final AuthenticationToken token, final Request<String, String> request) {
+    static SignedRequest sign(final Hmac hmac, final String endpoint, final AuthenticationToken<?, TokenType.HmacSha1> token, final Request<String, String> request) {
         final URIBuilder uriBuilder;
 
         try {

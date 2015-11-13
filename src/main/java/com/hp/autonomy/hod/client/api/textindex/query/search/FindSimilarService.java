@@ -5,17 +5,19 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * Service representing the FindSimilarDocuments API
- * @param <T> The desired return type of the methods of the service
+ * @param <T> The desired type of the documents returned by the service
  */
-public interface FindSimilarService<T> {
+public interface FindSimilarService<T extends Serializable> {
 
     /**
      * Finds similar documents to the given text using a token proxy provided by a
@@ -27,7 +29,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToText(
+    Documents<T> findSimilarDocumentsToText(
         String text,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -41,8 +43,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToText(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToText(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String text,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -58,7 +60,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToReference(
+    Documents<T> findSimilarDocumentsToReference(
         String reference,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -73,8 +75,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToReference(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToReference(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -89,7 +91,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToUrl(
+    Documents<T> findSimilarDocumentsToUrl(
         String url,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -103,8 +105,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToUrl(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToUrl(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -119,7 +121,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToIndexReference(
+    Documents<T> findSimilarDocumentsToIndexReference(
         String indexReference,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -133,8 +135,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToIndexReference(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToIndexReference(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         String indexReference,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -149,7 +151,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToFile(
+    Documents<T> findSimilarDocumentsToFile(
         File file,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -163,8 +165,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToFile(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToFile(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -179,7 +181,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToFile(
+    Documents<T> findSimilarDocumentsToFile(
         byte[] bytes,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -193,8 +195,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToFile(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToFile(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -209,7 +211,7 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToFile(
+    Documents<T> findSimilarDocumentsToFile(
         InputStream inputStream,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -223,8 +225,8 @@ public interface FindSimilarService<T> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    T findSimilarDocumentsToFile(
-        TokenProxy tokenProxy,
+    Documents<T> findSimilarDocumentsToFile(
+        TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         QueryRequestBuilder params
     ) throws HodErrorException;

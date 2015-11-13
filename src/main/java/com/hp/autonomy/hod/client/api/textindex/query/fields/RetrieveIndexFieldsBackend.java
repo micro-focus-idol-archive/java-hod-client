@@ -28,7 +28,7 @@ interface RetrieveIndexFieldsBackend {
      */
     @GET(URL)
     Response retrieveIndexFields(
-        @Header("token") AuthenticationToken token,
+        @Header("token") AuthenticationToken<?, ?> token,
         @Query("index") ResourceIdentifier index,
         @QueryMap Map<String, Object> params
     ) throws HodErrorException;

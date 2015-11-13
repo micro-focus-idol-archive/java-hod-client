@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.hod</groupId>
     <artifactId>java-hod-client</artifactId>
-    <version>0.13.1</version>
+    <version>0.14.0</version>
 
     <description>Java Client for communicating with HP Haven OnDemand</description>
 
@@ -81,6 +81,7 @@
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jackson.version>2.6.0</jackson.version>
     </properties>
 
     <build>
@@ -180,6 +181,21 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
