@@ -7,7 +7,7 @@ For the version 1 APIs, see [java-iod-client](http://hpautonomy.github.io/java-i
 
 Information can be found on the project homepage [here](http://hpautonomy.github.io/java-hod-client)
 
-[![Build Status](https://travis-ci.org/hpautonomy/java-hod-client.svg?branch=develop)](https://travis-ci.org/hpautonomy/java-hod-client)
+[![Build Status](https://travis-ci.org/hpautonomy/java-hod-client.svg?branch=master)](https://travis-ci.org/hpautonomy/java-hod-client)
 
 ## Usage
 
