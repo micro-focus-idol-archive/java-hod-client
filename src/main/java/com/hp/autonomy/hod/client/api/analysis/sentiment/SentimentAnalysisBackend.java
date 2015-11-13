@@ -6,7 +6,6 @@
 package com.hp.autonomy.hod.client.api.analysis.sentiment;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
