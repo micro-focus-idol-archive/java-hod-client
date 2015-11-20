@@ -136,7 +136,7 @@ public class HodServiceConfig<E extends EntityType, T extends TokenType> {
          * @param asyncTimeout The duration of the timeout
          * @return this
          */
-        public Builder setAsyncTimeout(final Duration asyncTimeout) {
+        public Builder<E, T> setAsyncTimeout(final Duration asyncTimeout) {
             this.asyncTimeout = asyncTimeout;
             return this;
         }
