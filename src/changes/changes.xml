@@ -7,6 +7,11 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.15.0" date="2015-11-20">
+            <action dev="Will Byrne" type="update">
+                Add support for a timeout on ASYNC api calls.
+            </action>
+        </release>
         <release version="0.14.0" date="2015-11-13">
             <action dev="Matthew Gordon" type="update">
                 Tokens and token proxies are now parameterized by Entity Type and Token Type.

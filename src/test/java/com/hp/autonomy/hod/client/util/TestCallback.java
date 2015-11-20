@@ -7,6 +7,8 @@ package com.hp.autonomy.hod.client.util;
 
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
@@ -17,6 +19,9 @@ public class TestCallback<T> implements HodJobCallback<T> {
     protected final CountDownLatch latch;
 
     private volatile T result;
+
+    @Getter
+    private volatile boolean timedOut;
 
     public TestCallback(final CountDownLatch latch) {
         this.latch = latch;
@@ -39,6 +44,15 @@ public class TestCallback<T> implements HodJobCallback<T> {
     public void error(final HodErrorCode error) {
         log.error("Error code " + error + " returned from HP Haven OnDemand");
 
+        latch.countDown();
+    }
+
+    @Override
+    public void timeout()
+    {
+        log.error("Job timed out");
+
+        timedOut = true;
         latch.countDown();
     }
 

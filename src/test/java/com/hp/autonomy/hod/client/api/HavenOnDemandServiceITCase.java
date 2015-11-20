@@ -22,6 +22,7 @@ import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
 import com.hp.autonomy.hod.client.job.Status;
 import com.hp.autonomy.hod.client.util.TestCallback;
+import org.joda.time.Duration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,12 +39,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(Parameterized.class)
@@ -163,7 +166,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
 
         final CountDownLatch latch = new CountDownLatch(1);
         final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
-        final Runnable runnable = new PollingJobStatusRunnable<>(getTokenProxy(), jobId, testCallback, scheduledExecutorService, jobService);
+        final Runnable runnable = new PollingJobStatusRunnable<>(getTokenProxy(), new Duration(100000), jobId, testCallback, scheduledExecutorService, jobService);
 
         scheduledExecutorService.submit(runnable);
 
@@ -178,6 +181,34 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
         final List<Map<String, Object>> resultList = (List<Map<String, Object>>) result.get("references");
 
         assertThat(resultList, hasSize(1));
+    }
+
+    @Test
+    public void testAsyncPostWithTimeout() throws HodErrorException, InterruptedException {
+        final Document document = new Document.Builder()
+                .setReference("0e5ed498-7251-4acf-8658-34ed874ca352")
+                .setTitle("Some stuff")
+                .setContent("")
+                .build();
+
+        final Documents<Document> documents = new Documents<>(document);
+
+        final Map<String, Object> params = new HashMap<>();
+        params.put("json", documents);
+        params.put("duplicate_mode", AddToTextIndexRequestBuilder.DuplicateMode.replace);
+
+        final JobId jobId = havenOnDemandService.postAsync(getTokenProxy(), "textindex", getPrivateIndex().toString(), "document", 1, params);
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        final TestCallback<Map<String, Object>> testCallback = new TestCallback<>(latch);
+        final Runnable runnable = new PollingJobStatusRunnable<>(getTokenProxy(), new Duration(1), jobId, testCallback, scheduledExecutorService, jobService);
+
+        scheduledExecutorService.submit(runnable);
+
+        latch.await();
+
+        assertTrue(testCallback.isTimedOut());
+        assertThat(testCallback.getResult(), nullValue());
     }
 
     private static class MapJobStatus extends JobStatus<Map<String, Object>> {

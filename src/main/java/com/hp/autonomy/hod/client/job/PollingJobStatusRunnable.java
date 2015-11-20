@@ -11,6 +11,8 @@ import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.Duration;
+import org.joda.time.LocalDateTime;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -42,6 +44,7 @@ public class PollingJobStatusRunnable<T> implements Runnable {
     private final HodJobCallback<T> callback;
     private final ScheduledExecutorService executorService;
     private final JobService<? extends JobStatus<T>> jobService;
+    private final LocalDateTime timeout;
 
     private final AtomicInteger tries = new AtomicInteger(0);
 
@@ -51,8 +54,8 @@ public class PollingJobStatusRunnable<T> implements Runnable {
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
-        this(null, jobId, callback, executorService, jobService);
+    public PollingJobStatusRunnable(final Duration timeout, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
+        this(null, timeout, jobId, callback, executorService, jobService);
     }
 
     /**
@@ -62,12 +65,13 @@ public class PollingJobStatusRunnable<T> implements Runnable {
      * @param callback The callback that will be called with the result
      * @param executorService The executor service responsible for running the runnable
      */
-    public PollingJobStatusRunnable(final TokenProxy<?, TokenType.Simple> tokenProxy, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
+    public PollingJobStatusRunnable(final TokenProxy<?, TokenType.Simple> tokenProxy, final Duration timeout, final JobId jobId, final HodJobCallback<T> callback, final ScheduledExecutorService executorService, final JobService<? extends JobStatus<T>> jobService) {
         this.tokenProxy = tokenProxy;
         this.jobId = jobId;
         this.callback = callback;
         this.executorService = executorService;
         this.jobService = jobService;
+        this.timeout = timeout != null ? LocalDateTime.now().plus(timeout) : null;
     }
 
     /**
@@ -109,6 +113,10 @@ public class PollingJobStatusRunnable<T> implements Runnable {
                         }
                     }
                 }
+            }
+            else if (timeout != null && timeout.isBefore(LocalDateTime.now())) {
+                callback.timeout();
+                log.debug("Timeout callback called");
             }
             else {
                 log.debug("Not finished or failed, retrying");
