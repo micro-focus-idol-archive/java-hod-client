@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.converter;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import retrofit.converter.ConversionException;
 import retrofit.converter.Converter;
 import retrofit.mime.TypedInput;
@@ -34,7 +35,16 @@ public class HodConverter implements Converter {
      */
     @Override
     public Object fromBody(final TypedInput body, final Type type) throws ConversionException {
-        return converter.fromBody(body, type);
+        try {
+            return converter.fromBody(body, type);
+        } catch(final ConversionException e) {
+            if(e.getCause() instanceof JsonParseException) {
+                throw new HodUnavailableException(e.getCause());
+            } else {
+                throw e;
+            }
+
+        }
     }
 
     /**
