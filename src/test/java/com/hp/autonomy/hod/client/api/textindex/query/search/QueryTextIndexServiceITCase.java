@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.types.requests.Documents;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

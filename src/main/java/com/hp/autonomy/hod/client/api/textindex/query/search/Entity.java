@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.hp.autonomy.types.requests.idol.actions.query.QuerySummaryElement;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,7 +20,7 @@ import java.io.Serializable;
  */
 @Data
 @JsonDeserialize(builder = Entity.Builder.class)
-public class Entity implements Serializable {
+public class Entity implements QuerySummaryElement, Serializable {
     private static final long serialVersionUID = -768487153426935202L;
 
     /**

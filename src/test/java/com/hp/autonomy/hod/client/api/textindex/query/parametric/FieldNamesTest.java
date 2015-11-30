@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hp.autonomy.types.requests.idol.actions.tags.QueryTagCountInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,8 +73,8 @@ public class FieldNamesTest {
 
     @Test
     public void testGetValuesAndCountsForFieldName() {
-        final List<FieldNames.ValueAndCount> parametricValues = fieldNames.getValuesAndCountsForFieldName("zero");
-        final FieldNames.ValueAndCount one = parametricValues.get(0);
+        final List<QueryTagCountInfo> parametricValues = fieldNames.getValuesAndCountsForFieldName("zero");
+        final QueryTagCountInfo one = parametricValues.get(0);
         assertThat(one.getValue(), is("1"));
         assertThat(one.getCount(), is(1));
     }
@@ -90,8 +91,7 @@ public class FieldNamesTest {
 
             if (x < 3) {
                 assertThat(value.getFieldName(), is("zero"));
-            }
-            else {
+            } else {
                 assertThat(value.getFieldName(), is("one"));
             }
 
@@ -113,13 +113,13 @@ public class FieldNamesTest {
     public void testSerialization() throws IOException, ClassNotFoundException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        try(final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+        try (final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
             objectOutputStream.writeObject(fieldNames);
         }
 
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
-        try(final ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+        try (final ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
             final FieldNames fieldNamesFromStream = (FieldNames) objectInputStream.readObject();
 
             assertThat(fieldNamesFromStream, is(fieldNames));

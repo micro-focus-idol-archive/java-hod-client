@@ -14,6 +14,7 @@ import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.util.TypedByteArrayWithFilename;
+import com.hp.autonomy.types.requests.Documents;
 import org.apache.commons.io.IOUtils;
 import retrofit.client.Response;
 import retrofit.mime.TypedFile;

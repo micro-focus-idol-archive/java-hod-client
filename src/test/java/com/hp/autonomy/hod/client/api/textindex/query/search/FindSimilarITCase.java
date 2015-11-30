@@ -14,6 +14,7 @@ import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexResponse;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexService;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.TestCallback;
+import com.hp.autonomy.types.requests.Documents;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
