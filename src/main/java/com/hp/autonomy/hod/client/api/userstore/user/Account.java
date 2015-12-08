@@ -8,6 +8,8 @@ package com.hp.autonomy.hod.client.api.userstore.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Represents a Haven OnDemand account.
  */
@@ -34,7 +36,7 @@ public class Account {
      * Represents the type of a Haven OnDemand account.
      */
     @Data
-    public static class Type {
+    public static class Type implements Serializable {
         /**
          * The {@link Account#account} for a developer account is the developer UUID.
          */
@@ -44,6 +46,8 @@ public class Account {
          * The {@link Account#account} for an email account is the email address.
          */
         public static final Type EMAIL = new Type("email");
+
+        private static final long serialVersionUID = -5875593359004072473L;
 
         private final String name;
 
