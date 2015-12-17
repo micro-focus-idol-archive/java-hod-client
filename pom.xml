@@ -74,16 +74,13 @@
             <organization>Hewlett-Packard Enterprise</organization>
             <organizationUrl>http://www.hpe.com</organizationUrl>
         </developer>
-    </developers>
-
-    <contributors>
-        <contributor>
+        <developer>
             <name>Will Byrne</name>
             <email>will.byrne@hp.com</email>
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
-        </contributor>
-    </contributors>
+        </developer>
+    </developers>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
