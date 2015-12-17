@@ -7,7 +7,6 @@ package com.hp.autonomy.hod.client.util;
 
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
