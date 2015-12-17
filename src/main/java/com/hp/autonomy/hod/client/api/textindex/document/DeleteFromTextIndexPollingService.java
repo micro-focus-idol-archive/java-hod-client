@@ -41,7 +41,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
      * @param hodServiceConfig The configuration to use
      */
     public DeleteFromTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
-        super();
+        super(hodServiceConfig.getAsyncTimeout());
 
         deleteFromTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteFromTextIndexBackend.class);
         jobService = new JobServiceImpl<>(hodServiceConfig, DeleteFromTextIndexBackend.DeleteFromTextIndexJobStatus.class);
@@ -54,7 +54,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
      * @param executorService The executor service to use while polling for status updates
      */
     public DeleteFromTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
-        super(executorService);
+        super(executorService, hodServiceConfig.getAsyncTimeout());
 
         deleteFromTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteFromTextIndexBackend.class);
         jobService = new JobServiceImpl<>(hodServiceConfig, DeleteFromTextIndexBackend.DeleteFromTextIndexJobStatus.class);
@@ -69,7 +69,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteReferencesBackendCaller(index, references));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getDeleteReferencesBackendCaller(index, references));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteReferencesBackendCaller(final ResourceIdentifier index, final List<String> references) {

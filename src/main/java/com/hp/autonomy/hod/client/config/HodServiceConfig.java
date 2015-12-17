@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.http.client.HttpClient;
+import org.joda.time.Duration;
 import retrofit.RestAdapter;
 import retrofit.client.ApacheClient;
 import retrofit.client.Client;
@@ -35,6 +36,7 @@ public class HodServiceConfig<E extends EntityType, T extends TokenType> {
     private final Requester<E, T> requester;
     private final String endpoint;
     private final ObjectMapper objectMapper;
+    private final Duration asyncTimeout;
 
     private HodServiceConfig(final Builder<E, T> builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
@@ -65,6 +67,8 @@ public class HodServiceConfig<E extends EntityType, T extends TokenType> {
 
         requester = new Requester<>(tokenRepository, new ResponseParser(tokenRepository, objectMapper), builder.tokenProxyService);
         endpoint = builder.endpoint;
+
+        asyncTimeout = builder.asyncTimeout;
     }
 
     /**
@@ -74,6 +78,7 @@ public class HodServiceConfig<E extends EntityType, T extends TokenType> {
     public static class Builder<E extends EntityType, T extends TokenType> {
 
         private final String endpoint;
+        private Duration asyncTimeout;
 
         /**
          * Sets the TokenRepository to use. If not provided an {@link InMemoryTokenRepository} will be used
@@ -123,6 +128,16 @@ public class HodServiceConfig<E extends EntityType, T extends TokenType> {
          */
         public Builder<E, T> setErrorHandler(final HodErrorHandler errorHandler) {
             this.errorHandler = errorHandler;
+            return this;
+        }
+
+        /**
+         * Configures an timeout for async requests
+         * @param asyncTimeout The duration of the timeout
+         * @return this
+         */
+        public Builder<E, T> setAsyncTimeout(final Duration asyncTimeout) {
+            this.asyncTimeout = asyncTimeout;
             return this;
         }
 

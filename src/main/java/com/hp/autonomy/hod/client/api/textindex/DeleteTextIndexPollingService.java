@@ -43,7 +43,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
      * @param hodServiceConfig The configuration to use
      */
     public DeleteTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
-        super();
+        super(hodServiceConfig.getAsyncTimeout());
 
         deleteTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteTextIndexBackend.class);
         requester = hodServiceConfig.getRequester();
@@ -56,7 +56,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
      * @param executorService The executor service to use while polling for status updates
      */
     public DeleteTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
-        super(executorService);
+        super(executorService, hodServiceConfig.getAsyncTimeout());
 
         deleteTextIndexBackend = hodServiceConfig.getRestAdapter().create(DeleteTextIndexBackend.class);
         requester = hodServiceConfig.getRequester();
@@ -72,7 +72,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
         final JobId jobId = requester.makeRequest(JobId.class, getDeletingBackendCaller(index, response));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getDeletingBackendCaller(index, response));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceIdentifier index) {

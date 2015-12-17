@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
+import com.hp.autonomy.types.requests.idol.actions.tags.QueryTagCountInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +64,7 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
 
         assertThat(fieldNames.getValuesForFieldName("person_profession").size(), is(lessThanOrEqualTo(15)));
 
-        final List<FieldNames.ValueAndCount> wikipediaTypes = fieldNames.getValuesAndCountsForFieldName("wikipedia_type");
+        final List<QueryTagCountInfo> wikipediaTypes = fieldNames.getValuesAndCountsForFieldName("wikipedia_type");
 
         final String first = wikipediaTypes.get(0).getValue();
         final String last = wikipediaTypes.get(wikipediaTypes.size() - 1).getValue();

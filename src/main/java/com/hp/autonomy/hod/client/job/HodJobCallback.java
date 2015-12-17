@@ -26,6 +26,11 @@ public interface HodJobCallback<T> {
     void error(final HodErrorCode error);
 
     /**
+     * Called when a job runtime exceeds the timeout duration specified in the configuration
+     */
+    void timeout();
+
+    /**
      * Called if a RuntimeException is thrown while checking the job status
      * @param exception The exception that was thrown
      */

@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.hod</groupId>
     <artifactId>java-hod-client</artifactId>
-    <version>0.14.0</version>
+    <version>0.15.0</version>
 
     <description>Java Client for communicating with HP Haven OnDemand</description>
 
@@ -68,16 +68,19 @@
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
-    </developers>
-
-    <contributors>
-        <contributor>
+        <developer>
+            <name>Ivo Miller</name>
+            <email>ivo.miller@hpe.com</email>
+            <organization>Hewlett-Packard Enterprise</organization>
+            <organizationUrl>http://www.hpe.com</organizationUrl>
+        </developer>
+        <developer>
             <name>Will Byrne</name>
             <email>will.byrne@hp.com</email>
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
-        </contributor>
-    </contributors>
+        </developer>
+    </developers>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -147,6 +150,12 @@
     </reporting>
 
     <dependencies>
+        <dependency>
+            <groupId>com.hp.autonomy.frontend</groupId>
+            <artifactId>aci-types</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.squareup.retrofit</groupId>
             <artifactId>retrofit</artifactId>
@@ -234,6 +243,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
 
 
 </project>

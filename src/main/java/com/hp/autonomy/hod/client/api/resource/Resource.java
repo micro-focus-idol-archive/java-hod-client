@@ -32,6 +32,11 @@ public class Resource implements Serializable {
     private final String resource;
 
     /**
+     * @return The display name of the resource
+     */
+    private final String displayName;
+
+    /**
      * @return The resource description
      */
     private final String description;
@@ -56,7 +61,8 @@ public class Resource implements Serializable {
             @JsonProperty("description") final String description,
             @JsonProperty("type") final ResourceType type,
             @JsonProperty("flavor") final ResourceFlavour flavour,
-            @JsonProperty("date_created") final String dateCreated
+            @JsonProperty("date_created") final String dateCreated,
+            @JsonProperty("display_name") final String displayName
     ) {
         this.resource = resource;
         this.description = description;
@@ -69,5 +75,6 @@ public class Resource implements Serializable {
         else {
             this.dateCreated = null;
         }
+        this.displayName = displayName != null ? displayName : resource;
     }
 }

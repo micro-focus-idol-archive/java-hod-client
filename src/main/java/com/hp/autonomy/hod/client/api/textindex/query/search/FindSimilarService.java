@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
+import com.hp.autonomy.types.requests.Documents;
 
 import java.io.File;
 import java.io.InputStream;

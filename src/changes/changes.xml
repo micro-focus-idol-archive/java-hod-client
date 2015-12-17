@@ -7,6 +7,23 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.15.0" date="2015-11-20">
+            <action dev="Will Byrne" type="update">
+                Add support for a timeout on ASYNC api calls.
+            </action>
+            <action dev="Daniel Grayling" type="update">
+                Improve handling of non JSON responses.
+            </action>
+            <action dev="Alex Scown" type="update">
+                Make Account.Type Serializable.
+            </action>
+            <action dev="Ivo Miller" type="add">
+                Use ACI types library for better integration with on premise IDOL.
+            </action>
+            <action dev="Will Byrne" type="update">
+                Support friendly names for resources.
+            </action>
+        </release>
         <release version="0.14.0" date="2015-11-13">
             <action dev="Matthew Gordon" type="update">
                 Tokens and token proxies are now parameterized by Entity Type and Token Type.

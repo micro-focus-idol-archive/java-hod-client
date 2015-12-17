@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.job;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.Duration;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,18 +23,22 @@ public abstract class AbstractPollingService {
     @Getter(AccessLevel.PROTECTED)
     private final ScheduledExecutorService executorService;
 
+    @Getter(AccessLevel.PROTECTED)
+    private final Duration timeout;
+
     /**
      * Constructs a new service with the default executor service
      */
-    public AbstractPollingService() {
-        this(Executors.newScheduledThreadPool(8));
+    public AbstractPollingService(final Duration timeout) {
+        this(Executors.newScheduledThreadPool(8), timeout);
     }
 
     /**
      * Constructs a new service with the given executor service
      */
-    public AbstractPollingService(final ScheduledExecutorService executorService) {
+    public AbstractPollingService(final ScheduledExecutorService executorService, final Duration timeout) {
         this.executorService = executorService;
+        this.timeout = timeout;
     }
 
     /**

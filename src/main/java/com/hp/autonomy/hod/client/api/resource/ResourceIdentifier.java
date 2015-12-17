@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents a domain-qualified resource identifier; for example the identifier for a text index or user store.
- *
+ * <p>
  * This class implements {@link Serializable} to facilitate easier caching
  */
 @Data
@@ -55,18 +55,21 @@ public class ResourceIdentifier implements Serializable {
 
     /**
      * The domain of the resource. Must be non-null
+     *
      * @serial
      */
     private final String domain;
 
     /**
      * The name of the resource. Must be non-null
+     *
      * @serial
      */
     private final String name;
 
     /**
      * Construct a ResourceIdentifier from a colon-separated and escaped domain and name.
+     *
      * @param identifier Colon-separated domain and name
      */
     public ResourceIdentifier(final String identifier) {
@@ -87,8 +90,9 @@ public class ResourceIdentifier implements Serializable {
 
     /**
      * Construct a ResourceIdentifier from a domain and a name.
+     *
      * @param domain The resource domain
-     * @param name The resource name
+     * @param name   The resource name
      */
     @JsonCreator
     public ResourceIdentifier(
@@ -103,6 +107,7 @@ public class ResourceIdentifier implements Serializable {
 
     /**
      * Escapes the domain and name and joins them with a colon.
+     *
      * @return The HOD resource identifier string
      */
     @Override
@@ -127,11 +132,11 @@ public class ResourceIdentifier implements Serializable {
     }
 
     private void validate(final String domain, final String name) {
-        if(domain == null) {
+        if (domain == null) {
             throw new IllegalArgumentException("domain must not be null");
         }
 
-        if(name == null) {
+        if (name == null) {
             throw new IllegalArgumentException("name must not be null");
         }
     }

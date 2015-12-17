@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.hp.autonomy.types.requests.idol.actions.tags.QueryTagCountInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
@@ -48,7 +49,8 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
 
     /**
      * Get the count for a parametric value given the field name it resides in
-     * @param fieldName The name of the field
+     *
+     * @param fieldName  The name of the field
      * @param fieldValue The value of the field
      * @return count The number of documents that have the given value in the given field
      */
@@ -86,17 +88,18 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
 
     /**
      * Get an array of values and counts for a given fieldName
+     *
      * @param fieldName The name of the field
      * @return an array of value and count types
      */
-    public List<ValueAndCount> getValuesAndCountsForFieldName(final String fieldName) {
+    public List<QueryTagCountInfo> getValuesAndCountsForFieldName(final String fieldName) {
         final Map<String, Integer> map = parametricValuesMap.get(fieldName);
 
         if (map != null) {
-            final List<ValueAndCount> counts = new ArrayList<>();
+            final List<QueryTagCountInfo> counts = new ArrayList<>();
 
             for (final Map.Entry<String, Integer> entry : map.entrySet()) {
-                counts.add(new ValueAndCount(entry.getKey(), entry.getValue()));
+                counts.add(new QueryTagCountInfo(entry.getKey(), entry.getValue()));
             }
 
             return counts;
@@ -106,8 +109,8 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
     }
 
     @JsonAnyGetter
-    private Map<String, List<ValueAndCount>> getJson() {
-        final Map<String, List<ValueAndCount>> map = new LinkedHashMap<>();
+    private Map<String, List<QueryTagCountInfo>> getJson() {
+        final Map<String, List<QueryTagCountInfo>> map = new LinkedHashMap<>();
 
         for (final String fieldName : parametricValuesMap.keySet()) {
             map.put(fieldName, getValuesAndCountsForFieldName(fieldName));
@@ -127,11 +130,11 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
 
         objectOutputStream.writeInt(parametricValuesMap.size());
 
-        for(final Map.Entry<String, Map<String, Integer>> entry : parametricValuesMap.entrySet()) {
+        for (final Map.Entry<String, Map<String, Integer>> entry : parametricValuesMap.entrySet()) {
             objectOutputStream.writeObject(entry.getKey());
             objectOutputStream.writeInt(entry.getValue().size());
 
-            for(final Map.Entry<String, Integer> valueCount : entry.getValue().entrySet()) {
+            for (final Map.Entry<String, Integer> valueCount : entry.getValue().entrySet()) {
                 objectOutputStream.writeObject(valueCount.getKey());
                 objectOutputStream.writeInt(valueCount.getValue());
             }
@@ -145,13 +148,13 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
 
         parametricValuesMap = new LinkedHashMap<>();
 
-        for(int i = 0; i < fieldCount; i++) {
+        for (int i = 0; i < fieldCount; i++) {
             final String fieldName = (String) objectInputStream.readObject();
             final int countsCount = objectInputStream.readInt();
 
             final LinkedHashMap<String, Integer> countsMap = new LinkedHashMap<>();
 
-            for(int j = 0; j < countsCount; j++) {
+            for (int j = 0; j < countsCount; j++) {
                 final String value = (String) objectInputStream.readObject();
                 final int count = objectInputStream.readInt();
 
@@ -184,13 +187,6 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
     public static class ParametricValue implements Serializable {
         private static final long serialVersionUID = 656458301600512829L;
         private final String fieldName;
-        private final String value;
-        private final int count;
-    }
-
-    @Data
-    public static class ValueAndCount implements Serializable {
-        private static final long serialVersionUID = 5286493407790738300L;
         private final String value;
         private final int count;
     }

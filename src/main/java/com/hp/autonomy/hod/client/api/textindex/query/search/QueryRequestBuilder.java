@@ -15,7 +15,6 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,10 +95,10 @@ public class QueryRequestBuilder {
     private Print print;
 
     /**
-     * @param printFields Value for the print_fields parameter. This list will be joined with commas before being sent
+     * @param printFields Value for the print_fields parameter. This collection will be joined with commas before being sent
      * to the server
      */
-    private List<String> printFields;
+    private Collection<String> printFields;
 
     /**
      * @param start Value for the start parameter
@@ -140,7 +139,7 @@ public class QueryRequestBuilder {
 
     /**
      * Adds indexes to the indexes parameter
-     * @param index0 The first index
+     * @param index0  The first index
      * @param indexes The remaining indexes
      * @return this
      */

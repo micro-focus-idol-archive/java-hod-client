@@ -42,7 +42,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
      * @param hodServiceConfig The configuration to use
      */
     public CreateTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
-        super();
+        super(hodServiceConfig.getAsyncTimeout());
 
         this.createTextIndexBackend = hodServiceConfig.getRestAdapter().create(CreateTextIndexBackend.class);
         requester = hodServiceConfig.getRequester();
@@ -55,7 +55,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
      * @param executorService The executor service to use while polling for status updates
      */
     public CreateTextIndexPollingService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig, final ScheduledExecutorService executorService) {
-        super(executorService);
+        super(executorService, hodServiceConfig.getAsyncTimeout());
 
         this.createTextIndexBackend = hodServiceConfig.getRestAdapter().create(CreateTextIndexBackend.class);
         requester = hodServiceConfig.getRequester();
@@ -71,7 +71,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getBackendCaller(index, flavor, params));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     @Override
@@ -84,7 +84,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(tokenProxy, JobId.class, getBackendCaller(index, flavor, params));
 
-        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, jobId, callback, getExecutorService(), jobService));
+        getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final String index, final IndexFlavor flavor, final CreateTextIndexRequestBuilder params) {
