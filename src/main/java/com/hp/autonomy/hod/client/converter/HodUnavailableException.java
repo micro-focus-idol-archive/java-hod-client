@@ -6,6 +6,8 @@
 package com.hp.autonomy.hod.client.converter;
 
 public class HodUnavailableException extends RuntimeException {
+    private static final long serialVersionUID = 7338702565370576310L;
+
     HodUnavailableException(final Throwable e) {
         super("The service is unavailable", e);
     }
