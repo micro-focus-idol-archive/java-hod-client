@@ -168,7 +168,10 @@ public class Hmac {
 
     private String urlEncode(final String input) {
         try {
-            return URLEncoder.encode(input, UTF8);
+            final String encode = URLEncoder.encode(input, UTF8);
+
+            // Haven OnDemand expects space to be encoded as %20, not plus
+            return encode.replaceAll("\\+", "%20");
         } catch (final UnsupportedEncodingException e) {
             // This should never happen on a sensible JVM
             throw new AssertionError("UTF8 is not supported", e);
