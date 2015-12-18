@@ -30,6 +30,15 @@ public class HmacTest {
 
     @Test
     public void generatesToken() {
+        testHmacSign("UNB:HMAC_SHA1:DF7aRd8VEeSiCdSFZKbA7w:-UTk_c6xZSCH2-MMLPiLJg:cPJN8CsxX6chmGif3TLdTLEpMd8", "IOD-TEST-APPLICATION");
+    }
+
+    @Test
+    public void generateTokenWithSpacesInParameters() {
+        testHmacSign("UNB:HMAC_SHA1:DF7aRd8VEeSiCdSFZKbA7w:xgAlHiMaGMVmddPDmaSc6A:R8dbS5_aZf5jVx6rLB3uY-V6B50", "IOD TEST APPLICATION");
+    }
+
+    private void testHmacSign(final String expectedHmacToken, final String application) {
         final String tokenId = "DF7aRd8VEeSiCdSFZKbA7w";
         final String tokenSecret = "Ba90fFmxdioyouz06xr1fhn6Nxq4nB90jWEQ2UzDQr8";
 
@@ -47,12 +56,11 @@ public class HmacTest {
 
         final Map<String, List<Object>> body = new HashMap<>();
         body.put("domain", Collections.<Object>singletonList("IOD-TEST-DOMAIN"));
-        body.put("application", Collections.<Object>singletonList("IOD-TEST-APPLICATION"));
+        body.put("application", Collections.<Object>singletonList(application));
         body.put("token_type", Collections.<Object>singletonList(TokenType.Simple.INSTANCE.getParameter()));
 
         final Request<String, Object> request = new Request<>(Request.Verb.POST, "/2/authenticate/combined", queryParameters, body);
         final String hmacToken = hmac.generateToken(request, token);
-        final String expectedHmacToken = "UNB:HMAC_SHA1:DF7aRd8VEeSiCdSFZKbA7w:-UTk_c6xZSCH2-MMLPiLJg:cPJN8CsxX6chmGif3TLdTLEpMd8";
 
         assertThat(hmacToken, is(expectedHmacToken));
     }
