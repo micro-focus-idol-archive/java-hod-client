@@ -107,8 +107,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
                         new ResourceIdentifier(getEndpoint().getDomainName(), testIndexName),
                         callback);
             } catch (final HodErrorException e) {
-                log.error("Error deleting document", e);
-
+                log.error("Error deleting document. NOTE: this may result in the text index still being created, preventing this test from running successfully in the future", e);
                 latch.countDown();
             }
         }
