@@ -46,7 +46,7 @@ public abstract class AbstractHodClientIntegrationTest {
 
             token = hodServiceConfig.getTokenRepository().get(tokenProxy);
         } catch (final IOException | HodErrorException e) {
-            throw new AssertionError("COULD NOT OBTAIN TOKEN");
+            throw new AssertionError("COULD NOT OBTAIN TOKEN", e);
         }
     }
 
