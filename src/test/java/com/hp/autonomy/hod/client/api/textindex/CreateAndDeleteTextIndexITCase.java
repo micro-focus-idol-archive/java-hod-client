@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
@@ -107,8 +107,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
                         new ResourceIdentifier(getEndpoint().getDomainName(), testIndexName),
                         callback);
             } catch (final HodErrorException e) {
-                log.error("Error deleting document", e);
-
+                log.error("Error deleting document. NOTE: this may result in the text index still being created, preventing this test from running successfully in the future", e);
                 latch.countDown();
             }
         }

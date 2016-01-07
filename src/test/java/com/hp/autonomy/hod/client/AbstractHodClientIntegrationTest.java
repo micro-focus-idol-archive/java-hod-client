@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
@@ -46,7 +46,7 @@ public abstract class AbstractHodClientIntegrationTest {
 
             token = hodServiceConfig.getTokenRepository().get(tokenProxy);
         } catch (final IOException | HodErrorException e) {
-            throw new AssertionError("COULD NOT OBTAIN TOKEN");
+            throw new AssertionError("COULD NOT OBTAIN TOKEN", e);
         }
     }
 

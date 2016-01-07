@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
@@ -135,6 +135,11 @@ public class QueryRequestBuilder {
      */
     private Boolean promotions;
 
+    /**
+     * @param checkSpelling Value for the check_spelling parameter
+     */
+    private CheckSpelling checkSpelling;
+
     private Collection<ResourceIdentifier> indexes = new ArrayList<>();
 
     /**
@@ -182,6 +187,7 @@ public class QueryRequestBuilder {
         map.put("total_results", totalResults);
         map.put("query_profile", queryProfile);
         map.put("promotion", promotions);
+        map.put("check_spelling", checkSpelling);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));

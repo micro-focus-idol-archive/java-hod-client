@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Hewlett-Packard Development Company, L.P.
+ * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
@@ -94,6 +94,28 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
+    }
+
+    @Test
+    public void testSpellCheckSuggestion() throws HodErrorException {
+        final QueryRequestBuilder params = new QueryRequestBuilder()
+            .setCheckSpelling(CheckSpelling.suggest)
+            .addIndexes(ResourceIdentifier.WIKI_ENG);
+
+        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
+
+        assertThat(documents.getSuggestion().getCorrectedQuery(), is("ludwig van Beethoven"));
+    }
+
+    @Test
+    public void testSpellCheckAutocomplete() throws HodErrorException {
+        final QueryRequestBuilder params = new QueryRequestBuilder()
+            .setCheckSpelling(CheckSpelling.autocorrect)
+            .addIndexes(ResourceIdentifier.WIKI_ENG);
+
+        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
+
+        assertThat(documents.getAutoCorrection().getCorrectedQuery(), is("ludwig van Beethoven"));
     }
 
 }
