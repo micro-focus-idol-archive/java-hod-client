@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.converter.DoNotConvert;
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@Setter
+@Data
 @Accessors(chain = true)
 public class AddToTextIndexRequestBuilder {
 
@@ -30,7 +30,8 @@ public class AddToTextIndexRequestBuilder {
 
     /**
      * Adds values to the referencePrefixes parameter
-     * @param referencePrefix The first index
+     *
+     * @param referencePrefix   The first index
      * @param referencePrefixes The remaining referencePrefixes
      * @return this
      */
@@ -43,6 +44,7 @@ public class AddToTextIndexRequestBuilder {
 
     /**
      * Sets the value of the referencePrefixes parameter
+     *
      * @param referencePrefixes The referencePrefixes to query
      * @return this
      */
@@ -54,8 +56,9 @@ public class AddToTextIndexRequestBuilder {
 
     /**
      * Sets the value of the metadata parameter
+     *
      * @param metadatum The first index
-     * @param metadata The remaining metadata
+     * @param metadata  The remaining metadata
      * @return this
      */
     public AddToTextIndexRequestBuilder addAdditionalMetadata(final Object metadatum, final Object... metadata) {
@@ -67,6 +70,7 @@ public class AddToTextIndexRequestBuilder {
 
     /**
      * Sets the value of the metadata parameter
+     *
      * @param metadata The metadata to query
      * @return this
      */

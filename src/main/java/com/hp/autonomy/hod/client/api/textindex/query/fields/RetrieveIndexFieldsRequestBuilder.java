@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
  * Helper class for building up optional parameters for the Retrieve Index Fields API. The default value for all parameters
  * is null. Null parameters will not be sent to HP Haven OnDemand
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class RetrieveIndexFieldsRequestBuilder {
 

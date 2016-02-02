@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.Map;
  * Helper class for building up optional parameters for the Get Parametric Values API. The default value for all parameters
  * is null. Null parameters will not be sent to HP Haven OnDemand
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class GetParametricValuesRequestBuilder {
 

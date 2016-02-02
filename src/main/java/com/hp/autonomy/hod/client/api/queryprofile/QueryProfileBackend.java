@@ -25,10 +25,12 @@ interface QueryProfileBackend {
 
     String PROFILE_VARIABLE = "query_profile";
     String INDEX_PART = "query_manipulation_index";
-    String URL = "/2/api/sync/queryprofile/{" + PROFILE_VARIABLE +"}/v1";
+    String URL = "/2/api/sync/queryprofile/{" + PROFILE_VARIABLE + '}';
+    String V1 = "/v1";
+    String V2 = "/v2";
     String TOKEN_HEADER = "token";
 
-    @POST(URL)
+    @POST(URL + V2)
     @Multipart
     Response createQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
@@ -37,13 +39,13 @@ interface QueryProfileBackend {
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
-    @GET(URL)
+    @GET(URL + V1)
     Response retrieveQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
         @Path(PROFILE_VARIABLE) ResourceIdentifier queryProfile
     ) throws HodErrorException;
 
-    @PUT(URL)
+    @PUT(URL + V1)
     @Multipart
     Response updateQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
@@ -52,7 +54,7 @@ interface QueryProfileBackend {
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
-    @DELETE(URL)
+    @DELETE(URL + V1)
     Response deleteQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
         @Path(PROFILE_VARIABLE) ResourceIdentifier queryProfile
