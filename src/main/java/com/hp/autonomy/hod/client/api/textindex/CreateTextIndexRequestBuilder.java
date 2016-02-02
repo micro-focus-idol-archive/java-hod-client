@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex;
 
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Request builder for the CreateTextIndex API
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class CreateTextIndexRequestBuilder {
 

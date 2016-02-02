@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.api.analysis.viewdocument;
 
 import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -19,7 +20,7 @@ import java.util.Map;
  * Helper class for building up optional parameters for the Query Text Index API. The default value for all parameters
  * is null. Null parameters will not be sent to HP Haven OnDemand
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class ViewDocumentRequestBuilder {
 
@@ -29,6 +30,7 @@ public class ViewDocumentRequestBuilder {
 
     /**
      * Sets the value for the raw_html parameter
+     *
      * @param rawHtml Value of the raw_html parameter
      */
     @Setter(AccessLevel.PACKAGE) // setting this parameter messes with return values, so should only be used with the appropriate methods
@@ -45,7 +47,8 @@ public class ViewDocumentRequestBuilder {
 
     /**
      * Adds values to the highlight_expression parameter
-     * @param highlightExpression The first highlight expression
+     *
+     * @param highlightExpression  The first highlight expression
      * @param highlightExpressions The remaining highlight expressions
      * @return this
      */
@@ -66,7 +69,8 @@ public class ViewDocumentRequestBuilder {
 
     /**
      * Adds values to the start_tag parameter
-     * @param startTag The first start tag
+     *
+     * @param startTag  The first start tag
      * @param startTags The remaining start tags
      * @return this
      */
@@ -87,7 +91,8 @@ public class ViewDocumentRequestBuilder {
 
     /**
      * Adds values to the end_tag parameter
-     * @param endTag The first end tag
+     *
+     * @param endTag  The first end tag
      * @param endTags The remaining end tags
      * @return this
      */

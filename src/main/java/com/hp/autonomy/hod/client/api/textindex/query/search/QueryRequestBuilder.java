@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -21,7 +21,7 @@ import java.util.Map;
  * Helper class for building up optional parameters for the QueryTextIndex API and FindSimilar API. The default value
  * for all parameters is null. Null parameters will not be sent to HP Haven OnDemand
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class QueryRequestBuilder {
 
@@ -144,6 +144,7 @@ public class QueryRequestBuilder {
 
     /**
      * Adds indexes to the indexes parameter
+     *
      * @param index0  The first index
      * @param indexes The remaining indexes
      * @return this
@@ -157,6 +158,7 @@ public class QueryRequestBuilder {
 
     /**
      * Sets the value of the indexes parameter
+     *
      * @param indexes The indexes to query
      * @return this
      */

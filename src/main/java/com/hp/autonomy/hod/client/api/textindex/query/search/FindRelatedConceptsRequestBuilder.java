@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -21,7 +21,7 @@ import java.util.Map;
  * Helper class for building up optional parameters for the Find Related Concepts API. The default value for all parameters
  * is null. Null parameters will not be sent to HP Haven OnDemand
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class FindRelatedConceptsRequestBuilder {
 

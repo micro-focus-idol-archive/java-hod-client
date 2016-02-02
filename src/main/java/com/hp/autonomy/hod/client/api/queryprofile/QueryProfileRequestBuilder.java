@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.util.MultiMap;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Collection;
  * Helper class for building up optional parameters for the CreateQueryProfile API and UpdateQueryProfile API. Null parameters
  * or empty collections will not be sent to HP Haven OnDemand.
  */
-@Setter
+@Data
 @Accessors(chain = true)
 public class QueryProfileRequestBuilder {
     /**
@@ -62,7 +62,8 @@ public class QueryProfileRequestBuilder {
 
     /**
      * Adds categories to the promotion_categories parameter
-     * @param category0 The first category to add
+     *
+     * @param category0  The first category to add
      * @param categories Additional categories to add
      * @return this
      */
@@ -74,7 +75,8 @@ public class QueryProfileRequestBuilder {
 
     /**
      * Adds categories to the synonym_categories parameter
-     * @param category0 The first category to add
+     *
+     * @param category0  The first category to add
      * @param categories Additional categories to add
      * @return this
      */
@@ -86,7 +88,8 @@ public class QueryProfileRequestBuilder {
 
     /**
      * Adds categories to the blacklist_categories parameter
-     * @param category0 The first category to add
+     *
+     * @param category0  The first category to add
      * @param categories Additional categories to add
      * @return this
      */
