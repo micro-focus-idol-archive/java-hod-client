@@ -14,22 +14,40 @@ import retrofit.http.Header;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 
+import java.util.List;
 import java.util.Map;
 
 interface RetrieveIndexFieldsBackend {
-    String URL = "/2/api/sync/textindex/query/fields/v1";
+    String URL = "/2/api/sync/textindex/query/fields/v2";
+    String COMBINE_FIELDS_TRUE = "?combine_fields=true";
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been ingested
+     * Retrieve from HP Haven OnDemand a list of the fields across all specified indexes that have been ingested
      * into a given text index using the given token
-     * @param token The token to use to authenticate the request
+     *
+     * @param token  The token to use to authenticate the request
+     * @param params Additional parameters to be sent as part of the request
+     * @return A list of fields and their types
+     */
+    @GET(URL + COMBINE_FIELDS_TRUE)
+    Response retrieveIndexFields(
+            @Header("token") AuthenticationToken<?, ?> token,
+            @Query("indexes") List<ResourceIdentifier> indexes,
+            @QueryMap Map<String, Object> params
+    ) throws HodErrorException;
+
+    /**
+     * Retrieve from HP Haven OnDemand a list of the fields for each index that have been ingested
+     * into a given text index using the given token
+     *
+     * @param token  The token to use to authenticate the request
      * @param params Additional parameters to be sent as part of the request
      * @return A list of fields and their types
      */
     @GET(URL)
-    Response retrieveIndexFields(
-        @Header("token") AuthenticationToken<?, ?> token,
-        @Query("index") ResourceIdentifier index,
-        @QueryMap Map<String, Object> params
+    Response retrieveIndexFieldsByIndex(
+            @Header("token") AuthenticationToken<?, ?> token,
+            @Query("indexes") List<ResourceIdentifier> indexes,
+            @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }
