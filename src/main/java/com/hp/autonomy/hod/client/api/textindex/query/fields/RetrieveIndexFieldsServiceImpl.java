@@ -15,40 +15,64 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import retrofit.client.Response;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * Default implementation of RetrieveIndexFieldsService
  */
 public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsService {
 
     private static final Class<RetrieveIndexFieldsResponse> RESPONSE_CLASS = RetrieveIndexFieldsResponse.class;
+    private static final Class<RetrieveIndexFieldsByIndexResponseWrapper> RESPONSE_WRAPPER_CLASS = RetrieveIndexFieldsByIndexResponseWrapper.class;
 
     private final RetrieveIndexFieldsBackend retrieveIndexFieldsBackend;
     private final Requester<?, TokenType.Simple> requester;
 
     /**
      * Creates a new RetrieveIndexFieldsServiceImpl with the given configuration
+     *
      * @param hodServiceConfig The configuration to use
      */
     public RetrieveIndexFieldsServiceImpl(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         retrieveIndexFieldsBackend = hodServiceConfig.getRestAdapter().create(RetrieveIndexFieldsBackend.class);
         requester = hodServiceConfig.getRequester();
     }
-    
+
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(RESPONSE_CLASS, getBackendCaller(index, params));
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(RESPONSE_CLASS, getRetrieveIndexFieldsBackendCaller(indexes, params));
     }
 
     @Override
-    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getBackendCaller(index, params));
+    public RetrieveIndexFieldsResponse retrieveIndexFields(final TokenProxy<?, TokenType.Simple> tokenProxy, final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, RESPONSE_CLASS, getRetrieveIndexFieldsBackendCaller(indexes, params));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final ResourceIdentifier index, final RetrieveIndexFieldsRequestBuilder params) {
+    @Override
+    public Map<String, RetrieveIndexFieldsResponse> retrieveIndexFieldsByIndex(final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(RESPONSE_WRAPPER_CLASS, getRetrieveIndexFieldsByIndexBackendCaller(indexes, params)).getResponseMap();
+    }
+
+    @Override
+    public Map<String, RetrieveIndexFieldsResponse> retrieveIndexFieldsByIndex(final TokenProxy<?, TokenType.Simple> tokenProxy, final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) throws HodErrorException {
+        return requester.makeRequest(tokenProxy, RESPONSE_WRAPPER_CLASS, getRetrieveIndexFieldsByIndexBackendCaller(indexes, params)).getResponseMap();
+    }
+
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveIndexFieldsBackendCaller(final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) {
         return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
             @Override
             public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, index, params.build());
+                return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, indexes, params.build());
+            }
+        };
+    }
+
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveIndexFieldsByIndexBackendCaller(final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) {
+        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
+            @Override
+            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
+                return retrieveIndexFieldsBackend.retrieveIndexFieldsByIndex(authenticationToken, indexes, params.build());
             }
         };
     }
