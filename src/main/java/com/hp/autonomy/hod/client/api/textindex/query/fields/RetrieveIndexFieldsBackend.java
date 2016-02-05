@@ -14,7 +14,7 @@ import retrofit.http.Header;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 interface RetrieveIndexFieldsBackend {
@@ -32,7 +32,7 @@ interface RetrieveIndexFieldsBackend {
     @GET(URL + COMBINE_FIELDS_TRUE)
     Response retrieveIndexFields(
             @Header("token") AuthenticationToken<?, ?> token,
-            @Query("indexes") List<ResourceIdentifier> indexes,
+            @Query("indexes") Collection<ResourceIdentifier> indexes,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -47,7 +47,7 @@ interface RetrieveIndexFieldsBackend {
     @GET(URL)
     Response retrieveIndexFieldsByIndex(
             @Header("token") AuthenticationToken<?, ?> token,
-            @Query("indexes") List<ResourceIdentifier> indexes,
+            @Query("indexes") Collection<ResourceIdentifier> indexes,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }

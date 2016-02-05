@@ -11,7 +11,7 @@ import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -31,7 +31,7 @@ public interface RetrieveIndexFieldsService {
      * @throws HodAuthenticationFailedException If the token associated with the token proxy has expired
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
-            final List<ResourceIdentifier> indexes,
+            final Collection<ResourceIdentifier> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
@@ -48,7 +48,7 @@ public interface RetrieveIndexFieldsService {
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
             final TokenProxy<?, TokenType.Simple> tokenProxy,
-            final List<ResourceIdentifier> indexes,
+            final Collection<ResourceIdentifier> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
@@ -64,7 +64,7 @@ public interface RetrieveIndexFieldsService {
      * @throws HodAuthenticationFailedException If the token associated with the token proxy has expired
      */
     Map<String, RetrieveIndexFieldsResponse> retrieveIndexFieldsByIndex(
-            final List<ResourceIdentifier> indexes,
+            final Collection<ResourceIdentifier> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
@@ -81,7 +81,7 @@ public interface RetrieveIndexFieldsService {
      */
     Map<String, RetrieveIndexFieldsResponse> retrieveIndexFieldsByIndex(
             final TokenProxy<?, TokenType.Simple> tokenProxy,
-            final List<ResourceIdentifier> indexes,
+            final Collection<ResourceIdentifier> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 

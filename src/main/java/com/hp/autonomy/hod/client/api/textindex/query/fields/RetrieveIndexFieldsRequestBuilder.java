@@ -9,7 +9,7 @@ import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -22,7 +22,7 @@ public class RetrieveIndexFieldsRequestBuilder {
     /**
      * @param fieldType Describe the field type of field names to retrieve.
      */
-    private List<FieldType> fieldTypes;
+    private Collection<FieldType> fieldTypes;
 
     /**
      * @param maxValues The number of field names to display. Displays maximum 1000 tags by default.
