@@ -14,14 +14,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.notNullValue;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrationTest {
+    private static final List<ResourceIdentifier> SAMPLE_INDEXES = Arrays.asList(ResourceIdentifier.WIKI_ENG, ResourceIdentifier.NEWS_ENG);
+    private static final String WIKI_ENG_FIELD = "content";
 
     private RetrieveIndexFieldsService retrieveIndexFieldsService;
 
@@ -38,23 +44,41 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
     }
 
     @Test
-    public void testRetrieveIndexFieldsGrouped() throws HodErrorException {
-        final String wikiEngField = "content";
+    public void testRetrieveIndexFieldsCombined() throws HodErrorException {
 
         final RetrieveIndexFieldsRequestBuilder params = new RetrieveIndexFieldsRequestBuilder()
-            .setFieldType(FieldType.index)
-            .setGroupFieldsByType(true);
+                .setFieldTypes(Collections.singletonList(FieldType.index));
 
         final RetrieveIndexFieldsResponse response = retrieveIndexFieldsService.retrieveIndexFields(
-            getTokenProxy(),
-            ResourceIdentifier.WIKI_ENG,
-            params
+                getTokenProxy(),
+                SAMPLE_INDEXES,
+                params
         );
 
-        assertThat(response.getAllFields(), hasItem(wikiEngField));
+        validateResults(response);
+    }
+
+    @Test
+    public void testRetrieveIndexFieldsPerIndex() throws HodErrorException {
+
+        final RetrieveIndexFieldsRequestBuilder params = new RetrieveIndexFieldsRequestBuilder()
+                .setFieldTypes(Collections.singletonList(FieldType.index));
+
+        final Map<String, RetrieveIndexFieldsResponse> responses = retrieveIndexFieldsService.retrieveIndexFieldsByIndex(
+                getTokenProxy(),
+                SAMPLE_INDEXES,
+                params
+        );
+
+        assertThat(responses.keySet(), hasSize(SAMPLE_INDEXES.size()));
+        final RetrieveIndexFieldsResponse response = responses.get(ResourceIdentifier.WIKI_ENG.getName());
+        validateResults(response);
+    }
+
+    private void validateResults(final RetrieveIndexFieldsResponse response) {
         assertThat(response.getTotalFields(), greaterThan(0));
         assertThat(response.getFieldTypeCounts(), is(notNullValue()));
-        assertThat(response.getIndexTypeFields(), hasItem(wikiEngField));
+        assertThat(response.getIndexTypeFields(), hasItem(WIKI_ENG_FIELD));
     }
 
 }

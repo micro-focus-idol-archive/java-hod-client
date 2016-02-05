@@ -24,17 +24,6 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = RetrieveIndexFieldsResponse.Builder.class)
 public class RetrieveIndexFieldsResponse {
-
-    /**
-     * @return The index name
-     */
-    private final String indexName;
-
-    /**
-     * @return A list of all fields optionally restricted by type
-     */
-    private final List<String> allFields;
-
     /**
      * @return An object containing the frequency of each field type
      */
@@ -92,13 +81,6 @@ public class RetrieveIndexFieldsResponse {
     @Setter
     @Accessors(chain = true)
     public static class Builder {
-
-        @JsonProperty("index_name")
-        private String indexName;
-
-        @JsonProperty("all_fields")
-        private List<String> allFields;
-
         @JsonProperty("field_type_counts")
         private FieldTypeCounts fieldTypeCounts;
 
@@ -128,8 +110,6 @@ public class RetrieveIndexFieldsResponse {
 
         public RetrieveIndexFieldsResponse build() {
             return new RetrieveIndexFieldsResponse(
-                    indexName,
-                    allFields,
                     fieldTypeCounts,
                     totalFields,
                     indexTypeFields,

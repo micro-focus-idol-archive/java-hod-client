@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -18,23 +19,15 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 public class RetrieveIndexFieldsRequestBuilder {
-
-
-    /**
-     * @param groupFieldsByType Whether the fields should be shown grouped by field types.
-     */
-    private Boolean groupFieldsByType;
-
     /**
      * @param fieldType Describe the field type of field names to retrieve.
      */
-    private FieldType fieldType;
+    private Collection<FieldType> fieldTypes;
 
     /**
      * @param maxValues The number of field names to display. Displays maximum 1000 tags by default.
      */
     private Integer maxValues;
-
 
     /**
      * @return A map of query parameters suitable for use with {@link RetrieveIndexFieldsBackend}. get is NOT supported on
@@ -42,8 +35,9 @@ public class RetrieveIndexFieldsRequestBuilder {
      */
     Map<String, Object> build() {
         final Map<String, Object> map = new MultiMap<>();
-        map.put("group_fields_by_type", groupFieldsByType);
-        map.put("fieldtype", fieldType);
+        for (final FieldType fieldType : fieldTypes) {
+            map.put("field_types", fieldType);
+        }
         map.put("max_values", maxValues);
 
         return map;
