@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.hod</groupId>
     <artifactId>java-hod-client</artifactId>
-    <version>0.17.0</version>
+    <version>0.18.0</version>
 
     <description>Java Client for communicating with HP Haven OnDemand</description>
 
@@ -79,6 +79,12 @@
             <email>will.byrne@hp.com</email>
             <organization>HP</organization>
             <organizationUrl>http://www.hp.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Rosie Taylor</name>
+            <email>rosie.taylor@hpe.com</email>
+            <organization>Hewlett-Packard Enterprise</organization>
+            <organizationUrl>http://www.hpe.com</organizationUrl>
         </developer>
     </developers>
 
@@ -153,7 +159,7 @@
         <dependency>
             <groupId>com.hp.autonomy.frontend</groupId>
             <artifactId>aci-types</artifactId>
-            <version>0.4.0</version>
+            <version>0.7.0</version>
         </dependency>
 
         <dependency>

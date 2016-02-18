@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.hp.autonomy.types.requests.idol.actions.tags.TagResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = RetrieveIndexFieldsResponse.Builder.class)
-public class RetrieveIndexFieldsResponse {
+public class RetrieveIndexFieldsResponse implements TagResponse {
     /**
      * @return An object containing the frequency of each field type
      */
