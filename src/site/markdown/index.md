@@ -1,14 +1,14 @@
 # java-hod-client
 
-Java Client for communicating with [HP Haven OnDemand](http://www.idolondemand.com)
+Java Client for communicating with [HPE Haven OnDemand](http://www.havenondemand.com)
 
 ## About
-java-hod-client provides a Java Interface to the HP Haven OnDemand APIs to simplify calling the HP Haven OnDemand APIs
+java-hod-client provides a Java Interface to the HPE Haven OnDemand APIs to simplify calling the HPE Haven OnDemand APIs
 from Java, allowing consumers of java-hod-client to access HP Haven OnDemand in a typesafe way. It also automatically
 handles refreshed tokens in the headers of HP Haven OnDemand responses.
 
 ## Goals
-Currently only a small subset of HP Haven OnDemand APIs are supported. The eventual aim to support all the HP Haven
+Currently only a small subset of HPE Haven OnDemand APIs are supported. The eventual aim to support all the HP Haven
 OnDemand APIs.
 
 If an API you need is not supported, submit a pull request!
