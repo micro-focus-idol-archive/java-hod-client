@@ -52,6 +52,8 @@ public class ResourceFlavour implements Serializable {
      */
     public static final ResourceFlavour FILESYSTEM_ONSITE = new ResourceFlavour("filesystem_onsite");
 
+    public static final ResourceFlavour JUMBO = new ResourceFlavour("jumbo");
+
     private final String name;
 
     /**
@@ -77,6 +79,7 @@ public class ResourceFlavour implements Serializable {
             CATEGORIZATION,
             CUSTOM_FIELDS,
             QUERY_MANIPULATION,
+            JUMBO,
             WEB_CLOUD,
             FILESYSTEM_ONSITE
         ));

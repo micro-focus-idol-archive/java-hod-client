@@ -13,5 +13,6 @@ public enum IndexFlavor {
     explorer,
     categorization,
     custom_fields,
-    querymanipulation
+    querymanipulation,
+    jumbo
 }
