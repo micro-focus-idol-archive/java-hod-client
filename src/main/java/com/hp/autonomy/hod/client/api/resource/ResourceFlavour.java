@@ -79,6 +79,7 @@ public class ResourceFlavour implements Serializable {
             CATEGORIZATION,
             CUSTOM_FIELDS,
             QUERY_MANIPULATION,
+            JUMBO,
             WEB_CLOUD,
             FILESYSTEM_ONSITE
         ));
