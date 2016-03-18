@@ -15,6 +15,8 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -22,9 +24,10 @@ import java.util.List;
  * Holds the response from the RetrieveIndexFields API
  */
 @Data
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = RetrieveIndexFieldsResponse.Builder.class)
-public class RetrieveIndexFieldsResponse implements TagResponse {
+public class RetrieveIndexFieldsResponse implements Serializable, TagResponse {
+
+    private static final long serialVersionUID = -4764411121480400430L;
     /**
      * @return An object containing the frequency of each field type
      */
@@ -77,6 +80,21 @@ public class RetrieveIndexFieldsResponse implements TagResponse {
      */
     private final List<String> storedTypeFields;
 
+    private RetrieveIndexFieldsResponse(final Builder builder) {
+        fieldTypeCounts = builder.fieldTypeCounts;
+        totalFields = builder.totalFields;
+        indexTypeFields = serializableList(builder.indexTypeFields);
+        parametricTypeFields = serializableList(builder.parametricTypeFields);
+        numericTypeFields = serializableList(builder.numericTypeFields);
+        autnRankTypeFields = serializableList(builder.autnRankTypeFields);
+        referenceTypeFields = serializableList(builder.referenceTypeFields);
+        dateTypeFields = serializableList(builder.dateTypeFields);
+        storedTypeFields = serializableList(builder.storedTypeFields);
+    }
+
+    private List<String> serializableList(final List<String> input) {
+        return input == null ? new LinkedList<String>() : new LinkedList<>(input);
+    }
 
     @JsonPOJOBuilder(withPrefix = "set")
     @Setter
@@ -110,17 +128,7 @@ public class RetrieveIndexFieldsResponse implements TagResponse {
         private List<String> storedTypeFields;
 
         public RetrieveIndexFieldsResponse build() {
-            return new RetrieveIndexFieldsResponse(
-                    fieldTypeCounts,
-                    totalFields,
-                    indexTypeFields,
-                    parametricTypeFields,
-                    numericTypeFields,
-                    autnRankTypeFields,
-                    referenceTypeFields,
-                    dateTypeFields,
-                    storedTypeFields
-            );
+            return new RetrieveIndexFieldsResponse(this);
         }
 
     }

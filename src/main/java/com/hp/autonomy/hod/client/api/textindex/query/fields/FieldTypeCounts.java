@@ -14,6 +14,8 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 
 /**
  * Nested response as part of the Retrieve Index Fields API.
@@ -22,8 +24,9 @@ import lombok.experimental.Accessors;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(builder = FieldTypeCounts.Builder.class)
-public class FieldTypeCounts {
+public class FieldTypeCounts implements Serializable {
 
+    private static final long serialVersionUID = 7366279865367956482L;
     /**
      * @returns The count of index field type
      */
