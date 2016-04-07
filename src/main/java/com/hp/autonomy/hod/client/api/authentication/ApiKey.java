@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 
 /**
@@ -17,6 +18,11 @@ public class ApiKey {
      * @return The API key to be used
      */
     private final String apiKey;
+
+    @JsonCreator
+    public ApiKey(final String apiKey) {
+        this.apiKey = apiKey;
+    }
 
     @Override
     public String toString() {
