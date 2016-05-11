@@ -22,24 +22,29 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 @EqualsAndHashCode
 @ToString
 @JsonDeserialize(builder = FieldNames.Builder.class)
 public class FieldNames implements Iterable<FieldNames.ParametricValue>, Serializable {
 
     private static final long serialVersionUID = 2336751244628886019L;
+    private static final Pattern CSV_SEPARATOR_PATTERN = Pattern.compile(",\\s*");
 
     private transient Map<String, Map<String, Integer>> parametricValuesMap;
 
     private FieldNames(final Builder builder) {
-        this.parametricValuesMap = builder.parametricValuesMap;
+        parametricValuesMap = builder.parametricValuesMap;
     }
 
     @Override
@@ -108,6 +113,42 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
         return Collections.emptyList();
     }
 
+    /**
+     * Get an array of values and counts for a given fieldName
+     *
+     * @param fieldName The name of the field
+     * @return an array of value and count types
+     */
+    public List<QueryTagCountInfo> getValuesAndCountsForNumericField(final String fieldName) {
+        final Map<String, Integer> map = parametricValuesMap.get(fieldName);
+
+        if (map != null) {
+            final Map<Integer, Integer> countInfo = new TreeMap<>();
+            for (final Map.Entry<String, Integer> entry : map.entrySet()) {
+                final String[] csv = CSV_SEPARATOR_PATTERN.split(entry.getKey());
+                final int count = entry.getValue();
+                for (final String value : csv) {
+                    final int numericValue = Integer.parseInt(value);
+                    if (countInfo.containsKey(numericValue)) {
+                        countInfo.put(numericValue, countInfo.get(numericValue) + count);
+                    } else {
+                        countInfo.put(numericValue, count);
+                    }
+                }
+            }
+
+            final List<QueryTagCountInfo> counts = new ArrayList<>();
+            for (final Map.Entry<Integer, Integer> entry : countInfo.entrySet()) {
+                counts.add(new QueryTagCountInfo(entry.getKey().toString(), entry.getValue()));
+            }
+
+            return counts;
+        }
+
+        return Collections.emptyList();
+    }
+
+    @SuppressWarnings("unused")
     @JsonAnyGetter
     private Map<String, List<QueryTagCountInfo>> getJson() {
         final Map<String, List<QueryTagCountInfo>> map = new LinkedHashMap<>();
@@ -152,7 +193,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
             final String fieldName = (String) objectInputStream.readObject();
             final int countsCount = objectInputStream.readInt();
 
-            final LinkedHashMap<String, Integer> countsMap = new LinkedHashMap<>();
+            final Map<String, Integer> countsMap = new LinkedHashMap<>();
 
             for (int j = 0; j < countsCount; j++) {
                 final String value = (String) objectInputStream.readObject();
@@ -196,7 +237,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
         private final Iterator<ParametricValue> inner;
 
         private ParametricValueIterator() {
-            final List<ParametricValue> values = new ArrayList<>();
+            final Collection<ParametricValue> values = new ArrayList<>();
 
             for (final Map.Entry<String, Map<String, Integer>> fieldAndValues : parametricValuesMap.entrySet()) {
                 final String fieldName = fieldAndValues.getKey();
