@@ -21,10 +21,7 @@ import org.junit.runners.Parameterized;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.Matchers.aMapWithSize;
@@ -41,6 +38,9 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     private UserStoreUsersService service;
     private UUID developerUserUuid;
 
+    private final Set<HodErrorCode> storeNotFoundErrorCodes = new HashSet<>();
+    private final Set<HodErrorCode> userNotFoundErrorCodes = new HashSet<>();
+
     public UserStoreUsersServiceImplITCase(final Endpoint endpoint) {
         super(endpoint);
     }
@@ -50,6 +50,12 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     public void setUp() {
         super.setUp();
         service = new UserStoreUsersServiceImpl(getConfig());
+
+        storeNotFoundErrorCodes.add(HodErrorCode.STORE_NOT_FOUND);
+        storeNotFoundErrorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
+
+        userNotFoundErrorCodes.add(HodErrorCode.USER_NOT_FOUND);
+        userNotFoundErrorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
         try {
             final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), true, false);
@@ -260,7 +266,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     public void testResetThrowsWhenUserStoreNotFound() throws MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
-        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.resetAuthentication(
@@ -290,7 +296,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void listUserGroupsThrowsWithNonExistentUserStore() {
-        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.listUserGroups(
@@ -319,7 +325,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void getUserMetadataThrowsWithNonExistentUserStore() {
-        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.getUserMetadata(
@@ -334,7 +340,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void addUserMetadataThrowsWithNonExistentUser() {
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        testErrorCode(userNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.addUserMetadata(
@@ -349,7 +355,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void addUserMetadataThrowsWithNonExistentUserStore() {
-        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.addUserMetadata(
@@ -379,7 +385,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void removeUserMetadataThrowsWithNonExistentUserStore() {
-        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.removeUserMetadata(

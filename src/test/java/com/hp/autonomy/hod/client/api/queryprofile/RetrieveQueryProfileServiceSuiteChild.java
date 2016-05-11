@@ -22,6 +22,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -138,7 +140,11 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
         final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
         trackedDeleteProfile(profileIdentifier);
 
-        testErrorCode(HodErrorCode.QUERY_PROFILE_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
+        final Set<HodErrorCode> errorCodes = new HashSet<>();
+        errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
+        errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
+
+        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
