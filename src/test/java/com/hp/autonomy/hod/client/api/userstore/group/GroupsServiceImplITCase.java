@@ -22,12 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.Matchers.contains;
@@ -160,7 +155,11 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
 
     @Test
     public void createInNonExistentUserStore() {
-        testErrorCode(HodErrorCode.STORE_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
+        final Set<HodErrorCode> errorCodes = new HashSet<>();
+        errorCodes.add(HodErrorCode.STORE_NOT_FOUND);
+        errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
+
+        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.create(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), unique()), unique());

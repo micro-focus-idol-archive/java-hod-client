@@ -15,9 +15,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,8 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.empty;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @Slf4j
@@ -74,9 +78,33 @@ public class FieldNamesTest {
     @Test
     public void testGetValuesAndCountsForFieldName() {
         final List<QueryTagCountInfo> parametricValues = fieldNames.getValuesAndCountsForFieldName("zero");
-        final QueryTagCountInfo one = parametricValues.get(0);
-        assertThat(one.getValue(), is("1"));
-        assertThat(one.getCount(), is(1));
+        final QueryTagCountInfo firstEntry = parametricValues.get(0);
+        assertThat(firstEntry.getValue(), is("1"));
+        assertThat(firstEntry.getCount(), is(1));
+    }
+
+    @Test
+    public void getValuesAndCountsForNumericField() {
+        final Map<String, Integer> numericField = new LinkedHashMap<>();
+        numericField.put("0", 1);
+        numericField.put("0, 4, 12", 2);
+        numericField.put("4", 3);
+        numericField.put("5", 1);
+
+        final FieldNames fieldNames = new FieldNames.Builder()
+                .addParametricValue("numericField", numericField)
+                .build();
+        final List<QueryTagCountInfo> numericParametricValues = fieldNames.getValuesAndCountsForNumericField("numericField");
+        final Iterator<QueryTagCountInfo> iterator = numericParametricValues.iterator();
+        assertEquals(new QueryTagCountInfo("0", 3), iterator.next());
+        assertEquals(new QueryTagCountInfo("4", 5), iterator.next());
+        assertEquals(new QueryTagCountInfo("5", 1), iterator.next());
+        assertEquals(new QueryTagCountInfo("12", 2), iterator.next());
+    }
+
+    @Test
+    public void getValuesAndCountsForNumericFieldNoResults() {
+        assertThat(new FieldNames.Builder().build().getValuesAndCountsForNumericField("numericField"), empty());
     }
 
     @Test
@@ -113,13 +141,14 @@ public class FieldNamesTest {
     public void testSerialization() throws IOException, ClassNotFoundException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        try (final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+        try (final ObjectOutput objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
             objectOutputStream.writeObject(fieldNames);
         }
 
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
         try (final ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            @SuppressWarnings("CastToConcreteClass")
             final FieldNames fieldNamesFromStream = (FieldNames) objectInputStream.readObject();
 
             assertThat(fieldNamesFromStream, is(fieldNames));

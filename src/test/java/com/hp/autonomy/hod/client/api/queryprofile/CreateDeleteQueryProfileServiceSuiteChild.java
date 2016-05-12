@@ -15,6 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -79,7 +82,11 @@ public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractQueryProf
 
     @Test
     public void deleteNonExistentFails() {
-        testErrorCode(HodErrorCode.QUERY_PROFILE_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
+        final Set<HodErrorCode> errorCodes = new HashSet<>();
+        errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
+        errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
+
+        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
             @Override
             public void run() throws HodErrorException {
                 service.deleteQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName()));
