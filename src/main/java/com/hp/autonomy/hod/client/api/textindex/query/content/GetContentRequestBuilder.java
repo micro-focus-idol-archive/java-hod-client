@@ -54,6 +54,8 @@ public class GetContentRequestBuilder {
      */
     private Summary summary;
 
+    private String securityInfo;
+
     /**
      * @return A map of query parameters suitable for use with {@link GetContentBackend}. get is NOT supported on
      * the resulting map
@@ -66,6 +68,7 @@ public class GetContentRequestBuilder {
         map.put("print", print);
         map.put("print_fields", StringUtils.join(printFields, ','));
         map.put("summary", summary);
+        map.put("security_info", securityInfo);
 
         return map;
     }

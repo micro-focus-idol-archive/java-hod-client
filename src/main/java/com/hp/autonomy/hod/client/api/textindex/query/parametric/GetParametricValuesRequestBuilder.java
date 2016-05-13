@@ -52,6 +52,8 @@ public class GetParametricValuesRequestBuilder {
      */
     private ResourceIdentifier queryProfile;
 
+    private String securityInfo;
+
     /**
      * @param minScore Sets the value of minScore
      */
@@ -83,6 +85,7 @@ public class GetParametricValuesRequestBuilder {
         map.put("document_count", documentCount);
         map.put("sort", sort);
         map.put("query_profile", queryProfile);
+        map.put("security_info", securityInfo);
 
         return map;
     }

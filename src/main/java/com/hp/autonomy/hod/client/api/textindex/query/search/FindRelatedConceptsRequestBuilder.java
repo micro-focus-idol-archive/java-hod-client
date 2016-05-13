@@ -91,6 +91,9 @@ public class FindRelatedConceptsRequestBuilder {
      */
     private Integer sampleSize;
 
+
+    private String securityInfo;
+
     /**
      * @return A map of query parameters suitable for use with {@link FindRelatedConceptsBackend}. get is NOT supported on
      * the resulting map
@@ -102,6 +105,7 @@ public class FindRelatedConceptsRequestBuilder {
         map.put("print_fields", StringUtils.join(printFields, ','));
         map.put("max_results", maxResults);
         map.put("sample_size", sampleSize);
+        map.put("security_info", securityInfo);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
