@@ -31,16 +31,6 @@ public class UserInformation implements Serializable {
     private final AuthenticationInformation authentication;
 
     /**
-     * @return Groups directly associated with the user
-     */
-    private final List<String> directGroups;
-
-    /**
-     * @return Groups either directly or transitively associated with the user
-     */
-    private final List<String> groups;
-
-    /**
      * @return Accounts associated with the user
      */
     private final List<Account> accounts;
@@ -48,14 +38,10 @@ public class UserInformation implements Serializable {
     public UserInformation(
         @JsonProperty("uuid") final UUID uuid,
         @JsonProperty("auth") final AuthenticationInformation authentication,
-        @JsonProperty("direct_groups") final List<String> directGroups,
-        @JsonProperty("groups") final List<String> groups,
         @JsonProperty("accounts") final List<Account> accounts
     ) {
         this.uuid = uuid;
         this.authentication = authentication;
-        this.directGroups = directGroups;
-        this.groups = groups;
         this.accounts = accounts;
     }
 }
