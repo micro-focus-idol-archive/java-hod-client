@@ -47,6 +47,8 @@ public class Account {
          */
         public static final Type EMAIL = new Type("email");
 
+        public static final Type ONSITE = new Type("onsite");
+
         private static final long serialVersionUID = -5875593359004072473L;
 
         private final String name;
