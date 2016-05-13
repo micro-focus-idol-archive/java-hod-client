@@ -140,6 +140,8 @@ public class QueryRequestBuilder {
      */
     private CheckSpelling checkSpelling;
 
+    private String securityInfo;
+
     private Collection<ResourceIdentifier> indexes = new ArrayList<>();
 
     /**
@@ -190,6 +192,7 @@ public class QueryRequestBuilder {
         map.put("query_profile", queryProfile);
         map.put("promotion", promotions);
         map.put("check_spelling", checkSpelling);
+        map.put("security_info", securityInfo);
 
         // prefer the DateTime over the numeric versions
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
