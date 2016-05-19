@@ -123,12 +123,12 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
         final Map<String, Integer> map = parametricValuesMap.get(fieldName);
 
         if (map != null) {
-            final Map<Integer, Integer> countInfo = new TreeMap<>();
+            final Map<Double, Integer> countInfo = new TreeMap<>();
             for (final Map.Entry<String, Integer> entry : map.entrySet()) {
                 final String[] csv = CSV_SEPARATOR_PATTERN.split(entry.getKey());
                 final int count = entry.getValue();
                 for (final String value : csv) {
-                    final int numericValue = Integer.parseInt(value);
+                    final double numericValue = Double.parseDouble(value);
                     if (countInfo.containsKey(numericValue)) {
                         countInfo.put(numericValue, countInfo.get(numericValue) + count);
                     } else {
@@ -138,7 +138,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
             }
 
             final List<QueryTagCountInfo> counts = new ArrayList<>();
-            for (final Map.Entry<Integer, Integer> entry : countInfo.entrySet()) {
+            for (final Map.Entry<Double, Integer> entry : countInfo.entrySet()) {
                 counts.add(new QueryTagCountInfo(entry.getKey().toString(), entry.getValue()));
             }
 

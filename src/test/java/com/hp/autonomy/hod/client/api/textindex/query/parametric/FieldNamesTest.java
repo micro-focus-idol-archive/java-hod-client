@@ -89,17 +89,17 @@ public class FieldNamesTest {
         numericField.put("0", 1);
         numericField.put("0, 4, 12", 2);
         numericField.put("4", 3);
-        numericField.put("5", 1);
+        numericField.put("5.1", 1);
 
         final FieldNames fieldNames = new FieldNames.Builder()
                 .addParametricValue("numericField", numericField)
                 .build();
         final List<QueryTagCountInfo> numericParametricValues = fieldNames.getValuesAndCountsForNumericField("numericField");
         final Iterator<QueryTagCountInfo> iterator = numericParametricValues.iterator();
-        assertEquals(new QueryTagCountInfo("0", 3), iterator.next());
-        assertEquals(new QueryTagCountInfo("4", 5), iterator.next());
-        assertEquals(new QueryTagCountInfo("5", 1), iterator.next());
-        assertEquals(new QueryTagCountInfo("12", 2), iterator.next());
+        assertEquals(new QueryTagCountInfo("0.0", 3), iterator.next());
+        assertEquals(new QueryTagCountInfo("4.0", 5), iterator.next());
+        assertEquals(new QueryTagCountInfo("5.1", 1), iterator.next());
+        assertEquals(new QueryTagCountInfo("12.0", 2), iterator.next());
     }
 
     @Test
