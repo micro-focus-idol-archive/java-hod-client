@@ -40,6 +40,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
 
     private static final long serialVersionUID = 2336751244628886019L;
     private static final Pattern CSV_SEPARATOR_PATTERN = Pattern.compile(",\\s*");
+    private static final long MILLI_MULTIPLIER = 1000L;
 
     private transient Map<String, Map<String, Integer>> parametricValuesMap;
 
@@ -140,6 +141,28 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
             final List<QueryTagCountInfo> counts = new ArrayList<>();
             for (final Map.Entry<Double, Integer> entry : countInfo.entrySet()) {
                 counts.add(new QueryTagCountInfo(entry.getKey().toString(), entry.getValue()));
+            }
+
+            return counts;
+        }
+
+        return Collections.emptyList();
+    }
+
+    /**
+     * Get an array of values and counts for a given fieldName
+     *
+     * @param fieldName The name of the field
+     * @return an array of value and count types
+     */
+    public List<QueryTagCountInfo> getValuesAndCountsForDateField(final String fieldName) {
+        final Map<String, Integer> map = parametricValuesMap.get(fieldName);
+
+        if (map != null) {
+            final List<QueryTagCountInfo> counts = new ArrayList<>();
+
+            for (final Map.Entry<String, Integer> entry : map.entrySet()) {
+                counts.add(new QueryTagCountInfo(String.valueOf(Long.parseLong(entry.getKey()) * MILLI_MULTIPLIER), entry.getValue()));
             }
 
             return counts;

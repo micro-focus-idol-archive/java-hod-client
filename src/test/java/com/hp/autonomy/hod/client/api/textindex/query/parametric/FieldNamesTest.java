@@ -108,6 +108,21 @@ public class FieldNamesTest {
     }
 
     @Test
+    public void getValuesAndCountsForDateField() {
+        final Map<String, Integer> dateField = new LinkedHashMap<>();
+        dateField.put("1238223600", 3);
+        dateField.put("1463997811", 1);
+
+        final FieldNames fieldNames = new FieldNames.Builder()
+                .addParametricValue("dateField", dateField)
+                .build();
+        final List<QueryTagCountInfo> numericParametricValues = fieldNames.getValuesAndCountsForDateField("dateField");
+        final Iterator<QueryTagCountInfo> iterator = numericParametricValues.iterator();
+        assertEquals(new QueryTagCountInfo("1238223600000", 3), iterator.next());
+        assertEquals(new QueryTagCountInfo("1463997811000", 1), iterator.next());
+    }
+
+    @Test
     public void testIterator() {
         int x = 0;
 

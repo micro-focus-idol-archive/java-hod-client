@@ -8,16 +8,16 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.hp.autonomy.types.requests.idol.actions.tags.TagResponse;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import com.hp.autonomy.types.requests.idol.actions.tags.params.FieldTypeParam;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.commons.collections4.ListUtils;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Data
 @JsonDeserialize(builder = RetrieveIndexFieldsResponse.Builder.class)
-public class RetrieveIndexFieldsResponse implements Serializable, TagResponse {
+public class RetrieveIndexFieldsResponse implements Serializable {
 
     private static final long serialVersionUID = -4764411121480400430L;
     /**
@@ -39,61 +39,21 @@ public class RetrieveIndexFieldsResponse implements Serializable, TagResponse {
     private final Integer totalFields;
 
     /**
-     * @return A list of the index type fields if the results
-     * were grouped by type
+     * @return Map of fields by field type
      */
-    private final List<String> indexTypeFields;
-
-    /**
-     * @return A list of the parametric type fields if the results
-     * were grouped by type
-     */
-    private final List<String> parametricTypeFields;
-
-    /**
-     * @return A list of the numeric type fields if the results
-     * were grouped by type
-     */
-    private final List<String> numericTypeFields;
-
-    /**
-     * @return A list of the autnrank type fields if the results
-     * were grouped by type
-     */
-    private final List<String> autnRankTypeFields;
-
-    /**
-     * @return A list of the reference type fields if the results
-     * were grouped by type
-     */
-    private final List<String> referenceTypeFields;
-
-    /**
-     * @return A list of the date type fields if the results
-     * were grouped by type
-     */
-    private final List<String> dateTypeFields;
-
-    /**
-     * @return A list of the stored type fields if the results
-     * were grouped by type
-     */
-    private final List<String> storedTypeFields;
+    private final Map<FieldTypeParam, List<String>> fields = new EnumMap<>(FieldTypeParam.class);
 
     private RetrieveIndexFieldsResponse(final Builder builder) {
         fieldTypeCounts = builder.fieldTypeCounts;
         totalFields = builder.totalFields;
-        indexTypeFields = serializableList(builder.indexTypeFields);
-        parametricTypeFields = serializableList(builder.parametricTypeFields);
-        numericTypeFields = serializableList(builder.numericTypeFields);
-        autnRankTypeFields = serializableList(builder.autnRankTypeFields);
-        referenceTypeFields = serializableList(builder.referenceTypeFields);
-        dateTypeFields = serializableList(builder.dateTypeFields);
-        storedTypeFields = serializableList(builder.storedTypeFields);
-    }
 
-    private List<String> serializableList(final List<String> input) {
-        return input == null ? new LinkedList<String>() : new LinkedList<>(input);
+        fields.put(FieldTypeParam.AutnRank, ListUtils.emptyIfNull(builder.autnRankTypeFields));
+        fields.put(FieldTypeParam.Date, ListUtils.emptyIfNull(builder.dateTypeFields));
+        fields.put(FieldTypeParam.Index, ListUtils.emptyIfNull(builder.indexTypeFields));
+        fields.put(FieldTypeParam.Numeric, ListUtils.emptyIfNull(builder.numericTypeFields));
+        fields.put(FieldTypeParam.Parametric, ListUtils.emptyIfNull(builder.parametricTypeFields));
+        fields.put(FieldTypeParam.Reference, ListUtils.emptyIfNull(builder.referenceTypeFields));
+        fields.put(FieldTypeParam.All, ListUtils.emptyIfNull(builder.storedTypeFields));
     }
 
     @JsonPOJOBuilder(withPrefix = "set")
