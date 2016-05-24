@@ -6,10 +6,12 @@
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.converter.DoNotConvert;
+import com.hp.autonomy.types.requests.idol.actions.tags.params.FieldTypeParam;
 
 /**
- * Enum type representing the possible options for the fieldtype parameter (see retrieve index fields api)
+ * Enum type representing the possible options for the field type parameter (see retrieve index fields api)
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @DoNotConvert
 public enum FieldType {
     index,
@@ -18,5 +20,35 @@ public enum FieldType {
     autnrank,
     reference,
     date,
-    stored
+    stored;
+
+    public static FieldType fromParam(final FieldTypeParam fieldTypeParam) {
+        final FieldType fieldType;
+        //noinspection EnumSwitchStatementWhichMissesCases
+        switch (fieldTypeParam) {
+            case AutnRank:
+                fieldType = autnrank;
+                break;
+            case Index:
+                fieldType = index;
+                break;
+            case NumericDate:
+                fieldType = date;
+                break;
+            case Numeric:
+                fieldType = numeric;
+                break;
+            case Parametric:
+                fieldType = parametric;
+                break;
+            case Reference:
+                fieldType = reference;
+                break;
+            default:
+                fieldType = stored;
+                break;
+        }
+
+        return fieldType;
+    }
 }
