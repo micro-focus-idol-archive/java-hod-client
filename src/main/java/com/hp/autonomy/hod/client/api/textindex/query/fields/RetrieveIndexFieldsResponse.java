@@ -48,7 +48,7 @@ public class RetrieveIndexFieldsResponse implements Serializable {
         totalFields = builder.totalFields;
 
         fields.put(FieldTypeParam.AutnRank, ListUtils.emptyIfNull(builder.autnRankTypeFields));
-        fields.put(FieldTypeParam.Date, ListUtils.emptyIfNull(builder.dateTypeFields));
+        fields.put(FieldTypeParam.NumericDate, ListUtils.emptyIfNull(builder.dateTypeFields));
         fields.put(FieldTypeParam.Index, ListUtils.emptyIfNull(builder.indexTypeFields));
         fields.put(FieldTypeParam.Numeric, ListUtils.emptyIfNull(builder.numericTypeFields));
         fields.put(FieldTypeParam.Parametric, ListUtils.emptyIfNull(builder.parametricTypeFields));
