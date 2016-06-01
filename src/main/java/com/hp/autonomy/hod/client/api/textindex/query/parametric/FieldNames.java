@@ -149,28 +149,6 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
         return Collections.emptyList();
     }
 
-    /**
-     * Get an array of values and counts for a given fieldName
-     *
-     * @param fieldName The name of the field
-     * @return an array of value and count types
-     */
-    public List<QueryTagCountInfo> getValuesAndCountsForDateField(final String fieldName) {
-        final Map<String, Integer> map = parametricValuesMap.get(fieldName);
-
-        if (map != null) {
-            final List<QueryTagCountInfo> counts = new ArrayList<>();
-
-            for (final Map.Entry<String, Integer> entry : map.entrySet()) {
-                counts.add(new QueryTagCountInfo(String.valueOf(Long.parseLong(entry.getKey()) * MILLI_MULTIPLIER), entry.getValue()));
-            }
-
-            return counts;
-        }
-
-        return Collections.emptyList();
-    }
-
     @SuppressWarnings("unused")
     @JsonAnyGetter
     private Map<String, List<QueryTagCountInfo>> getJson() {
