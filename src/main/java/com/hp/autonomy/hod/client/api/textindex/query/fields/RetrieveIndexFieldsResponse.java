@@ -8,6 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.hp.autonomy.types.requests.idol.actions.tags.TagName;
 import com.hp.autonomy.types.requests.idol.actions.tags.params.FieldTypeParam;
 import lombok.Data;
 import lombok.Setter;
@@ -41,7 +42,7 @@ public class RetrieveIndexFieldsResponse implements Serializable {
     /**
      * @return Map of fields by field type
      */
-    private final Map<FieldTypeParam, List<String>> fields = new EnumMap<>(FieldTypeParam.class);
+    private final Map<FieldTypeParam, List<TagName>> fields = new EnumMap<>(FieldTypeParam.class);
 
     private RetrieveIndexFieldsResponse(final Builder builder) {
         fieldTypeCounts = builder.fieldTypeCounts;
@@ -67,25 +68,25 @@ public class RetrieveIndexFieldsResponse implements Serializable {
         private Integer totalFields;
 
         @JsonProperty("index_type_fields")
-        private List<String> indexTypeFields;
+        private List<TagName> indexTypeFields;
 
         @JsonProperty("parametric_type_fields")
-        private List<String> parametricTypeFields;
+        private List<TagName> parametricTypeFields;
 
         @JsonProperty("numeric_type_fields")
-        private List<String> numericTypeFields;
+        private List<TagName> numericTypeFields;
 
         @JsonProperty("autnrank_type_fields")
-        private List<String> autnRankTypeFields;
+        private List<TagName> autnRankTypeFields;
 
         @JsonProperty("reference_type_fields")
-        private List<String> referenceTypeFields;
+        private List<TagName> referenceTypeFields;
 
         @JsonProperty("date_type_fields")
-        private List<String> dateTypeFields;
+        private List<TagName> dateTypeFields;
 
         @JsonProperty("stored_type_fields")
-        private List<String> storedTypeFields;
+        private List<TagName> storedTypeFields;
 
         public RetrieveIndexFieldsResponse build() {
             return new RetrieveIndexFieldsResponse(this);
