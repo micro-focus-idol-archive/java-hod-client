@@ -49,6 +49,8 @@ public class Account {
 
         public static final Type ONSITE = new Type("onsite");
 
+        public static final Type ACTIVE_DIRECTORY = new Type("active_directory");
+
         private static final long serialVersionUID = -5875593359004072473L;
 
         private final String name;
