@@ -10,6 +10,7 @@ import com.hp.autonomy.hod.client.api.userstore.user.Account;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,20 +29,29 @@ public class UserInformation implements Serializable {
     /**
      * @return Information about the mechanism used to authenticate the user
      */
+    @SuppressWarnings("InstanceVariableOfConcreteClass")
     private final AuthenticationInformation authentication;
 
     /**
      * @return Accounts associated with the user
      */
+    @SuppressWarnings("NonSerializableFieldInSerializableClass")
     private final List<Account> accounts;
+
+    /**
+     * @return Groups to which the user belongs
+     */
+    private final List<GroupInformation> groups;
 
     public UserInformation(
         @JsonProperty("uuid") final UUID uuid,
         @JsonProperty("auth") final AuthenticationInformation authentication,
-        @JsonProperty("accounts") final List<Account> accounts
-    ) {
+        @JsonProperty("accounts") final List<Account> accounts,
+        @JsonProperty("groups") final List<GroupInformation> groups
+        ) {
         this.uuid = uuid;
         this.authentication = authentication;
-        this.accounts = accounts;
+        this.accounts = new ArrayList<>(accounts);
+        this.groups = new ArrayList<>(groups);
     }
 }

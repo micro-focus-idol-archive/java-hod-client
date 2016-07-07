@@ -14,6 +14,7 @@ import java.util.UUID;
 
 /**
  * Information about a user store associated with an authentication token.
+ * TODO: combine with {@link GroupUserStoreInformation} once HOD-3394 has been resolved
  */
 @Data
 public class UserStoreInformation implements Serializable {
