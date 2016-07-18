@@ -14,7 +14,6 @@ import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.util.TypedByteArrayWithFilename;
-import com.hp.autonomy.types.requests.Documents;
 import org.apache.commons.io.IOUtils;
 import retrofit.client.Response;
 import retrofit.mime.TypedFile;
@@ -30,6 +29,7 @@ import java.io.Serializable;
  * If you don't need a custom return type use the {@link #documentsService(HodServiceConfig)} static factory
  * @param <T> The desired return type of the methods of the service
  */
+@SuppressWarnings("WeakerAccess")
 public class QueryTextIndexServiceImpl<T extends Serializable> implements QueryTextIndexService<T> {
 
     private final QueryTextIndexBackend queryTextIndexBackend;
@@ -45,7 +45,7 @@ public class QueryTextIndexServiceImpl<T extends Serializable> implements QueryT
     public QueryTextIndexServiceImpl(final HodServiceConfig<?, TokenType.Simple> config, final Class<T> documentType) {
         queryTextIndexBackend = config.getRestAdapter().create(QueryTextIndexBackend.class);
         requester = config.getRequester();
-        returnType = config.getObjectMapper().getTypeFactory().constructParametrizedType(Documents.class, Documents.class, documentType);
+        returnType = config.getObjectMapper().getTypeFactory().constructParametrizedType(QueryResults.class, QueryResults.class, documentType);
     }
 
     /**
@@ -58,62 +58,62 @@ public class QueryTextIndexServiceImpl<T extends Serializable> implements QueryT
     }
 
     @Override
-    public Documents<T> queryTextIndexWithText(final String text, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithText(final String text, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getTextBackendCaller(text, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithText(final TokenProxy<?, TokenType.Simple> tokenProxy, final String text, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithText(final TokenProxy<?, TokenType.Simple> tokenProxy, final String text, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getTextBackendCaller(text, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithReference(final String reference, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithReference(final String reference, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getReferenceBackendCaller(reference, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithReference(final TokenProxy<?, TokenType.Simple> tokenProxy, final String reference, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithReference(final TokenProxy<?, TokenType.Simple> tokenProxy, final String reference, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getReferenceBackendCaller(reference, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithUrl(final String url, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithUrl(final String url, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getUrlBackendCaller(url, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithUrl(final TokenProxy<?, TokenType.Simple> tokenProxy, final String url, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithUrl(final TokenProxy<?, TokenType.Simple> tokenProxy, final String url, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getUrlBackendCaller(url, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithFile(final File file, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithFile(final File file, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getFileBackendCaller(file, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final File file, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final File file, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getFileBackendCaller(file, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithFile(final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithFile(final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getByteArrayBackendCaller(bytes, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final byte[] bytes, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getByteArrayBackendCaller(bytes, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithFile(final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithFile(final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getInputStreamBackendCaller(inputStream, params));
     }
 
     @Override
-    public Documents<T> queryTextIndexWithFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> queryTextIndexWithFile(final TokenProxy<?, TokenType.Simple> tokenProxy, final InputStream inputStream, final QueryRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getInputStreamBackendCaller(inputStream, params));
     }
 

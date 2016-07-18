@@ -13,6 +13,7 @@ import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexServiceImpl;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
@@ -20,7 +21,6 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.token.TokenProxyService;
 import com.hp.autonomy.hod.client.token.TokenRepositoryException;
-import com.hp.autonomy.types.requests.Documents;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +75,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
             .addIndexes(ResourceIdentifier.WIKI_ENG)
             .setTotalResults(true);
 
-        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText("*", params);
+        final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText("*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
     }

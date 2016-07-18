@@ -7,9 +7,9 @@ package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import com.hp.autonomy.types.requests.Documents;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +18,7 @@ import java.util.List;
  * Service representing the GetContent API
  * @param <T> The desired return type of the API methods
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface GetContentService<T extends Serializable> {
 
     /**
@@ -31,7 +32,7 @@ public interface GetContentService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> getContent(
+    QueryResults<T> getContent(
         List<String> indexReference,
         ResourceIdentifier index,
         GetContentRequestBuilder params
@@ -47,7 +48,7 @@ public interface GetContentService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> getContent(
+    QueryResults<T> getContent(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         List<String> indexReference,
         ResourceIdentifier index,

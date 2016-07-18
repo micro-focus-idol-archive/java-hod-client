@@ -9,7 +9,6 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.types.requests.Documents;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +51,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .setTotalResults(true)
                 .addIndexes(ResourceIdentifier.WIKI_ENG, ResourceIdentifier.WIKI_GER);
 
-        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
+        final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
 
         assertThat(documents.getTotalResults(), is(greaterThan(0)));
 
@@ -74,7 +73,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
                 .setSort(Sort.date);
 
-        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
+        final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
@@ -90,7 +89,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
                 .setSort(Sort.date);
 
-        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);
+        final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);
         final List<Document> documentList = documents.getDocuments();
 
         assertThat(documentList, hasSize(10));
@@ -102,7 +101,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
             .setCheckSpelling(CheckSpelling.suggest)
             .addIndexes(ResourceIdentifier.WIKI_ENG);
 
-        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
+        final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
 
         assertThat(documents.getSuggestion().getCorrectedQuery(), is("ludwig van Beethoven"));
     }
@@ -113,7 +112,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
             .setCheckSpelling(CheckSpelling.autocorrect)
             .addIndexes(ResourceIdentifier.WIKI_ENG);
 
-        final Documents<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
+        final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
 
         assertThat(documents.getAutoCorrection().getCorrectedQuery(), is("ludwig van Beethoven"));
     }
