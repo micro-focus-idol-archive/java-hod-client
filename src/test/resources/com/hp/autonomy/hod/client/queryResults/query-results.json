@@ -1,0 +1,38 @@
+{
+  "documents": [
+    {
+      "reference": "http://www.cheese.com/campfire/",
+      "weight": 86.9,
+      "links": [
+        "CHEES"
+      ],
+      "index": "cheese",
+      "title": "Campfire - Cheese.com",
+      "content_type": [
+        "text/xhtml"
+      ],
+      "source_connector": [
+        "cheese"
+      ],
+      "promotion": "STATIC_REFERENCE_PROMOTION"
+    },
+    {
+      "reference": "http://www.cheese.com/cameo/",
+      "weight": 86.9,
+      "links": [
+        "CHEES"
+      ],
+      "index": "cheese",
+      "title": "Cameo - Cheese.com",
+      "content_type": [
+        "text/xhtml"
+      ],
+      "source_connector": [
+        "cheese"
+      ],
+      "promotion": "STATIC_REFERENCE_PROMOTION"
+    }
+  ],
+  "totalhits": 2,
+  "expandedQuery": "Longer string than the original query with + lots + of + things + added"
+}

@@ -1,0 +1,42 @@
+{
+  "documents": [
+    {
+      "reference": "http://www.cheese.com/campfire/",
+      "weight": 86.9,
+      "links": [
+        "CHEES"
+      ],
+      "index": "cheese",
+      "title": "Campfire - Cheese.com",
+      "content_type": [
+        "text/xhtml"
+      ],
+      "source_connector": [
+        "cheese"
+      ],
+      "promotion": "STATIC_REFERENCE_PROMOTION"
+    },
+    {
+      "reference": "http://www.cheese.com/cameo/",
+      "weight": 86.9,
+      "links": [
+        "CHEES"
+      ],
+      "index": "cheese",
+      "title": "Cameo - Cheese.com",
+      "content_type": [
+        "text/xhtml"
+      ],
+      "source_connector": [
+        "cheese"
+      ],
+      "promotion": "STATIC_REFERENCE_PROMOTION"
+    }
+  ],
+  "warnings": [
+    {
+      "code": 40003,
+      "warning": "{\"reason\":\"Document for reference 161-23/12/2015-11:00 and index tvguide2 is missing.\",}"
+    }
+  ]
+}
