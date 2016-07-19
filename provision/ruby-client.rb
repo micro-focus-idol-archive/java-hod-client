@@ -49,7 +49,7 @@ def make_request(endpoint, api, proxy_host, proxy_port, request_method, options 
     uri.query = URI.encode_www_form(options[:params])
   end
 
-  Net::HTTP::Proxy(proxy_host, proxy_port).start(uri.host, uri.port, :use_ssl => true) do |http|
+  Net::HTTP::Proxy(proxy_host, proxy_port).start(uri.host, uri.port, :use_ssl => true, :ssl_version => :TLSv1) do |http|
     request = request_method.new(uri.request_uri)
 
     if options[:apikey]

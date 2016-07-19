@@ -36,6 +36,8 @@ unless endpoint && apikey && application && domain
   abort("Usage: #{__FILE__} APIKEY ENVIRONMENT APPLICATION DOMAIN [PROXY_HOST] [PROXY_PORT]")
 end
 
+puts "Supported SSL versions: #{OpenSSL::SSL::SSLContext::METHODS}"
+
 puts "Using #{endpoint}"
 
 token = get_token(endpoint, apikey, application, domain, proxy_host, proxy_port)
