@@ -10,6 +10,7 @@ import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.token.TokenProxyService;
 import org.apache.http.HttpHost;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 public class HodServiceConfigFactory {
@@ -20,6 +21,9 @@ public class HodServiceConfigFactory {
     ) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
         builder.disableCookieManagement();
+        builder.setDefaultSocketConfig(SocketConfig.custom()
+            .setSoTimeout(60000)
+            .build());
 
         final String proxyHost = System.getProperty("hp.hod.https.proxyHost");
 
