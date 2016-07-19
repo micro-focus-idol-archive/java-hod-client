@@ -43,6 +43,8 @@ end
 def make_request(endpoint, api, proxy_host, proxy_port, request_method, options = {})
   uri = URI.parse("#{endpoint}/2#{api}")
 
+  puts "Using uri: #{uri}"
+
   if options[:params]
     uri.query = URI.encode_www_form(options[:params])
   end
