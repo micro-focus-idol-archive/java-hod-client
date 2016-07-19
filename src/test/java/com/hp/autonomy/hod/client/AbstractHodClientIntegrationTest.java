@@ -31,6 +31,8 @@ public abstract class AbstractHodClientIntegrationTest {
     private TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy;
 
     protected void setUp() {
+        System.setProperty("javax.net.debug", "all");
+
         hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, getEndpoint());
         restAdapter = hodServiceConfig.getRestAdapter();
 
