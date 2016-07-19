@@ -2,7 +2,7 @@ language: java
 jdk:
 - oraclejdk8
 before_install:
-- rvm install 2.0.0
+- rvm install 2.3.0
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 before_script: ruby provision/setup-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
 script: mvn verify -Prelease -Dhp.hod.env=$HOD_ENV -Dhp.hod.applicationApiKey=$HOD_APPLICATION_API_KEY -Dhp.hod.developerApiKey=$HOD_DEVELOPER_API_KEY -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN -Dhp.hod.developerEmail=$HOD_DEVELOPER_EMAIL
