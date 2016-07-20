@@ -1,6 +1,10 @@
 language: java
 jdk:
 - oraclejdk8
+addons:
+  apt:
+    packages:
+    - dnsutils
 before_install:
 - nslookup api.havenondemand.com
 - rvm install 2.3.0
