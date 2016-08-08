@@ -41,7 +41,6 @@ public class HodServiceConfig<E extends EntityType, T extends TokenType> {
     private HodServiceConfig(final Builder<E, T> builder) {
         final RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
             .setEndpoint(builder.endpoint)
-            .setLogLevel(RestAdapter.LogLevel.BASIC)
             .setErrorHandler(new ErrorHandlerWrapper(builder.errorHandler));
 
         if(builder.client != null) {
