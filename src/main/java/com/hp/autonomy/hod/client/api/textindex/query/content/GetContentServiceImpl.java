@@ -11,11 +11,11 @@ import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import com.hp.autonomy.types.requests.Documents;
 import retrofit.client.Response;
 
 import java.io.Serializable;
@@ -27,6 +27,7 @@ import java.util.List;
  * If a custom return type is not required, use the {@link #documentsService(HodServiceConfig)} static factory method
  * @param <T> The desired return type of the services methods
  */
+@SuppressWarnings("WeakerAccess")
 public class GetContentServiceImpl<T extends Serializable> implements GetContentService<T> {
     
     private final GetContentBackend getContentBackend;
@@ -42,25 +43,25 @@ public class GetContentServiceImpl<T extends Serializable> implements GetContent
     public GetContentServiceImpl(final HodServiceConfig<?, TokenType.Simple> config, final Class<T> documentType) {
         getContentBackend = config.getRestAdapter().create(GetContentBackend.class);
         requester = config.getRequester();
-        returnType = config.getObjectMapper().getTypeFactory().constructParametrizedType(Documents.class, Documents.class, documentType);
+        returnType = config.getObjectMapper().getTypeFactory().constructParametrizedType(QueryResults.class, QueryResults.class, documentType);
     }
 
     /**
-     * Create a new GetContentServiceImpl of type {@link Documents}
+     * Create a new GetContentServiceImpl of type {@link QueryResults}
      * @param hodServiceConfig The configuration to use
-     * @return A new {@literal GetContentService<Documents>}
+     * @return A new {@literal GetContentService<Document>}
      */
     public static GetContentServiceImpl<Document> documentsService(final HodServiceConfig<?, TokenType.Simple> hodServiceConfig) {
         return new GetContentServiceImpl<>(hodServiceConfig, Document.class);
     }
     
     @Override
-    public Documents<T> getContent(final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> getContent(final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getBackendCaller(indexReference, index, params));
     }
 
     @Override
-    public Documents<T> getContent(final TokenProxy<?, TokenType.Simple> tokenProxy, final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> getContent(final TokenProxy<?, TokenType.Simple> tokenProxy, final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getBackendCaller(indexReference, index, params));
     }
 

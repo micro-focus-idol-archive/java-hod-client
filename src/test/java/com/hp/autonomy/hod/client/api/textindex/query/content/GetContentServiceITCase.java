@@ -9,8 +9,8 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Print;
+import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.types.requests.Documents;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +45,7 @@ public class GetContentServiceITCase extends AbstractHodClientIntegrationTest {
         final GetContentRequestBuilder params = new GetContentRequestBuilder()
             .setPrint(Print.all);
 
-        final Documents<Document> documents = getContentService.getContent(
+        final QueryResults<Document> documents = getContentService.getContent(
             getTokenProxy(),
             Collections.singletonList("f6eef7b0-eb5c-4458-a22d-faadb4785539"),
             getPrivateIndex(),

@@ -33,7 +33,7 @@ proxy_port = ARGV[5]
 endpoint = resolve_endpoint(environment)
 
 unless endpoint && apikey && application && domain
-  abort("Usage: #{__FILE__} ENVIRONMENT APIKEY APPLICATION DOMAIN [PROXY_HOST] [PROXY_PORT]")
+  abort("Usage: #{__FILE__} APIKEY ENVIRONMENT APPLICATION DOMAIN [PROXY_HOST] [PROXY_PORT]")
 end
 
 puts "Using #{endpoint}"

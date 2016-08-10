@@ -8,7 +8,6 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import com.hp.autonomy.types.requests.Documents;
 
 import java.io.File;
 import java.io.InputStream;
@@ -18,6 +17,7 @@ import java.io.Serializable;
  * Interface representing the QueryTextIndex API
  * @param <T> The desired return type of the methods of the service
  */
+@SuppressWarnings("unused")
 public interface QueryTextIndexService<T extends Serializable> {
 
     /**
@@ -30,7 +30,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithText(
+    QueryResults<T> queryTextIndexWithText(
         String text,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -44,7 +44,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithText(
+    QueryResults<T> queryTextIndexWithText(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         String text,
         QueryRequestBuilder params
@@ -61,7 +61,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithReference(
+    QueryResults<T> queryTextIndexWithReference(
         String reference,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -76,7 +76,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithReference(
+    QueryResults<T> queryTextIndexWithReference(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         String reference,
         QueryRequestBuilder params
@@ -92,7 +92,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithUrl(
+    QueryResults<T> queryTextIndexWithUrl(
         String url,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -106,7 +106,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithUrl(
+    QueryResults<T> queryTextIndexWithUrl(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         String url,
         QueryRequestBuilder params
@@ -122,7 +122,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithFile(
+    QueryResults<T> queryTextIndexWithFile(
         File file,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -136,7 +136,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithFile(
+    QueryResults<T> queryTextIndexWithFile(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         File file,
         QueryRequestBuilder params
@@ -152,7 +152,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithFile(
+    QueryResults<T> queryTextIndexWithFile(
         byte[] bytes,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -166,7 +166,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithFile(
+    QueryResults<T> queryTextIndexWithFile(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         byte[] bytes,
         QueryRequestBuilder params
@@ -182,7 +182,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithFile(
+    QueryResults<T> queryTextIndexWithFile(
         InputStream inputStream,
         QueryRequestBuilder params
     ) throws HodErrorException;
@@ -196,7 +196,7 @@ public interface QueryTextIndexService<T extends Serializable> {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    Documents<T> queryTextIndexWithFile(
+    QueryResults<T> queryTextIndexWithFile(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         InputStream inputStream,
         QueryRequestBuilder params

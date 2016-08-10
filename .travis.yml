@@ -1,6 +1,6 @@
 language: java
 jdk:
-- oraclejdk7
+- oraclejdk8
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 before_script: ruby provision/setup-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
