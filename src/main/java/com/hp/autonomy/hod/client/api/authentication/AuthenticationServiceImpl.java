@@ -36,6 +36,7 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private static final String COMBINED_PATH = "/2/authenticate/combined";
     private static final String ALLOWED_ORIGINS = "allowed_origins";
+    private static final String REDIRECT_URL = "redirect_url";
 
     private static final Request<?, ?> TOKEN_INFORMATION_REQUEST = new Request<>(Request.Verb.GET, AuthenticationBackend.GET_TOKEN_INFORMATION_PATH, null, null);
 
@@ -156,6 +157,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
 
         final Request<String, String> request = new Request<>(Request.Verb.GET, COMBINED_PATH, queryParameters, null);
+        return SignedRequest.sign(hmac, endpoint, token, request);
+    }
+
+    @Override
+    public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final String redirectUrl, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(REDIRECT_URL, Collections.singletonList(redirectUrl));
+
+        final Request<String, String> request = new Request<>(Request.Verb.PATCH, COMBINED_PATH, queryParameters, null);
         return SignedRequest.sign(hmac, endpoint, token, request);
     }
 
