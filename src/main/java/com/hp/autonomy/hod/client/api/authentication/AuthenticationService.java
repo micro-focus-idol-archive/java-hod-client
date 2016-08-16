@@ -149,6 +149,19 @@ public interface AuthenticationService {
     );
 
     /**
+     * Get a representation of a request for obtaining a combined SSO token from Haven OnDemand.
+     * @param allowedOrigins Origins from which this request may be sent
+     * @param redirectUrl Redirect URL to sign
+     * @param token The unbound token to use to sign the request
+     * @return A representation of an AJAX request to make from a browser from one of the allowedOrigins
+     */
+    SignedRequest combinedPatchRequest(
+            Collection<String> allowedOrigins,
+            String redirectUrl,
+            AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token
+    );
+
+    /**
      * Get a representation of a request for obtaining a combined token from Haven OnDemand. This request must be made
      * from a browser. No nonce is included.
      * @param allowedOrigins Origins from which this request may be sent

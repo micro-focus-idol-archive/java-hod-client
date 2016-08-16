@@ -7,6 +7,7 @@ package com.hp.autonomy.hod.client.util;
 
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +28,12 @@ public class Request<Q, B> {
 
         this.verb = verb;
         this.path = path;
-        this.queryParameters = queryParameters;
-        this.body = body;
+        this.queryParameters = queryParameters == null ? null : Collections.unmodifiableMap(queryParameters);
+        this.body = body == null ? null : Collections.unmodifiableMap(body);
     }
 
     public enum Verb {
         // These must be uppercase or HMAC signing will fail
-        GET, POST, PUT, DELETE
+        GET, POST, PUT, DELETE, PATCH
     }
 }

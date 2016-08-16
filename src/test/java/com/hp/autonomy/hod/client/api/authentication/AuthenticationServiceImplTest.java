@@ -9,6 +9,7 @@ import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.util.Request;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,12 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 
-public class AuthenticationServiceTest {
+public class AuthenticationServiceImplTest {
     private static final String ENDPOINT = "https://api.testdomain.com";
     private static final String COMBINED_PATH = "/2/authenticate/combined";
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList("https://example.idolondemand.com", "http://example2.idolondemna.com");
@@ -58,10 +57,33 @@ public class AuthenticationServiceTest {
 
         assertThat(request.getVerb(), is(Request.Verb.GET));
 
-        checkUrl(request);
+        final List<NameValuePair> expectedParameters = Arrays.<NameValuePair>asList(
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(0)),
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(1))
+        );
+
+        checkCombinedUrl(request, expectedParameters);
 
         assertThat(request.getBody(), is(nullValue()));
         assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id::iIccQELdwLXw9zypF86bwXKbaNQ"));
+    }
+
+    @Test
+    public void generatesPatchCombinedSignedRequest() throws URISyntaxException {
+        final SignedRequest request = service.combinedPatchRequest(ALLOWED_ORIGINS, "http://my-domain/my-page", TOKEN);
+
+        assertThat(request.getVerb(), is(Request.Verb.PATCH));
+
+        final List<NameValuePair> expectedParameters = Arrays.<NameValuePair>asList(
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(0)),
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(1)),
+                new BasicNameValuePair("redirect_url", "http://my-domain/my-page")
+        );
+
+        checkCombinedUrl(request, expectedParameters);
+
+        assertThat(request.getBody(), is(nullValue()));
+        assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id::1AOt8y6LgWVSwyQmeCpp2Qfwll0"));
     }
 
     @Test
@@ -70,7 +92,12 @@ public class AuthenticationServiceTest {
 
         assertThat(request.getVerb(), is(Request.Verb.POST));
 
-        checkUrl(request);
+        final List<NameValuePair> expectedParameters = Arrays.<NameValuePair>asList(
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(0)),
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(1))
+        );
+
+        checkCombinedUrl(request, expectedParameters);
 
         final List<NameValuePair> pairs = URLEncodedUtils.parse(request.getBody(), StandardCharsets.UTF_8);
         checkParameterPair(pairs, "domain", DOMAIN);
@@ -92,19 +119,13 @@ public class AuthenticationServiceTest {
         assertThat(nonce, notNullValue());
     }
 
-    private void checkUrl(final SignedRequest request) throws URISyntaxException {
+    private void checkCombinedUrl(final SignedRequest request, final List<NameValuePair> expectedParameters) throws URISyntaxException {
         final URI uri = new URI(request.getUrl());
         assertThat(uri.getScheme() + "://" + uri.getHost(), is(ENDPOINT));
         assertThat(uri.getPath(), is(COMBINED_PATH));
 
         final List<NameValuePair> pairs = URLEncodedUtils.parse(uri, "UTF-8");
-        assertThat(pairs, hasSize(2));
-
-        assertThat(pairs.get(0).getName(), is("allowed_origins"));
-        assertThat(pairs.get(0).getValue(), is(ALLOWED_ORIGINS.get(0)));
-
-        assertThat(pairs.get(1).getName(), is("allowed_origins"));
-        assertThat(pairs.get(1).getValue(), is(ALLOWED_ORIGINS.get(1)));
+        assertThat(pairs, containsInAnyOrder(expectedParameters.toArray()));
     }
 
     private void checkParameterPair(final List<NameValuePair> pairs, final String name, final String value) {
