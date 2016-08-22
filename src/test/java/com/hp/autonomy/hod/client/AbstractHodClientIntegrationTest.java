@@ -31,16 +31,16 @@ public abstract class AbstractHodClientIntegrationTest {
     private TokenProxy<EntityType.Application, TokenType.Simple> tokenProxy;
 
     protected void setUp() {
-        hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, getEndpoint());
+        hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(null, endpoint);
         restAdapter = hodServiceConfig.getRestAdapter();
 
         final AuthenticationService authenticationService = new AuthenticationServiceImpl(hodServiceConfig);
 
         try {
             tokenProxy = authenticationService.authenticateApplication(
-                getEndpoint().getApplicationApiKey(),
-                getEndpoint().getApplicationName(),
-                getEndpoint().getDomainName(),
+                endpoint.getApplicationApiKey(),
+                endpoint.getApplicationName(),
+                endpoint.getDomainName(),
                 TokenType.Simple.INSTANCE
             );
 
@@ -77,11 +77,11 @@ public abstract class AbstractHodClientIntegrationTest {
     }
 
     protected ResourceIdentifier getPrivateIndex() {
-        return new ResourceIdentifier(getEndpoint().getDomainName(), "java-iod-client-integration-tests");
+        return new ResourceIdentifier(endpoint.getDomainName(), "java-iod-client-integration-tests");
     }
 
     protected ResourceIdentifier getUserStore() {
-        return new ResourceIdentifier(getEndpoint().getDomainName(), getEndpoint().getUserStoreName());
+        return new ResourceIdentifier(endpoint.getDomainName(), endpoint.getUserStoreName());
     }
 
     protected Endpoint getEndpoint() {

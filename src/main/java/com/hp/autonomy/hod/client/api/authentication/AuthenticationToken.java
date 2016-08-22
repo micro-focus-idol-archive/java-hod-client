@@ -54,7 +54,7 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
     private final String secret;
 
     /**
-     * @return The time when a the token will begin to refresh
+     * @return The time when a the token will begin to refresh; if null, the token will not refresh
      */
     private final DateTime startRefresh;
 
@@ -126,7 +126,7 @@ public class AuthenticationToken<E extends EntityType, T extends TokenType> impl
 
         // values may be null if deserialized from an invalid stream
         //noinspection ConstantConditions
-        if (expiry == null || id == null || secret == null || startRefresh == null || entityType == null || tokenType == null) {
+        if (expiry == null || id == null || secret == null || entityType == null || tokenType == null) {
             throw new InvalidObjectException("Values must not be null");
         }
     }

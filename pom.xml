@@ -12,7 +12,7 @@
 
     <groupId>com.hp.autonomy.hod</groupId>
     <artifactId>java-hod-client</artifactId>
-    <version>0.18.8</version>
+    <version>0.18.9</version>
 
     <description>Java Client for communicating with HP Haven OnDemand</description>
 
