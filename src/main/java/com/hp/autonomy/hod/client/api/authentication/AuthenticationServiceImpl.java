@@ -248,6 +248,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+
+        final Request<String, String> request = new Request<>(Request.Verb.PATCH, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
+        return SignedRequest.sign(hmac, endpoint, token, request);
+    }
+
+    @Override
     public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final String redirectUrl, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
         queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
