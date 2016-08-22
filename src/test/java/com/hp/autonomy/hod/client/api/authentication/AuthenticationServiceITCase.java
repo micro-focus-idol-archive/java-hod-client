@@ -5,10 +5,12 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.authentication.tokeninformation.ApplicationTokenInformation;
+import com.hp.autonomy.hod.client.api.authentication.tokeninformation.CombinedTokenInformation;
 import com.hp.autonomy.hod.client.api.authentication.tokeninformation.DeveloperTokenInformation;
 import com.hp.autonomy.hod.client.api.authentication.tokeninformation.UnboundTokenInformation;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
@@ -17,23 +19,28 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(Parameterized.class)
 @Slf4j
 public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTest {
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     private AuthenticationServiceImpl authenticationService;
     private UUID tenantUuid;
 
@@ -225,5 +232,52 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
                 authenticationService.getCombinedTokenInformation(fakeToken);
             }
         });
+    }
+
+    // This test expects a system property hp.hod.combinedSsoTokenJson containing a combined SSO token compatible with the application authentication
+    @Test
+    @Ignore("There is no way to get a combined SSO token without a browser")
+    public void authenticateCombined() throws IOException, HodErrorException {
+        final Endpoint endpoint = getEndpoint();
+
+        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appUnboundToken = authenticationService.authenticateUnbound(
+                endpoint.getApplicationApiKey(),
+                TokenType.HmacSha1.INSTANCE
+        );
+
+        final String combinedSsoTokenJson = System.getProperty("hp.hod.combinedSsoTokenJson");
+        final AuthenticationToken.Json parsedJson = objectMapper.readValue(combinedSsoTokenJson, AuthenticationToken.Json.class);
+        final AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken = parsedJson.buildToken(EntityType.CombinedSso.INSTANCE, TokenType.Simple.INSTANCE);
+
+        // Testing authenticate combined GET
+        final List<ApplicationAndUsers> applicationsAndUsers = authenticationService.authenticateCombinedGet(combinedSsoToken, appUnboundToken);
+        assertThat("No application/user pairs found", applicationsAndUsers, not(empty()));
+
+        final ApplicationAndUsers applicationAndUsers = applicationsAndUsers.get(0);
+        assertThat(applicationAndUsers.getName(), is(endpoint.getApplicationName()));
+        assertThat(applicationAndUsers.getDomain(), is(endpoint.getDomainName()));
+
+        assertThat("No users found for application", applicationAndUsers.getUsers(), not(empty()));
+
+        final ApplicationAndUsers.User user = applicationAndUsers.getUsers().get(0);
+        assertThat(user, not(nullValue()));
+
+        // Testing authenticate combined POST
+        final AuthenticationToken<EntityType.Combined, TokenType.Simple> combinedToken = authenticationService.authenticateCombined(
+                combinedSsoToken,
+                appUnboundToken,
+                applicationAndUsers.getDomain(),
+                applicationAndUsers.getName(),
+                user.getUserStore(),
+                user.getDomain(),
+                TokenType.Simple.INSTANCE
+        );
+
+        assertThat(combinedToken, not(nullValue()));
+
+        // Testing using the combined token
+        final CombinedTokenInformation combinedTokenInformation = authenticationService.getCombinedTokenInformation(combinedToken);
+        assertThat(combinedTokenInformation.getApplication().getDomain(), is(endpoint.getDomainName()));
+        assertThat(combinedTokenInformation.getApplication().getName(), is(endpoint.getApplicationName()));
     }
 }

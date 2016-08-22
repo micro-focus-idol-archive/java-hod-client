@@ -14,6 +14,7 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -43,7 +44,7 @@ public interface AuthenticationService {
      * @param apiKey The API key to use for authentication
      * @param tenantUuid The UUID of the developer's tenant
      * @param email The email address of the developer
-     * @return A token to authenticate request made to Haven OnDemand
+     * @return A token to authenticate requests made to Haven OnDemand
      * @throws HodErrorException
      */
     AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> authenticateDeveloper(
@@ -56,12 +57,64 @@ public interface AuthenticationService {
      * Acquire an unbound application token for use with HP Haven OnDemand. This must be combined with an unbound user
      * token before it can be used to query HP Haven OnDemand
      * @param apiKey The application API key
-     * @return A response containing an unbound application token and a list of applications
+     * @return An unbound application token
      * @throws HodErrorException
      */
     <T extends TokenType> AuthenticationToken<EntityType.Unbound, T> authenticateUnbound(
         ApiKey apiKey,
         T tokenType
+    ) throws HodErrorException;
+
+    /**
+     * Get applications and users which can be authenticated with the given authentication tokens.
+     * @param combinedSsoToken Combined SSO token obtained from the user agent
+     * @param appToken The application unbound authentication token
+     * @return A list of applications and users which can be authenticated
+     * @throws HodErrorException
+     */
+    List<ApplicationAndUsers> authenticateCombinedGet(
+        AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+        AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appToken
+    ) throws HodErrorException;
+
+    /**
+     * Obtain a combined SSO token from Haven OnDemand.
+     * @param combinedSsoToken Combined SSO token obtained from the user agent
+     * @param appToken The application unbound authentication token
+     * @param applicationDomain Domain of the application
+     * @param applicationName Name of the application
+     * @param tokenType The type of the returned token
+     * @return A combined token
+     * @throws HodErrorException
+     */
+    <T extends TokenType> AuthenticationToken<EntityType.Combined, T> authenticateCombined(
+        AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+        AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appToken,
+        String applicationDomain,
+        String applicationName,
+        T tokenType
+    ) throws HodErrorException;
+
+    /**
+     * Obtain a combined SSO token from Haven OnDemand, explicitly specifying a user store.
+     * @param combinedSsoToken Combined SSO token obtained from the user agent
+     * @param appToken The application unbound authentication token
+     * @param applicationDomain Domain of the application
+     * @param applicationName Name of the application
+     * @param userStoreDomain Domain of the user store
+     * @param userStoreName Name of the user store
+     * @param tokenType The type of the returned token
+     * @return A combined token
+     * @throws HodErrorException
+     */
+     <T extends TokenType> AuthenticationToken<EntityType.Combined, T> authenticateCombined(
+         AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+         AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appToken,
+         String applicationDomain,
+         String applicationName,
+         String userStoreDomain,
+         String userStoreName,
+         T tokenType
     ) throws HodErrorException;
 
     /**

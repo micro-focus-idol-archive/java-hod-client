@@ -32,6 +32,18 @@ public interface EntityType extends Serializable {
     }
 
     /**
+     * Entity type for combined SSO tokens.
+     */
+    enum CombinedSso implements EntityType {
+        INSTANCE;
+
+        @Override
+        public String getName() {
+            return "CMB_SSO";
+        }
+    }
+
+    /**
      * Entity type for application tokens.
      */
     enum Application implements EntityType {
