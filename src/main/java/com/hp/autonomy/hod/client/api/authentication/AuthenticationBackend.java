@@ -29,6 +29,7 @@ interface AuthenticationBackend {
     String APPLICATION_PARAMETER = "application";
     String TOKEN_TYPE_PARAMETER = "token_type";
     String NAME_PARAMETER = "name";
+    String ALLOWED_ORIGINS_PARAMETER = "allowed_origins";
 
     /**
      * Acquire a token for an application
@@ -114,16 +115,21 @@ interface AuthenticationBackend {
     Response authenticateCombinedGet(
         @Header("cmb_sso_tkn") AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
         @Header("token") String signature,
+        @Header("origin") String origin,
+        @Query(ALLOWED_ORIGINS_PARAMETER) String allowedOrigin,
         @Query(NONCE_PARAMETER) String nonce
     ) throws HodErrorException;
 
     @POST(COMBINED_PATH)
+    @Multipart
     Response authenticateCombined(
         @Header("cmb_sso_tkn") AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
         @Header("token") String signature,
-        @Query(NONCE_PARAMETER) String nonce,
+        @Header("origin") String origin,
+        @Query(ALLOWED_ORIGINS_PARAMETER) String allowedOrigin,
+        @Part(NONCE_PARAMETER) String nonce,
         @Part(DOMAIN_PARAMETER) String domain,
-        @Part(NAME_PARAMETER) String name,
+        @Part(APPLICATION_PARAMETER) String name,
         @Part(USERSTORE_DOMAIN_PARAMETER) String userstoreDomain,
         @Part(USERSTORE_NAME_PARAMETER) String userstoreName,
         @Part(TOKEN_TYPE_PARAMETER) String tokenType

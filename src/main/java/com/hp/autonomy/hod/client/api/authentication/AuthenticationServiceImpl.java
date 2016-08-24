@@ -34,8 +34,11 @@ import java.util.UUID;
  * Default implementation of {@link AuthenticationService}
  */
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final String ALLOWED_ORIGINS = "allowed_origins";
     private static final String REDIRECT_URL = "redirect_url";
+
+    // Fake origin to use when making authenticate combined requests to HOD
+    // TODO: This should be removed once "origin" becomes optional (HOD-4031)
+    private static final String ORIGIN = "http://www.example.com";
 
     private static final Request<?, ?> TOKEN_INFORMATION_REQUEST = new Request<>(Request.Verb.GET, AuthenticationBackend.GET_TOKEN_INFORMATION_PATH, null, null);
 
@@ -96,14 +99,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     ) throws HodErrorException {
         final String nonce = generateNonce();
 
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(nonce));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, Collections.singletonList(ORIGIN));
+
         final Request<String, Void> request = new Request<>(
                 Request.Verb.GET,
                 AuthenticationBackend.COMBINED_PATH,
-                Collections.singletonMap(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(nonce)),
+                queryParameters,
                 null
         );
 
-        final Response response = authenticationBackend.authenticateCombinedGet(combinedSsoToken, hmac.generateToken(request, appToken), nonce);
+        final Response response = authenticationBackend.authenticateCombinedGet(combinedSsoToken, hmac.generateToken(request, appToken), ORIGIN, ORIGIN, nonce);
 
         try {
             return objectMapper.readValue(response.getBody().in(), AUTHENTICATE_COMBINED_GET_TYPE);
@@ -120,18 +127,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final String applicationName,
             final T tokenType
     ) throws HodErrorException {
-        final Request<Void, String> request = new Request<>(
-            Request.Verb.POST,
-            AuthenticationBackend.COMBINED_PATH,
-            null,
-            createBaseCombinedBody(applicationName, applicationDomain, tokenType)
-        );
+        final Map<String, List<String>> queryParameters = Collections.singletonMap(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, Collections.singletonList(ORIGIN));
 
+        final Map<String, List<String>> body = createBaseCombinedBody(applicationName, applicationDomain, tokenType);
+        body.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(generateNonce()));
+
+        final Request<String, String> request = new Request<>(Request.Verb.POST, AuthenticationBackend.COMBINED_PATH, queryParameters, body);
         final String signature = hmac.generateToken(request, appToken);
 
         final Response response = authenticationBackend.authenticateCombined(
                 combinedSsoToken,
                 signature,
+                ORIGIN,
+                ORIGIN,
                 generateNonce(),
                 applicationDomain,
                 applicationName,
@@ -153,18 +161,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final String userstoreName,
             final T tokenType
     ) throws HodErrorException {
-        final Request<Void, String> request = new Request<>(
-                Request.Verb.POST,
-                AuthenticationBackend.COMBINED_PATH,
-                null,
-                createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userstoreDomain, userstoreName)
-        );
+        final Map<String, List<String>> queryParameters = Collections.singletonMap(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, Collections.singletonList(ORIGIN));
 
+        final Map<String, List<String>> body = createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userstoreDomain, userstoreName);
+        body.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(generateNonce()));
+
+        final Request<String, String> request = new Request<>(Request.Verb.POST, AuthenticationBackend.COMBINED_PATH, queryParameters, body);
         final String signature = hmac.generateToken(request, appToken);
 
         final Response response = authenticationBackend.authenticateCombined(
                 combinedSsoToken,
                 signature,
+                ORIGIN,
+                ORIGIN,
                 generateNonce(),
                 applicationDomain,
                 applicationName,
@@ -241,7 +250,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public SignedRequest combinedGetRequest(final Collection<String> allowedOrigins, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
 
         final Request<String, String> request = new Request<>(Request.Verb.GET, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
         return SignedRequest.sign(hmac, endpoint, token, request);
@@ -250,7 +259,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
 
         final Request<String, String> request = new Request<>(Request.Verb.PATCH, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
         return SignedRequest.sign(hmac, endpoint, token, request);
@@ -259,7 +268,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final String redirectUrl, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
         queryParameters.put(REDIRECT_URL, Collections.singletonList(redirectUrl));
 
         final Request<String, String> request = new Request<>(Request.Verb.PATCH, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
@@ -322,7 +331,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final Map<String, List<String>> body
     ) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
 
         final Request<String, String> request = new Request<>(Request.Verb.POST, AuthenticationBackend.COMBINED_PATH, queryParameters, body);
         return SignedRequest.sign(hmac, endpoint, token, request);
