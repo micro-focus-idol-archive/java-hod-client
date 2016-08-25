@@ -1,0 +1,23 @@
+{
+    "name": "Find",
+    "description": "Find Application",
+    "domain": "8bacd595-f288-4c33-a5dd-8a92f7bd14a0",
+    "domainDescription": null,
+    "supportedTokenTypes": [
+        "SIMPLE",
+        "HMAC_SHA1"
+    ],
+    "users": [
+        {
+            "accounts": [
+                {
+                    "type": "developer",
+                    "identifier": "237f1bbf-422d-4c39-8e7c-bd2f4a813ede"
+                }
+            ],
+            "userStore": "DEFAULT_USER_STORE",
+            "domain": "8bacd595-f288-4c33-a5dd-8a92f7bd14a0",
+            "domainDescription": null
+        }
+    ]
+}

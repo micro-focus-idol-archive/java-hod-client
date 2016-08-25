@@ -12,6 +12,7 @@ import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
+import retrofit.http.Query;
 
 /**
  * Service for making authentication requests to HP Haven OnDemand
@@ -19,6 +20,16 @@ import retrofit.http.Part;
 interface AuthenticationBackend {
 
     String GET_TOKEN_INFORMATION_PATH = "/2/authenticate";
+    String COMBINED_PATH = "/2/authenticate/combined";
+
+    String NONCE_PARAMETER = "nonce";
+    String USERSTORE_NAME_PARAMETER = "userstore_name";
+    String USERSTORE_DOMAIN_PARAMETER = "userstore_domain";
+    String DOMAIN_PARAMETER = "domain";
+    String APPLICATION_PARAMETER = "application";
+    String TOKEN_TYPE_PARAMETER = "token_type";
+    String NAME_PARAMETER = "name";
+    String ALLOWED_ORIGINS_PARAMETER = "allowed_origins";
 
     /**
      * Acquire a token for an application
@@ -33,9 +44,9 @@ interface AuthenticationBackend {
     @Multipart
     Response authenticateApplication(
         @Header("apiKey") ApiKey apiKey,
-        @Part("name") String applicationName,
-        @Part("domain") String domain,
-        @Part("token_type") String tokenType
+        @Part(NAME_PARAMETER) String applicationName,
+        @Part(DOMAIN_PARAMETER) String domain,
+        @Part(TOKEN_TYPE_PARAMETER) String tokenType
     ) throws HodErrorException;
 
     /**
@@ -53,7 +64,7 @@ interface AuthenticationBackend {
         @Header("apiKey") ApiKey apiKey,
         @Part("application_name") String applicationName,
         @Part("application_domain") String applicationDomain,
-        @Part("token_type") String tokenType
+        @Part(TOKEN_TYPE_PARAMETER) String tokenType
     ) throws HodErrorException;
 
     /**
@@ -97,7 +108,31 @@ interface AuthenticationBackend {
     @Multipart
     Response authenticateUnbound(
         @Header("apiKey") ApiKey apiKey,
-        @Part("token_type") String tokenType
+        @Part(TOKEN_TYPE_PARAMETER) String tokenType
+    ) throws HodErrorException;
+
+    @GET(COMBINED_PATH)
+    Response authenticateCombinedGet(
+        @Header("cmb_sso_tkn") AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+        @Header("token") String signature,
+        @Header("origin") String origin,
+        @Query(ALLOWED_ORIGINS_PARAMETER) String allowedOrigin,
+        @Query(NONCE_PARAMETER) String nonce
+    ) throws HodErrorException;
+
+    @POST(COMBINED_PATH)
+    @Multipart
+    Response authenticateCombined(
+        @Header("cmb_sso_tkn") AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+        @Header("token") String signature,
+        @Header("origin") String origin,
+        @Query(ALLOWED_ORIGINS_PARAMETER) String allowedOrigin,
+        @Part(NONCE_PARAMETER) String nonce,
+        @Part(DOMAIN_PARAMETER) String domain,
+        @Part(APPLICATION_PARAMETER) String name,
+        @Part(USERSTORE_DOMAIN_PARAMETER) String userstoreDomain,
+        @Part(USERSTORE_NAME_PARAMETER) String userstoreName,
+        @Part(TOKEN_TYPE_PARAMETER) String tokenType
     ) throws HodErrorException;
 
     @GET(GET_TOKEN_INFORMATION_PATH)

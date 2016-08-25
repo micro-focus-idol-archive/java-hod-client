@@ -70,6 +70,23 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void generatesPatchCombinedSignedRequest() throws URISyntaxException {
+        final SignedRequest request = service.combinedPatchRequest(ALLOWED_ORIGINS, TOKEN);
+
+        assertThat(request.getVerb(), is(Request.Verb.PATCH));
+
+        final List<NameValuePair> expectedParameters = Arrays.<NameValuePair>asList(
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(0)),
+                new BasicNameValuePair("allowed_origins", ALLOWED_ORIGINS.get(1))
+        );
+
+        checkCombinedUrl(request, expectedParameters);
+
+        assertThat(request.getBody(), is(nullValue()));
+        assertThat(request.getToken(), is("UNB:HMAC_SHA1:my-token-id::p8OjRSGH3MSCTuoYQ_FVYg7TE2g"));
+    }
+
+    @Test
+    public void generatesPatchCombinedSignedRequestWithRedirectUrl() throws URISyntaxException {
         final SignedRequest request = service.combinedPatchRequest(ALLOWED_ORIGINS, "http://my-domain/my-page", TOKEN);
 
         assertThat(request.getVerb(), is(Request.Verb.PATCH));

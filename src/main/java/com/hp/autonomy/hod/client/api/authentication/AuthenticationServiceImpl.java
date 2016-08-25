@@ -34,9 +34,11 @@ import java.util.UUID;
  * Default implementation of {@link AuthenticationService}
  */
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final String COMBINED_PATH = "/2/authenticate/combined";
-    private static final String ALLOWED_ORIGINS = "allowed_origins";
     private static final String REDIRECT_URL = "redirect_url";
+
+    // Fake origin to use when making authenticate combined requests to HOD
+    // TODO: This should be removed once "origin" becomes optional (HOD-4031)
+    private static final String ORIGIN = "http://www.example.com";
 
     private static final Request<?, ?> TOKEN_INFORMATION_REQUEST = new Request<>(Request.Verb.GET, AuthenticationBackend.GET_TOKEN_INFORMATION_PATH, null, null);
 
@@ -46,6 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final TypeReference<TokenResponse<UserTokenInformation>> USER_INFORMATION_TYPE = new TypeReference<TokenResponse<UserTokenInformation>>() {};
     private static final TypeReference<TokenResponse<UnboundTokenInformation>> UNBOUND_INFORMATION_TYPE = new TypeReference<TokenResponse<UnboundTokenInformation>>() {};
     private static final TypeReference<TokenResponse<ApplicationTokenInformation>> APPLICATION_INFORMATION_TYPE = new TypeReference<TokenResponse<ApplicationTokenInformation>>() {};
+    private static final TypeReference<List<ApplicationAndUsers>> AUTHENTICATE_COMBINED_GET_TYPE = new TypeReference<List<ApplicationAndUsers>>() {};
 
     private final AuthenticationBackend authenticationBackend;
     private final TokenRepository tokenRepository;
@@ -67,10 +70,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public <T extends TokenType> TokenProxy<EntityType.Application, T> authenticateApplication(
-        final ApiKey apiKey,
-        final String applicationName,
-        final String domain,
-        final T tokenType
+            final ApiKey apiKey,
+            final String applicationName,
+            final String domain,
+            final T tokenType
     ) throws HodErrorException {
         final Response response = authenticationBackend.authenticateApplication(apiKey, applicationName, domain, tokenType.getParameter());
         final AuthenticationToken<EntityType.Application, T> token = parseToken(response, EntityType.Application.INSTANCE, tokenType);
@@ -87,6 +90,99 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public <T extends TokenType> AuthenticationToken<EntityType.Unbound, T> authenticateUnbound(final ApiKey apiKey, final T tokenType) throws HodErrorException {
         final Response response = authenticationBackend.authenticateUnbound(apiKey, tokenType.getParameter());
         return parseToken(response, EntityType.Unbound.INSTANCE, tokenType);
+    }
+
+    @Override
+    public List<ApplicationAndUsers> authenticateCombinedGet(
+            final AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appToken
+    ) throws HodErrorException {
+        final String nonce = generateNonce();
+
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(nonce));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, Collections.singletonList(ORIGIN));
+
+        final Request<String, Void> request = new Request<>(
+                Request.Verb.GET,
+                AuthenticationBackend.COMBINED_PATH,
+                queryParameters,
+                null
+        );
+
+        final Response response = authenticationBackend.authenticateCombinedGet(combinedSsoToken, hmac.generateToken(request, appToken), ORIGIN, ORIGIN, nonce);
+
+        try {
+            return objectMapper.readValue(response.getBody().in(), AUTHENTICATE_COMBINED_GET_TYPE);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T extends TokenType> AuthenticationToken<EntityType.Combined, T> authenticateCombined(
+            final AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appToken,
+            final String applicationDomain,
+            final String applicationName,
+            final T tokenType
+    ) throws HodErrorException {
+        final Map<String, List<String>> queryParameters = Collections.singletonMap(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, Collections.singletonList(ORIGIN));
+
+        final Map<String, List<String>> body = createBaseCombinedBody(applicationName, applicationDomain, tokenType);
+        body.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(generateNonce()));
+
+        final Request<String, String> request = new Request<>(Request.Verb.POST, AuthenticationBackend.COMBINED_PATH, queryParameters, body);
+        final String signature = hmac.generateToken(request, appToken);
+
+        final Response response = authenticationBackend.authenticateCombined(
+                combinedSsoToken,
+                signature,
+                ORIGIN,
+                ORIGIN,
+                generateNonce(),
+                applicationDomain,
+                applicationName,
+                null,
+                null,
+                tokenType.getParameter()
+        );
+
+        return parseToken(response, EntityType.Combined.INSTANCE, tokenType);
+    }
+
+    @Override
+    public <T extends TokenType> AuthenticationToken<EntityType.Combined, T> authenticateCombined(
+            final AuthenticationToken<EntityType.CombinedSso, TokenType.Simple> combinedSsoToken,
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> appToken,
+            final String applicationDomain,
+            final String applicationName,
+            final String userstoreDomain,
+            final String userstoreName,
+            final T tokenType
+    ) throws HodErrorException {
+        final Map<String, List<String>> queryParameters = Collections.singletonMap(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, Collections.singletonList(ORIGIN));
+
+        final Map<String, List<String>> body = createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userstoreDomain, userstoreName);
+        body.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(generateNonce()));
+
+        final Request<String, String> request = new Request<>(Request.Verb.POST, AuthenticationBackend.COMBINED_PATH, queryParameters, body);
+        final String signature = hmac.generateToken(request, appToken);
+
+        final Response response = authenticationBackend.authenticateCombined(
+                combinedSsoToken,
+                signature,
+                ORIGIN,
+                ORIGIN,
+                generateNonce(),
+                applicationDomain,
+                applicationName,
+                userstoreDomain,
+                userstoreName,
+                tokenType.getParameter()
+        );
+
+        return parseToken(response, EntityType.Combined.INSTANCE, tokenType);
     }
 
     @Override
@@ -154,29 +250,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public SignedRequest combinedGetRequest(final Collection<String> allowedOrigins, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
 
-        final Request<String, String> request = new Request<>(Request.Verb.GET, COMBINED_PATH, queryParameters, null);
+        final Request<String, String> request = new Request<>(Request.Verb.GET, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
+        return SignedRequest.sign(hmac, endpoint, token, request);
+    }
+
+    @Override
+    public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
+        final Map<String, List<String>> queryParameters = new HashMap<>();
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
+
+        final Request<String, String> request = new Request<>(Request.Verb.PATCH, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
         return SignedRequest.sign(hmac, endpoint, token, request);
     }
 
     @Override
     public SignedRequest combinedPatchRequest(final Collection<String> allowedOrigins, final String redirectUrl, final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
         queryParameters.put(REDIRECT_URL, Collections.singletonList(redirectUrl));
 
-        final Request<String, String> request = new Request<>(Request.Verb.PATCH, COMBINED_PATH, queryParameters, null);
+        final Request<String, String> request = new Request<>(Request.Verb.PATCH, AuthenticationBackend.COMBINED_PATH, queryParameters, null);
         return SignedRequest.sign(hmac, endpoint, token, request);
     }
 
     @Override
     public SignedRequest combinedRequest(
-        final Collection<String> allowedOrigins,
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
-        final String applicationDomain,
-        final String applicationName,
-        final TokenType tokenType
+            final Collection<String> allowedOrigins,
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
+            final String applicationDomain,
+            final String applicationName,
+            final TokenType tokenType
     ) {
         final Map<String, List<String>> body = createBaseCombinedBody(applicationName, applicationDomain, tokenType);
         return createCombinedRequest(token, allowedOrigins, body);
@@ -184,13 +289,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SignedRequest combinedRequest(
-        final Collection<String> allowedOrigins,
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
-        final String applicationDomain,
-        final String applicationName,
-        final String userStoreDomain,
-        final String userStoreName,
-        final TokenType tokenType
+            final Collection<String> allowedOrigins,
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
+            final String applicationDomain,
+            final String applicationName,
+            final String userStoreDomain,
+            final String userStoreName,
+            final TokenType tokenType
     ) {
         final Map<String, List<String>> body = createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userStoreDomain, userStoreName);
         return createCombinedRequest(token, allowedOrigins, body);
@@ -198,59 +303,62 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SignedRequest combinedRequest(
-        final Collection<String> allowedOrigins,
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
-        final String applicationDomain,
-        final String applicationName,
-        final String userStoreDomain,
-        final String userStoreName,
-        final TokenType tokenType,
-        final boolean useNonce
+            final Collection<String> allowedOrigins,
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
+            final String applicationDomain,
+            final String applicationName,
+            final String userStoreDomain,
+            final String userStoreName,
+            final TokenType tokenType,
+            final boolean useNonce
     ) {
         final Map<String, List<String>> body = createUserStoreCombinedBody(applicationName, applicationDomain, tokenType, userStoreDomain, userStoreName);
 
         if (useNonce) {
-            final String nonce = UUID.randomUUID().toString();
-            body.put("nonce", Collections.singletonList(nonce));
+            body.put(AuthenticationBackend.NONCE_PARAMETER, Collections.singletonList(generateNonce()));
         }
 
         return createCombinedRequest(token, allowedOrigins, body);
     }
 
+    private String generateNonce() {
+        return UUID.randomUUID().toString();
+    }
+
     private SignedRequest createCombinedRequest(
-        final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
-        final Collection<String> allowedOrigins,
-        final Map<String, List<String>> body
+            final AuthenticationToken<EntityType.Unbound, TokenType.HmacSha1> token,
+            final Collection<String> allowedOrigins,
+            final Map<String, List<String>> body
     ) {
         final Map<String, List<String>> queryParameters = new HashMap<>();
-        queryParameters.put(ALLOWED_ORIGINS, new ArrayList<>(allowedOrigins));
+        queryParameters.put(AuthenticationBackend.ALLOWED_ORIGINS_PARAMETER, new ArrayList<>(allowedOrigins));
 
-        final Request<String, String> request = new Request<>(Request.Verb.POST, COMBINED_PATH, queryParameters, body);
+        final Request<String, String> request = new Request<>(Request.Verb.POST, AuthenticationBackend.COMBINED_PATH, queryParameters, body);
         return SignedRequest.sign(hmac, endpoint, token, request);
     }
 
     private Map<String, List<String>> createBaseCombinedBody(
-        final String applicationName,
-        final String applicationDomain,
-        final TokenType tokenType
+            final String applicationName,
+            final String applicationDomain,
+            final TokenType tokenType
     ) {
         final Map<String, List<String>> body = new HashMap<>();
-        body.put("domain", Collections.singletonList(applicationDomain));
-        body.put("application", Collections.singletonList(applicationName));
-        body.put("token_type", Collections.singletonList(tokenType.getParameter()));
+        body.put(AuthenticationBackend.DOMAIN_PARAMETER, Collections.singletonList(applicationDomain));
+        body.put(AuthenticationBackend.APPLICATION_PARAMETER, Collections.singletonList(applicationName));
+        body.put(AuthenticationBackend.TOKEN_TYPE_PARAMETER, Collections.singletonList(tokenType.getParameter()));
         return body;
     }
 
     private Map<String, List<String>> createUserStoreCombinedBody(
-        final String applicationName,
-        final String applicationDomain,
-        final TokenType tokenType,
-        final String userStoreDomain,
-        final String userStoreName
+            final String applicationName,
+            final String applicationDomain,
+            final TokenType tokenType,
+            final String userStoreDomain,
+            final String userStoreName
     ) {
         final Map<String, List<String>> body = createBaseCombinedBody(applicationName, applicationDomain, tokenType);
-        body.put("userstore_domain", Collections.singletonList(userStoreDomain));
-        body.put("userstore_name", Collections.singletonList(userStoreName));
+        body.put(AuthenticationBackend.USERSTORE_DOMAIN_PARAMETER, Collections.singletonList(userStoreDomain));
+        body.put(AuthenticationBackend.USERSTORE_NAME_PARAMETER, Collections.singletonList(userStoreName));
         return body;
     }
 
