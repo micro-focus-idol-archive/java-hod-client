@@ -44,7 +44,7 @@ public class User {
      * Metadata associated with the user
      */
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private final Map<String, JsonNode> metadata;
+    private Map<String, JsonNode> metadata;
 
     @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public User(
@@ -59,10 +59,12 @@ public class User {
         this.groups = groups;
         this.accounts = accounts;
 
-        this.metadata = new HashMap<>(metadata.size());
+        if (metadata != null) {
+            this.metadata = new HashMap<>(metadata.size());
 
-        for (final Metadata<JsonNode> metadatum : metadata) {
-            this.metadata.put(metadatum.getKey(), metadatum.getValue());
+            for (final Metadata<JsonNode> metadatum : metadata) {
+                this.metadata.put(metadatum.getKey(), metadatum.getValue());
+            }
         }
     }
 }
