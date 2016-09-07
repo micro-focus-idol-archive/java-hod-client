@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.hp.autonomy.hod.client.AbstractDeveloperHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodErrorTester;
@@ -21,16 +22,17 @@ import org.junit.runners.Parameterized;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
-import static org.hamcrest.Matchers.aMapWithSize;
-import static org.hamcrest.Matchers.anEmptyMap;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientIntegrationTest {
@@ -58,9 +60,9 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
         userNotFoundErrorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
         try {
-            final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), true, false);
+            final List<User> users = service.list(getTokenProxy(), getUserStore(), true, false);
 
-            for (final User<Void> user : users) {
+            for (final User user : users) {
                 for (final Account account : user.getAccounts()) {
                     if (Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())) {
                         developerUserUuid = user.getUuid();
@@ -83,10 +85,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void listUsersWithoutAccountsOrGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), false, false);
+        final List<User> users = service.list(getTokenProxy(), getUserStore(), false, false);
         boolean foundDeveloper = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), nullValue());
@@ -103,11 +105,11 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void listUsersWithAccounts() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), true, false);
+        final List<User> users = service.list(getTokenProxy(), getUserStore(), true, false);
         boolean foundDeveloper = false;
         boolean foundDeveloperAccount = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), nullValue());
@@ -137,10 +139,10 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void listUsersWithGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), false, true);
+        final List<User> users = service.list(getTokenProxy(), getUserStore(), false, true);
         boolean foundDeveloper = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), not(nullValue()));
@@ -165,11 +167,11 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void listUsersWithAccountsAndGroups() throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), true, true);
+        final List<User> users = service.list(getTokenProxy(), getUserStore(), true, true);
         boolean foundDeveloper = false;
         boolean foundDeveloperAccount = false;
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
@@ -316,8 +318,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
                 service.getUserMetadata(
                         getTokenProxy(),
                         getUserStore(),
-                        UUID.randomUUID(),
-                        new HashMap<String, Class<?>>()
+                        UUID.randomUUID()
                 );
             }
         });
@@ -331,8 +332,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
                 service.getUserMetadata(
                         getTokenProxy(),
                         new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
-                        UUID.randomUUID(),
-                        new HashMap<String, Class<?>>()
+                        UUID.randomUUID()
                 );
             }
         });
@@ -399,15 +399,6 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     }
 
     @Test
-    public void getEmptyMetadata() throws HodErrorException {
-        final Map<String, Class<?>> metadataTypes = new HashMap<>();
-        metadataTypes.put(randomString(), TestMetadata.class);
-
-        final Map<String, Object> userMetadata = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadataTypes);
-        assertThat(userMetadata, is(anEmptyMap()));
-    }
-
-    @Test
     public void addGetRemoveMetadatum() throws HodErrorException {
         final String key = randomString();
 
@@ -415,25 +406,22 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
         final TestMetadata testMetadata = new TestMetadata(7, "bobby");
         metadata.put(key, testMetadata);
 
-        final Map<String, Class<? extends TestMetadata>> metadataTypes = new HashMap<>();
-        metadataTypes.put(key, TestMetadata.class);
+        final int metadataSize = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid).size();
 
         service.addUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadata);
-
-        final Map<String, TestMetadata> outputMetadata = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadataTypes);
-        assertThat(outputMetadata, is(aMapWithSize(1)));
-
-        final TestMetadata outputTestMetadata = outputMetadata.get(key);
-        assertThat(outputTestMetadata, is(testMetadata));
+        final int metadataSizeAfterAdd = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid).size();
+        assertEquals(metadataSize + 1, metadataSizeAfterAdd);
 
         service.removeUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, key);
-
-        final Map<String, TestMetadata> outputMetadata2 = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadataTypes);
-        assertThat(outputMetadata2, is(anEmptyMap()));
+        final int metadataSizeAfterRemove = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid).size();
+        assertEquals(metadataSize, metadataSizeAfterRemove);
     }
+
 
     @Test
     public void addGetRemoveMetadata() throws HodErrorException {
+        final int metadataStartSize = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid).size();
+
         final String integerKey = randomString();
         final String stringKey = randomString();
         final String testDataKey = randomString();
@@ -447,70 +435,54 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
         metadata.put(stringKey, string);
         metadata.put(testDataKey, testMetadata);
 
-        final Map<String, Class<?>> metadataTypes = new HashMap<>();
-        metadataTypes.put(integerKey, Integer.class);
-        metadataTypes.put(stringKey, String.class);
-        metadataTypes.put(testDataKey, TestMetadata.class);
-
-        // Add three metadata keys
+        // Add two metadata keys
         service.addUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadata);
 
-        // Check the correct metadata values were associated with the keys
-        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadataTypes);
-        assertThat(outputMetadata, is(aMapWithSize(3)));
-
-        assertThat((Integer) outputMetadata.get(integerKey), is(integer));
-        assertThat((String) outputMetadata.get(stringKey), is(string));
-        assertThat((TestMetadata) outputMetadata.get(testDataKey), is(testMetadata));
+        // Check the correct number of metadata values were added
+        final Map<String, JsonNode> outputMetadata = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid);
+        assertEquals(metadataStartSize + 3, outputMetadata.size());
 
         // Remove one of the keys
         service.removeUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, integerKey);
 
         // Check the correct key was removed
-        final Map<String, Object> outputMetadata2 = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadataTypes);
-        assertThat(outputMetadata2, is(aMapWithSize(2)));
-
-        assertThat((String) outputMetadata.get(stringKey), is(string));
-        assertThat((TestMetadata) outputMetadata.get(testDataKey), is(testMetadata));
+        final Map<String, JsonNode> outputMetadata2 = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid);
+        assertEquals(metadataStartSize + 2, outputMetadata2.size());
 
         // Remove all added keys
         service.removeUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, stringKey);
         service.removeUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, testDataKey);
 
         // Check all keys were removed
-        final Map<String, Object> outputMetadata3 = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadataTypes);
-        assertThat(outputMetadata3, is(anEmptyMap()));
+        final Map<String, JsonNode> outputMetadata3 = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid);
+        assertEquals(metadataStartSize, outputMetadata3.size());
     }
 
     @Test
     public void addUserMetadataAndList() throws HodErrorException {
+        final int metadataStartSize = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid).size();
         final String key = randomString();
 
         final Map<String, Object> metadata = new HashMap<>();
         final TestMetadata testMetadata = new TestMetadata(7, "bobby");
         metadata.put(key, testMetadata);
 
-        final Map<String, Class<?>> metadataTypes = new HashMap<>();
-        metadataTypes.put(key, TestMetadata.class);
-
         service.addUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadata);
 
-        final List<User<Object>> users = service.listWithMetadata(getTokenProxy(), getUserStore(), metadataTypes, false, false);
+        final List<User> users = service.listWithMetadata(getTokenProxy(), getUserStore(), false, false);
         boolean foundUser = false;
 
-        for (final User<Object> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), nullValue());
             assertThat(user.getDirectGroups(), nullValue());
             assertThat(user.getGroups(), nullValue());
 
-            final Map<String, Object> userMetadata = user.getMetadata();
+            final Map<String, JsonNode> userMetadata = user.getMetadata();
 
             if (user.getUuid().equals(developerUserUuid)) {
                 foundUser = true;
-                assertThat(userMetadata, is(metadata));
-            } else {
-                assertThat(userMetadata, is(anEmptyMap()));
+                assertEquals(metadataStartSize + 1, userMetadata.size());
             }
         }
 
@@ -521,21 +493,19 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void addUserMetadataAndListWithAccountsAndGroups() throws HodErrorException {
+        final int metadataStartSize = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid).size();
         final String key = randomString();
 
         final Map<String, TestMetadata> metadata = new HashMap<>();
         final TestMetadata testMetadata = new TestMetadata(7, "bobby");
         metadata.put(key, testMetadata);
 
-        final Map<String, Class<? extends TestMetadata>> metadataTypes = new HashMap<>();
-        metadataTypes.put(key, TestMetadata.class);
-
         service.addUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadata);
 
-        final List<User<TestMetadata>> users = service.listWithMetadata(getTokenProxy(), getUserStore(), metadataTypes, true, true);
+        final List<User> users = service.listWithMetadata(getTokenProxy(), getUserStore(), true, true);
         boolean foundUser = false;
 
-        for (final User<TestMetadata> user : users) {
+        for (final User user : users) {
             assertThat(user.getUuid(), not(nullValue()));
             assertThat(user.getAccounts(), not(nullValue()));
             assertThat(user.getDirectGroups(), not(nullValue()));
@@ -555,13 +525,11 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
                 assertThat(account.getType(), not(nullValue()));
             }
 
-            final Map<String, TestMetadata> userMetadata = user.getMetadata();
+            final Map<String, JsonNode> userMetadata = user.getMetadata();
 
             if (user.getUuid().equals(developerUserUuid)) {
                 foundUser = true;
-                assertThat(userMetadata, is(metadata));
-            } else {
-                assertThat(userMetadata, is(anEmptyMap()));
+                assertEquals(metadataStartSize + 1, userMetadata.size());
             }
         }
 
@@ -570,42 +538,14 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
         service.removeUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, key);
     }
 
-    @Test
-    public void getUserMetadataIgnoresIncorrectMetadataType() throws HodErrorException {
-        final String key = randomString();
-        final Integer value = 5;
-
-        final Map<String, Object> metadata = new HashMap<>();
-        metadata.put(key, value);
-
-        final Map<String, Class<?>> incorrectMetadataTypes = new HashMap<>();
-        incorrectMetadataTypes.put(key, TestMetadata.class);
-
-        service.addUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, metadata);
-
-        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, incorrectMetadataTypes);
-        assertThat(outputMetadata, is(anEmptyMap()));
-
-        service.removeUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, key);
-    }
-
-    @Test
-    public void getUserMetadataIgnoresMissingMetadataKey() throws HodErrorException {
-        final Map<String, Class<?>> missingMetadataTypes = new HashMap<>();
-        missingMetadataTypes.put(randomString(), Integer.class);
-
-        final Map<String, Object> outputMetadata = service.getUserMetadata(getTokenProxy(), getUserStore(), developerUserUuid, missingMetadataTypes);
-        assertThat(outputMetadata, is(anEmptyMap()));
-    }
-
     private String randomString() {
         return "hod-client-" + UUID.randomUUID().toString();
     }
 
     private UUID getUserUuidFromEmail(final String userEmail) throws HodErrorException {
-        final List<User<Void>> users = service.list(getTokenProxy(), getUserStore(), true, false);
+        final List<User> users = service.list(getTokenProxy(), getUserStore(), true, false);
 
-        for (final User<Void> user : users) {
+        for (final User user : users) {
             for (final Account account : user.getAccounts()) {
                 if (Account.Type.EMAIL.equals(account.getType()) && userEmail.equals(account.getAccount())) {
                     return user.getUuid();

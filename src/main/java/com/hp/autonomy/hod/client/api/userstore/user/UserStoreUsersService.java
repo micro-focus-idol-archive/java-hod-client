@@ -5,6 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.userstore.user;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -29,7 +30,7 @@ public interface UserStoreUsersService {
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    List<User<Void>> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> list(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of the users in a user store.
@@ -40,35 +41,29 @@ public interface UserStoreUsersService {
      * @return The users in the user store
      * @throws HodErrorException
      */
-    List<User<Void>> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> list(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
-     * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
      * @param userStore The resource identifier of the user store
-     * @param metadataTypes The types of values associated with metadata keys
      * @param includeAccounts If true, accounts are listed for each user
      * @param includeGroups If true, groups are listed for each user
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    <T> List<User<T>> listWithMetadata(ResourceIdentifier userStore, Map<String, Class<? extends T>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    <T> List<User> listWithMetadata(ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Get a list of users and metadata in a user store, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
-     * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
      * @param tokenProxy The token proxy to use for authentication
      * @param userStore The resource identifier of the user store
-     * @param metadataTypes The types of values associated with metadata keys
      * @param includeAccounts If true, accounts are listed for each user
      * @param includeGroups If true, groups are listed for each user
      * @return The users in the user store and their metadata
      * @throws HodErrorException
      */
-    <T> List<User<T>> listWithMetadata(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, Map<String, Class<? extends T>> metadataTypes, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
+    List<User> listWithMetadata(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier userStore, boolean includeAccounts, boolean includeGroups) throws HodErrorException;
 
     /**
      * Create a user in a userstore.
@@ -149,39 +144,29 @@ public interface UserStoreUsersService {
     /**
      * Get the metadata associated with the given user, using a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * for authentication.
-     * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
-     * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
-     * @param <T> The type of the values in the returned metadata map
      * @param userStore The resource identifier of the user store
      * @param userUuid The UUID of the user
-     * @param metadataTypes The types of values associated with metadata keys
      * @return A map of metadata keys to parsed values
      * @throws HodErrorException
      * @throws NullPointerException If a TokenProxyService is not configured
      */
-    <T> Map<String, T> getUserMetadata(
+    Map<String, JsonNode> getUserMetadata(
         ResourceIdentifier userStore,
-        UUID userUuid,
-        Map<String, Class<? extends T>> metadataTypes
+        UUID userUuid
     ) throws HodErrorException;
 
     /**
      * Get the metadata associated with the given user, using a TokenProxy for authentication.
-     * The metadata values are converted according to the corresponding type in the metadataTypes map. If no type is found
-     * for a returned key, or if the value cannot be converted, then the key is not returned but no exception is thrown.
-     * @param <T> The type of the values in the returned metadata map
      * @param tokenProxy Used for authentication
      * @param userStore The resource identifier of the user store
      * @param userUuid The UUID of the user
-     * @param metadataTypes The types of values associated with metadata keys
      * @return A map of metadata keys to parsed values
      * @throws HodErrorException
      */
-    <T> Map<String, T> getUserMetadata(
+    Map<String, JsonNode> getUserMetadata(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         ResourceIdentifier userStore,
-        UUID userUuid,
-        Map<String, Class<? extends T>> metadataTypes
+        UUID userUuid
     ) throws HodErrorException;
 
     /**

@@ -9,16 +9,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 /**
  * Representation of a user as returned from the list users in a user store API.
- * @param <T> Type of metadata values associated with the user
  */
 @Data
-public class User<T> {
+public class User {
     /**
      * The UUID of the user
      */
@@ -42,47 +43,28 @@ public class User<T> {
     /**
      * Metadata associated with the user
      */
-    private final Map<String, T> metadata;
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private Map<String, JsonNode> metadata;
 
+    @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public User(
-        final UUID uuid,
-        final List<String> directGroups,
-        final List<String> groups,
-        final List<Account> accounts,
-        final Map<String, T> metadata
+            @JsonProperty("uuid") final UUID uuid,
+            @JsonProperty("direct_groups") final List<String> directGroups,
+            @JsonProperty("groups") final List<String> groups,
+            @JsonProperty("accounts") final List<Account> accounts,
+            @JsonProperty("metadata") final Collection<Metadata<JsonNode>> metadata
     ) {
         this.uuid = uuid;
         this.directGroups = directGroups;
         this.groups = groups;
         this.accounts = accounts;
-        this.metadata = metadata;
-    }
 
-    User(final Json json, final Map<String, T> metadata) {
-        this(json.uuid, json.directGroups, json.groups, json.accounts, metadata);
-    }
+        if (metadata != null) {
+            this.metadata = new HashMap<>(metadata.size());
 
-    // Helper class so we can parse the metadata list returned from HOD into a map of user-defined types
-    @Data
-    static class Json {
-        private final UUID uuid;
-        private final List<String> directGroups;
-        private final List<String> groups;
-        private final List<Account> accounts;
-        private final List<Metadata<JsonNode>> metadataList;
-
-        Json(
-            @JsonProperty("uuid") final UUID uuid,
-            @JsonProperty("direct_groups") final List<String> directGroups,
-            @JsonProperty("groups") final List<String> groups,
-            @JsonProperty("accounts") final List<Account> accounts,
-            @JsonProperty("metadata") final List<Metadata<JsonNode>> metadataList
-        ) {
-            this.uuid = uuid;
-            this.directGroups = directGroups;
-            this.groups = groups;
-            this.accounts = accounts;
-            this.metadataList = metadataList;
+            for (final Metadata<JsonNode> metadatum : metadata) {
+                this.metadata.put(metadatum.getKey(), metadatum.getValue());
+            }
         }
     }
 }

@@ -58,9 +58,9 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
         userStoreUsersService = new UserStoreUsersServiceImpl(getConfig());
 
         try {
-            final List<User<Void>> users = userStoreUsersService.list(getTokenProxy(), getUserStore(), true, false);
+            final List<User> users = userStoreUsersService.list(getTokenProxy(), getUserStore(), true, false);
 
-            for (final User<Void> user : users) {
+            for (final User user : users) {
                 for (final Account account : user.getAccounts()) {
                     if (Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())) {
                         developerUserUuid = user.getUuid();

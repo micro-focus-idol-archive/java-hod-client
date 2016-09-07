@@ -5,9 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.userstore.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
@@ -29,54 +27,46 @@ import java.util.UUID;
 
 @Slf4j
 public class UserStoreUsersServiceImpl implements UserStoreUsersService {
-    private final ObjectMapper objectMapper;
     private final Requester<?, TokenType.Simple> requester;
     private final UserStoreUsersBackend backend;
 
     public UserStoreUsersServiceImpl(final HodServiceConfig<?, TokenType.Simple> config) {
-        objectMapper = config.getObjectMapper();
         requester = config.getRequester();
         backend = config.getRestAdapter().create(UserStoreUsersBackend.class);
     }
 
     @Override
-    public List<User<Void>> list(final ResourceIdentifier userStore, final boolean includeAccounts, final boolean includeGroups) throws HodErrorException {
-        final List<User.Json> rawUsers = requester.makeRequest(ListUsersResponse.class, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
-        return parseRawUsers(rawUsers);
+    public List<User> list(final ResourceIdentifier userStore, final boolean includeAccounts, final boolean includeGroups) throws HodErrorException {
+        return requester.makeRequest(ListUsersResponse.class, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
     }
 
     @Override
-    public List<User<Void>> list(
+    public List<User> list(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier userStore,
         final boolean includeAccounts,
         final boolean includeGroups
     ) throws HodErrorException {
-        final List<User.Json> rawUsers = requester.makeRequest(tokenProxy, ListUsersResponse.class, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
-        return parseRawUsers(rawUsers);
+        return requester.makeRequest(tokenProxy, ListUsersResponse.class, listBackendCaller(userStore, false, includeAccounts, includeGroups)).getUsers();
     }
 
     @Override
-    public <T> List<User<T>> listWithMetadata(
+    public List<User> listWithMetadata(
         final ResourceIdentifier userStore,
-        final Map<String, Class<? extends T>> metadataTypes,
         final boolean includeAccounts,
         final boolean includeGroups
     ) throws HodErrorException {
-        final List<User.Json> rawUsers = requester.makeRequest(ListUsersResponse.class, listBackendCaller(userStore, true, includeAccounts, includeGroups)).getUsers();
-        return parseRawUsersWithMetadata(rawUsers, metadataTypes);
+        return requester.makeRequest(ListUsersResponse.class, listBackendCaller(userStore, true, includeAccounts, includeGroups)).getUsers();
     }
 
     @Override
-    public <T> List<User<T>> listWithMetadata(
+    public List<User> listWithMetadata(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
         final ResourceIdentifier userStore,
-        final Map<String, Class<? extends T>> metadataTypes,
         final boolean includeAccounts,
         final boolean includeGroups
     ) throws HodErrorException {
-        final List<User.Json> rawUsers = requester.makeRequest(tokenProxy, ListUsersResponse.class, listBackendCaller(userStore, true, includeAccounts, includeGroups)).getUsers();
-        return parseRawUsersWithMetadata(rawUsers, metadataTypes);
+        return requester.makeRequest(tokenProxy, ListUsersResponse.class, listBackendCaller(userStore, true, includeAccounts, includeGroups)).getUsers();
     }
 
     @Override
@@ -141,15 +131,13 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     @Override
-    public <T> Map<String, T> getUserMetadata(final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<? extends T>> metadataTypes) throws HodErrorException {
-        final List<Metadata<JsonNode>> metadataList = requester.makeRequest(GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata();
-        return parseMetadata(metadataList, metadataTypes);
+    public Map<String, JsonNode> getUserMetadata(final ResourceIdentifier userStore, final UUID userUuid) throws HodErrorException {
+        return parseMetadata(requester.makeRequest(GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata());
     }
 
     @Override
-    public <T> Map<String, T> getUserMetadata(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final UUID userUuid, final Map<String, Class<? extends T>> metadataTypes) throws HodErrorException {
-        final List<Metadata<JsonNode>> metadataList = requester.makeRequest(tokenProxy, GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata();
-        return parseMetadata(metadataList, metadataTypes);
+    public Map<String, JsonNode> getUserMetadata(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier userStore, final UUID userUuid) throws HodErrorException {
+        return parseMetadata(requester.makeRequest(tokenProxy, GetMetadataResponse.class, getUserMetadataBackendCaller(userStore, userUuid)).getMetadata());
     }
 
     @Override
@@ -189,41 +177,11 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         return requester.makeRequest(tokenProxy, UserGroups.class, listUserGroupsBackendCaller(userStore, userUuid));
     }
 
-    private List<User<Void>> parseRawUsers(final List<User.Json> rawUsers) {
-        final List<User<Void>> users = new LinkedList<>();
-
-        for (final User.Json rawUser : rawUsers) {
-            users.add(new User<Void>(rawUser, null));
-        }
-
-        return users;
-    }
-
-    private <T> List<User<T>> parseRawUsersWithMetadata(final List<User.Json> rawUsers, final Map<String, Class<? extends T>> metadataTypes) {
-        final List<User<T>> users = new LinkedList<>();
-
-        for (final User.Json rawUser : rawUsers) {
-            users.add(new User<>(rawUser, parseMetadata(rawUser.getMetadataList(), metadataTypes)));
-        }
-
-        return users;
-    }
-
-    private <T> Map<String, T> parseMetadata(final List<Metadata<JsonNode>> metadataList, final Map<String, Class<? extends T>> metadataTypes) {
-        final Map<String, T> metadata = new HashMap<>();
+    private Map<String, JsonNode> parseMetadata(final List<Metadata<JsonNode>> metadataList) {
+        final Map<String, JsonNode> metadata = new HashMap<>();
 
         for (final Metadata<JsonNode> metadataItem : metadataList) {
-            final String key = metadataItem.getKey();
-            final Class<? extends T> clazz = metadataTypes.get(key);
-
-            if (clazz != null) {
-                try {
-                    final T value = objectMapper.treeToValue(metadataItem.getValue(), clazz);
-                    metadata.put(key, value);
-                } catch (final JsonProcessingException e) {
-                    log.warn("Failed to parse metadata key " + key, e);
-                }
-            }
+            metadata.put(metadataItem.getKey(), metadataItem.getValue());
         }
 
         return metadata;
