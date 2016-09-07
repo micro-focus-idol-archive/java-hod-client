@@ -478,7 +478,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
             assertThat(user.getDirectGroups(), nullValue());
             assertThat(user.getGroups(), nullValue());
 
-            final List<Metadata<JsonNode>> userMetadata = user.getMetadata();
+            final Map<String, JsonNode> userMetadata = user.getMetadata();
 
             if (user.getUuid().equals(developerUserUuid)) {
                 foundUser = true;
@@ -525,7 +525,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
                 assertThat(account.getType(), not(nullValue()));
             }
 
-            final List<Metadata<JsonNode>> userMetadata = user.getMetadata();
+            final Map<String, JsonNode> userMetadata = user.getMetadata();
 
             if (user.getUuid().equals(developerUserUuid)) {
                 foundUser = true;
