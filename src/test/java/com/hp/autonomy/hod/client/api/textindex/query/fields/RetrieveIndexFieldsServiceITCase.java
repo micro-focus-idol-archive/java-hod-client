@@ -9,7 +9,6 @@ import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.types.requests.idol.actions.tags.TagName;
 import com.hp.autonomy.types.requests.idol.actions.tags.params.FieldTypeParam;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +79,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
     private void validateResults(final RetrieveIndexFieldsResponse response) {
         assertThat(response.getTotalFields(), greaterThan(0));
         assertThat(response.getFieldTypeCounts(), is(notNullValue()));
-        assertThat(response.getFields().get(FieldTypeParam.Index), hasItem(new TagName(WIKI_ENG_FIELD)));
+        assertThat(response.getFields().get(FieldTypeParam.Index), hasItem(WIKI_ENG_FIELD));
     }
 
 }
