@@ -76,9 +76,9 @@
         </developer>
         <developer>
             <name>Will Byrne</name>
-            <email>will.byrne@hp.com</email>
+            <email>will.byrne@hpe.com</email>
             <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
+            <organizationUrl>http://www.hpe.com</organizationUrl>
         </developer>
         <developer>
             <name>Rosie Taylor</name>
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>com.hp.autonomy.frontend</groupId>
             <artifactId>aci-types</artifactId>
-            <version>0.13.1</version>
+            <version>0.14.1</version>
         </dependency>
 
         <dependency>
