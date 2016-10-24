@@ -106,21 +106,11 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteReferencesBackendCaller(final ResourceIdentifier index, final List<String> references) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
-            }
-        };
+        return authenticationToken -> deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteAllBackendCaller(final ResourceIdentifier index) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
-            }
-        };
+        return authenticationToken -> deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
     }
 
 }

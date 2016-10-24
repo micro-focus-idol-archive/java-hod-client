@@ -63,11 +63,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
             final List<User> users = service.list(getTokenProxy(), getUserStore(), true, false);
 
             for (final User user : users) {
-                for (final Account account : user.getAccounts()) {
-                    if (Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())) {
-                        developerUserUuid = user.getUuid();
-                    }
-                }
+                user.getAccounts().stream().filter(account -> Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())).forEachOrdered(account -> developerUserUuid = user.getUuid());
             }
 
             if (developerUserUuid == null) {
@@ -244,158 +240,103 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
     @Test
     public void deleteNonExistentUser() throws HodErrorException {
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.delete(getTokenProxy(), getUserStore(), new UUID(0, 0));
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.delete(getTokenProxy(), getUserStore(), new UUID(0, 0)));
     }
 
     @Test
     public void testResetThrowsWhenUserNotFound() throws MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.resetAuthentication(getTokenProxy(), getUserStore(), UUID.randomUUID(), testUrl, testUrl);
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.resetAuthentication(getTokenProxy(), getUserStore(), UUID.randomUUID(), testUrl, testUrl));
     }
 
     @Test
     public void testResetThrowsWhenUserStoreNotFound() throws MalformedURLException {
         final URL testUrl = new URL("http://www.example.com");
 
-        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.resetAuthentication(
-                        getTokenProxy(),
-                        new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
-                        UUID.randomUUID(),
-                        testUrl,
-                        testUrl
-                );
-            }
-        });
+        testErrorCode(storeNotFoundErrorCodes, () -> service.resetAuthentication(
+                getTokenProxy(),
+                new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
+                UUID.randomUUID(),
+                testUrl,
+                testUrl
+        ));
     }
 
     @Test
     public void listUserGroupsThrowsWithNonExistentUser() {
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.listUserGroups(
-                        getTokenProxy(),
-                        getUserStore(),
-                        UUID.randomUUID()
-                );
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.listUserGroups(
+                getTokenProxy(),
+                getUserStore(),
+                UUID.randomUUID()
+        ));
     }
 
     @Test
     public void listUserGroupsThrowsWithNonExistentUserStore() {
-        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.listUserGroups(
-                        getTokenProxy(),
-                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstorereally"),
-                        UUID.randomUUID()
-                );
-            }
-        });
+        testErrorCode(storeNotFoundErrorCodes, () -> service.listUserGroups(
+                getTokenProxy(),
+                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstorereally"),
+                UUID.randomUUID()
+        ));
     }
 
     @Test
     public void getUserMetadataThrowsWithNonExistentUser() {
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.getUserMetadata(
-                        getTokenProxy(),
-                        getUserStore(),
-                        UUID.randomUUID()
-                );
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.getUserMetadata(
+                getTokenProxy(),
+                getUserStore(),
+                UUID.randomUUID()
+        ));
     }
 
     @Test
     public void getUserMetadataThrowsWithNonExistentUserStore() {
-        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.getUserMetadata(
-                        getTokenProxy(),
-                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
-                        UUID.randomUUID()
-                );
-            }
-        });
+        testErrorCode(storeNotFoundErrorCodes, () -> service.getUserMetadata(
+                getTokenProxy(),
+                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
+                UUID.randomUUID()
+        ));
     }
 
     @Test
     public void addUserMetadataThrowsWithNonExistentUser() {
-        testErrorCode(userNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.addUserMetadata(
-                        getTokenProxy(),
-                        getUserStore(),
-                        UUID.randomUUID(),
-                        new HashMap<String, Object>()
-                );
-            }
-        });
+        testErrorCode(userNotFoundErrorCodes, () -> service.addUserMetadata(
+                getTokenProxy(),
+                getUserStore(),
+                UUID.randomUUID(),
+                new HashMap<>()
+        ));
     }
 
     @Test
     public void addUserMetadataThrowsWithNonExistentUserStore() {
-        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.addUserMetadata(
-                        getTokenProxy(),
-                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
-                        UUID.randomUUID(),
-                        new HashMap<String, Object>()
-                );
-            }
-        });
+        testErrorCode(storeNotFoundErrorCodes, () -> service.addUserMetadata(
+                getTokenProxy(),
+                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
+                UUID.randomUUID(),
+                new HashMap<>()
+        ));
     }
 
     @Test
     public void removeUserMetadataThrowsWithNonExistentUser() {
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.removeUserMetadata(
-                        getTokenProxy(),
-                        getUserStore(),
-                        UUID.randomUUID(),
-                        "metakey"
-                );
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.removeUserMetadata(
+                getTokenProxy(),
+                getUserStore(),
+                UUID.randomUUID(),
+                "metakey"
+        ));
     }
 
     @Test
     public void removeUserMetadataThrowsWithNonExistentUserStore() {
-        testErrorCode(storeNotFoundErrorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.removeUserMetadata(
-                        getTokenProxy(),
-                        new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
-                        UUID.randomUUID(),
-                        "metakey"
-                );
-            }
-        });
+        testErrorCode(storeNotFoundErrorCodes, () -> service.removeUserMetadata(
+                getTokenProxy(),
+                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
+                UUID.randomUUID(),
+                "metakey"
+        ));
     }
 
     @Test

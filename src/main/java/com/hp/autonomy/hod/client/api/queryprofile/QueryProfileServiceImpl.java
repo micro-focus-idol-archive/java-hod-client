@@ -95,21 +95,11 @@ public class QueryProfileServiceImpl implements QueryProfileService {
         final String queryManipulationIndex,
         final QueryProfileRequestBuilder params
     ) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryProfileBackend.createQueryProfile(authenticationToken, name, queryManipulationIndex, params == null ? null : params.build());
-            }
-        };
+        return authenticationToken -> queryProfileBackend.createQueryProfile(authenticationToken, name, queryManipulationIndex, params == null ? null : params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveBackendCaller(final ResourceIdentifier queryProfile) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryProfileBackend.retrieveQueryProfile(authenticationToken, queryProfile);
-            }
-        };
+        return authenticationToken -> queryProfileBackend.retrieveQueryProfile(authenticationToken, queryProfile);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUpdateBackendCaller(
@@ -117,21 +107,11 @@ public class QueryProfileServiceImpl implements QueryProfileService {
         final String queryManipulationIndex,
         final QueryProfileRequestBuilder params
     ) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryProfileBackend.updateQueryProfile(authenticationToken, queryProfile, queryManipulationIndex, params == null ? null : params.build());
-            }
-        };
+        return authenticationToken -> queryProfileBackend.updateQueryProfile(authenticationToken, queryProfile, queryManipulationIndex, params == null ? null : params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteBackendCaller(final ResourceIdentifier queryProfile) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryProfileBackend.deleteQueryProfile(authenticationToken, queryProfile);
-            }
-        };
+        return authenticationToken -> queryProfileBackend.deleteQueryProfile(authenticationToken, queryProfile);
     }
 
 }

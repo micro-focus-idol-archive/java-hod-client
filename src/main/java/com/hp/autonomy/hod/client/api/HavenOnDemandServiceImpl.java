@@ -29,241 +29,121 @@ public class HavenOnDemandServiceImpl implements HavenOnDemandService {
 
     @Override
     public <T> T get(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.get(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.get(authenticationToken, api, version, params));
     }
 
     @Override
     public <T> T get(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.get(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.get(authenticationToken, first, second, version, params));
     }
 
     @Override
     public <T> T get(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.get(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.get(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public JobId getAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.getAsync(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.getAsync(authenticationToken, api, version, params));
     }
 
     @Override
     public JobId getAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.getAsync(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.getAsync(authenticationToken, first, second, version, params));
     }
 
     @Override
     public JobId getAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.getAsync(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.getAsync(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public <T> T post(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.post(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.post(authenticationToken, api, version, params));
     }
 
     @Override
     public <T> T post(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.post(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.post(authenticationToken, first, second, version, params));
     }
 
     @Override
     public <T> T post(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.post(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.post(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public JobId postAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.postAsync(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.postAsync(authenticationToken, api, version, params));
     }
 
     @Override
     public JobId postAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.postAsync(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.postAsync(authenticationToken, first, second, version, params));
     }
 
     @Override
     public JobId postAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.postAsync(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.postAsync(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public <T> T put(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.put(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.put(authenticationToken, api, version, params));
     }
 
     @Override
     public <T> T put(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.put(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.put(authenticationToken, first, second, version, params));
     }
 
     @Override
     public <T> T put(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.put(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.put(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public JobId putAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.putAsync(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.putAsync(authenticationToken, api, version, params));
     }
 
     @Override
     public JobId putAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.putAsync(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.putAsync(authenticationToken, first, second, version, params));
     }
 
     @Override
     public JobId putAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.putAsync(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.putAsync(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public <T> T delete(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.delete(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.delete(authenticationToken, api, version, params));
     }
 
     @Override
     public <T> T delete(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.delete(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.delete(authenticationToken, first, second, version, params));
     }
 
     @Override
     public <T> T delete(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params, final Class<T> returnType) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, returnType, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.delete(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, returnType, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.delete(authenticationToken, first, second, third, version, params));
     }
 
     @Override
     public JobId deleteAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String api, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.deleteAsync(authenticationToken, api, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.deleteAsync(authenticationToken, api, version, params));
     }
 
     @Override
     public JobId deleteAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.deleteAsync(authenticationToken, first, second, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.deleteAsync(authenticationToken, first, second, version, params));
     }
 
     @Override
     public JobId deleteAsync(final TokenProxy<?, TokenType.Simple> tokenProxy, final String first, final String second, final String third, final int version, final Map<String, Object> params) throws HodErrorException {
-        return requester.makeRequest(tokenProxy, JobId.class, new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return havenOnDemandBackend.deleteAsync(authenticationToken, first, second, third, version, params);
-            }
-        });
+        return requester.makeRequest(tokenProxy, JobId.class, (Requester.BackendCaller<EntityType, TokenType.Simple>) authenticationToken -> havenOnDemandBackend.deleteAsync(authenticationToken, first, second, third, version, params));
     }
 }

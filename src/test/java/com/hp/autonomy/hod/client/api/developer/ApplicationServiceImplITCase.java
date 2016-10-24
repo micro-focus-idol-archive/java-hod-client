@@ -81,22 +81,12 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
 
     @Test
     public void failsToCreateDuplicateApplication() {
-        testErrorCode(HodErrorCode.INVALID_JOB_ACTION_PARAMETER, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.create(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName(), APPLICATION_DESCRIPTION);
-            }
-        });
+        testErrorCode(HodErrorCode.INVALID_JOB_ACTION_PARAMETER, () -> service.create(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName(), APPLICATION_DESCRIPTION));
     }
 
     @Test
     public void failsToDeleteNonExistentApplication() {
-        testErrorCode(HodErrorCode.INVALID_APPLICATION, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.delete(getDeveloperToken(), getEndpoint().getDomainName(), randomName());
-            }
-        });
+        testErrorCode(HodErrorCode.INVALID_APPLICATION, () -> service.delete(getDeveloperToken(), getEndpoint().getDomainName(), randomName()));
     }
 
     @Test

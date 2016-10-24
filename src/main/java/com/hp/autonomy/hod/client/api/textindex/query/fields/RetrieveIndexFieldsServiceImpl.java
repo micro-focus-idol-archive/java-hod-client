@@ -60,20 +60,10 @@ public class RetrieveIndexFieldsServiceImpl implements RetrieveIndexFieldsServic
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveIndexFieldsBackendCaller(final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, indexes, params.build());
-            }
-        };
+        return authenticationToken -> retrieveIndexFieldsBackend.retrieveIndexFields(authenticationToken, indexes, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveIndexFieldsByIndexBackendCaller(final Collection<ResourceIdentifier> indexes, final RetrieveIndexFieldsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return retrieveIndexFieldsBackend.retrieveIndexFieldsByIndex(authenticationToken, indexes, params.build());
-            }
-        };
+        return authenticationToken -> retrieveIndexFieldsBackend.retrieveIndexFieldsByIndex(authenticationToken, indexes, params.build());
     }
 }

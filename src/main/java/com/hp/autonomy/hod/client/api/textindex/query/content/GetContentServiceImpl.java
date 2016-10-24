@@ -66,11 +66,6 @@ public class GetContentServiceImpl<T extends Serializable> implements GetContent
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final List<String> indexReference, final ResourceIdentifier indexes, final GetContentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return getContentBackend.getContent(authenticationToken, indexReference, indexes, params.build());
-            }
-        };
+        return authenticationToken -> getContentBackend.getContent(authenticationToken, indexReference, indexes, params.build());
     }
 }

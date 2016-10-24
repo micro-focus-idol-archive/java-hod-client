@@ -42,11 +42,6 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final ListResourcesRequestBuilder parameters) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return resourcesBackend.list(authenticationToken, parameters.build());
-            }
-        };
+        return authenticationToken -> resourcesBackend.list(authenticationToken, parameters.build());
     }
 }

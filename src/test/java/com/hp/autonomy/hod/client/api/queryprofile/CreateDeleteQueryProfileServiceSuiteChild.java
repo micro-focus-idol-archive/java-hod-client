@@ -55,22 +55,12 @@ public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractQueryProf
     public void createDuplicateFails() throws HodErrorException {
         final ResponseAndIdentifier responseAndIdentifier = trackedCreateProfile();
 
-        testErrorCode(HodErrorCode.QUERY_PROFILE_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.createQueryProfile(getTokenProxy(), responseAndIdentifier.getProfile().getName(), QUERY_MANIPULATION_INDEX_NAME, new QueryProfileRequestBuilder());
-            }
-        });
+        testErrorCode(HodErrorCode.QUERY_PROFILE_NAME_INVALID, () -> service.createQueryProfile(getTokenProxy(), responseAndIdentifier.getProfile().getName(), QUERY_MANIPULATION_INDEX_NAME, new QueryProfileRequestBuilder()));
     }
 
     @Test
     public void createWithNonExistentIndexFails() {
-        testErrorCode(HodErrorCode.INDEX_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.createQueryProfile(getTokenProxy(), uniqueName(), uniqueName(), new QueryProfileRequestBuilder());
-            }
-        });
+        testErrorCode(HodErrorCode.INDEX_NAME_INVALID, () -> service.createQueryProfile(getTokenProxy(), uniqueName(), uniqueName(), new QueryProfileRequestBuilder()));
     }
 
     @Test
@@ -86,11 +76,6 @@ public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractQueryProf
         errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.deleteQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName()));
-            }
-        });
+        testErrorCode(errorCodes, () -> service.deleteQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName())));
     }
 }

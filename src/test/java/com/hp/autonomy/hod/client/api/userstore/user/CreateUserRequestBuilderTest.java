@@ -73,19 +73,23 @@ public class CreateUserRequestBuilderTest {
         for (final Map.Entry<String, Object> entry : output.entrySet()) {
             final String key = entry.getKey();
 
-            if (key.equals(USER_MESSAGE_KEY)) {
-                assertThat((String) entry.getValue(), is(userMessage));
-                foundUserMessage = true;
-            } else if (key.equals(METADATA_KEY)) {
-                //noinspection unchecked
-                assertThat((List<Metadata<?>>) entry.getValue(), Matchers.<Object>containsInAnyOrder(
-                    new Metadata<>("name", "fred"),
-                    new Metadata<>("age", 24)
-                ));
+            switch (key) {
+                case USER_MESSAGE_KEY:
+                    assertThat(entry.getValue(), is(userMessage));
+                    foundUserMessage = true;
+                    break;
+                case METADATA_KEY:
+                    //noinspection unchecked
+                    assertThat((List<Metadata<?>>) entry.getValue(), Matchers.<Object>containsInAnyOrder(
+                            new Metadata<>("name", "fred"),
+                            new Metadata<>("age", 24)
+                    ));
 
-                foundMetadata = true;
-            } else {
-                assertThat(entry.getValue(), is(nullValue()));
+                    foundMetadata = true;
+                    break;
+                default:
+                    assertThat(entry.getValue(), is(nullValue()));
+                    break;
             }
         }
 

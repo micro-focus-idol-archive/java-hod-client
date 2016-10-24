@@ -128,11 +128,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
         final Resources resources = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
-        for (final Resource resource : resources.getResources()) {
-            if (profileIdentifier.getName().equals(resource.getResource())) {
-                fail("Deleted profile returned from list resources: " + profileIdentifier);
-            }
-        }
+        resources.getResources().stream().filter(resource -> profileIdentifier.getName().equals(resource.getResource())).forEach(resource -> fail("Deleted profile returned from list resources: " + profileIdentifier));
     }
 
     @Test
@@ -144,11 +140,6 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
         errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
-            }
-        });
+        testErrorCode(errorCodes, () -> service.retrieveQueryProfile(getTokenProxy(), profileIdentifier));
     }
 }

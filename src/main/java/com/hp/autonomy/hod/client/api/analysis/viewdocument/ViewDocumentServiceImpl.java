@@ -149,100 +149,54 @@ public class ViewDocumentServiceImpl implements ViewDocumentService {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getFileBackendCaller(final File file, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewFile(authenticationToken, new TypedFile(MIME_TYPE, file), params.build());
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewFile(authenticationToken, new TypedFile(MIME_TYPE, file), params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayBackendCaller(final byte[] bytes, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, bytes), params.build());
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, bytes), params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamBackendCaller(final InputStream inputStream, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                try {
-                    return viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, IOUtils.toByteArray(inputStream)), params.build());
-                } catch (final IOException e) {
-                    throw new RuntimeException("Error reading bytes from stream", e);
-                }
+        return authenticationToken -> {
+            try {
+                return viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, IOUtils.toByteArray(inputStream)), params.build());
+            } catch (final IOException e) {
+                throw new RuntimeException("Error reading bytes from stream", e);
             }
         };
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceBackendCaller(final String reference, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewReference(authenticationToken, reference, params.build());
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewReference(authenticationToken, reference, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlBackendCaller(final String url, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewUrl(authenticationToken, url, params.build());
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewUrl(authenticationToken, url, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getFileAsStringBackendCaller(final File file, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewFile(authenticationToken, new TypedFile(MIME_TYPE, file), getRawHtmlParams(params));
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewFile(authenticationToken, new TypedFile(MIME_TYPE, file), getRawHtmlParams(params));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayAsStringBackendCaller(final byte[] bytes, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, bytes), getRawHtmlParams(params));
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, bytes), getRawHtmlParams(params));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamAsFileBackendCaller(final InputStream inputStream, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                try {
-                    return viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, IOUtils.toByteArray(inputStream)), getRawHtmlParams(params));
-                } catch (final IOException e) {
-                    throw new RuntimeException(e);
-                }
+        return authenticationToken -> {
+            try {
+                return viewDocumentBackend.viewFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, IOUtils.toByteArray(inputStream)), getRawHtmlParams(params));
+            } catch (final IOException e) {
+                throw new RuntimeException(e);
             }
         };
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceAsStringBackendCaller(final String reference, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewReference(authenticationToken, reference, getRawHtmlParams(params));
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewReference(authenticationToken, reference, getRawHtmlParams(params));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlAsStringBackendCaller(final String url, final ViewDocumentRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return viewDocumentBackend.viewUrl(authenticationToken, url, getRawHtmlParams(params));
-            }
-        };
+        return authenticationToken -> viewDocumentBackend.viewUrl(authenticationToken, url, getRawHtmlParams(params));
     }
 }

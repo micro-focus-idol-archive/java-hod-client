@@ -101,60 +101,32 @@ public class SentimentAnalysisServiceImpl implements SentimentAnalysisService {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlBackendCaller(final String url, final SentimentAnalysisLanguage language) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return sentimentAnalysisBackend.analyzeSentimentForUrl(authenticationToken, url, language);
-            }
-        };
+        return authenticationToken -> sentimentAnalysisBackend.analyzeSentimentForUrl(authenticationToken, url, language);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getTextBackendCaller(final String text, final SentimentAnalysisLanguage language) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return sentimentAnalysisBackend.analyzeSentimentForText(authenticationToken, text, language);
-            }
-        };
+        return authenticationToken -> sentimentAnalysisBackend.analyzeSentimentForText(authenticationToken, text, language);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getFileBackendCaller(final File file, final SentimentAnalysisLanguage language) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return sentimentAnalysisBackend.analyzeSentimentForFile(authenticationToken, new TypedFile("text/plain", file), language);
-            }
-        };
+        return authenticationToken -> sentimentAnalysisBackend.analyzeSentimentForFile(authenticationToken, new TypedFile("text/plain", file), language);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayBackendCaller(final byte[] file, final SentimentAnalysisLanguage language) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return sentimentAnalysisBackend.analyzeSentimentForFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", file), language);
-            }
-        };
+        return authenticationToken -> sentimentAnalysisBackend.analyzeSentimentForFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", file), language);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamBackendCaller(final InputStream file, final SentimentAnalysisLanguage language) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                try {
-                    return sentimentAnalysisBackend.analyzeSentimentForFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(file)), language);
-                } catch (final IOException e) {
-                    throw new RuntimeException("Error reading bytes from stream", e);
-                }
+        return authenticationToken -> {
+            try {
+                return sentimentAnalysisBackend.analyzeSentimentForFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(file)), language);
+            } catch (final IOException e) {
+                throw new RuntimeException("Error reading bytes from stream", e);
             }
         };
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceBackendCaller(final String reference, final SentimentAnalysisLanguage language) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return sentimentAnalysisBackend.analyzeSentimentForReference(authenticationToken, reference, language);
-            }
-        };
+        return authenticationToken -> sentimentAnalysisBackend.analyzeSentimentForReference(authenticationToken, reference, language);
     }
 }

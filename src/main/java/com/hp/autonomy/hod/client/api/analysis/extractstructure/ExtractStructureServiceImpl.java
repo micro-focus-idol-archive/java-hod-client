@@ -97,51 +97,28 @@ public class ExtractStructureServiceImpl implements ExtractStructureService {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayBackendCaller(final byte[] file) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return extractStructureBackend.extractFromFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", file));
-            }
-        };
+        return authenticationToken -> extractStructureBackend.extractFromFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", file));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamBackendCaller(final InputStream inputStream) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                try {
-                    return extractStructureBackend.extractFromFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(inputStream)));
-                } catch (final IOException e) {
-                    throw new RuntimeException("Error reading bytes from stream", e);
-                }
+        return authenticationToken -> {
+            try {
+                return extractStructureBackend.extractFromFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(inputStream)));
+            } catch (final IOException e) {
+                throw new RuntimeException("Error reading bytes from stream", e);
             }
         };
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getFileBackendCaller(final File file) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return extractStructureBackend.extractFromFile(authenticationToken, new TypedFile("text/plain", file));
-            }
-        };
+        return authenticationToken -> extractStructureBackend.extractFromFile(authenticationToken, new TypedFile("text/plain", file));
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceBackendCaller(final String reference) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return extractStructureBackend.extractFromReference(authenticationToken, reference);
-            }
-        };
+        return authenticationToken -> extractStructureBackend.extractFromReference(authenticationToken, reference);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlBackendCaller(final String url) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return extractStructureBackend.extractFromUrl(authenticationToken, url);
-            }
-        };
+        return authenticationToken -> extractStructureBackend.extractFromUrl(authenticationToken, url);
     }
 }

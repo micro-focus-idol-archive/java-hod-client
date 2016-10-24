@@ -82,23 +82,13 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileSu
         errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.updateQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName()), null, parameters);
-            }
-        });
+        testErrorCode(errorCodes, () -> service.updateQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName()), null, parameters));
     }
 
     @Test
     public void updateWithNonExistentIndexFails() throws HodErrorException {
         final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
 
-        testErrorCode(HodErrorCode.INDEX_NAME_INVALID, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.updateQueryProfile(getTokenProxy(), profileIdentifier, uniqueName(), null);
-            }
-        });
+        testErrorCode(HodErrorCode.INDEX_NAME_INVALID, () -> service.updateQueryProfile(getTokenProxy(), profileIdentifier, uniqueName(), null));
     }
 }

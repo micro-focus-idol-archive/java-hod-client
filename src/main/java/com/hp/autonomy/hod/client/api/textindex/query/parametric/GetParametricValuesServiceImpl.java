@@ -48,11 +48,6 @@ public class GetParametricValuesServiceImpl implements GetParametricValuesServic
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final Collection<String> fieldNames, final Collection<ResourceIdentifier> indexes, final GetParametricValuesRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return getParametricValuesBackend.getParametricValues(authenticationToken, StringUtils.join(fieldNames, ','), indexes, params.build());
-            }
-        };
+        return authenticationToken -> getParametricValuesBackend.getParametricValues(authenticationToken, StringUtils.join(fieldNames, ','), indexes, params.build());
     }
 }

@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class UserStoreUsersServiceImpl implements UserStoreUsersService {
@@ -188,80 +189,36 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> listBackendCaller(final ResourceIdentifier userStore, final boolean includeMetadata, final boolean includeAccounts, final boolean includeGroups) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
-                return backend.list(token, userStore, includeMetadata, includeAccounts, includeGroups);
-            }
-        };
+        return token -> backend.list(token, userStore, includeMetadata, includeAccounts, includeGroups);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> createBackendCaller(final ResourceIdentifier userStore, final String userEmail, final URL onSuccess, final URL onError, final CreateUserRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
-                return backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString(), params == null ? null : params.build());
-            }
-        };
+        return token -> backend.create(token, userStore, userEmail, onSuccess.toString(), onError.toString(), params == null ? null : params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> deleteBackendCaller(final ResourceIdentifier userStore, final UUID userUuid) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> token) throws HodErrorException {
-                return backend.delete(token, userStore, userUuid);
-            }
-        };
+        return token -> backend.delete(token, userStore, userUuid);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getResetBackendCaller(final ResourceIdentifier userStore, final UUID userUuid, final URL onSuccess, final URL onError) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return backend.resetAuthentication(authenticationToken, userStore, userUuid, onSuccess.toString(), onError.toString());
-            }
-        };
+        return authenticationToken -> backend.resetAuthentication(authenticationToken, userStore, userUuid, onSuccess.toString(), onError.toString());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> listUserGroupsBackendCaller(final ResourceIdentifier userStore, final UUID userUuid) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<? extends EntityType, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return backend.listUserGroups(authenticationToken, userStore, userUuid);
-            }
-        };
+        return authenticationToken -> backend.listUserGroups(authenticationToken, userStore, userUuid);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUserMetadataBackendCaller(final ResourceIdentifier userStore, final UUID userUuid) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<? extends EntityType, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return backend.getUserMetadata(authenticationToken, userStore, userUuid);
-            }
-        };
+        return authenticationToken -> backend.getUserMetadata(authenticationToken, userStore, userUuid);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> addUserMetadataBackendCaller(final ResourceIdentifier userStore, final UUID userUuid, final Map<String, ?> metadata) {
-        final List<Metadata<?>> metadataList = new LinkedList<>();
+        final List<Metadata<?>> metadataList = metadata.entrySet().stream().map(entry -> new Metadata<>(entry.getKey(), entry.getValue())).collect(Collectors.toCollection(LinkedList::new));
 
-        for (final Map.Entry<String, ?> entry : metadata.entrySet()) {
-            metadataList.add(new Metadata<>(entry.getKey(), entry.getValue()));
-        }
-
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<? extends EntityType, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return backend.addUserMetadata(authenticationToken, userStore, userUuid, metadataList);
-            }
-        };
+        return authenticationToken -> backend.addUserMetadata(authenticationToken, userStore, userUuid, metadataList);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> removeUserMetadataBackendCaller(final ResourceIdentifier userStore, final UUID userUuid, final String metadataKey) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<? extends EntityType, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return backend.removeUserMetadata(authenticationToken, userStore, userUuid, metadataKey);
-            }
-        };
+        return authenticationToken -> backend.removeUserMetadata(authenticationToken, userStore, userUuid, metadataKey);
     }
 }

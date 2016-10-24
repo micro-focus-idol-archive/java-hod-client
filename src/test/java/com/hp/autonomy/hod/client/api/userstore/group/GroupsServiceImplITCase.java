@@ -61,11 +61,7 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
             final List<User> users = userStoreUsersService.list(getTokenProxy(), getUserStore(), true, false);
 
             for (final User user : users) {
-                for (final Account account : user.getAccounts()) {
-                    if (Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())) {
-                        developerUserUuid = user.getUuid();
-                    }
-                }
+                user.getAccounts().stream().filter(account -> Account.Type.DEVELOPER.equals(account.getType()) && getDeveloperUuid().toString().equals(account.getAccount())).forEachOrdered(account -> developerUserUuid = user.getUuid());
             }
 
             if (developerUserUuid == null) {
@@ -126,12 +122,7 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
         safeDeleteGroup(name);
 
         // Check user has gone from the get info API
-        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.getInfo(getTokenProxy(), getUserStore(), name);
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, () -> service.getInfo(getTokenProxy(), getUserStore(), name));
 
         // Check user has gone from the list groups API
         final List<Group> groups = service.list(getTokenProxy(), getUserStore());
@@ -145,12 +136,7 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
     public void createDuplicate() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.GROUP_ALREADY_EXISTS, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.create(getTokenProxy(), getUserStore(), groupName);
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_ALREADY_EXISTS, () -> service.create(getTokenProxy(), getUserStore(), groupName));
     }
 
     @Test
@@ -159,12 +145,7 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
         errorCodes.add(HodErrorCode.STORE_NOT_FOUND);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.create(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), unique()), unique());
-            }
-        });
+        testErrorCode(errorCodes, () -> service.create(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), unique()), unique()));
     }
 
     @Test
@@ -180,56 +161,31 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
 
     @Test
     public void deleteNonExistent() {
-        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.delete(getTokenProxy(), getUserStore(), unique());
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, () -> service.delete(getTokenProxy(), getUserStore(), unique()));
     }
 
     @Test
     public void assignNonExistentUser() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), getUserStore(), groupName, UUID.randomUUID());
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.assignUser(getTokenProxy(), getUserStore(), groupName, UUID.randomUUID()));
     }
 
     @Test
     public void removeNonExistentUser() throws HodErrorException {
         final String groupName = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.removeUser(getTokenProxy(), getUserStore(), groupName, UUID.randomUUID());
-            }
-        });
+        testErrorCode(HodErrorCode.USER_NOT_FOUND, () -> service.removeUser(getTokenProxy(), getUserStore(), groupName, UUID.randomUUID()));
     }
 
     @Test
     public void assignNonExistentUserToNonExistentGroup() {
-        testErrorCode(GROUP_OR_USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), getUserStore(), unique(), UUID.randomUUID());
-            }
-        });
+        testErrorCode(GROUP_OR_USER_NOT_FOUND, () -> service.assignUser(getTokenProxy(), getUserStore(), unique(), UUID.randomUUID()));
     }
 
     @Test
     public void removeNonExistentUserFromNonExistentGroup() {
-        testErrorCode(GROUP_OR_USER_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.assignUser(getTokenProxy(), getUserStore(), unique(), UUID.randomUUID());
-            }
-        });
+        testErrorCode(GROUP_OR_USER_NOT_FOUND, () -> service.assignUser(getTokenProxy(), getUserStore(), unique(), UUID.randomUUID()));
     }
 
     @Test
@@ -317,24 +273,14 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
     public void linkNonExistentParent() throws HodErrorException {
         final String child = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.link(getTokenProxy(), getUserStore(), unique(), child);
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, () -> service.link(getTokenProxy(), getUserStore(), unique(), child));
     }
 
     @Test
     public void linkNonExistentChild() throws HodErrorException {
         final String parent = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.link(getTokenProxy(), getUserStore(), parent, unique());
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, () -> service.link(getTokenProxy(), getUserStore(), parent, unique()));
     }
 
     @Test
@@ -355,24 +301,14 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
     public void unlinkNonExistentParent() throws HodErrorException {
         final String child = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.unlink(getTokenProxy(), getUserStore(), unique(), child);
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, () -> service.unlink(getTokenProxy(), getUserStore(), unique(), child));
     }
 
     @Test
     public void unlinkNonExistentChild() throws HodErrorException {
         final String parent = safeCreateGroup().name;
 
-        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.unlink(getTokenProxy(), getUserStore(), parent, unique());
-            }
-        });
+        testErrorCode(HodErrorCode.GROUP_NOT_FOUND, () -> service.unlink(getTokenProxy(), getUserStore(), parent, unique()));
     }
 
     @Test

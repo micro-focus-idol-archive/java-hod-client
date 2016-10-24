@@ -47,12 +47,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
         // TokenRepository, which requires the HodServiceConfig
         final AtomicReference<TokenProxy<EntityType.Application, TokenType.Simple>> tokenProxyAtomicReference = new AtomicReference<>();
 
-        final TokenProxyService<EntityType.Application, TokenType.Simple> tokenProxyService = new TokenProxyService<EntityType.Application, TokenType.Simple>() {
-            @Override
-            public TokenProxy<EntityType.Application, TokenType.Simple> getTokenProxy() {
-                return tokenProxyAtomicReference.get();
-            }
-        };
+        final TokenProxyService<EntityType.Application, TokenType.Simple> tokenProxyService = tokenProxyAtomicReference::get;
 
         final HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(tokenProxyService, getEndpoint());
 

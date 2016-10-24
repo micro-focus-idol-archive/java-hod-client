@@ -88,12 +88,7 @@ public class CreateTextIndexPollingService extends AbstractPollingService implem
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final String index, final IndexFlavor flavor, final CreateTextIndexRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return createTextIndexBackend.createTextIndex(authenticationToken, index, flavor, params.build());
-            }
-        };
+        return authenticationToken -> createTextIndexBackend.createTextIndex(authenticationToken, index, flavor, params.build());
     }
 
 }

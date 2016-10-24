@@ -89,21 +89,11 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceIdentifier index) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return deleteTextIndexBackend.initialDeleteTextIndex(authenticationToken, index);
-            }
-        };
+        return authenticationToken -> deleteTextIndexBackend.initialDeleteTextIndex(authenticationToken, index);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeletingBackendCaller(final ResourceIdentifier index, final DeleteTextIndexResponse response) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return deleteTextIndexBackend.deleteTextIndex(authenticationToken, index, response.getConfirm());
-            }
-        };
+        return authenticationToken -> deleteTextIndexBackend.deleteTextIndex(authenticationToken, index, response.getConfirm());
     }
 
 

@@ -207,12 +207,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
 
     @Test
     public void failsWithInvalidApiKey() {
-        testErrorCode(HodErrorCode.AUTHENTICATION_FAILED, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"), TokenType.Simple.INSTANCE);
-            }
-        });
+        testErrorCode(HodErrorCode.AUTHENTICATION_FAILED, () -> authenticationService.authenticateUnbound(new ApiKey("PROBABLY_NOT_A_REAL_API_KEY"), TokenType.Simple.INSTANCE));
     }
 
     @Test
@@ -226,12 +221,7 @@ public class AuthenticationServiceITCase extends AbstractHodClientIntegrationTes
             new DateTime(456)
         );
 
-        testErrorCode(HodErrorCode.AUTHENTICATION_FAILED, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                authenticationService.getCombinedTokenInformation(fakeToken);
-            }
-        });
+        testErrorCode(HodErrorCode.AUTHENTICATION_FAILED, () -> authenticationService.getCombinedTokenInformation(fakeToken));
     }
 
     // This test expects a system property hp.hod.combinedSsoTokenJson containing a combined SSO token compatible with the application authentication

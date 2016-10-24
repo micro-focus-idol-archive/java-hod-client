@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Represents the return type from the get group info API.
@@ -37,9 +38,7 @@ public class GroupInfo {
 
         users = new LinkedList<>();
 
-        for (final GroupUser groupUser : builder.users) {
-            users.add(groupUser.getUuid());
-        }
+        users.addAll(builder.users.stream().map(GroupUser::getUuid).collect(Collectors.toList()));
     }
 
     @JsonPOJOBuilder(withPrefix = "set")

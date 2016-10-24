@@ -63,7 +63,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
 
         havenOnDemandService = new HavenOnDemandServiceImpl(getConfig());
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        jobService = new JobServiceImpl<JobStatus<Map<String, Object>>>(getConfig(), MapJobStatus.class);
+        jobService = new JobServiceImpl<>(getConfig(), MapJobStatus.class);
     }
 
     @After

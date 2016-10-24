@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Represents a request to HP Haven OnDemand which must be made from a user's browser. The token header should be set to
@@ -63,9 +64,7 @@ public class SignedRequest {
             final List<NameValuePair> pairs = new LinkedList<>();
 
             for (final Map.Entry<String, List<String>> entry : request.getBody().entrySet()) {
-                for (final String value: entry.getValue()) {
-                    pairs.add(new BasicNameValuePair(entry.getKey(), value));
-                }
+                pairs.addAll(entry.getValue().stream().map(value -> new BasicNameValuePair(entry.getKey(), value)).collect(Collectors.toList()));
             }
 
             bodyString = URLEncodedUtils.format(pairs, UTF8);

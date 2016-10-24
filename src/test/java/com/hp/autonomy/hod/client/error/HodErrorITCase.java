@@ -48,12 +48,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testNoQueryTextError() {
-        testErrorCodeAndMessage(HodErrorCode.MISSING_REQUIRED_PARAMETERS, "Missing required parameter(s)", new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "", new QueryRequestBuilder());
-            }
-        });
+        testErrorCodeAndMessage(HodErrorCode.MISSING_REQUIRED_PARAMETERS, "Missing required parameter(s)", () -> queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "", new QueryRequestBuilder()));
     }
 
     @Test
@@ -61,12 +56,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
         final QueryRequestBuilder params = new QueryRequestBuilder()
             .addIndexes(ResourceIdentifier.WIKI_ENG);
 
-        testErrorCodeAndMessage(HodErrorCode.NO_IGNORE_SPECIALS, "Invalid query text", new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
-            }
-        });
+        testErrorCodeAndMessage(HodErrorCode.NO_IGNORE_SPECIALS, "Invalid query text", () -> queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params));
     }
 
     @Test
@@ -80,12 +70,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
             new DateTime(1234567890L)
         ));
 
-        testErrorCodeAndMessage(HodErrorCode.AUTHENTICATION_FAILED, "Authentication failed", new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                queryTextIndexService.queryTextIndexWithText(tokenProxy, "*", new QueryRequestBuilder());
-            }
-        });
+        testErrorCodeAndMessage(HodErrorCode.AUTHENTICATION_FAILED, "Authentication failed", () -> queryTextIndexService.queryTextIndexWithText(tokenProxy, "*", new QueryRequestBuilder()));
     }
 
 }
