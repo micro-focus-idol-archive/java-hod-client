@@ -12,26 +12,29 @@ import java.util.Map;
 import java.util.Set;
 
 public class ListResourcesRequestBuilder {
+    @SuppressWarnings("TypeMayBeWeakened")
     private Set<ResourceType> types = new HashSet<>();
-    private Set<ResourceFlavour> flavours = new HashSet<>();
+
+    @SuppressWarnings("TypeMayBeWeakened")
+    private Set<String> domains = new HashSet<>();
 
     /**
      * @param types Resource type restriction
      */
     public ListResourcesRequestBuilder setTypes(final Set<ResourceType> types) {
         if (types != null) {
-            this.types = types;
+            this.types = new HashSet<>(types);
         }
 
         return this;
     }
 
     /**
-     * @param flavours Resource flavour restriction
+     * @param domains Domain name restriction
      */
-    public ListResourcesRequestBuilder setFlavours(final Set<ResourceFlavour> flavours) {
-        if (flavours != null) {
-            this.flavours = flavours;
+    public ListResourcesRequestBuilder setDomains(final Set<String> domains) {
+        if (domains != null) {
+            this.domains = new HashSet<>(domains);
         }
 
         return this;
@@ -44,8 +47,8 @@ public class ListResourcesRequestBuilder {
             parameters.put("type", type);
         }
 
-        for (final ResourceFlavour flavour : flavours) {
-            parameters.put("flavor", flavour);
+        for (final String domain : domains) {
+            parameters.put("domain", domain);
         }
 
         return parameters;

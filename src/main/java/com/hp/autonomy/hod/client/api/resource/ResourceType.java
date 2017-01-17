@@ -17,13 +17,12 @@ import java.util.Set;
  */
 @Data
 public class ResourceType implements Serializable {
-
     private static final long serialVersionUID = 5840146896341397940L;
 
     /**
      * The resource type of a text index
      */
-    public static final ResourceType CONTENT = new ResourceType("content");
+    public static final ResourceType TEXT_INDEX = new ResourceType("text_index");
 
     /**
      * The resource type of a connector
@@ -56,7 +55,7 @@ public class ResourceType implements Serializable {
      */
     public static Set<ResourceType> allOf() {
         return new HashSet<>(Arrays.asList(
-            CONTENT,
+            TEXT_INDEX,
             CONNECTOR,
             QUERY_PROFILE
         ));

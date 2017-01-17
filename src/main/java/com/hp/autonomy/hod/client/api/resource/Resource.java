@@ -7,29 +7,18 @@ package com.hp.autonomy.hod.client.api.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 @Data
 public class Resource implements Serializable {
-    private static final long serialVersionUID = -2332288355411288129L;
-
-    private static final DateTimeFormatter FORMAT = new DateTimeFormatterBuilder()
-        .append(null, new DateTimeParser[]{
-            DateTimeFormat.forPattern("EEE MMM dd yyyy HH:mm:ss zZ ('UTC)").getParser(),
-            DateTimeFormat.forPattern("EEE MMM dd yyyy HH:mm:ss zZ").getParser()
-        })
-        .toFormatter();
+    private static final long serialVersionUID = -6529460305631289926L;
 
     /**
-     * @return The name of the resource
+     * @return The name, domain and UUID of the resource
      */
-    private final String resource;
+    private final ResourceInformation resource;
 
     /**
      * @return The display name of the resource
@@ -47,34 +36,22 @@ public class Resource implements Serializable {
     private final ResourceType type;
 
     /**
-     * @return The resource flavour
-     */
-    private final ResourceFlavour flavour;
-
-    /**
      * @return The date created
      */
-    private final DateTime dateCreated;
+    private final Instant dateCreated;
 
     public Resource(
-            @JsonProperty("resource") final String resource,
+            @JsonProperty("resource") final ResourceInformation resource,
             @JsonProperty("description") final String description,
             @JsonProperty("type") final ResourceType type,
-            @JsonProperty("flavor") final ResourceFlavour flavour,
             @JsonProperty("date_created") final String dateCreated,
             @JsonProperty("display_name") final String displayName
     ) {
         this.resource = resource;
         this.description = description;
         this.type = type;
-        this.flavour = flavour;
+        this.displayName = displayName;
 
-        if (dateCreated != null) {
-            this.dateCreated = FORMAT.parseDateTime(dateCreated);
-        }
-        else {
-            this.dateCreated = null;
-        }
-        this.displayName = displayName != null ? displayName : resource;
+        this.dateCreated = dateCreated != null ? Instant.parse(dateCreated) : null;
     }
 }
