@@ -3,12 +3,11 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-package com.hp.autonomy.hod.client.api.userstore;
+package com.hp.autonomy.hod.client.api.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,26 +15,26 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * Information about a user store.
+ * Information about a HOD resource.
  */
 @Data
 @Builder
-@JsonDeserialize(builder = UserStoreInformation.UserStoreInformationBuilder.class)
-public class UserStoreInformation implements Serializable {
+@JsonDeserialize(builder = ResourceInformation.ResourceInformationBuilder.class)
+public class ResourceInformation implements Serializable {
     private static final long serialVersionUID = 7276817124651403883L;
 
     /**
-     * @return The UUID of the user store
+     * @return The UUID of the resource
      */
     private final UUID uuid;
 
     /**
-     * @return The name of the user store
+     * @return The name of the resource
      */
     private final String name;
 
     /**
-     * @return The domain of the user store
+     * @return The domain of the resource
      */
     private final String domain;
 
@@ -44,11 +43,11 @@ public class UserStoreInformation implements Serializable {
     }
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class UserStoreInformationBuilder {
+    public static class ResourceInformationBuilder {
         // TODO: Remove this once HOD-3394 has been resolved
         // Some APIs return domain_name instead of domain
         @JsonProperty("domain_name")
-        public UserStoreInformationBuilder domainName(final String domainName) {
+        public ResourceInformationBuilder domainName(final String domainName) {
             domain = domainName;
             return this;
         }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.hp.autonomy.hod.client.api.textindex.IndexFlavor;
-import com.hp.autonomy.hod.client.api.userstore.UserStoreInformation;
+import com.hp.autonomy.hod.client.api.resource.ResourceInformation;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,7 +17,7 @@ public class TextIndexStatus {
     private final int indexUpdates24hr;
     private final int componentCount;
     private final IndexFlavor flavor;
-    private final UserStoreInformation userStore;
+    private final ResourceInformation userStore;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class TextIndexStatusBuilder {
@@ -25,6 +25,6 @@ public class TextIndexStatus {
         @JsonProperty("total_index_size") private long totalIndexSize;
         @JsonProperty("24hr_index_updates") private int indexUpdates24hr;
         @JsonProperty("component_count") private int componentCount;
-        @JsonProperty("user_store") private UserStoreInformation userStore;
+        @JsonProperty("user_store") private ResourceInformation userStore;
     }
 }
