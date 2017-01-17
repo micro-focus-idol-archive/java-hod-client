@@ -1,0 +1,13 @@
+{
+  "user_store": {
+    "name": "DEFAULT_USER_STORE",
+    "domain_name": "21259eb0-b1c4-4bd7-b4fc-c502aac60a44",
+    "fully_qualified_name": "21259eb0-b1c4-4bd7-b4fc-c502aac60a44:DEFAULT_USER_STORE",
+    "uuid": "39b69aed-bdf4-44dc-83a6-aeb41bd7a9af"
+  },
+  "total_documents": 5,
+  "total_index_size": 15514038,
+  "24hr_index_updates": 5,
+  "component_count": 1,
+  "flavor": "standard"
+}
