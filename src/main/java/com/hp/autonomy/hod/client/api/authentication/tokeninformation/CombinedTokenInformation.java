@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.authentication.tokeninformation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hp.autonomy.hod.client.api.userstore.UserStoreInformation;
 import lombok.Data;
 
 import java.util.UUID;
