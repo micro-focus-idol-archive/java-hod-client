@@ -63,7 +63,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
         createTextIndexService.createTextIndex(
                 getTokenProxy(),
                 testIndexName,
-                IndexFlavor.explorer,
+                IndexFlavor.EXPLORER,
                 createParams,
                 callback);
 

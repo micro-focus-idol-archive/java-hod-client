@@ -41,7 +41,7 @@ public class TextIndexStatusTest {
                 .totalDocuments(5)
                 .totalIndexSize(15514038)
                 .componentCount(1)
-                .flavor(IndexFlavor.standard)
+                .flavor(IndexFlavor.STANDARD)
                 .indexUpdates24hr(5)
                 .userStore(expectedUserStore)
                 .build();
