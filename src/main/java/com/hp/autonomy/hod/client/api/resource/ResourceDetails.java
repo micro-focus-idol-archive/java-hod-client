@@ -18,7 +18,7 @@ public class ResourceDetails implements Serializable {
     /**
      * @return The name, domain and UUID of the resource
      */
-    private final ResourceInformation resource;
+    private final Resource resource;
 
     /**
      * @return The display name of the resource
@@ -41,7 +41,7 @@ public class ResourceDetails implements Serializable {
     private final Instant dateCreated;
 
     public ResourceDetails(
-            @JsonProperty("resource") final ResourceInformation resource,
+            @JsonProperty("resource") final Resource resource,
             @JsonProperty("description") final String description,
             @JsonProperty("type") final ResourceType type,
             @JsonProperty("date_created") final String dateCreated,

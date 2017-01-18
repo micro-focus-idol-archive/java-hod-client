@@ -19,8 +19,8 @@ import java.util.UUID;
  */
 @Data
 @Builder
-@JsonDeserialize(builder = ResourceInformation.ResourceInformationBuilder.class)
-public class ResourceInformation implements Serializable {
+@JsonDeserialize(builder = Resource.ResourceBuilder.class)
+public class Resource implements Serializable {
     private static final long serialVersionUID = 7276817124651403883L;
 
     /**
@@ -43,11 +43,11 @@ public class ResourceInformation implements Serializable {
     }
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class ResourceInformationBuilder {
+    public static class ResourceBuilder {
         // TODO: Remove this once HOD-3394 has been resolved
         // Some APIs return domain_name instead of domain
         @JsonProperty("domain_name")
-        public ResourceInformationBuilder domainName(final String domainName) {
+        public ResourceBuilder domainName(final String domainName) {
             domain = domainName;
             return this;
         }

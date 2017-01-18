@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ResourceInformationTest {
+public class ResourceTest {
     private ObjectMapper objectMapper;
 
     @Before
@@ -27,7 +27,7 @@ public class ResourceInformationTest {
 
     @Test
     public void buildsResourceIdentifier() {
-        final ResourceInformation information = new ResourceInformation(UUID.randomUUID(), "resource_name", "domain_name");
+        final Resource information = new Resource(UUID.randomUUID(), "resource_name", "domain_name");
 
         final ResourceName identifier = information.getIdentifier();
         assertThat(identifier.getDomain(), is("domain_name"));
@@ -48,7 +48,7 @@ public class ResourceInformationTest {
     public void testSerializeAndDeserialize() throws IOException, ClassNotFoundException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        final ResourceInformation input = new ResourceInformation(UUID.randomUUID(), "name", "domain");
+        final Resource input = new Resource(UUID.randomUUID(), "name", "domain");
 
         try (final ObjectOutput objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
             objectOutputStream.writeObject(input);
@@ -56,19 +56,19 @@ public class ResourceInformationTest {
 
         try (final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()))) {
             @SuppressWarnings("CastToConcreteClass")
-            final ResourceInformation output = (ResourceInformation) objectInputStream.readObject();
+            final Resource output = (Resource) objectInputStream.readObject();
             assertThat(output, is(input));
         }
     }
 
     private void testDeserialization(final String file) throws IOException {
-        final ResourceInformation output;
+        final Resource output;
 
         try (final InputStream jsonStream = getClass().getResourceAsStream(file)) {
-            output = objectMapper.readValue(jsonStream, ResourceInformation.class);
+            output = objectMapper.readValue(jsonStream, Resource.class);
         }
 
-        final ResourceInformation expectedOutput = new ResourceInformation(
+        final Resource expectedOutput = new Resource(
                 UUID.fromString("1f885ea5-9d63-4101-908d-257d300efb72"),
                 "DEFAULT_USER_STORE",
                 "33ed089f-8fe7-451d-82b3-51a06dcdc49b"

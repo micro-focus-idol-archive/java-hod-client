@@ -3,7 +3,7 @@ package com.hp.autonomy.hod.client.api.textindex.status;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.api.textindex.IndexFlavor;
-import com.hp.autonomy.hod.client.api.resource.ResourceInformation;
+import com.hp.autonomy.hod.client.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ public class TextIndexStatusTest {
             output = objectMapper.readValue(jsonStream, TextIndexStatus.class);
         }
 
-        final ResourceInformation expectedUserStore = ResourceInformation.builder()
+        final Resource expectedUserStore = Resource.builder()
                 .name("DEFAULT_USER_STORE")
                 .domain("21259eb0-b1c4-4bd7-b4fc-c502aac60a44")
                 .uuid(UUID.fromString("39b69aed-bdf4-44dc-83a6-aeb41bd7a9af"))

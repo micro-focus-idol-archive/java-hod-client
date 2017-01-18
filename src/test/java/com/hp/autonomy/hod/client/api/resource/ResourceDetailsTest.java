@@ -16,7 +16,7 @@ public class ResourceDetailsTest {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         final ResourceDetails input = new ResourceDetails(
-                ResourceInformation.builder()
+                Resource.builder()
                         .domain("my-domain")
                         .name("my-connector")
                         .uuid(UUID.randomUUID())
@@ -50,7 +50,7 @@ public class ResourceDetailsTest {
         }
 
         final ResourceDetails expectedOutput = new ResourceDetails(
-                ResourceInformation.builder()
+                Resource.builder()
                         .domain("PUBLIC_INDEXES")
                         .name("arxiv")
                         .uuid(UUID.fromString("111e34b3-d20c-11e4-9484-d48564a6c0ef"))
