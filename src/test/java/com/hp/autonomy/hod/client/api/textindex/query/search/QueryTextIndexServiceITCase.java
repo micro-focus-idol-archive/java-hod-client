@@ -7,7 +7,10 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileRequestBuilder;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileService;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileServiceImpl;
+import com.hp.autonomy.hod.client.api.resource.*;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +20,7 @@ import org.junit.runners.Parameterized;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
@@ -62,6 +65,50 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final Document document0 = documentList.get(0);
 
         assertThat(document0.getFields().keySet(), hasSize(greaterThan(0)));
+    }
+
+    @Test
+    public void testQueryForTextWithIndexUuidAndQueryProfileUuid() throws HodErrorException {
+        final ResourceName queryProfileName = new ResourceName(getEndpoint().getDomainName(), UUID.randomUUID().toString());
+
+        final QueryProfileService queryProfileService = new QueryProfileServiceImpl(getConfig());
+
+        queryProfileService.createQueryProfile(
+                getTokenProxy(),
+                queryProfileName.getName(),
+                QUERY_MANIPULATION_INDEX_NAME,
+                new QueryProfileRequestBuilder()
+        );
+
+        try {
+            final ListResourcesRequestBuilder listResourcesRequestBuilder = new ListResourcesRequestBuilder()
+                    .setTypes(new HashSet<>(Arrays.asList(ResourceType.TEXT_INDEX, ResourceType.QUERY_PROFILE)));
+
+            final List<ResourceDetails> resources = new ResourcesServiceImpl(getConfig()).list(getTokenProxy(), listResourcesRequestBuilder);
+
+            final ResourceUuid wikiEngUuid = resources.stream()
+                    .filter(resourceDetails -> ResourceName.WIKI_ENG.equals(resourceDetails.getResource().getResourceName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Could not determine UUID for wiki_eng"))
+                    .getResource().getResourceUuid();
+
+            final ResourceUuid queryProfileUuid = resources.stream()
+                    .filter(resourceDetails -> queryProfileName.equals(resourceDetails.getResource().getResourceName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Could not determine UUID for query profile"))
+                    .getResource().getResourceUuid();
+
+            final QueryRequestBuilder params = new QueryRequestBuilder()
+                    .setMaxPageResults(1)
+                    .setAbsoluteMaxResults(1)
+                    .setQueryProfile(queryProfileUuid)
+                    .addIndexes(wikiEngUuid);
+
+            final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
+            assertThat(documents.getDocuments().size(), is(greaterThan(0)));
+        } finally {
+            queryProfileService.deleteQueryProfile(getTokenProxy(), new ResourceName(getEndpoint().getDomainName(), queryProfileName.getName()));
+        }
     }
 
     @Test

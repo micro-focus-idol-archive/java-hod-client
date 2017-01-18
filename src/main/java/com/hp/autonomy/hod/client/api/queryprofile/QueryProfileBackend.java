@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.DELETE;
@@ -42,14 +42,14 @@ interface QueryProfileBackend {
     @GET(URL + V1)
     Response retrieveQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(PROFILE_VARIABLE) ResourceName queryProfile
+        @Path(PROFILE_VARIABLE) ResourceIdentifier queryProfile
     ) throws HodErrorException;
 
     @PUT(URL + V1)
     @Multipart
     Response updateQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(PROFILE_VARIABLE) ResourceName queryProfile,
+        @Path(PROFILE_VARIABLE) ResourceIdentifier queryProfile,
         @Part(INDEX_PART) String queryManipulationIndex,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
@@ -57,7 +57,7 @@ interface QueryProfileBackend {
     @DELETE(URL + V1)
     Response deleteQueryProfile(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(PROFILE_VARIABLE) ResourceName queryProfile
+        @Path(PROFILE_VARIABLE) ResourceIdentifier queryProfile
     ) throws HodErrorException;
 
 }

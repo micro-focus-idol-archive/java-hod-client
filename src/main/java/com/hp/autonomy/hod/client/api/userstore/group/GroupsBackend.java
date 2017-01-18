@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.DELETE;
@@ -31,13 +31,13 @@ interface GroupsBackend {
     @GET(BASE_PATH + V1)
     Response list(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore
     ) throws HodErrorException;
 
     @GET(BASE_PATH + "/{group}" + V1)
     Response getInfo(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("group") String group
     ) throws HodErrorException;
 
@@ -45,7 +45,7 @@ interface GroupsBackend {
     @Multipart
     Response create(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Part("group_name") String name,
         @PartMap Map<String, Object> hierarchyParameters
     ) throws HodErrorException;
@@ -53,7 +53,7 @@ interface GroupsBackend {
     @DELETE(BASE_PATH + "/{name}" + V1)
     Response delete(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("name") String name
     ) throws HodErrorException;
 
@@ -61,7 +61,7 @@ interface GroupsBackend {
     @Multipart
     Response assignUser(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("group") String group,
         @Part("user_uuid") String userUuid
     ) throws HodErrorException;
@@ -69,7 +69,7 @@ interface GroupsBackend {
     @DELETE(BASE_PATH + "/{group}/user/{user_uuid}" + V1)
     Response removeUser(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("group") String group,
         @Path("user_uuid") String userUuid
     ) throws HodErrorException;
@@ -78,7 +78,7 @@ interface GroupsBackend {
     @Multipart
     Response link(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Part("parent_group_name") String parent,
         @Part("child_group_name") String child
     ) throws HodErrorException;
@@ -86,7 +86,7 @@ interface GroupsBackend {
     @DELETE(BASE_PATH + "/{parent_group_name}/link" + V1)
     Response unlink(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceName userStore,
+        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
         @Path("parent_group_name") String parent,
         @Query("child_group_name") String child
     ) throws HodErrorException;

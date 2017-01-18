@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.Action;
@@ -36,7 +36,7 @@ interface DeleteFromTextIndexBackend {
     @DELETE(URL)
     Response deleteReferencesFromTextIndex(
         @Header("token") final AuthenticationToken<?, ?> token,
-        @Path("indexName") final ResourceName index,
+        @Path("indexName") final ResourceIdentifier index,
         @Query("index_reference") final List<String> references
     ) throws HodErrorException;
 
@@ -50,7 +50,7 @@ interface DeleteFromTextIndexBackend {
     @DELETE(URL + "?delete_all_documents=true")
     Response deleteAllDocumentsFromTextIndex(
         @Header("token") final AuthenticationToken<?, ?> token,
-        @Path("indexName") final ResourceName index
+        @Path("indexName") final ResourceIdentifier index
     ) throws HodErrorException;
 
     /**

@@ -5,20 +5,13 @@
 
 package com.hp.autonomy.hod.client.api.textindex;
 
-
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
-import com.hp.autonomy.hod.client.job.AbstractPollingService;
-import com.hp.autonomy.hod.client.job.HodJobCallback;
-import com.hp.autonomy.hod.client.job.JobId;
-import com.hp.autonomy.hod.client.job.JobService;
-import com.hp.autonomy.hod.client.job.JobServiceImpl;
-import com.hp.autonomy.hod.client.job.JobStatus;
-import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
+import com.hp.autonomy.hod.client.job.*;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,7 +56,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
     @Override
     public void deleteTextIndex(
-        final ResourceName index,
+        final ResourceIdentifier index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
         final DeleteTextIndexResponse response = requester.makeRequest(DeleteTextIndexResponse.class, getInitialBackendCaller(index));
@@ -76,7 +69,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
     @Override
     public void deleteTextIndex(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceName index,
+        final ResourceIdentifier index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
         final DeleteTextIndexResponse response = requester.makeRequest(tokenProxy, DeleteTextIndexResponse.class, getInitialBackendCaller(index));
@@ -86,11 +79,11 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceName index) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceIdentifier index) {
         return authenticationToken -> deleteTextIndexBackend.initialDeleteTextIndex(authenticationToken, index);
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeletingBackendCaller(final ResourceName index, final DeleteTextIndexResponse response) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeletingBackendCaller(final ResourceIdentifier index, final DeleteTextIndexResponse response) {
         return authenticationToken -> deleteTextIndexBackend.deleteTextIndex(authenticationToken, index, response.getConfirm());
     }
 

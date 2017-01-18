@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -61,7 +61,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
 
     @Override
     public void deleteReferencesFromTextIndex(
-        final ResourceName index,
+        final ResourceIdentifier index,
         final List<String> references,
         final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
@@ -73,7 +73,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     @Override
     public void deleteReferencesFromTextIndex(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceName index,
+        final ResourceIdentifier index,
         final List<String> references,
         final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
@@ -84,7 +84,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
 
     @Override
     public void deleteAllDocumentsFromTextIndex(
-        final ResourceName index,
+        final ResourceIdentifier index,
         final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
@@ -95,7 +95,7 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     @Override
     public void deleteAllDocumentsFromTextIndex(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceName index,
+        final ResourceIdentifier index,
         final HodJobCallback<DeleteFromTextIndexResponse> callback
     ) throws HodErrorException {
         final JobId jobId = requester.makeRequest(JobId.class, getDeleteAllBackendCaller(index));
@@ -103,11 +103,11 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteReferencesBackendCaller(final ResourceName index, final List<String> references) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteReferencesBackendCaller(final ResourceIdentifier index, final List<String> references) {
         return authenticationToken -> deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteAllBackendCaller(final ResourceName index) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteAllBackendCaller(final ResourceIdentifier index) {
         return authenticationToken -> deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
     }
 

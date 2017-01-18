@@ -7,7 +7,8 @@ package com.hp.autonomy.hod.client.api.textindex.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodError;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.Action;
@@ -48,7 +49,7 @@ interface AddToTextIndexBackend {
     Response addJsonToTextIndex(
         @Header("token") AuthenticationToken<?, ?> token,
         @Part("json") Documents<?> documents,
-        @Path("indexName") ResourceName indexName,
+        @Path("indexName") ResourceIdentifier indexName,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -66,7 +67,7 @@ interface AddToTextIndexBackend {
     Response addFileToTextIndex(
         @Header("token") AuthenticationToken<?, ?> token,
         @Part("file") TypedOutput file,
-        @Path("indexName") ResourceName index,
+        @Path("indexName") ResourceIdentifier index,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -84,7 +85,7 @@ interface AddToTextIndexBackend {
     Response addReferenceToTextIndex(
         @Header("token") AuthenticationToken<?, ?> token,
         @Part("reference") String reference,
-        @Path("indexName") ResourceName index,
+        @Path("indexName") ResourceIdentifier index,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -102,7 +103,7 @@ interface AddToTextIndexBackend {
     Response addUrlToTextIndex(
         @Header("token") AuthenticationToken<?, ?> token,
         @Part("url") String url,
-        @Path("indexName") ResourceName index,
+        @Path("indexName") ResourceIdentifier index,
         @PartMap Map<String, Object> params
     ) throws HodErrorException;
 

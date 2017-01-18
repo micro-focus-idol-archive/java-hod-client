@@ -8,7 +8,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.content;
 import com.fasterxml.jackson.databind.JavaType;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
@@ -54,16 +54,16 @@ public class GetContentServiceImpl<T extends Serializable> implements GetContent
     }
     
     @Override
-    public QueryResults<T> getContent(final List<String> indexReference, final ResourceName index, final GetContentRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> getContent(final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(returnType, getBackendCaller(indexReference, index, params));
     }
 
     @Override
-    public QueryResults<T> getContent(final TokenProxy<?, TokenType.Simple> tokenProxy, final List<String> indexReference, final ResourceName index, final GetContentRequestBuilder params) throws HodErrorException {
+    public QueryResults<T> getContent(final TokenProxy<?, TokenType.Simple> tokenProxy, final List<String> indexReference, final ResourceIdentifier index, final GetContentRequestBuilder params) throws HodErrorException {
         return requester.unsafeMakeRequest(tokenProxy, returnType, getBackendCaller(indexReference, index, params));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final List<String> indexReference, final ResourceName indexes, final GetContentRequestBuilder params) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final List<String> indexReference, final ResourceIdentifier indexes, final GetContentRequestBuilder params) {
         return authenticationToken -> getContentBackend.getContent(authenticationToken, indexReference, indexes, params.build());
     }
 }

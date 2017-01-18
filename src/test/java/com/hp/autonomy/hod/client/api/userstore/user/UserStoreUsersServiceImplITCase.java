@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.hp.autonomy.hod.client.AbstractDeveloperHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.Data;
@@ -21,16 +21,12 @@ import org.junit.runners.Parameterized;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
@@ -96,6 +92,26 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
         }
 
         assertTrue("User associated with test developer not found", foundDeveloper);
+    }
+
+    @Test
+    public void listUsersWithUserStoreUuid() throws HodErrorException {
+        final ResourceName userStoreName = getUserStore();
+        final ResourcesService resourcesService = new ResourcesServiceImpl(getConfig());
+
+        final ListResourcesRequestBuilder listResourcesRequestBuilder = new ListResourcesRequestBuilder()
+                .setDomains(Collections.singleton(userStoreName.getDomain()))
+                .setTypes(Collections.singleton(ResourceType.USER_STORE));
+
+        final ResourceUuid userStoreUuid = resourcesService.list(getTokenProxy(), listResourcesRequestBuilder).stream()
+            .filter(resourceDetails -> userStoreName.equals(resourceDetails.getResource().getResourceName()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Failed to retrieve user store UUID"))
+            .getResource().getResourceUuid();
+
+        final List<User> uuidUsers = service.list(getTokenProxy(), userStoreUuid, false, false);
+        final List<User> nameUsers = service.list(getTokenProxy(), userStoreName, false, false);
+        assertThat(uuidUsers, hasSize(nameUsers.size()));
     }
 
     @Test

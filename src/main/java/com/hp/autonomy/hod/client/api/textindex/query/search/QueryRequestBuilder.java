@@ -5,17 +5,14 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Helper class for building up optional parameters for the QueryTextIndex API and FindSimilar API. The default value
@@ -128,7 +125,7 @@ public class QueryRequestBuilder {
     /**
      * @param queryProfile Value for the query_profile parameter
      */
-    private ResourceName queryProfile;
+    private ResourceIdentifier queryProfile;
 
     /**
      * @param promotions Value for the promotion parameter
@@ -142,7 +139,7 @@ public class QueryRequestBuilder {
 
     private String securityInfo;
 
-    private Collection<ResourceName> indexes = new ArrayList<>();
+    private Collection<ResourceIdentifier> indexes = new ArrayList<>();
 
     /**
      * Adds indexes to the indexes parameter
@@ -151,7 +148,7 @@ public class QueryRequestBuilder {
      * @param indexes The remaining indexes
      * @return this
      */
-    public QueryRequestBuilder addIndexes(final ResourceName index0, final ResourceName... indexes) {
+    public QueryRequestBuilder addIndexes(final ResourceIdentifier index0, final ResourceIdentifier... indexes) {
         this.indexes.add(index0);
         this.indexes.addAll(Arrays.asList(indexes));
 
@@ -164,9 +161,8 @@ public class QueryRequestBuilder {
      * @param indexes The indexes to query
      * @return this
      */
-    public QueryRequestBuilder setIndexes(final Collection<ResourceName> indexes) {
-        this.indexes = indexes;
-
+    public QueryRequestBuilder setIndexes(final Collection<ResourceIdentifier> indexes) {
+        this.indexes = new LinkedList<>(indexes);
         return this;
     }
 
@@ -198,7 +194,7 @@ public class QueryRequestBuilder {
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
 
-        for (final ResourceName index : indexes) {
+        for (final ResourceIdentifier index : indexes) {
             map.put("indexes", index);
         }
 
