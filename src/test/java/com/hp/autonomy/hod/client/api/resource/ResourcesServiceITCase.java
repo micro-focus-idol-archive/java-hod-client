@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isEmpty;
 import static com.hp.autonomy.hod.client.api.resource.ResourcesServiceITCase.ResourceMatcher.hasResourceWithIdentifier;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
@@ -80,7 +80,7 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
                 .filter(resource -> !resource.getResource().getDomain().equals(privateDomain))
                 .findFirst();
 
-        assertFalse("A resource with the wrong domain was returned", maybeResource.isPresent());
+        assertThat("A resource with the wrong domain was returned", maybeResource, isEmpty());
     }
 
     static class ResourceMatcher extends BaseMatcher<List<Resource>> {

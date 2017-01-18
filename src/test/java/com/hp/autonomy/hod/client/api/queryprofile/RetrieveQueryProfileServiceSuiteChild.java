@@ -16,6 +16,8 @@ import org.junit.runners.Parameterized;
 
 import java.util.*;
 
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isEmpty;
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isPresent;
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -54,7 +56,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
                 .filter(resource -> profile.equals(resource.getResource().getIdentifier()))
                 .findFirst();
 
-        assertTrue("List resources did not return created profile", maybeResource.isPresent());
+        assertThat("List resources did not return created profile", maybeResource, isPresent());
     }
 
     @Test
@@ -117,7 +119,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
                 .filter(resource -> profileIdentifier.equals(resource.getResource().getIdentifier()))
                 .findFirst();
 
-        assertFalse("Deleted profile returned from list resources: " + profileIdentifier, maybeResource.isPresent());
+        assertThat("Deleted profile returned from list resources: " + profileIdentifier, maybeResource, isEmpty());
     }
 
     @Test
