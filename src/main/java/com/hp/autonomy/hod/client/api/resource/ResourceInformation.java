@@ -38,8 +38,8 @@ public class ResourceInformation implements Serializable {
      */
     private final String domain;
 
-    public ResourceIdentifier getIdentifier() {
-        return new ResourceIdentifier(domain, name);
+    public ResourceName getIdentifier() {
+        return new ResourceName(domain, name);
     }
 
     @JsonPOJOBuilder(withPrefix = "")

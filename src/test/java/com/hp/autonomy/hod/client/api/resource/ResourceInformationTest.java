@@ -29,7 +29,7 @@ public class ResourceInformationTest {
     public void buildsResourceIdentifier() {
         final ResourceInformation information = new ResourceInformation(UUID.randomUUID(), "resource_name", "domain_name");
 
-        final ResourceIdentifier identifier = information.getIdentifier();
+        final ResourceName identifier = information.getIdentifier();
         assertThat(identifier.getDomain(), is("domain_name"));
         assertThat(identifier.getName(), is("resource_name"));
     }

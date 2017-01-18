@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex;
 
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.job.HodJobCallback;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -28,7 +28,7 @@ public interface DeleteTextIndexService {
      * with the token proxy has expired
      */
     void deleteTextIndex(
-        ResourceIdentifier index,
+        ResourceName index,
         HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException;
 
@@ -44,7 +44,7 @@ public interface DeleteTextIndexService {
      */
     void deleteTextIndex(
         TokenProxy<?, TokenType.Simple> tokenProxy,
-        ResourceIdentifier index,
+        ResourceName index,
         HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException;
 

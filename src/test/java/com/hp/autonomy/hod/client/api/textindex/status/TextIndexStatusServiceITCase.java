@@ -2,7 +2,7 @@ package com.hp.autonomy.hod.client.api.textindex.status;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.api.textindex.IndexFlavor;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -49,7 +49,7 @@ public class TextIndexStatusServiceITCase extends AbstractHodClientIntegrationTe
 
     @Test
     public void getInvalidIndexStatus() {
-        final ResourceIdentifier invalidIndex = new ResourceIdentifier(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        final ResourceName invalidIndex = new ResourceName(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         try {
             service.getIndexStatus(getTokenProxy(), invalidIndex);

@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.search;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
                 .setSummary(Summary.concept)
                 .setPrint(Print.all)
                 .setTotalResults(true)
-                .addIndexes(ResourceIdentifier.WIKI_ENG, ResourceIdentifier.WIKI_GER);
+                .addIndexes(ResourceName.WIKI_ENG, ResourceName.WIKI_GER);
 
         final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "*", params);
 
@@ -70,7 +70,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
+                .addIndexes(ResourceName.WIKI_GER, ResourceName.WIKI_ENG)
                 .setSort(Sort.date);
 
         final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), file, params);
@@ -86,7 +86,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
         final QueryRequestBuilder params = new QueryRequestBuilder()
                 .setMaxPageResults(10)
                 .setAbsoluteMaxResults(10)
-                .addIndexes(ResourceIdentifier.WIKI_GER, ResourceIdentifier.WIKI_ENG)
+                .addIndexes(ResourceName.WIKI_GER, ResourceName.WIKI_ENG)
                 .setSort(Sort.date);
 
         final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithFile(getTokenProxy(), stream, params);
@@ -99,7 +99,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
     public void testSpellCheckSuggestion() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
             .setCheckSpelling(CheckSpelling.suggest)
-            .addIndexes(ResourceIdentifier.WIKI_ENG);
+            .addIndexes(ResourceName.WIKI_ENG);
 
         final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
 
@@ -110,7 +110,7 @@ public class QueryTextIndexServiceITCase extends AbstractHodClientIntegrationTes
     public void testSpellCheckAutocomplete() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
             .setCheckSpelling(CheckSpelling.autocorrect)
-            .addIndexes(ResourceIdentifier.WIKI_ENG);
+            .addIndexes(ResourceName.WIKI_ENG);
 
         final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "ludwig van beethofen", params);
 

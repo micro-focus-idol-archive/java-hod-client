@@ -18,29 +18,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Represents a domain-qualified resource identifier; for example the identifier for a text index or user store.
+ * Represents a domain-qualified resource name; for example the identifier for a text index or user store.
  * <p>
  * This class implements {@link Serializable} to facilitate easier caching
  */
 @Data
 @DoNotConvert
-public class ResourceIdentifier implements Serializable {
-
+public class ResourceName implements Serializable {
     public static final String PUBLIC_INDEXES_DOMAIN = "PUBLIC_INDEXES";
 
-    public static final ResourceIdentifier WIKI_CHI = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_chi");
-    public static final ResourceIdentifier WIKI_ENG = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_eng");
-    public static final ResourceIdentifier WIKI_FRA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_fra");
-    public static final ResourceIdentifier WIKI_GER = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_ger");
-    public static final ResourceIdentifier WIKI_ITA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_ita");
-    public static final ResourceIdentifier WIKI_SPA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "wiki_spa");
-    public static final ResourceIdentifier WORLD_FACTBOOK = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "world_factbook");
-    public static final ResourceIdentifier NEWS_ENG = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_eng");
-    public static final ResourceIdentifier NEWS_FRA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_fra");
-    public static final ResourceIdentifier NEWS_GER = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_ger");
-    public static final ResourceIdentifier NEWS_ITA = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "news_ita");
-    public static final ResourceIdentifier ARXIV = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "arxiv");
-    public static final ResourceIdentifier PATENTS = new ResourceIdentifier(PUBLIC_INDEXES_DOMAIN, "patents");
+    public static final ResourceName WIKI_CHI = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_chi");
+    public static final ResourceName WIKI_ENG = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_eng");
+    public static final ResourceName WIKI_FRA = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_fra");
+    public static final ResourceName WIKI_GER = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_ger");
+    public static final ResourceName WIKI_ITA = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_ita");
+    public static final ResourceName WIKI_SPA = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_spa");
+    public static final ResourceName WORLD_FACTBOOK = new ResourceName(PUBLIC_INDEXES_DOMAIN, "world_factbook");
+    public static final ResourceName NEWS_ENG = new ResourceName(PUBLIC_INDEXES_DOMAIN, "news_eng");
+    public static final ResourceName NEWS_FRA = new ResourceName(PUBLIC_INDEXES_DOMAIN, "news_fra");
+    public static final ResourceName NEWS_GER = new ResourceName(PUBLIC_INDEXES_DOMAIN, "news_ger");
+    public static final ResourceName NEWS_ITA = new ResourceName(PUBLIC_INDEXES_DOMAIN, "news_ita");
+    public static final ResourceName ARXIV = new ResourceName(PUBLIC_INDEXES_DOMAIN, "arxiv");
+    public static final ResourceName PATENTS = new ResourceName(PUBLIC_INDEXES_DOMAIN, "patents");
 
     private static final String SEPARATOR = ":";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile("([\\\\:])");
@@ -68,11 +67,11 @@ public class ResourceIdentifier implements Serializable {
     private final String name;
 
     /**
-     * Construct a ResourceIdentifier from a colon-separated and escaped domain and name.
+     * Construct a ResourceName from a colon-separated and escaped domain and name.
      *
      * @param identifier Colon-separated domain and name
      */
-    public ResourceIdentifier(final String identifier) {
+    public ResourceName(final String identifier) {
         if (StringUtils.isEmpty(identifier)) {
             throw new IllegalArgumentException("Identifier must not be empty");
         }
@@ -89,13 +88,13 @@ public class ResourceIdentifier implements Serializable {
     }
 
     /**
-     * Construct a ResourceIdentifier from a domain and a name.
+     * Construct a ResourceName from a domain and a name.
      *
      * @param domain The resource domain
      * @param name   The resource name
      */
     @JsonCreator
-    public ResourceIdentifier(
+    public ResourceName(
             @JsonProperty("domain") final String domain,
             @JsonProperty("name") final String name
     ) {
@@ -108,7 +107,7 @@ public class ResourceIdentifier implements Serializable {
     /**
      * Escapes the domain and name and joins them with a colon.
      *
-     * @return The HOD resource identifier string
+     * @return The HOD resource name string
      */
     @Override
     public String toString() {
@@ -116,7 +115,7 @@ public class ResourceIdentifier implements Serializable {
     }
 
     // HOD resource names (text index names, domain names etc) must have : escaped to \: and \ escaped to \\ when
-    // combined into a resource identifier.
+    // combined into a resource name.
     private static String escapeComponent(final String input) {
         return ESCAPE_PATTERN.matcher(input).replaceAll("\\\\$1");
     }

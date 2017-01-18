@@ -6,16 +6,16 @@
 package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import lombok.Data;
 
 @Data
 public class CreateGroupResponse {
-    private final ResourceIdentifier userStore;
+    private final ResourceName userStore;
     private final String groupName;
 
     public CreateGroupResponse(
-        @JsonProperty("user_store") final ResourceIdentifier userStore,
+        @JsonProperty("user_store") final ResourceName userStore,
         @JsonProperty("group") final String groupName
     ) {
         this.userStore = userStore;

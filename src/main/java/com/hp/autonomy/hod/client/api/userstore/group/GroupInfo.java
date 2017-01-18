@@ -8,7 +8,7 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @JsonDeserialize(builder = GroupInfo.Builder.class)
 public class GroupInfo {
     private final String name;
-    private final ResourceIdentifier userStore;
+    private final ResourceName userStore;
     private final List<String> parents;
     private final List<String> children;
     private final List<UUID> users;
@@ -49,7 +49,7 @@ public class GroupInfo {
         private String name;
 
         @JsonProperty("user_store")
-        private ResourceIdentifier userStore;
+        private ResourceName userStore;
 
         private List<String> parents;
         private List<String> children;

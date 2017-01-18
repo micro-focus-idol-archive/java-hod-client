@@ -1,7 +1,7 @@
 package com.hp.autonomy.hod.client.api.textindex.status;
 
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -14,7 +14,7 @@ public interface TextIndexStatusService {
      * @throws NullPointerException If a TokenProxyService has not been defined
      * @throws HodErrorException If HOD returns an error
      */
-    TextIndexStatus getIndexStatus(ResourceIdentifier index) throws HodErrorException;
+    TextIndexStatus getIndexStatus(ResourceName index) throws HodErrorException;
 
     /**
      * Get status information for the given text index, using the given token proxy for authentication.
@@ -23,6 +23,6 @@ public interface TextIndexStatusService {
      * @return Status information for the text index
      * @throws HodErrorException If HOD returns an error
      */
-    TextIndexStatus getIndexStatus(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceIdentifier index) throws HodErrorException;
+    TextIndexStatus getIndexStatus(TokenProxy<?, TokenType.Simple> tokenProxy, ResourceName index) throws HodErrorException;
 
 }

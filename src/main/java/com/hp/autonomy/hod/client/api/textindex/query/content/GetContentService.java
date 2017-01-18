@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -34,7 +34,7 @@ public interface GetContentService<T extends Serializable> {
      */
     QueryResults<T> getContent(
         List<String> indexReference,
-        ResourceIdentifier index,
+        ResourceName index,
         GetContentRequestBuilder params
     ) throws HodErrorException;
 
@@ -51,7 +51,7 @@ public interface GetContentService<T extends Serializable> {
     QueryResults<T> getContent(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         List<String> indexReference,
-        ResourceIdentifier index,
+        ResourceName index,
         GetContentRequestBuilder params
     ) throws HodErrorException;
 

@@ -16,7 +16,7 @@ import java.io.ObjectOutputStream;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ResourceIdentifierTest {
+public class ResourceNameTest {
     @Test
     public void toStringWithNoSpecialCharacters() {
         testToString("animals", "cat", "animals:cat");
@@ -149,53 +149,53 @@ public class ResourceIdentifierTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void constructionWithNullDomainThrowsIllegalArgumentException() {
-        new ResourceIdentifier(null, "foo");
+        new ResourceName(null, "foo");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructionWithNullNameThrowsIllegalArgumentException() {
-        new ResourceIdentifier("foo", null);
+        new ResourceName("foo", null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructWithNullIdentifierThrowsIllegalArgumentException() {
-        new ResourceIdentifier(null);
+        new ResourceName(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructWithEmptyIdentifierThrowsIllegalArgumentException() {
-        new ResourceIdentifier("");
+        new ResourceName("");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructWithInvalidIdentifierThrowsIllegalArgumentException() {
         // Missing name, so invalid identifier
-        new ResourceIdentifier("domain:");
+        new ResourceName("domain:");
     }
 
     @Test
     public void testSerialization() throws IOException, ClassNotFoundException {
-        final ResourceIdentifier resourceIdentifier = new ResourceIdentifier("domain", "name");
+        final ResourceName resourceName = new ResourceName("domain", "name");
 
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-        objectOutputStream.writeObject(resourceIdentifier);
+        objectOutputStream.writeObject(resourceName);
 
         final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
-        final ResourceIdentifier resourceIdentifierOut = (ResourceIdentifier) objectInputStream.readObject();
+        final ResourceName resourceNameOut = (ResourceName) objectInputStream.readObject();
 
-        assertThat(resourceIdentifierOut.getDomain(), is("domain"));
-        assertThat(resourceIdentifierOut.getName(), is("name"));
+        assertThat(resourceNameOut.getDomain(), is("domain"));
+        assertThat(resourceNameOut.getName(), is("name"));
     }
 
     private void testFromString(final String identifier, final String expectedDomain, final String expectedName) {
-        final ResourceIdentifier resourceIdentifier = new ResourceIdentifier(identifier);
-        assertThat(resourceIdentifier.getDomain(), is(expectedDomain));
-        assertThat(resourceIdentifier.getName(), is(expectedName));
+        final ResourceName resourceName = new ResourceName(identifier);
+        assertThat(resourceName.getDomain(), is(expectedDomain));
+        assertThat(resourceName.getName(), is(expectedName));
     }
 
     private void testToString(final String domain, final String name, final String expected) {
-        final ResourceIdentifier identifier = new ResourceIdentifier(domain, name);
+        final ResourceName identifier = new ResourceName(domain, name);
         assertThat(identifier.toString(), is(expected));
     }
 }

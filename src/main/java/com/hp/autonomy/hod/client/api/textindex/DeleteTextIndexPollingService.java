@@ -6,10 +6,9 @@
 package com.hp.autonomy.hod.client.api.textindex;
 
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -22,7 +21,6 @@ import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import lombok.extern.slf4j.Slf4j;
-import retrofit.client.Response;
 
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -65,7 +63,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
 
     @Override
     public void deleteTextIndex(
-        final ResourceIdentifier index,
+        final ResourceName index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
         final DeleteTextIndexResponse response = requester.makeRequest(DeleteTextIndexResponse.class, getInitialBackendCaller(index));
@@ -78,7 +76,7 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
     @Override
     public void deleteTextIndex(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceIdentifier index,
+        final ResourceName index,
         final HodJobCallback<DeleteTextIndexResponse> callback
     ) throws HodErrorException {
         final DeleteTextIndexResponse response = requester.makeRequest(tokenProxy, DeleteTextIndexResponse.class, getInitialBackendCaller(index));
@@ -88,11 +86,11 @@ public class DeleteTextIndexPollingService extends AbstractPollingService implem
         getExecutorService().submit(new PollingJobStatusRunnable<>(tokenProxy, getTimeout(), jobId, callback, getExecutorService(), jobService));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceIdentifier index) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getInitialBackendCaller(final ResourceName index) {
         return authenticationToken -> deleteTextIndexBackend.initialDeleteTextIndex(authenticationToken, index);
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeletingBackendCaller(final ResourceIdentifier index, final DeleteTextIndexResponse response) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeletingBackendCaller(final ResourceName index, final DeleteTextIndexResponse response) {
         return authenticationToken -> deleteTextIndexBackend.deleteTextIndex(authenticationToken, index, response.getConfirm());
     }
 

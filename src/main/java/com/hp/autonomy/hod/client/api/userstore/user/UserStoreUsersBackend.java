@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.DELETE;
@@ -39,7 +39,7 @@ interface UserStoreUsersBackend {
     @GET(BASE_PATH + V1)
     Response list(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Query("include_metadata") boolean includeMetadata,
         @Query("include_accounts") boolean includeAccounts,
         @Query("include_groups") boolean includeGroups
@@ -49,7 +49,7 @@ interface UserStoreUsersBackend {
     @Multipart
     Response create(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Part("user_email") String email,
         @Part("on_success") String onSuccess,
         @Part("on_error") String onError,
@@ -59,7 +59,7 @@ interface UserStoreUsersBackend {
     @DELETE(USER_BASE_PATH + V1)
     Response delete(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Path(USER_UUID_VARIABLE) UUID userUuid
     ) throws HodErrorException;
 
@@ -67,7 +67,7 @@ interface UserStoreUsersBackend {
     @Multipart
     Response resetAuthentication(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Path(USER_UUID_VARIABLE) UUID userUuid,
         @Part("on_success") String onSuccess,
         @Part("on_error") String onError
@@ -76,14 +76,14 @@ interface UserStoreUsersBackend {
     @GET(USER_BASE_PATH + "/group" + V1)
     Response listUserGroups(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Path(USER_UUID_VARIABLE) UUID userUuid
     ) throws HodErrorException;
 
     @GET(METADATA_BASE_PATH + V1)
     Response getUserMetadata(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Path(USER_UUID_VARIABLE) UUID userUuid
     ) throws HodErrorException;
 
@@ -91,7 +91,7 @@ interface UserStoreUsersBackend {
     @Multipart
     Response addUserMetadata(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Path(USER_UUID_VARIABLE) UUID userUuid,
         @Part("metadata") List<Metadata<?>> metadata
     ) throws HodErrorException;
@@ -99,7 +99,7 @@ interface UserStoreUsersBackend {
     @DELETE(METADATA_BASE_PATH + "/{metadata_key}" + V1)
     Response removeUserMetadata(
         @Header(TOKEN_HEADER) AuthenticationToken<?, ?> token,
-        @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+        @Path(USER_STORE_VARIABLE) ResourceName userStore,
         @Path(USER_UUID_VARIABLE) UUID userUuid,
         @Path("metadata_key") String metadataKey
     ) throws HodErrorException;

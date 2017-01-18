@@ -9,8 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.hp.autonomy.hod.client.AbstractDeveloperHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.Data;
@@ -256,7 +255,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
 
         testErrorCode(storeNotFoundErrorCodes, () -> service.resetAuthentication(
                 getTokenProxy(),
-                new ResourceIdentifier("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
+                new ResourceName("dsakjhdsakjdsalkj", "dsakjhdsajkdsalkj"),
                 UUID.randomUUID(),
                 testUrl,
                 testUrl
@@ -276,7 +275,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     public void listUserGroupsThrowsWithNonExistentUserStore() {
         testErrorCode(storeNotFoundErrorCodes, () -> service.listUserGroups(
                 getTokenProxy(),
-                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstorereally"),
+                new ResourceName(getEndpoint().getDomainName(), "notarealuserstorereally"),
                 UUID.randomUUID()
         ));
     }
@@ -294,7 +293,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     public void getUserMetadataThrowsWithNonExistentUserStore() {
         testErrorCode(storeNotFoundErrorCodes, () -> service.getUserMetadata(
                 getTokenProxy(),
-                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
+                new ResourceName(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
                 UUID.randomUUID()
         ));
     }
@@ -313,7 +312,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     public void addUserMetadataThrowsWithNonExistentUserStore() {
         testErrorCode(storeNotFoundErrorCodes, () -> service.addUserMetadata(
                 getTokenProxy(),
-                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
+                new ResourceName(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
                 UUID.randomUUID(),
                 new HashMap<>()
         ));
@@ -333,7 +332,7 @@ public class UserStoreUsersServiceImplITCase extends AbstractDeveloperHodClientI
     public void removeUserMetadataThrowsWithNonExistentUserStore() {
         testErrorCode(storeNotFoundErrorCodes, () -> service.removeUserMetadata(
                 getTokenProxy(),
-                new ResourceIdentifier(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
+                new ResourceName(getEndpoint().getDomainName(), "notarealuserstoreIhope"),
                 UUID.randomUUID(),
                 "metakey"
         ));

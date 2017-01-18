@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -59,7 +59,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfile retrieveQueryProfile(
-        ResourceIdentifier queryProfile
+        ResourceName queryProfile
     ) throws HodErrorException;
 
     /**
@@ -73,7 +73,7 @@ public interface QueryProfileService {
      */
     QueryProfile retrieveQueryProfile(
         TokenProxy<?, TokenType.Simple> tokenProxy,
-        ResourceIdentifier queryProfile
+        ResourceName queryProfile
     ) throws HodErrorException;
 
     /**
@@ -87,7 +87,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfileStatusResponse updateQueryProfile(
-        ResourceIdentifier queryProfile,
+        ResourceName queryProfile,
         String queryManipulationIndex,
         QueryProfileRequestBuilder params
     ) throws HodErrorException;
@@ -105,7 +105,7 @@ public interface QueryProfileService {
      */
     QueryProfileStatusResponse updateQueryProfile(
         TokenProxy<?, TokenType.Simple> tokenProxy,
-        ResourceIdentifier queryProfile,
+        ResourceName queryProfile,
         String queryManipulationIndex,
         QueryProfileRequestBuilder params
     ) throws HodErrorException;
@@ -120,7 +120,7 @@ public interface QueryProfileService {
      * with the token proxy has expired
      */
     QueryProfileStatusResponse deleteQueryProfile(
-        ResourceIdentifier queryProfile
+        ResourceName queryProfile
     ) throws HodErrorException;
 
     /**
@@ -133,7 +133,7 @@ public interface QueryProfileService {
      */
     QueryProfileStatusResponse deleteQueryProfile(
         TokenProxy<?, TokenType.Simple> tokenProxy,
-        ResourceIdentifier queryProfile
+        ResourceName queryProfile
     ) throws HodErrorException;
 
 }

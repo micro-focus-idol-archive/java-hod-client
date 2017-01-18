@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import lombok.Getter;
@@ -104,7 +104,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
             try {
                 deleteTextIndexService.deleteTextIndex(
                         getTokenProxy(),
-                        new ResourceIdentifier(getEndpoint().getDomainName(), testIndexName),
+                        new ResourceName(getEndpoint().getDomainName(), testIndexName),
                         callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document. NOTE: this may result in the text index still being created, preventing this test from running successfully in the future", e);

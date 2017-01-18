@@ -10,7 +10,7 @@ import com.hp.autonomy.hod.client.api.authentication.AuthenticationServiceImpl;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
@@ -76,12 +76,12 @@ public abstract class AbstractHodClientIntegrationTest {
         return tokenProxy;
     }
 
-    protected ResourceIdentifier getPrivateIndex() {
-        return new ResourceIdentifier(endpoint.getDomainName(), "java-iod-client-integration-tests");
+    protected ResourceName getPrivateIndex() {
+        return new ResourceName(endpoint.getDomainName(), "java-iod-client-integration-tests");
     }
 
-    protected ResourceIdentifier getUserStore() {
-        return new ResourceIdentifier(endpoint.getDomainName(), endpoint.getUserStoreName());
+    protected ResourceName getUserStore() {
+        return new ResourceName(endpoint.getDomainName(), endpoint.getUserStoreName());
     }
 
     protected Endpoint getEndpoint() {

@@ -5,15 +5,13 @@
 
 package com.hp.autonomy.hod.client.api.queryprofile;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import retrofit.client.Response;
 
 /**
  * Default implementation of QueryProfileService
@@ -52,18 +50,18 @@ public class QueryProfileServiceImpl implements QueryProfileService {
     }
 
     @Override
-    public QueryProfile retrieveQueryProfile(final ResourceIdentifier queryProfile) throws HodErrorException {
+    public QueryProfile retrieveQueryProfile(final ResourceName queryProfile) throws HodErrorException {
         return requester.makeRequest(QueryProfile.class, getRetrieveBackendCaller(queryProfile));
     }
 
     @Override
-    public QueryProfile retrieveQueryProfile(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier queryProfile) throws HodErrorException {
+    public QueryProfile retrieveQueryProfile(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceName queryProfile) throws HodErrorException {
         return requester.makeRequest(tokenProxy, QueryProfile.class, getRetrieveBackendCaller(queryProfile));
     }
 
     @Override
     public QueryProfileStatusResponse updateQueryProfile(
-        final ResourceIdentifier queryProfile,
+        final ResourceName queryProfile,
         final String queryManipulationIndex,
         final QueryProfileRequestBuilder params
     ) throws HodErrorException {
@@ -73,7 +71,7 @@ public class QueryProfileServiceImpl implements QueryProfileService {
     @Override
     public QueryProfileStatusResponse updateQueryProfile(
         final TokenProxy<?, TokenType.Simple> tokenProxy,
-        final ResourceIdentifier queryProfile,
+        final ResourceName queryProfile,
         final String queryManipulationIndex,
         final QueryProfileRequestBuilder params
     ) throws HodErrorException {
@@ -81,12 +79,12 @@ public class QueryProfileServiceImpl implements QueryProfileService {
     }
 
     @Override
-    public QueryProfileStatusResponse deleteQueryProfile(final ResourceIdentifier queryProfile) throws HodErrorException {
+    public QueryProfileStatusResponse deleteQueryProfile(final ResourceName queryProfile) throws HodErrorException {
         return requester.makeRequest(QueryProfileStatusResponse.class, getDeleteBackendCaller(queryProfile));
     }
 
     @Override
-    public QueryProfileStatusResponse deleteQueryProfile(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier queryProfile) throws HodErrorException {
+    public QueryProfileStatusResponse deleteQueryProfile(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceName queryProfile) throws HodErrorException {
         return requester.makeRequest(tokenProxy, QueryProfileStatusResponse.class, getDeleteBackendCaller(queryProfile));
     }
 
@@ -98,19 +96,19 @@ public class QueryProfileServiceImpl implements QueryProfileService {
         return authenticationToken -> queryProfileBackend.createQueryProfile(authenticationToken, name, queryManipulationIndex, params == null ? null : params.build());
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveBackendCaller(final ResourceIdentifier queryProfile) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getRetrieveBackendCaller(final ResourceName queryProfile) {
         return authenticationToken -> queryProfileBackend.retrieveQueryProfile(authenticationToken, queryProfile);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUpdateBackendCaller(
-        final ResourceIdentifier queryProfile,
+        final ResourceName queryProfile,
         final String queryManipulationIndex,
         final QueryProfileRequestBuilder params
     ) {
         return authenticationToken -> queryProfileBackend.updateQueryProfile(authenticationToken, queryProfile, queryManipulationIndex, params == null ? null : params.build());
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteBackendCaller(final ResourceIdentifier queryProfile) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteBackendCaller(final ResourceName queryProfile) {
         return authenticationToken -> queryProfileBackend.deleteQueryProfile(authenticationToken, queryProfile);
     }
 

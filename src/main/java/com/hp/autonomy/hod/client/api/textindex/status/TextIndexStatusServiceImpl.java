@@ -2,7 +2,7 @@ package com.hp.autonomy.hod.client.api.textindex.status;
 
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -18,16 +18,16 @@ public class TextIndexStatusServiceImpl implements TextIndexStatusService {
     }
 
     @Override
-    public TextIndexStatus getIndexStatus(final ResourceIdentifier index) throws HodErrorException {
+    public TextIndexStatus getIndexStatus(final ResourceName index) throws HodErrorException {
         return requester.makeRequest(TextIndexStatus.class, backendCaller(index));
     }
 
     @Override
-    public TextIndexStatus getIndexStatus(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceIdentifier index) throws HodErrorException {
+    public TextIndexStatus getIndexStatus(final TokenProxy<?, TokenType.Simple> tokenProxy, final ResourceName index) throws HodErrorException {
         return requester.makeRequest(tokenProxy, TextIndexStatus.class, backendCaller(index));
     }
 
-    private Requester.BackendCaller<EntityType, TokenType.Simple> backendCaller(final ResourceIdentifier index) {
+    private Requester.BackendCaller<EntityType, TokenType.Simple> backendCaller(final ResourceName index) {
         return authenticationToken -> backend.getIndexStatus(authenticationToken, index);
     }
 }

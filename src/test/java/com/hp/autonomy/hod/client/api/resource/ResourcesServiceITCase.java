@@ -52,7 +52,7 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
         final List<Resource> resources = resourcesService.list(getTokenProxy(), parameters);
 
         final List<Resource> publicIndexes = resources.stream()
-                .filter(resource -> ResourceIdentifier.PUBLIC_INDEXES_DOMAIN.equals(resource.getResource().getDomain()))
+                .filter(resource -> ResourceName.PUBLIC_INDEXES_DOMAIN.equals(resource.getResource().getDomain()))
                 .collect(Collectors.toList());
 
         assertThat(publicIndexes, is(not(empty())));
@@ -62,7 +62,7 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
             assertThat(publicResource.getResource(), is(not(nullValue())));
         }
 
-        assertThat(resources, hasResourceWithIdentifier(ResourceIdentifier.WIKI_ENG));
+        assertThat(resources, hasResourceWithIdentifier(ResourceName.WIKI_ENG));
         assertThat(resources, hasResourceWithIdentifier(getPrivateIndex()));
     }
 
@@ -84,13 +84,13 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
     }
 
     static class ResourceMatcher extends BaseMatcher<List<Resource>> {
-        private final ResourceIdentifier identifier;
+        private final ResourceName identifier;
 
-        private ResourceMatcher(final ResourceIdentifier identifier) {
+        private ResourceMatcher(final ResourceName identifier) {
             this.identifier = identifier;
         }
 
-        static ResourceMatcher hasResourceWithIdentifier(final ResourceIdentifier identifier) {
+        static ResourceMatcher hasResourceWithIdentifier(final ResourceName identifier) {
             return new ResourceMatcher(identifier);
         }
 

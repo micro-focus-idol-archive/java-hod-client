@@ -7,8 +7,7 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 
 import com.hp.autonomy.hod.client.AbstractDeveloperHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.api.userstore.user.Account;
 import com.hp.autonomy.hod.client.api.userstore.user.User;
 import com.hp.autonomy.hod.client.api.userstore.user.UserGroups;
@@ -145,7 +144,7 @@ public class GroupsServiceImplITCase extends AbstractDeveloperHodClientIntegrati
         errorCodes.add(HodErrorCode.STORE_NOT_FOUND);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, () -> service.create(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), unique()), unique()));
+        testErrorCode(errorCodes, () -> service.create(getTokenProxy(), new ResourceName(getEndpoint().getDomainName(), unique()), unique()));
     }
 
     @Test

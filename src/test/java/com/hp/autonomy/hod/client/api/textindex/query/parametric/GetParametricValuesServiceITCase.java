@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.types.requests.idol.actions.tags.QueryTagCountInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
         final FieldNames fieldNames = getParametricValuesService.getParametricValues(
                 getTokenProxy(),
                 Arrays.asList("wikipedia_type", "person_profession"),
-                Collections.singletonList(ResourceIdentifier.WIKI_ENG),
+                Collections.singletonList(ResourceName.WIKI_ENG),
                 params
         );
 

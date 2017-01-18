@@ -1,7 +1,7 @@
 package com.hp.autonomy.hod.client.api.textindex.status;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
@@ -21,6 +21,6 @@ interface TextIndexStatusBackend {
     @GET(URL)
     Response getIndexStatus(
             @Header("token") AuthenticationToken<?, ?> token,
-            @Path("index_identifier") ResourceIdentifier indexIdentifier
+            @Path("index_identifier") ResourceName indexIdentifier
     ) throws HodErrorException;
 }

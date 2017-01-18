@@ -49,7 +49,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
     @Test
     public void createAndList() throws HodErrorException {
-        final ResourceIdentifier profile = trackedCreateProfile().getProfile();
+        final ResourceName profile = trackedCreateProfile().getProfile();
         final List<Resource> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
         final Optional<Resource> maybeResource = queryProfiles.stream()
@@ -61,7 +61,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
     @Test
     public void createAndRetrieveDefault() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         final QueryProfile profile = service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
 
         assertThat(profile.getName(), is(profileIdentifier.getName()));
@@ -91,7 +91,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
                 .setPromotionsEnabled(true)
                 .addPromotionCategories("promotions1", "promotions2");
 
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile(builder).getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile(builder).getProfile();
         final QueryProfile profile = service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
 
         assertThat(profile.getName(), is(profileIdentifier.getName()));
@@ -110,7 +110,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
     @Test
     public void deleteAndList() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         trackedDeleteProfile(profileIdentifier);
 
         final List<Resource> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
@@ -124,7 +124,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
     @Test
     public void deleteAndRetrieve() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         trackedDeleteProfile(profileIdentifier);
 
         final Set<HodErrorCode> errorCodes = new HashSet<>();
