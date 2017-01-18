@@ -42,6 +42,10 @@ public class Resource implements Serializable {
         return new ResourceName(domain, name);
     }
 
+    public ResourceUuid getResourceUuid() {
+        return new ResourceUuid(uuid);
+    }
+
     @JsonPOJOBuilder(withPrefix = "")
     public static class ResourceBuilder {
         // TODO: Remove this once HOD-3394 has been resolved

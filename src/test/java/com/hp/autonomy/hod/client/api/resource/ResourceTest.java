@@ -27,11 +27,19 @@ public class ResourceTest {
 
     @Test
     public void buildsResourceName() {
-        final Resource information = new Resource(UUID.randomUUID(), "resource_name", "domain_name");
+        final Resource resource = new Resource(UUID.randomUUID(), "resource_name", "domain_name");
 
-        final ResourceName identifier = information.getResourceName();
+        final ResourceName identifier = resource.getResourceName();
         assertThat(identifier.getDomain(), is("domain_name"));
         assertThat(identifier.getName(), is("resource_name"));
+    }
+
+    @Test
+    public void buildsResourceUuid() {
+        final UUID uuid = UUID.randomUUID();
+        final Resource resource = new Resource(uuid, "resource_name", "domain_name");
+        final ResourceUuid resourceUuid = resource.getResourceUuid();
+        assertThat(resourceUuid.getUuid(), is(uuid));
     }
 
     @Test

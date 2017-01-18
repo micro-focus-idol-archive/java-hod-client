@@ -2,7 +2,7 @@ package com.hp.autonomy.hod.client.api.textindex.status;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceName;
+import com.hp.autonomy.hod.client.api.resource.*;
 import com.hp.autonomy.hod.client.api.textindex.IndexFlavor;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.not;
@@ -48,8 +49,33 @@ public class TextIndexStatusServiceITCase extends AbstractHodClientIntegrationTe
     }
 
     @Test
+    public void getIndexStatusWithUuid() throws HodErrorException {
+        final ResourceName privateIndex = getPrivateIndex();
+        final ResourcesService resourcesService = new ResourcesServiceImpl(getConfig());
+
+        final ListResourcesRequestBuilder resourcesRequest = new ListResourcesRequestBuilder()
+                .setDomains(Collections.singleton(privateIndex.getDomain()))
+                .setTypes(Collections.singleton(ResourceType.TEXT_INDEX));
+
+        final ResourceUuid resourceUuid = resourcesService.list(getTokenProxy(), resourcesRequest).stream()
+                .filter(resourceDetails -> privateIndex.equals(resourceDetails.getResource().getResourceName()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Could not determine private index UUID"))
+                .getResource()
+                .getResourceUuid();
+
+        final TextIndexStatus status = service.getIndexStatus(getTokenProxy(), resourceUuid);
+        assertThat(status.getTotalIndexSize(), greaterThan(0L));
+        assertThat(status.getTotalDocuments(), greaterThanOrEqualTo(0L));
+        assertThat(status.getComponentCount(), greaterThanOrEqualTo(0));
+        assertThat(status.getIndexUpdates24hr(), greaterThanOrEqualTo(0));
+        assertThat(status.getFlavor(), is(IndexFlavor.EXPLORER));
+        assertThat(status.getUserStore(), not(nullValue()));
+    }
+
+    @Test
     public void getInvalidIndexStatus() {
-        final ResourceName invalidIndex = new ResourceName(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        final ResourceIdentifier invalidIndex = new ResourceName(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         try {
             service.getIndexStatus(getTokenProxy(), invalidIndex);
