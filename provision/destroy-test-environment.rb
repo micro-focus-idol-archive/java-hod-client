@@ -29,7 +29,7 @@ puts "Using #{endpoint}"
 
 token = get_token(endpoint, apikey, application, domain, proxy_host, proxy_port)
 
-private_index_names = list_indexes(endpoint, proxy_host, proxy_port, token)
+private_index_names = list_indexes(endpoint, domain, proxy_host, proxy_port, token)
 
 get_required_indexes.find_all{|index| private_index_names.include?(index[:name])}.each do |index|
   puts "Deleting index with name #{index[:name]}"

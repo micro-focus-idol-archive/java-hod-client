@@ -92,7 +92,7 @@ def get_required_indexes
   ]
 end
 
-def list_indexes(endpoint, proxy_host, proxy_port, token)
-  index_list = get(endpoint, '/api/sync/resource/v1', proxy_host, proxy_port, :token => token, :params => {:type => 'content'})
-  index_list['private_resources'].map {|resource| resource['resource']}
+def list_indexes(endpoint, domain, proxy_host, proxy_port, token)
+  index_list = get(endpoint, '/api/sync/resource/v3', proxy_host, proxy_port, :token => token, :params => {:type => 'text_index', :domain => domain})['resources']
+  index_list.map {|resource| resource['resource']['name']}
 end
