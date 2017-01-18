@@ -33,12 +33,12 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
-    public List<Resource> list(final ListResourcesRequestBuilder parameters) throws HodErrorException {
+    public List<ResourceDetails> list(final ListResourcesRequestBuilder parameters) throws HodErrorException {
         return requester.makeRequest(Resources.class, getBackendCaller(parameters)).getResources();
     }
 
     @Override
-    public List<Resource> list(final TokenProxy<?, TokenType.Simple> tokenProxy, final ListResourcesRequestBuilder parameters) throws HodErrorException {
+    public List<ResourceDetails> list(final TokenProxy<?, TokenType.Simple> tokenProxy, final ListResourcesRequestBuilder parameters) throws HodErrorException {
         return requester.makeRequest(tokenProxy, Resources.class, getBackendCaller(parameters)).getResources();
     }
 

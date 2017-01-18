@@ -14,10 +14,10 @@ import java.util.List;
 
 @Data
 class Resources {
-    private final List<Resource> resources;
+    private final List<ResourceDetails> resources;
 
     @JsonCreator
-    Resources(@JsonProperty("resources") final List<Resource> resources) {
+    Resources(@JsonProperty("resources") final List<ResourceDetails> resources) {
         this.resources = new LinkedList<>(resources);
     }
 }

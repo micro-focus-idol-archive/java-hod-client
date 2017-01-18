@@ -25,7 +25,7 @@ public interface ResourcesService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    List<Resource> list(ListResourcesRequestBuilder parameters) throws HodErrorException;
+    List<ResourceDetails> list(ListResourcesRequestBuilder parameters) throws HodErrorException;
 
     /**
      * Query HP Haven OnDemand for the list of resources using the given token proxy
@@ -35,6 +35,6 @@ public interface ResourcesService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    List<Resource> list(TokenProxy<?, TokenType.Simple> tokenProxy, ListResourcesRequestBuilder parameters) throws HodErrorException;
+    List<ResourceDetails> list(TokenProxy<?, TokenType.Simple> tokenProxy, ListResourcesRequestBuilder parameters) throws HodErrorException;
 
 }

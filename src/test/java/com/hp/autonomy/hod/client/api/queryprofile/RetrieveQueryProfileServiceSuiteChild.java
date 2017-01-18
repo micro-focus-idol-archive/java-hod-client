@@ -50,9 +50,9 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
     @Test
     public void createAndList() throws HodErrorException {
         final ResourceName profile = trackedCreateProfile().getProfile();
-        final List<Resource> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
+        final List<ResourceDetails> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
-        final Optional<Resource> maybeResource = queryProfiles.stream()
+        final Optional<ResourceDetails> maybeResource = queryProfiles.stream()
                 .filter(resource -> profile.equals(resource.getResource().getIdentifier()))
                 .findFirst();
 
@@ -113,9 +113,9 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
         final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         trackedDeleteProfile(profileIdentifier);
 
-        final List<Resource> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
+        final List<ResourceDetails> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
-        final Optional<Resource> maybeResource = queryProfiles.stream()
+        final Optional<ResourceDetails> maybeResource = queryProfiles.stream()
                 .filter(resource -> profileIdentifier.equals(resource.getResource().getIdentifier()))
                 .findFirst();
 

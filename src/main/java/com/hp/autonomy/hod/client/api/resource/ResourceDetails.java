@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public class Resource implements Serializable {
+public class ResourceDetails implements Serializable {
     private static final long serialVersionUID = -6529460305631289926L;
 
     /**
@@ -40,7 +40,7 @@ public class Resource implements Serializable {
      */
     private final Instant dateCreated;
 
-    public Resource(
+    public ResourceDetails(
             @JsonProperty("resource") final ResourceInformation resource,
             @JsonProperty("description") final String description,
             @JsonProperty("type") final ResourceType type,

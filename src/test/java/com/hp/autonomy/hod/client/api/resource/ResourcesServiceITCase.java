@@ -49,15 +49,15 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
         final ListResourcesRequestBuilder parameters = new ListResourcesRequestBuilder()
                 .setTypes(ResourceType.of(ResourceType.TEXT_INDEX));
 
-        final List<Resource> resources = resourcesService.list(getTokenProxy(), parameters);
+        final List<ResourceDetails> resources = resourcesService.list(getTokenProxy(), parameters);
 
-        final List<Resource> publicIndexes = resources.stream()
+        final List<ResourceDetails> publicIndexes = resources.stream()
                 .filter(resource -> ResourceName.PUBLIC_INDEXES_DOMAIN.equals(resource.getResource().getDomain()))
                 .collect(Collectors.toList());
 
         assertThat(publicIndexes, is(not(empty())));
 
-        for (final Resource publicResource : publicIndexes) {
+        for (final ResourceDetails publicResource : publicIndexes) {
             assertThat(publicResource.getType(), is(ResourceType.TEXT_INDEX));
             assertThat(publicResource.getResource(), is(not(nullValue())));
         }
@@ -74,16 +74,16 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void listsDomainResource() throws HodErrorException {
         final String privateDomain = getPrivateIndex().getDomain();
-        final List<Resource> resources = resourcesService.list(getTokenProxy(), new ListResourcesRequestBuilder().setDomains(Collections.singleton(privateDomain)));
+        final List<ResourceDetails> resources = resourcesService.list(getTokenProxy(), new ListResourcesRequestBuilder().setDomains(Collections.singleton(privateDomain)));
 
-        final Optional<Resource> maybeResource = resources.stream()
+        final Optional<ResourceDetails> maybeResource = resources.stream()
                 .filter(resource -> !resource.getResource().getDomain().equals(privateDomain))
                 .findFirst();
 
         assertThat("A resource with the wrong domain was returned", maybeResource, isEmpty());
     }
 
-    static class ResourceMatcher extends BaseMatcher<List<Resource>> {
+    static class ResourceMatcher extends BaseMatcher<List<ResourceDetails>> {
         private final ResourceName identifier;
 
         private ResourceMatcher(final ResourceName identifier) {
@@ -101,7 +101,7 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
             }
 
             @SuppressWarnings("unchecked")
-            final Optional<Resource> maybeResource = ((Collection<Resource>) item).stream()
+            final Optional<ResourceDetails> maybeResource = ((Collection<ResourceDetails>) item).stream()
                     .filter(resource -> identifier.equals(resource.getResource().getIdentifier()))
                     .findFirst();
 

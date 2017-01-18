@@ -10,12 +10,12 @@ import java.util.UUID;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ResourceTest {
+public class ResourceDetailsTest {
     @Test
     public void testSerializeAndDeserialize() throws IOException, ClassNotFoundException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        final Resource input = new Resource(
+        final ResourceDetails input = new ResourceDetails(
                 ResourceInformation.builder()
                         .domain("my-domain")
                         .name("my-connector")
@@ -33,7 +33,7 @@ public class ResourceTest {
 
         try (final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()))) {
             @SuppressWarnings("CastToConcreteClass")
-            final Resource output = (Resource) objectInputStream.readObject();
+            final ResourceDetails output = (ResourceDetails) objectInputStream.readObject();
             assertThat(output, is(input));
         }
     }
@@ -43,13 +43,13 @@ public class ResourceTest {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        final Resource output;
+        final ResourceDetails output;
 
         try (final InputStream jsonStream = getClass().getResourceAsStream("/com/hp/autonomy/hod/client/api/resource/resource.json")) {
-            output = objectMapper.readValue(jsonStream, Resource.class);
+            output = objectMapper.readValue(jsonStream, ResourceDetails.class);
         }
 
-        final Resource expectedOutput = new Resource(
+        final ResourceDetails expectedOutput = new ResourceDetails(
                 ResourceInformation.builder()
                         .domain("PUBLIC_INDEXES")
                         .name("arxiv")
