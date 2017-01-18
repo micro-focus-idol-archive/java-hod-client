@@ -38,7 +38,7 @@ public class Resource implements Serializable {
      */
     private final String domain;
 
-    public ResourceName getIdentifier() {
+    public ResourceName getResourceName() {
         return new ResourceName(domain, name);
     }
 

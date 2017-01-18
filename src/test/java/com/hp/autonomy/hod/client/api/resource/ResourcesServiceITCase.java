@@ -102,7 +102,7 @@ public class ResourcesServiceITCase extends AbstractHodClientIntegrationTest {
 
             @SuppressWarnings("unchecked")
             final Optional<ResourceDetails> maybeResource = ((Collection<ResourceDetails>) item).stream()
-                    .filter(resource -> identifier.equals(resource.getResource().getIdentifier()))
+                    .filter(resource -> identifier.equals(resource.getResource().getResourceName()))
                     .findFirst();
 
             return maybeResource.isPresent();

@@ -43,7 +43,7 @@ public class ApplicationInformation implements Serializable {
         this.authentication = authentication;
     }
 
-    public ResourceName getIdentifier() {
+    public ResourceName getResourceName() {
         return new ResourceName(domain, name);
     }
 }

@@ -26,10 +26,10 @@ public class ResourceTest {
     }
 
     @Test
-    public void buildsResourceIdentifier() {
+    public void buildsResourceName() {
         final Resource information = new Resource(UUID.randomUUID(), "resource_name", "domain_name");
 
-        final ResourceName identifier = information.getIdentifier();
+        final ResourceName identifier = information.getResourceName();
         assertThat(identifier.getDomain(), is("domain_name"));
         assertThat(identifier.getName(), is("resource_name"));
     }

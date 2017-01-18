@@ -16,11 +16,11 @@ import static org.junit.Assert.assertThat;
 
 public class ApplicationInformationTest {
     @Test
-    public void buildsResourceIdentifier() {
+    public void buildsResourceName() {
         final AuthenticationInformation authentication = new AuthenticationInformation(UUID.randomUUID(), AuthenticationType.LEGACY_API_KEY);
         final ApplicationInformation information = new ApplicationInformation("app_name", "domain_name", authentication);
 
-        final ResourceName identifier = information.getIdentifier();
+        final ResourceName identifier = information.getResourceName();
         assertThat(identifier.getDomain(), is("domain_name"));
         assertThat(identifier.getName(), is("app_name"));
     }

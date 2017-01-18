@@ -53,7 +53,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
         final List<ResourceDetails> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
         final Optional<ResourceDetails> maybeResource = queryProfiles.stream()
-                .filter(resource -> profile.equals(resource.getResource().getIdentifier()))
+                .filter(resource -> profile.equals(resource.getResource().getResourceName()))
                 .findFirst();
 
         assertThat("List resources did not return created profile", maybeResource, isPresent());
@@ -116,7 +116,7 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
         final List<ResourceDetails> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
         final Optional<ResourceDetails> maybeResource = queryProfiles.stream()
-                .filter(resource -> profileIdentifier.equals(resource.getResource().getIdentifier()))
+                .filter(resource -> profileIdentifier.equals(resource.getResource().getResourceName()))
                 .findFirst();
 
         assertThat("Deleted profile returned from list resources: " + profileIdentifier, maybeResource, isEmpty());
