@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  */
 @Data
 @DoNotConvert
-public class ResourceName implements Serializable {
+public class ResourceName implements Serializable, ResourceIdentifier {
     public static final String PUBLIC_INDEXES_DOMAIN = "PUBLIC_INDEXES";
 
     public static final ResourceName WIKI_CHI = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_chi");
@@ -41,7 +41,6 @@ public class ResourceName implements Serializable {
     public static final ResourceName ARXIV = new ResourceName(PUBLIC_INDEXES_DOMAIN, "arxiv");
     public static final ResourceName PATENTS = new ResourceName(PUBLIC_INDEXES_DOMAIN, "patents");
 
-    private static final String SEPARATOR = ":";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile("([\\\\:])");
 
     private static final Pattern UNESCAPE_BACKSLASH_PATTERN = Pattern.compile("\\\\");
