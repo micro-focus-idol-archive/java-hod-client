@@ -27,8 +27,6 @@ import java.util.Map;
  * Default implementation of an {@link ApplicationService}.
  */
 public class ApplicationServiceImpl implements ApplicationService {
-    Request<Void, Void> LIST_APPLICATION_REQUEST = new Request<>(Request.Verb.GET, ApplicationBackend.APPLICATION_PATH, null, null);
-
     private final ApplicationBackend backend;
     private final Hmac hmac;
 
@@ -38,9 +36,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<Application> list(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException {
-        final String signature = hmac.generateToken(LIST_APPLICATION_REQUEST, token);
-        return backend.list(signature).getApplications();
+    public List<Application> list(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain) throws HodErrorException {
+        final Request<Void, Void> request = new Request<>(Request.Verb.GET, pathForDomain(domain) + "/v1", null, null);
+        final String signature = hmac.generateToken(request, token);
+        return backend.list(signature, domain).getApplications();
     }
 
     @Override

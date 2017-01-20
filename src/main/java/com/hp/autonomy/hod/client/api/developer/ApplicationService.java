@@ -16,12 +16,13 @@ import java.util.List;
 public interface ApplicationService {
 
     /**
-     * List applications associated with this developer token.
+     * List applications in the given domain.
      * @param token The developer token
+     * @param domain The domain name
      * @return Applications and their privileges
      * @throws HodErrorException
      */
-    List<Application> list(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException;
+    List<Application> list(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain) throws HodErrorException;
 
     /**
      * Create an application in the given domain.

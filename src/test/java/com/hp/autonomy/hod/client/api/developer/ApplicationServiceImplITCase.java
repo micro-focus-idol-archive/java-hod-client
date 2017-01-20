@@ -50,12 +50,11 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
 
     @Test
     public void listApplications() throws HodErrorException {
-        final List<Application> applications = service.list(getDeveloperToken());
+        final List<Application> applications = service.list(getDeveloperToken(), getEndpoint().getDomainName());
 
         for (final Application application : applications) {
-            assertThat(application.getDomain(), not(nullValue()));
+            assertThat(application.getDomain(), is(getEndpoint().getDomainName()));
             assertThat(application.getName(), not(nullValue()));
-
             assertThat(application.getPrivileges(), not(empty()));
         }
 
@@ -71,14 +70,14 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         final String appName = randomName();
         service.create(getDeveloperToken(), getEndpoint().getDomainName(), appName, APPLICATION_DESCRIPTION);
 
-        final List<Application> listPostCreate = service.list(getDeveloperToken());
+        final List<Application> listPostCreate = service.list(getDeveloperToken(), getEndpoint().getDomainName());
         final Optional<Application> optionalApplication = applicationByName(listPostCreate, getEndpoint().getDomainName(), appName);
         assertThat(optionalApplication, isPresent());
         assertThat(optionalApplication.get().getDescription(), is(APPLICATION_DESCRIPTION));
 
         service.delete(getDeveloperToken(), getEndpoint().getDomainName(), appName);
 
-        final List<Application> listPostDelete = service.list(getDeveloperToken());
+        final List<Application> listPostDelete = service.list(getDeveloperToken(), getEndpoint().getDomainName());
         assertThat(applicationByName(listPostDelete, getEndpoint().getDomainName(), appName), isEmpty());
     }
 
