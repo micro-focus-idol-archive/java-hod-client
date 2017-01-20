@@ -61,7 +61,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<Authentication> listAuthentications(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain, final String name) throws HodErrorException {
+    public List<AuthenticationDetails> listAuthentications(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain, final String name) throws HodErrorException {
         final Request<Void, Void> request = new Request<>(Request.Verb.GET, pathForApplication(domain, name) + "/authentication/v1", null, null);
         final String signature = hmac.generateToken(request, token);
         return backend.listAuthentications(signature, domain, name).getAuthentications();

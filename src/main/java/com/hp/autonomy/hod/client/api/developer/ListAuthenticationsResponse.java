@@ -12,9 +12,9 @@ import java.util.List;
 
 @Data
 class ListAuthenticationsResponse {
-    private final List<Authentication> authentications;
+    private final List<AuthenticationDetails> authentications;
 
-    ListAuthenticationsResponse(@JsonProperty("authentications") final List<Authentication> authentications) {
+    ListAuthenticationsResponse(@JsonProperty("authentications") final List<AuthenticationDetails> authentications) {
         this.authentications = authentications;
     }
 }

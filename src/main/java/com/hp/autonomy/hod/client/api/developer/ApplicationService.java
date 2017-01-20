@@ -51,7 +51,7 @@ public interface ApplicationService {
      * @return The authentications associated with the application
      * @throws HodErrorException
      */
-    List<Authentication> listAuthentications(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name) throws HodErrorException;
+    List<AuthenticationDetails> listAuthentications(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name) throws HodErrorException;
 
     /**
      * Create a new authentication and associate it with the given application.

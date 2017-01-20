@@ -93,10 +93,10 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
 
     @Test
     public void listAuthentications() throws HodErrorException {
-        final List<Authentication> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
+        final List<AuthenticationDetails> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
 
         // The IT suite uses an API key from this application to authenticate, so at least one API key must be assigned
-        final Optional<Authentication> maybeApiKeyAuth = authentications.stream()
+        final Optional<AuthenticationDetails> maybeApiKeyAuth = authentications.stream()
                 .filter(authentication -> ApplicationAuthMode.API_KEY.equals(authentication.getMode()))
                 .findFirst();
 
@@ -114,7 +114,7 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         final String name = randomName();
         service.create(getDeveloperToken(), getEndpoint().getDomainName(), name, APPLICATION_DESCRIPTION);
 
-        final List<Authentication> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
+        final List<AuthenticationDetails> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
         assertThat(authentications, is(empty()));
 
         service.delete(getDeveloperToken(), getEndpoint().getDomainName(), name);
@@ -122,12 +122,12 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
 
     @Test
     public void createAuthentication() throws HodErrorException {
-        final List<Authentication> initialAuthentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
+        final List<AuthenticationDetails> initialAuthentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
 
         final ApiKey apiKey = service.addAuthentication(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
         assertThat(apiKey, not(nullValue()));
 
-        final List<Authentication> finalAuthentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
+        final List<AuthenticationDetails> finalAuthentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
         assertThat(finalAuthentications, hasSize(initialAuthentications.size() + 1));
     }
 
@@ -141,10 +141,10 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         final ApiKey apiKey = service.addAuthentication(getDeveloperToken(), getEndpoint().getDomainName(), name);
         assertThat(apiKey, not(nullValue()));
 
-        final List<Authentication> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
+        final List<AuthenticationDetails> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
         assertThat(authentications, hasSize(1));
 
-        final Authentication newAuthentication = authentications.get(0);
+        final AuthenticationDetails newAuthentication = authentications.get(0);
         assertThat(newAuthentication.getCreatedAt(), not(nullValue()));
         assertThat(newAuthentication.getUuid(), not(nullValue()));
         assertThat(newAuthentication.getMode(), is(ApplicationAuthMode.API_KEY));

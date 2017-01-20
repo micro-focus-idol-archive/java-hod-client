@@ -15,14 +15,14 @@ import org.joda.time.DateTime;
 import java.util.UUID;
 
 @Data
-@JsonDeserialize(builder = Authentication.Builder.class)
-public class Authentication {
+@JsonDeserialize(builder = AuthenticationDetails.Builder.class)
+public class AuthenticationDetails {
     private final UUID uuid;
     private final ApplicationAuthMode mode;
     private final DateTime createdAt;
     private final boolean active;
 
-    private Authentication(final Builder builder) {
+    private AuthenticationDetails(final Builder builder) {
         uuid = builder.uuid;
         mode = builder.mode;
         active = builder.active;
@@ -49,8 +49,8 @@ public class Authentication {
             return this;
         }
 
-        public Authentication build() {
-            return new Authentication(this);
+        public AuthenticationDetails build() {
+            return new AuthenticationDetails(this);
         }
     }
 }
