@@ -7,7 +7,6 @@ package com.hp.autonomy.hod.client.api.developer;
 
 import com.hp.autonomy.hod.client.AbstractDeveloperHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.authentication.ApiKey;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
@@ -17,8 +16,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isEmpty;
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isPresent;
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -26,7 +29,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientIntegrationTest {
@@ -58,10 +60,10 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         }
 
         assertThat("Integration test application was not found in list application response", applicationByName(
-            applications,
-            getEndpoint().getDomainName(),
-            getEndpoint().getApplicationName()
-        ), not(nullValue()));
+                applications,
+                getEndpoint().getDomainName(),
+                getEndpoint().getApplicationName()
+        ), isPresent());
     }
 
     @Test
@@ -70,13 +72,14 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         service.create(getDeveloperToken(), getEndpoint().getDomainName(), appName, APPLICATION_DESCRIPTION);
 
         final List<Application> listPostCreate = service.list(getDeveloperToken());
-        final Application createdApplication = applicationByName(listPostCreate, getEndpoint().getDomainName(), appName);
-        assertThat(createdApplication.getDescription(), is(APPLICATION_DESCRIPTION));
+        final Optional<Application> optionalApplication = applicationByName(listPostCreate, getEndpoint().getDomainName(), appName);
+        assertThat(optionalApplication, isPresent());
+        assertThat(optionalApplication.get().getDescription(), is(APPLICATION_DESCRIPTION));
 
         service.delete(getDeveloperToken(), getEndpoint().getDomainName(), appName);
 
         final List<Application> listPostDelete = service.list(getDeveloperToken());
-        assertThat(applicationByName(listPostDelete, getEndpoint().getDomainName(), appName), is(nullValue()));
+        assertThat(applicationByName(listPostDelete, getEndpoint().getDomainName(), appName), isEmpty());
     }
 
     @Test
@@ -94,19 +97,17 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         final List<Authentication> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
 
         // The IT suite uses an API key from this application to authenticate, so at least one API key must be assigned
-        boolean foundApiKey = false;
+        final Optional<Authentication> maybeApiKeyAuth = authentications.stream()
+                .filter(authentication -> ApplicationAuthMode.API_KEY.equals(authentication.getMode()))
+                .findFirst();
 
-        for (final Authentication authentication : authentications) {
+        assertThat(maybeApiKeyAuth, isPresent());
+
+        authentications.forEach(authentication -> {
             assertThat(authentication.getCreatedAt(), not(nullValue()));
             assertThat(authentication.getMode(), not(nullValue()));
             assertThat(authentication.getUuid(), not(nullValue()));
-
-            if (ApplicationAuthMode.API_KEY.equals(authentication.getMode())) {
-                foundApiKey = true;
-            }
-        }
-
-        assertTrue("The test API key was not returned from list authentications", foundApiKey);
+        });
     }
 
     @Test
@@ -118,6 +119,17 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         assertThat(authentications, is(empty()));
 
         service.delete(getDeveloperToken(), getEndpoint().getDomainName(), name);
+    }
+
+    @Test
+    public void createAuthentication() throws HodErrorException {
+        final List<Authentication> initialAuthentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
+
+        final ApiKey apiKey = service.addAuthentication(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
+        assertThat(apiKey, not(nullValue()));
+
+        final List<Authentication> finalAuthentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), getEndpoint().getApplicationName());
+        assertThat(finalAuthentications, hasSize(initialAuthentications.size() + 1));
     }
 
     @Test
@@ -136,20 +148,15 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
         final Authentication newAuthentication = authentications.get(0);
         assertThat(newAuthentication.getCreatedAt(), not(nullValue()));
         assertThat(newAuthentication.getUuid(), not(nullValue()));
-
         assertThat(newAuthentication.getMode(), is(ApplicationAuthMode.API_KEY));
 
         service.delete(getDeveloperToken(), getEndpoint().getDomainName(), name);
     }
 
-    private Application applicationByName(final List<Application> applications, final String domain, final String name) {
-        for (final Application application : applications) {
-            if (domain.equals(application.getDomain()) && name.equals(application.getName())) {
-                return application;
-            }
-        }
-
-        return null;
+    private Optional<Application> applicationByName(final Collection<Application> applications, final String domain, final String name) {
+        return applications.stream()
+                .filter(application -> domain.equals(application.getDomain()) && name.equals(application.getName()))
+                .findFirst();
     }
 
     private String randomName() {

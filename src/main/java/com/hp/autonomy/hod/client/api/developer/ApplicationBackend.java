@@ -27,37 +27,37 @@ interface ApplicationBackend {
         @Header("token") String signature
     ) throws HodErrorException;
 
-    @POST(APPLICATION_PATH)
+    @POST("/2/api/sync/domain/{domain_name}/application/v1")
     @Multipart
     StatusResponse create(
         @Header("token") String signature,
-        @Part("domain_name") String domain,
+        @Path("domain_name") String domain,
         @Part("application_name") String name,
         @Part("description") String description
     ) throws HodErrorException;
 
-    @DELETE("/2/domain/{domain_name}/application/{application_name}")
+    @DELETE("/2/api/sync/domain/{domain_name}/application/{application_name}/v1")
     StatusResponse delete(
         @Header("token") String signature,
         @Path("domain_name") String domain,
         @Path("application_name") String name
     ) throws HodErrorException;
 
-    @GET("/2/domain/{domain_name}/application/{application_name}/authentication")
+    @GET("/2/api/sync/domain/{domain_name}/application/{application_name}/authentication/v1")
     ListAuthenticationsResponse listAuthentications(
         @Header("token") String signature,
         @Path("domain_name") String domain,
         @Path("application_name") String name
     ) throws HodErrorException;
 
-    @POST("/2/domain/{domain_name}/application/{application_name}/authentication")
+    @POST("/2/api/sync/domain/{domain_name}/application/{application_name}/authentication/v1")
     AddApplicationAuthenticationResponse addAuthentication(
         @Header("token") String signature,
         @Path("domain_name") String domain,
         @Path("application_name") String name
     ) throws HodErrorException;
 
-    @POST("/2/domain/{domain_name}/application/{application_name}/authentication_mode")
+    @POST("/2/api/sync/domain/{domain_name}/application/{application_name}/authentication_mode/v1")
     @Multipart
     StatusResponse addAuthMode(
         @Header("token") String signature,

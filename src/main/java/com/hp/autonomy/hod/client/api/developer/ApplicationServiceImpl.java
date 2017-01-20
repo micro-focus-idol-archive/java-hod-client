@@ -46,32 +46,31 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public void create(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain, final String name, final String description) throws HodErrorException {
         final Map<String, List<String>> body = new LinkedHashMap<>();
-        body.put("domain_name", Collections.singletonList(domain));
         body.put("application_name", Collections.singletonList(name));
         body.put("description", Collections.singletonList(description));
 
-        final Request<Void, String> request = new Request<>(Request.Verb.POST, ApplicationBackend.APPLICATION_PATH, null, body);
+        final Request<Void, String> request = new Request<>(Request.Verb.POST, pathForDomain(domain) + "/v1", null, body);
         final String signature = hmac.generateToken(request, token);
         backend.create(signature, domain, name, description);
     }
 
     @Override
     public void delete(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain, final String name) throws HodErrorException {
-        final Request<Void, Void> request = new Request<>(Request.Verb.DELETE, pathForApplication(domain, name), null, null);
+        final Request<Void, Void> request = new Request<>(Request.Verb.DELETE, pathForApplication(domain, name) + "/v1", null, null);
         final String signature = hmac.generateToken(request, token);
         backend.delete(signature, domain, name);
     }
 
     @Override
     public List<Authentication> listAuthentications(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain, final String name) throws HodErrorException {
-        final Request<Void, Void> request = new Request<>(Request.Verb.GET, pathForApplication(domain, name) + "/authentication", null, null);
+        final Request<Void, Void> request = new Request<>(Request.Verb.GET, pathForApplication(domain, name) + "/authentication/v1", null, null);
         final String signature = hmac.generateToken(request, token);
         return backend.listAuthentications(signature, domain, name).getAuthentications();
     }
 
     @Override
     public ApiKey addAuthentication(final AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, final String domain, final String name) throws HodErrorException {
-        final Request<Void, Void> request = new Request<>(Request.Verb.POST, pathForApplication(domain, name) + "/authentication", null, null);
+        final Request<Void, Void> request = new Request<>(Request.Verb.POST, pathForApplication(domain, name) + "/authentication/v1", null, null);
         final String signature = hmac.generateToken(request, token);
         return backend.addAuthentication(signature, domain, name).getCredentials().getApplicationApiKey();
     }
@@ -90,16 +89,22 @@ public class ApplicationServiceImpl implements ApplicationService {
         body.put(ApplicationBackend.USER_AUTH_MODE_PART, Collections.singletonList(userMode.getName()));
         body.put(ApplicationBackend.RETURN_TOKEN_TYPE_PART, Collections.singletonList(returnTokenType.getParameter()));
 
-        final Request<Void, String> request = new Request<>(Request.Verb.POST, pathForApplication(domain, name) + "/authentication_mode", null, body);
+        final Request<Void, String> request = new Request<>(Request.Verb.POST, pathForApplication(domain, name) + "/authentication_mode/v1", null, body);
         final String signature = hmac.generateToken(request, token);
         backend.addAuthMode(signature, domain, name, applicationMode.getName(), userMode.getName(), returnTokenType.getParameter());
     }
 
+    private String pathForDomain(final String domain) {
+        return "/2/api/sync/domain/" + encodeUriComponent(domain) + "/application";
+    }
+
     private String pathForApplication(final String domain, final String application) {
+        return pathForDomain(domain) + '/' + encodeUriComponent(application);
+    }
+
+    private String encodeUriComponent(final String input) {
         try {
-            final String encodedDomain = URLEncoder.encode(domain, StandardCharsets.UTF_8.name());
-            final String encodedName = URLEncoder.encode(application, StandardCharsets.UTF_8.name());
-            return "/2/domain/" + encodedDomain + "/application/" + encodedName;
+            return URLEncoder.encode(input, StandardCharsets.UTF_8.name());
         } catch (final UnsupportedEncodingException e) {
             throw new IllegalStateException("This should never happen", e);
         }
