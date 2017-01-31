@@ -16,9 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.npathai.hamcrestopt.OptionalMatchers.isEmpty;
 import static com.github.npathai.hamcrestopt.OptionalMatchers.isPresent;
@@ -132,22 +130,81 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
     }
 
     @Test
-    public void addAuthModeAndAuthentication() throws HodErrorException {
-        final String name = randomName();
+    public void createUpdateDescriptionDelete() throws HodErrorException {
+        final String name = UUID.randomUUID().toString();
         service.create(getDeveloperToken(), getEndpoint().getDomainName(), name, APPLICATION_DESCRIPTION);
 
-        service.addAuthenticationMode(getDeveloperToken(), getEndpoint().getDomainName(), name, ApplicationAuthMode.API_KEY, UserAuthMode.NONE, TokenType.Simple.INSTANCE);
+        final String newDescription = "My new application description";
+        final ApplicationUpdateRequest updateRequest = ApplicationUpdateRequest.builder().description(newDescription).build();
+        service.update(getDeveloperToken(), getEndpoint().getDomainName(), name, updateRequest);
 
+        final List<Application> applications = service.list(getDeveloperToken(), getEndpoint().getDomainName());
+        final Optional<Application> application = applicationByName(applications, getEndpoint().getDomainName(), name);
+        assertThat(application, isPresent());
+        assertThat(application.get().getDescription(), is(newDescription));
+
+        final List<AuthenticationDetails> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
+        assertThat(authentications, is(empty()));
+
+        service.delete(getDeveloperToken(), getEndpoint().getDomainName(), name);
+    }
+
+    @Test
+    public void createUpdateAuthenticationsDelete() throws HodErrorException {
+        final String name = UUID.randomUUID().toString();
+        service.create(getDeveloperToken(), getEndpoint().getDomainName(), name, APPLICATION_DESCRIPTION);
+
+        final ApplicationUpdateRequest updateRequest = ApplicationUpdateRequest.builder()
+                .authentications(Collections.singletonList(new Authentication(ApplicationAuthMode.API_KEY, UserAuthMode.NONE, TokenType.Simple.INSTANCE)))
+                .build();
+
+        service.update(getDeveloperToken(), getEndpoint().getDomainName(), name, updateRequest);
+
+        // Check description has not changed
+        final List<Application> applications = service.list(getDeveloperToken(), getEndpoint().getDomainName());
+        final Optional<Application> application = applicationByName(applications, getEndpoint().getDomainName(), name);
+        assertThat(application, isPresent());
+        assertThat(application.get().getDescription(), is(APPLICATION_DESCRIPTION));
+
+        // Check we can add an authentication
         final ApiKey apiKey = service.addAuthentication(getDeveloperToken(), getEndpoint().getDomainName(), name);
         assertThat(apiKey, not(nullValue()));
 
         final List<AuthenticationDetails> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
         assertThat(authentications, hasSize(1));
 
-        final AuthenticationDetails newAuthentication = authentications.get(0);
-        assertThat(newAuthentication.getCreatedAt(), not(nullValue()));
-        assertThat(newAuthentication.getUuid(), not(nullValue()));
-        assertThat(newAuthentication.getMode(), is(ApplicationAuthMode.API_KEY));
+        service.delete(getDeveloperToken(), getEndpoint().getDomainName(), name);
+    }
+
+    @Test
+    public void createUpdateAuthenticationsAndDescriptionDelete() throws HodErrorException {
+        final String name = UUID.randomUUID().toString();
+        service.create(getDeveloperToken(), getEndpoint().getDomainName(), name, APPLICATION_DESCRIPTION);
+
+        final String newDescription = "Super awesome application!";
+
+        final ApplicationUpdateRequest updateRequest = ApplicationUpdateRequest.builder()
+                .description(newDescription)
+                .authentications(Arrays.asList(
+                        new Authentication(ApplicationAuthMode.API_KEY, UserAuthMode.FACEBOOK, TokenType.Simple.INSTANCE),
+                        new Authentication(ApplicationAuthMode.API_KEY, UserAuthMode.TWITTER, TokenType.HmacSha1.INSTANCE)
+                ))
+                .build();
+
+        service.update(getDeveloperToken(), getEndpoint().getDomainName(), name, updateRequest);
+
+        // Check description has changed
+        final List<Application> applications = service.list(getDeveloperToken(), getEndpoint().getDomainName());
+        final Optional<Application> application = applicationByName(applications, getEndpoint().getDomainName(), name);
+        assertThat(application, isPresent());
+        assertThat(application.get().getDescription(), is(newDescription));
+
+        // Check we can add an authentication
+        final ApiKey apiKey = service.addAuthentication(getDeveloperToken(), getEndpoint().getDomainName(), name);
+        assertThat(apiKey, not(nullValue()));
+
+        final List<AuthenticationDetails> authentications = service.listAuthentications(getDeveloperToken(), getEndpoint().getDomainName(), name);
+        assertThat(authentications, hasSize(1));
 
         service.delete(getDeveloperToken(), getEndpoint().getDomainName(), name);
     }
@@ -159,6 +216,7 @@ public class ApplicationServiceImplITCase extends AbstractDeveloperHodClientInte
     }
 
     private String randomName() {
-        return "java-hod-client-" + Math.round(Math.random() * 1000);
+        // Can't use UUID here because UUIDs are too long
+        return "java-hod-client-" + new Random().nextInt(1000);
     }
 }

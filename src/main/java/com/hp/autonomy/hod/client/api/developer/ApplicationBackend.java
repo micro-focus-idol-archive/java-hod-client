@@ -9,11 +9,9 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.StatusResponse;
 import retrofit.http.*;
 
-interface ApplicationBackend {
-    String APP_AUTH_MODE_PART = "app_auth_mode";
-    String USER_AUTH_MODE_PART = "user_auth_mode";
-    String RETURN_TOKEN_TYPE_PART = "return_token_type";
+import java.util.Map;
 
+interface ApplicationBackend {
     @GET("/2/api/sync/domain/{domain_name}/application/v1")
     ListApplicationsResponse list(
             @Header("token") String signature,
@@ -36,6 +34,15 @@ interface ApplicationBackend {
             @Path("application_name") String name
     ) throws HodErrorException;
 
+    @PATCH("/2/api/sync/domain/{domain_name}/application/{application_name}/v1")
+    @Multipart
+    StatusResponse update(
+            @Header("token") String signature,
+            @Path("domain_name") String domain,
+            @Path("application_name") String name,
+            @PartMap Map<String, String> parts
+    ) throws HodErrorException;
+
     @GET("/2/api/sync/domain/{domain_name}/application/{application_name}/authentication/v1")
     ListAuthenticationsResponse listAuthentications(
             @Header("token") String signature,
@@ -48,16 +55,5 @@ interface ApplicationBackend {
             @Header("token") String signature,
             @Path("domain_name") String domain,
             @Path("application_name") String name
-    ) throws HodErrorException;
-
-    @POST("/2/api/sync/domain/{domain_name}/application/{application_name}/authentication_mode/v1")
-    @Multipart
-    StatusResponse addAuthMode(
-            @Header("token") String signature,
-            @Path("domain_name") String domain,
-            @Path("application_name") String name,
-            @Part(APP_AUTH_MODE_PART) String applicationMode,
-            @Part(USER_AUTH_MODE_PART) String userMode,
-            @Part(RETURN_TOKEN_TYPE_PART) String returnTokenType
     ) throws HodErrorException;
 }

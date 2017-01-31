@@ -5,6 +5,9 @@
 
 package com.hp.autonomy.hod.client.api.developer;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
 @Data
@@ -20,7 +23,13 @@ public class UserAuthMode {
 
     private final String name;
 
+    @JsonCreator
     public UserAuthMode(final String name) {
         this.name = name;
+    }
+
+    @JsonValue
+    public String getName() {
+        return name;
     }
 }

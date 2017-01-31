@@ -5,6 +5,8 @@
 
 package com.hp.autonomy.hod.client.api.authentication;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.io.Serializable;
 
 /**
@@ -36,6 +38,7 @@ public interface TokenType extends Serializable {
             return "SIMPLE";
         }
 
+        @JsonValue
         @Override
         public String getParameter() {
             return "simple";
@@ -53,6 +56,7 @@ public interface TokenType extends Serializable {
             return "HMAC_SHA1";
         }
 
+        @JsonValue
         @Override
         public String getParameter() {
             return "hmac_sha1";
