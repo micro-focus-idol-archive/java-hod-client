@@ -1,56 +1,23 @@
-/*
- * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.
- * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
- */
-
 package com.hp.autonomy.hod.client.api.developer;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import lombok.Data;
-import lombok.experimental.Accessors;
-import org.joda.time.DateTime;
-
-import java.util.UUID;
 
 @Data
-@JsonDeserialize(builder = Authentication.Builder.class)
 public class Authentication {
-    private final UUID uuid;
-    private final ApplicationAuthMode mode;
-    private final DateTime createdAt;
-    private final boolean active;
+    @JsonProperty("app_auth_mode")
+    private final ApplicationAuthMode applicationAuthMode;
 
-    private Authentication(final Builder builder) {
-        uuid = builder.uuid;
-        mode = builder.mode;
-        active = builder.active;
-        createdAt = builder.createdAt;
-    }
+    @JsonProperty("user_auth_mode")
+    private final UserAuthMode userAuthMode;
 
-    @Data
-    @Accessors(chain = true)
-    @JsonPOJOBuilder(withPrefix = "set")
-    public static class Builder {
-        private UUID uuid;
-        private ApplicationAuthMode mode;
-        private boolean active;
-        private DateTime createdAt;
+    @JsonProperty("token_type")
+    private final TokenType tokenType;
 
-        @JsonSetter
-        public Builder setCreatedAt(final String createdAt) {
-            this.createdAt = new DateTime(createdAt);
-            return this;
-        }
-
-        public Builder setCreatedAt(final DateTime createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public Authentication build() {
-            return new Authentication(this);
-        }
+    public Authentication(final ApplicationAuthMode applicationAuthMode, final UserAuthMode userAuthMode, final TokenType tokenType) {
+        this.applicationAuthMode = applicationAuthMode;
+        this.userAuthMode = userAuthMode;
+        this.tokenType = tokenType;
     }
 }
