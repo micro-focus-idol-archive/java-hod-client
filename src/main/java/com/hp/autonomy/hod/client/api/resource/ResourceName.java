@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  */
 @Data
 @DoNotConvert
-public class ResourceName implements Serializable, ResourceIdentifier {
+public class ResourceName implements ResourceIdentifier {
     public static final String PUBLIC_INDEXES_DOMAIN = "PUBLIC_INDEXES";
 
     public static final ResourceName WIKI_CHI = new ResourceName(PUBLIC_INDEXES_DOMAIN, "wiki_chi");
