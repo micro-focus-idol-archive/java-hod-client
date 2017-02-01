@@ -161,7 +161,7 @@ public class QueryRequestBuilder {
      * @param indexes The indexes to query
      * @return this
      */
-    public QueryRequestBuilder setIndexes(final Collection<ResourceIdentifier> indexes) {
+    public QueryRequestBuilder setIndexes(final Collection<? extends ResourceIdentifier> indexes) {
         this.indexes = new LinkedList<>(indexes);
         return this;
     }
