@@ -30,7 +30,7 @@ interface UserStoreUsersBackend {
     String USER_UUID_VARIABLE = "user_uuid";
 
     String BASE_PATH = "/2/api/sync/user_store/{" + USER_STORE_VARIABLE + "}/user";
-    String USER_BASE_PATH = BASE_PATH + "/{" + USER_UUID_VARIABLE + "}";
+    String USER_BASE_PATH = BASE_PATH + "/{" + USER_UUID_VARIABLE + '}';
     String METADATA_BASE_PATH = USER_BASE_PATH + "/metadata";
 
     String V1 = "/v1";

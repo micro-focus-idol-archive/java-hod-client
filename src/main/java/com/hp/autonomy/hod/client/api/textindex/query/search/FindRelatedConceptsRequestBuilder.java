@@ -5,7 +5,7 @@
 
 package com.hp.autonomy.hod.client.api.textindex.query.search;
 
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.util.MultiMap;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -79,7 +79,7 @@ public class FindRelatedConceptsRequestBuilder {
      * @param indexes Value for the indexes parameter. This list will be sent as separate parameters,
      * e.g. indexes=wiki_eng&indexes=news_eng&...
      */
-    private Collection<ResourceIdentifier> indexes = Collections.emptyList();
+    private Collection<ResourceName> indexes = Collections.emptyList();
 
     /**
      * @param maxResults Value for the max_results parameter.
@@ -111,7 +111,7 @@ public class FindRelatedConceptsRequestBuilder {
         map.putAll(TimeSelector.max(maxDate, maxDateDays, maxDateSeconds));
         map.putAll(TimeSelector.min(minDate, minDateDays, minDateSeconds));
 
-        for (final ResourceIdentifier index : indexes) {
+        for (final ResourceName index : indexes) {
             map.put("indexes", index);
         }
 

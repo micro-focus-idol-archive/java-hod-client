@@ -12,10 +12,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Helper class for building up optional parameters for the QueryTextIndex API and FindSimilar API. The default value
@@ -164,9 +161,8 @@ public class QueryRequestBuilder {
      * @param indexes The indexes to query
      * @return this
      */
-    public QueryRequestBuilder setIndexes(final Collection<ResourceIdentifier> indexes) {
-        this.indexes = indexes;
-
+    public QueryRequestBuilder setIndexes(final Collection<? extends ResourceIdentifier> indexes) {
+        this.indexes = new LinkedList<>(indexes);
         return this;
     }
 

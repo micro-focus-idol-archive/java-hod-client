@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.types.requests.idol.actions.tags.params.FieldTypeParam;
 import org.junit.Before;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrationTest {
-    private static final List<ResourceIdentifier> SAMPLE_INDEXES = Arrays.asList(ResourceIdentifier.WIKI_ENG, ResourceIdentifier.NEWS_ENG);
+    private static final List<ResourceName> SAMPLE_INDEXES = Arrays.asList(ResourceName.WIKI_ENG, ResourceName.NEWS_ENG);
     private static final String WIKI_ENG_FIELD = "content";
 
     private RetrieveIndexFieldsService retrieveIndexFieldsService;
@@ -72,7 +72,7 @@ public class RetrieveIndexFieldsServiceITCase extends AbstractHodClientIntegrati
         );
 
         assertThat(responses.keySet(), hasSize(SAMPLE_INDEXES.size()));
-        final RetrieveIndexFieldsResponse response = responses.get(ResourceIdentifier.WIKI_ENG.getName());
+        final RetrieveIndexFieldsResponse response = responses.get(ResourceName.WIKI_ENG.getName());
         validateResults(response);
     }
 

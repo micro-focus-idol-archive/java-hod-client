@@ -19,7 +19,7 @@ import java.util.Map;
  */
 interface ResourcesBackend {
 
-    String URL = "/2/api/sync/resource/v1";
+    String URL = "/2/api/sync/resource/v3";
 
     /**
      * Query HP Haven OnDemand for the list of resources with the given token

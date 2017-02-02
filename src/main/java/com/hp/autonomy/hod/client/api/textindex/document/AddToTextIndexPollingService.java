@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
@@ -23,7 +22,6 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.util.TypedByteArrayWithFilename;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import retrofit.client.Response;
 import retrofit.mime.TypedFile;
 
 import java.io.File;

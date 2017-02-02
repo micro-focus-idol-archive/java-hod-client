@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
@@ -20,7 +19,6 @@ import com.hp.autonomy.hod.client.job.JobServiceImpl;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import retrofit.client.Response;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;

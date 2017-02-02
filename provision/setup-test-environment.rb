@@ -40,7 +40,7 @@ puts "Using #{endpoint}"
 
 token = get_token(endpoint, apikey, application, domain, proxy_host, proxy_port)
 
-private_index_names = list_indexes(endpoint, proxy_host, proxy_port, token)
+private_index_names = list_indexes(endpoint, domain, proxy_host, proxy_port, token)
 
 # set up required indexes
 required_indexes = get_required_indexes

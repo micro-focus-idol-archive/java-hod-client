@@ -6,7 +6,6 @@
 package com.hp.autonomy.hod.client.api.textindex.query.content;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
@@ -16,7 +15,6 @@ import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import retrofit.client.Response;
 
 import java.io.Serializable;
 import java.util.List;

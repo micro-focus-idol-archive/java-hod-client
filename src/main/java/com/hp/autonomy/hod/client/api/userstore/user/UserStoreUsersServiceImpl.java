@@ -6,7 +6,6 @@
 package com.hp.autonomy.hod.client.api.userstore.user;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
@@ -16,7 +15,6 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 import com.hp.autonomy.hod.client.util.StatusResponse;
 import lombok.extern.slf4j.Slf4j;
-import retrofit.client.Response;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -178,7 +176,7 @@ public class UserStoreUsersServiceImpl implements UserStoreUsersService {
         return requester.makeRequest(tokenProxy, UserGroups.class, listUserGroupsBackendCaller(userStore, userUuid));
     }
 
-    private Map<String, JsonNode> parseMetadata(final List<Metadata<JsonNode>> metadataList) {
+    private Map<String, JsonNode> parseMetadata(final Iterable<Metadata<JsonNode>> metadataList) {
         final Map<String, JsonNode> metadata = new HashMap<>();
 
         for (final Metadata<JsonNode> metadataItem : metadataList) {

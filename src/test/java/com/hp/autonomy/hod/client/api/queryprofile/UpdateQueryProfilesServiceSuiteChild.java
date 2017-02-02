@@ -6,8 +6,7 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
@@ -45,7 +44,7 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileSu
         final QueryProfileRequestBuilder createParameters = new QueryProfileRequestBuilder()
             .setSynonymsEnabled(true);
 
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile(createParameters).getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile(createParameters).getProfile();
 
         final String description = "My freshly updated query profile";
 
@@ -82,12 +81,12 @@ public class UpdateQueryProfilesServiceSuiteChild extends AbstractQueryProfileSu
         errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, () -> service.updateQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName()), null, parameters));
+        testErrorCode(errorCodes, () -> service.updateQueryProfile(getTokenProxy(), new ResourceName(getEndpoint().getDomainName(), uniqueName()), null, parameters));
     }
 
     @Test
     public void updateWithNonExistentIndexFails() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
 
         testErrorCode(HodErrorCode.INDEX_NAME_INVALID, () -> service.updateQueryProfile(getTokenProxy(), profileIdentifier, uniqueName(), null));
     }

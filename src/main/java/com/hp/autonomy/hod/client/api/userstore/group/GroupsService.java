@@ -20,7 +20,7 @@ public interface GroupsService {
 
     /**
      * List the groups in the given user store, using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @return The groups in the user store and their relationships
      * @throws HodErrorException
      */
@@ -29,7 +29,7 @@ public interface GroupsService {
     /**
      * List the groups in the given user store.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @return The groups in the user store and their relationships
      * @throws HodErrorException
      */
@@ -38,7 +38,7 @@ public interface GroupsService {
     /**
      * Get information about the given group in the given user store, including its members, using a token proxy from a
      * {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The group name
      * @return Information about the group
      * @throws HodErrorException
@@ -48,7 +48,7 @@ public interface GroupsService {
     /**
      * Get information about the given group in the given user store, including its members.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The group name
      * @return Information about the group
      * @throws HodErrorException
@@ -58,7 +58,7 @@ public interface GroupsService {
     /**
      * Create a group in the given user store, using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * The group will be created without any hierarchical relationships.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The group name
      * @return Details about the resulting action
      * @throws HodErrorException
@@ -68,7 +68,7 @@ public interface GroupsService {
     /**
      * Create a group in the given user store. The group will be created without any hierarchical relationships.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The new group name
      * @return Details about the resulting action
      * @throws HodErrorException
@@ -79,7 +79,7 @@ public interface GroupsService {
      * Create a group in the given user store using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * Parent and child relationships will be set up between the new group and the groups listed in the parents and children
      * parameters.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The new group name
      * @param parents A list of names of groups which should be parents of the new group (can be null or empty)
      * @param children A list of names of groups which should be children of the new group (can be null or empty)
@@ -92,7 +92,7 @@ public interface GroupsService {
      * Create a group in the given user store. Parent and child relationships will be set up between the new group and
      * the groups listed in the parents and children parameters.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The new group name
      * @param parents A list of names of groups which should be parents of the new group (can be null or empty)
      * @param children A list of names of groups which should be children of the new group (can be null or empty)
@@ -103,7 +103,7 @@ public interface GroupsService {
 
     /**
      * Delete a group from the given user store using a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The group name
      * @throws HodErrorException
      */
@@ -112,7 +112,7 @@ public interface GroupsService {
     /**
      * Delete a group from the given user store.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param name The group name
      * @throws HodErrorException
      */
@@ -120,7 +120,7 @@ public interface GroupsService {
 
     /**
      * Assign a user to a group in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param groupName The group name
      * @param userUuid The UUID of the user
      * @throws HodErrorException
@@ -130,7 +130,7 @@ public interface GroupsService {
     /**
      * Assign a user to a group in a user store.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param groupName The group name
      * @param userUuid The UUID of the user
      * @throws HodErrorException
@@ -139,7 +139,7 @@ public interface GroupsService {
 
     /**
      * Remove a user from a group in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param groupName The group name
      * @param userUuid The UUID of the user
      * @throws HodErrorException
@@ -149,7 +149,7 @@ public interface GroupsService {
     /**
      * Remove a user from a group in a user store.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param groupName The group name
      * @param userUuid The UUID of the user
      * @throws HodErrorException
@@ -158,7 +158,7 @@ public interface GroupsService {
 
     /**
      * Create a hierarchical relationship between two groups in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param parent The parent group name
      * @param child The child group name
      * @throws HodErrorException
@@ -168,7 +168,7 @@ public interface GroupsService {
     /**
      * Create a hierarchical relationship between two groups in a user store.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param parent The parent group name
      * @param child The child group name
      * @throws HodErrorException
@@ -177,7 +177,7 @@ public interface GroupsService {
 
     /**
      * Remove a hierarchical relationship between two groups in a user store. Uses a token proxy from a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param parent The parent group name
      * @param child The child group name
      * @throws HodErrorException
@@ -187,7 +187,7 @@ public interface GroupsService {
     /**
      * Remove a hierarchical relationship between two groups in a user store.
      * @param tokenProxy The token proxy to use for authentication
-     * @param userStore The resource identifier for the user store
+     * @param userStore The resource name for the user store
      * @param parent The parent group name
      * @param child The child group name
      * @throws HodErrorException

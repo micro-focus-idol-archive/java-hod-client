@@ -6,8 +6,7 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
@@ -76,6 +75,6 @@ public class CreateDeleteQueryProfileServiceSuiteChild extends AbstractQueryProf
         errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, () -> service.deleteQueryProfile(getTokenProxy(), new ResourceIdentifier(getEndpoint().getDomainName(), uniqueName())));
+        testErrorCode(errorCodes, () -> service.deleteQueryProfile(getTokenProxy(), new ResourceName(getEndpoint().getDomainName(), uniqueName())));
     }
 }
