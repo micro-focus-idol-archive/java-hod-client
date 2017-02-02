@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Hmac {
     private static final String HMAC_SHA1 = "HmacSHA1";
@@ -74,12 +75,7 @@ public class Hmac {
         if (queryParameters == null || queryParameters.isEmpty()) {
             return Collections.emptyList();
         } else {
-            return encodeAndSpreadParameterMap(queryParameters, new ValueEncoder() {
-                @Override
-                public String encode(final Object input) {
-                    return urlEncode(input.toString());
-                }
-            });
+            return encodeAndSpreadParameterMap(queryParameters, input -> urlEncode(input.toString()));
         }
     }
 
@@ -88,19 +84,16 @@ public class Hmac {
             // If no body, the body hash must be the empty string
             return EMPTY;
         } else {
-            final List<String> components = encodeAndSpreadParameterMap(body, new ValueEncoder() {
-                @Override
-                public String encode(final Object input) {
-                    final byte[] bytes;
+            final List<String> components = encodeAndSpreadParameterMap(body, input -> {
+                final byte[] bytes;
 
-                    if (input instanceof byte[]) {
-                        bytes = (byte[]) input;
-                    } else {
-                        bytes = bytesFromString(input.toString());
-                    }
-
-                    return Hex.encodeHexString(md5Hash(bytes));
+                if (input instanceof byte[]) {
+                    bytes = (byte[]) input;
+                } else {
+                    bytes = bytesFromString(input.toString());
                 }
+
+                return Hex.encodeHexString(md5Hash(bytes));
             });
 
             final String bodyRepresentation = StringUtils.join(components, NEW_LINE);
@@ -125,9 +118,7 @@ public class Hmac {
             final String encodedKey = urlEncode(entry.getKey());
             final List<?> values = entry.getValue();
 
-            for (final Object value : values) {
-                parameters.add(new Parameter(encodedKey, encoder.encode(value)));
-            }
+            parameters.addAll(values.stream().map(value -> new Parameter(encodedKey, encoder.encode(value))).collect(Collectors.toList()));
         }
 
         // Sort is guaranteed to be stable, so parameters for a given key will remain in the same order

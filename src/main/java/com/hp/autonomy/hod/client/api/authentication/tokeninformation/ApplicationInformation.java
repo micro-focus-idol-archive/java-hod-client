@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.authentication.tokeninformation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -43,7 +43,7 @@ public class ApplicationInformation implements Serializable {
         this.authentication = authentication;
     }
 
-    public ResourceIdentifier getIdentifier() {
-        return new ResourceIdentifier(domain, name);
+    public ResourceName getResourceName() {
+        return new ResourceName(domain, name);
     }
 }

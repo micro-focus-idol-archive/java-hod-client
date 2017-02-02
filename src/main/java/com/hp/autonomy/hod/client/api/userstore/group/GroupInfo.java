@@ -8,7 +8,7 @@ package com.hp.autonomy.hod.client.api.userstore.group;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Represents the return type from the get group info API.
@@ -24,7 +25,7 @@ import java.util.UUID;
 @JsonDeserialize(builder = GroupInfo.Builder.class)
 public class GroupInfo {
     private final String name;
-    private final ResourceIdentifier userStore;
+    private final ResourceName userStore;
     private final List<String> parents;
     private final List<String> children;
     private final List<UUID> users;
@@ -37,9 +38,7 @@ public class GroupInfo {
 
         users = new LinkedList<>();
 
-        for (final GroupUser groupUser : builder.users) {
-            users.add(groupUser.getUuid());
-        }
+        users.addAll(builder.users.stream().map(GroupUser::getUuid).collect(Collectors.toList()));
     }
 
     @JsonPOJOBuilder(withPrefix = "set")
@@ -50,7 +49,7 @@ public class GroupInfo {
         private String name;
 
         @JsonProperty("user_store")
-        private ResourceIdentifier userStore;
+        private ResourceName userStore;
 
         private List<String> parents;
         private List<String> children;

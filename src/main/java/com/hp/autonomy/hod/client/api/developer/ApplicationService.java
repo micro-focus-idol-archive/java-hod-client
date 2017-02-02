@@ -9,19 +9,22 @@ import com.hp.autonomy.hod.client.api.authentication.ApiKey;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
+import com.hp.autonomy.hod.client.api.textindex.query.search.Entity;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 
+import javax.smartcardio.ATR;
 import java.util.List;
 
 public interface ApplicationService {
 
     /**
-     * List applications associated with this developer token.
+     * List applications in the given domain.
      * @param token The developer token
+     * @param domain The domain name
      * @return Applications and their privileges
      * @throws HodErrorException
      */
-    List<Application> list(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token) throws HodErrorException;
+    List<Application> list(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain) throws HodErrorException;
 
     /**
      * Create an application in the given domain.
@@ -43,6 +46,16 @@ public interface ApplicationService {
     void delete(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name) throws HodErrorException;
 
     /**
+     * Update an application's description or authentications.
+     * @param token The developer token to use for authentication
+     * @param domain The domain of the application to update
+     * @param name The name of the application to update
+     * @param request The update request
+     * @throws HodErrorException
+     */
+    void update(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name, ApplicationUpdateRequest request) throws HodErrorException;
+
+    /**
      * List the authentications associated with the given application.
      * @param token The developer token to use for authentication
      * @param domain The domain of the application
@@ -50,7 +63,7 @@ public interface ApplicationService {
      * @return The authentications associated with the application
      * @throws HodErrorException
      */
-    List<Authentication> listAuthentications(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name) throws HodErrorException;
+    List<AuthenticationDetails> listAuthentications(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name) throws HodErrorException;
 
     /**
      * Create a new authentication and associate it with the given application.
@@ -61,24 +74,5 @@ public interface ApplicationService {
      * @throws HodErrorException
      */
     ApiKey addAuthentication(AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token, String domain, String name) throws HodErrorException;
-
-    /**
-     * Add an authentication mode to the given application.
-     * @param token The developer token to use for authentication
-     * @param domain The domain of the application
-     * @param name The name of the application
-     * @param applicationMode The mode by which the application can authenticate
-     * @param userMode The mode by which users must authenticate to create a combined token
-     * @param returnTokenType The token type associated with this authentication mode
-     * @throws HodErrorException
-     */
-    void addAuthenticationMode(
-        AuthenticationToken<EntityType.Developer, TokenType.HmacSha1> token,
-        String domain,
-        String name,
-        ApplicationAuthMode applicationMode,
-        UserAuthMode userMode,
-        TokenType returnTokenType
-    ) throws HodErrorException;
 
 }

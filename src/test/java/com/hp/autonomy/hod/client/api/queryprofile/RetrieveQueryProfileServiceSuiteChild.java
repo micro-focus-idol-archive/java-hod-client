@@ -6,14 +6,7 @@
 package com.hp.autonomy.hod.client.api.queryprofile;
 
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
-import com.hp.autonomy.hod.client.api.resource.ListResourcesRequestBuilder;
-import com.hp.autonomy.hod.client.api.resource.Resource;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
-import com.hp.autonomy.hod.client.api.resource.ResourceType;
-import com.hp.autonomy.hod.client.api.resource.Resources;
-import com.hp.autonomy.hod.client.api.resource.ResourcesService;
-import com.hp.autonomy.hod.client.api.resource.ResourcesServiceImpl;
+import com.hp.autonomy.hod.client.api.resource.*;
 import com.hp.autonomy.hod.client.error.HodErrorCode;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import org.junit.Before;
@@ -21,24 +14,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isEmpty;
+import static com.github.npathai.hamcrestopt.OptionalMatchers.isPresent;
 import static com.hp.autonomy.hod.client.HodErrorTester.testErrorCode;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileSuiteChild {
     private static final ListResourcesRequestBuilder LIST_RESOURCES_REQUEST_BUILDER = new ListResourcesRequestBuilder()
-        .setTypes(Collections.singleton(ResourceType.QUERY_PROFILE));
+            .setTypes(Collections.singleton(ResourceType.QUERY_PROFILE));
 
     private QueryProfileService service;
     private ResourcesService resourcesService;
@@ -57,24 +49,19 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
     @Test
     public void createAndList() throws HodErrorException {
-        final ResourceIdentifier profile = trackedCreateProfile().getProfile();
-        final Resources output = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
+        final ResourceName profile = trackedCreateProfile().getProfile();
+        final List<ResourceDetails> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
-        boolean foundProfile = false;
+        final Optional<ResourceDetails> maybeResource = queryProfiles.stream()
+                .filter(resource -> profile.equals(resource.getResource().getResourceName()))
+                .findFirst();
 
-        for (final Resource resource : output.getResources()) {
-            if (profile.getName().equals(resource.getResource())) {
-                foundProfile = true;
-                break;
-            }
-        }
-
-        assertTrue("List resources did not return created profile", foundProfile);
+        assertThat("List resources did not return created profile", maybeResource, isPresent());
     }
 
     @Test
     public void createAndRetrieveDefault() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         final QueryProfile profile = service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
 
         assertThat(profile.getName(), is(profileIdentifier.getName()));
@@ -96,15 +83,15 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
         final String description = "My freshly created query profile";
 
         final QueryProfileRequestBuilder builder = new QueryProfileRequestBuilder()
-            .setDescription(description)
-            .setBlacklistsEnabled(true)
-            .addBlacklistCategories("my_blacklists")
-            .setSynonymsEnabled(false)
-            .setPromotionsIdentified(true)
-            .setPromotionsEnabled(true)
-            .addPromotionCategories("promotions1", "promotions2");
+                .setDescription(description)
+                .setBlacklistsEnabled(true)
+                .addBlacklistCategories("my_blacklists")
+                .setSynonymsEnabled(false)
+                .setPromotionsIdentified(true)
+                .setPromotionsEnabled(true)
+                .addPromotionCategories("promotions1", "promotions2");
 
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile(builder).getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile(builder).getProfile();
         final QueryProfile profile = service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
 
         assertThat(profile.getName(), is(profileIdentifier.getName()));
@@ -123,32 +110,27 @@ public class RetrieveQueryProfileServiceSuiteChild extends AbstractQueryProfileS
 
     @Test
     public void deleteAndList() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         trackedDeleteProfile(profileIdentifier);
 
-        final Resources resources = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
+        final List<ResourceDetails> queryProfiles = resourcesService.list(getTokenProxy(), LIST_RESOURCES_REQUEST_BUILDER);
 
-        for (final Resource resource : resources.getResources()) {
-            if (profileIdentifier.getName().equals(resource.getResource())) {
-                fail("Deleted profile returned from list resources: " + profileIdentifier);
-            }
-        }
+        final Optional<ResourceDetails> maybeResource = queryProfiles.stream()
+                .filter(resource -> profileIdentifier.equals(resource.getResource().getResourceName()))
+                .findFirst();
+
+        assertThat("Deleted profile returned from list resources: " + profileIdentifier, maybeResource, isEmpty());
     }
 
     @Test
     public void deleteAndRetrieve() throws HodErrorException {
-        final ResourceIdentifier profileIdentifier = trackedCreateProfile().getProfile();
+        final ResourceName profileIdentifier = trackedCreateProfile().getProfile();
         trackedDeleteProfile(profileIdentifier);
 
         final Set<HodErrorCode> errorCodes = new HashSet<>();
         errorCodes.add(HodErrorCode.QUERY_PROFILE_NAME_INVALID);
         errorCodes.add(HodErrorCode.INSUFFICIENT_PRIVILEGES);
 
-        testErrorCode(errorCodes, new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                service.retrieveQueryProfile(getTokenProxy(), profileIdentifier);
-            }
-        });
+        testErrorCode(errorCodes, () -> service.retrieveQueryProfile(getTokenProxy(), profileIdentifier));
     }
 }

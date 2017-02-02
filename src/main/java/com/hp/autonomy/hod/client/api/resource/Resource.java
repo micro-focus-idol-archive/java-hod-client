@@ -6,75 +6,54 @@
 package com.hp.autonomy.hod.client.api.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.Builder;
 import lombok.Data;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
 
 import java.io.Serializable;
+import java.util.UUID;
 
+/**
+ * Information about a HOD resource.
+ */
 @Data
+@Builder
+@JsonDeserialize(builder = Resource.ResourceBuilder.class)
 public class Resource implements Serializable {
-    private static final long serialVersionUID = -2332288355411288129L;
+    private static final long serialVersionUID = 7276817124651403883L;
 
-    private static final DateTimeFormatter FORMAT = new DateTimeFormatterBuilder()
-        .append(null, new DateTimeParser[]{
-            DateTimeFormat.forPattern("EEE MMM dd yyyy HH:mm:ss zZ ('UTC)").getParser(),
-            DateTimeFormat.forPattern("EEE MMM dd yyyy HH:mm:ss zZ").getParser()
-        })
-        .toFormatter();
+    /**
+     * @return The UUID of the resource
+     */
+    private final UUID uuid;
 
     /**
      * @return The name of the resource
      */
-    private final String resource;
+    private final String name;
 
     /**
-     * @return The display name of the resource
+     * @return The domain of the resource
      */
-    private final String displayName;
+    private final String domain;
 
-    /**
-     * @return The resource description
-     */
-    private final String description;
+    public ResourceName getResourceName() {
+        return new ResourceName(domain, name);
+    }
 
-    /**
-     * @return The resource type
-     */
-    private final ResourceType type;
+    public ResourceUuid getResourceUuid() {
+        return new ResourceUuid(uuid);
+    }
 
-    /**
-     * @return The resource flavour
-     */
-    private final ResourceFlavour flavour;
-
-    /**
-     * @return The date created
-     */
-    private final DateTime dateCreated;
-
-    public Resource(
-            @JsonProperty("resource") final String resource,
-            @JsonProperty("description") final String description,
-            @JsonProperty("type") final ResourceType type,
-            @JsonProperty("flavor") final ResourceFlavour flavour,
-            @JsonProperty("date_created") final String dateCreated,
-            @JsonProperty("display_name") final String displayName
-    ) {
-        this.resource = resource;
-        this.description = description;
-        this.type = type;
-        this.flavour = flavour;
-
-        if (dateCreated != null) {
-            this.dateCreated = FORMAT.parseDateTime(dateCreated);
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class ResourceBuilder {
+        // TODO: Remove this once HOD-3394 has been resolved
+        // Some APIs return domain_name instead of domain
+        @JsonProperty("domain_name")
+        public ResourceBuilder domainName(final String domainName) {
+            domain = domainName;
+            return this;
         }
-        else {
-            this.dateCreated = null;
-        }
-        this.displayName = displayName != null ? displayName : resource;
     }
 }

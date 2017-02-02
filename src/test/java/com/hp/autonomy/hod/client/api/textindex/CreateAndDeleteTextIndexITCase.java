@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.*;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.util.TestCallback;
 import lombok.Getter;
@@ -18,7 +18,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -53,17 +55,45 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
 
     @Test
     public void testCreateAndDeleteTextIndex() throws HodErrorException, InterruptedException {
+        testCreateAndDelete(createTextIndexResponse -> {
+            return new ResourceName(getEndpoint().getDomainName(), createTextIndexResponse.getIndex());
+        });
+    }
+
+    @Test
+    public void createAndDeleteByUuid() throws HodErrorException, InterruptedException {
+        testCreateAndDelete(createTextIndexResponse -> {
+            final ResourcesService resourcesService = new ResourcesServiceImpl(getConfig());
+
+            final ListResourcesRequestBuilder listResourcesRequestBuilder = new ListResourcesRequestBuilder()
+                    .setDomains(Collections.singleton(getEndpoint().getDomainName()))
+                    .setTypes(Collections.singleton(ResourceType.TEXT_INDEX));
+
+            try {
+                return resourcesService.list(getTokenProxy(), listResourcesRequestBuilder).stream()
+                        .filter(resourceDetails -> createTextIndexResponse.getIndex().equals(resourceDetails.getResource().getName()))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException("Created index not returned from list resources"))
+                        .getResource()
+                        .getResourceUuid();
+            } catch (final HodErrorException e) {
+                throw new IllegalStateException("Could not get index UUID", e);
+            }
+        });
+    }
+
+    private void testCreateAndDelete(final Function<CreateTextIndexResponse, ResourceIdentifier> getIdentifier) throws HodErrorException, InterruptedException {
         final CreateTextIndexRequestBuilder createParams = new CreateTextIndexRequestBuilder()
                 .setDescription("A text index created and deleted for test purposes");
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        final DeleteIndexTestCallback callback = new DeleteIndexTestCallback(latch);
+        final DeleteIndexTestCallback callback = new DeleteIndexTestCallback(latch, getIdentifier);
 
         createTextIndexService.createTextIndex(
                 getTokenProxy(),
                 testIndexName,
-                IndexFlavor.explorer,
+                IndexFlavor.EXPLORER,
                 createParams,
                 callback);
 
@@ -80,15 +110,16 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
     }
 
     private class DeleteIndexTestCallback extends TestCallback<CreateTextIndexResponse> {
-
         @Getter
         private CreateTextIndexResponse createResponse;
 
         private final TestCallback<DeleteTextIndexResponse> callback;
+        private final Function<CreateTextIndexResponse, ResourceIdentifier> getIdentifier;
 
-        public DeleteIndexTestCallback(final CountDownLatch latch) {
+        public DeleteIndexTestCallback(final CountDownLatch latch, final Function<CreateTextIndexResponse, ResourceIdentifier> getIdentifier) {
             super(latch);
             callback = new TestCallback<>(latch);
+            this.getIdentifier = getIdentifier;
         }
 
         public DeleteTextIndexResponse getInnerResult() {
@@ -102,10 +133,7 @@ public class CreateAndDeleteTextIndexITCase extends AbstractHodClientIntegration
             log.debug("Index created successfully");
 
             try {
-                deleteTextIndexService.deleteTextIndex(
-                        getTokenProxy(),
-                        new ResourceIdentifier(getEndpoint().getDomainName(), testIndexName),
-                        callback);
+                deleteTextIndexService.deleteTextIndex(getTokenProxy(), getIdentifier.apply(result), callback);
             } catch (final HodErrorException e) {
                 log.error("Error deleting document. NOTE: this may result in the text index still being created, preventing this test from running successfully in the future", e);
                 latch.countDown();

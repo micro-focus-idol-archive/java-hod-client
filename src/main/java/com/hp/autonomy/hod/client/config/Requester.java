@@ -202,6 +202,7 @@ public class Requester<E extends EntityType, T extends TokenType> {
      * @param <E> The most general authentication entity type which this backend caller accepts
      * @param <T> The most general authentication token type which this backend caller accepts
      */
+    @FunctionalInterface
     public interface BackendCaller<E extends EntityType, T extends TokenType> {
 
         /**

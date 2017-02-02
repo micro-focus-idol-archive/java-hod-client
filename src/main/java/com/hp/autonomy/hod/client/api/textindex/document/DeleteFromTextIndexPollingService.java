@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.hod.client.api.textindex.document;
 
-import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
@@ -20,7 +19,6 @@ import com.hp.autonomy.hod.client.job.JobServiceImpl;
 import com.hp.autonomy.hod.client.job.JobStatus;
 import com.hp.autonomy.hod.client.job.PollingJobStatusRunnable;
 import com.hp.autonomy.hod.client.token.TokenProxy;
-import retrofit.client.Response;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -106,21 +104,11 @@ public class DeleteFromTextIndexPollingService extends AbstractPollingService im
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteReferencesBackendCaller(final ResourceIdentifier index, final List<String> references) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
-            }
-        };
+        return authenticationToken -> deleteFromTextIndexBackend.deleteReferencesFromTextIndex(authenticationToken, index, references);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getDeleteAllBackendCaller(final ResourceIdentifier index) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
-            }
-        };
+        return authenticationToken -> deleteFromTextIndexBackend.deleteAllDocumentsFromTextIndex(authenticationToken, index);
     }
 
 }

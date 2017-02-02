@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Helper class for building up optional parameters for the create user API. The default value
@@ -43,11 +44,7 @@ public class CreateUserRequestBuilder {
         map.put("user_mode", userMode);
 
         if (metadata != null) {
-            final List<Metadata<?>> metadataList = new LinkedList<>();
-
-            for (final Map.Entry<String, ?> entry : metadata.entrySet()) {
-                metadataList.add(new Metadata<>(entry.getKey(), entry.getValue()));
-            }
+            final List<Metadata<?>> metadataList = metadata.entrySet().stream().map(entry -> new Metadata<>(entry.getKey(), entry.getValue())).collect(Collectors.toCollection(LinkedList::new));
 
             map.put("metadata", metadataList);
         }

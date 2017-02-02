@@ -7,11 +7,10 @@ package com.hp.autonomy.hod.client.error;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.HodErrorTester;
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryTextIndexService;
@@ -48,25 +47,15 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
 
     @Test
     public void testNoQueryTextError() {
-        testErrorCodeAndMessage(HodErrorCode.MISSING_REQUIRED_PARAMETERS, "Missing required parameter(s)", new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "", new QueryRequestBuilder());
-            }
-        });
+        testErrorCodeAndMessage(HodErrorCode.MISSING_REQUIRED_PARAMETERS, "Missing required parameter(s)", () -> queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "", new QueryRequestBuilder()));
     }
 
     @Test
     public void testHodReturnsJobError() {
         final QueryRequestBuilder params = new QueryRequestBuilder()
-            .addIndexes(ResourceIdentifier.WIKI_ENG);
+            .addIndexes(ResourceName.WIKI_ENG);
 
-        testErrorCodeAndMessage(HodErrorCode.NO_IGNORE_SPECIALS, "Invalid query text", new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params);
-            }
-        });
+        testErrorCodeAndMessage(HodErrorCode.NO_IGNORE_SPECIALS, "Invalid query text", () -> queryTextIndexService.queryTextIndexWithText(getTokenProxy(), "OR", params));
     }
 
     @Test
@@ -80,12 +69,7 @@ public class HodErrorITCase extends AbstractHodClientIntegrationTest {
             new DateTime(1234567890L)
         ));
 
-        testErrorCodeAndMessage(HodErrorCode.AUTHENTICATION_FAILED, "Authentication failed", new HodErrorTester.HodExceptionRunnable() {
-            @Override
-            public void run() throws HodErrorException {
-                queryTextIndexService.queryTextIndexWithText(tokenProxy, "*", new QueryRequestBuilder());
-            }
-        });
+        testErrorCodeAndMessage(HodErrorCode.AUTHENTICATION_FAILED, "Authentication failed", () -> queryTextIndexService.queryTextIndexWithText(tokenProxy, "*", new QueryRequestBuilder()));
     }
 
 }

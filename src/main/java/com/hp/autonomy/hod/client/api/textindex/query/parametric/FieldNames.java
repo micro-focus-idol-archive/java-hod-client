@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
 @EqualsAndHashCode
@@ -102,11 +103,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
         final Map<String, Integer> map = parametricValuesMap.get(fieldName);
 
         if (map != null) {
-            final List<QueryTagCountInfo> counts = new ArrayList<>();
-
-            for (final Map.Entry<String, Integer> entry : map.entrySet()) {
-                counts.add(new QueryTagCountInfo(entry.getKey(), entry.getValue()));
-            }
+            final List<QueryTagCountInfo> counts = map.entrySet().stream().map(entry -> new QueryTagCountInfo(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 
             return counts;
         }
@@ -138,10 +135,7 @@ public class FieldNames implements Iterable<FieldNames.ParametricValue>, Seriali
                 }
             }
 
-            final List<QueryTagCountInfo> counts = new ArrayList<>();
-            for (final Map.Entry<Double, Integer> entry : countInfo.entrySet()) {
-                counts.add(new QueryTagCountInfo(entry.getKey().toString(), entry.getValue()));
-            }
+            final List<QueryTagCountInfo> counts = countInfo.entrySet().stream().map(entry -> new QueryTagCountInfo(entry.getKey().toString(), entry.getValue())).collect(Collectors.toList());
 
             return counts;
         }

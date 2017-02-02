@@ -7,7 +7,7 @@ package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
@@ -31,7 +31,7 @@ public interface RetrieveIndexFieldsService {
      * @throws HodAuthenticationFailedException If the token associated with the token proxy has expired
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
-            final Collection<ResourceIdentifier> indexes,
+            final Collection<ResourceName> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
@@ -48,7 +48,7 @@ public interface RetrieveIndexFieldsService {
      */
     RetrieveIndexFieldsResponse retrieveIndexFields(
             final TokenProxy<?, TokenType.Simple> tokenProxy,
-            final Collection<ResourceIdentifier> indexes,
+            final Collection<ResourceName> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
@@ -64,7 +64,7 @@ public interface RetrieveIndexFieldsService {
      * @throws HodAuthenticationFailedException If the token associated with the token proxy has expired
      */
     Map<String, RetrieveIndexFieldsResponse> retrieveIndexFieldsByIndex(
-            final Collection<ResourceIdentifier> indexes,
+            final Collection<ResourceName> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 
@@ -81,7 +81,7 @@ public interface RetrieveIndexFieldsService {
      */
     Map<String, RetrieveIndexFieldsResponse> retrieveIndexFieldsByIndex(
             final TokenProxy<?, TokenType.Simple> tokenProxy,
-            final Collection<ResourceIdentifier> indexes,
+            final Collection<ResourceName> indexes,
             final RetrieveIndexFieldsRequestBuilder params
     ) throws HodErrorException;
 

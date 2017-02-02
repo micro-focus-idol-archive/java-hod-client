@@ -103,59 +103,31 @@ public class FindRelatedConceptsServiceImpl implements FindRelatedConceptsServic
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getTextBackendCaller(final String text, final FindRelatedConceptsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return findRelatedConceptsBackend.findRelatedConceptsWithText(authenticationToken, text, params.build());
-            }
-        };
+        return authenticationToken -> findRelatedConceptsBackend.findRelatedConceptsWithText(authenticationToken, text, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceBackendCaller(final String reference, final FindRelatedConceptsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return findRelatedConceptsBackend.findRelatedConceptsWithReference(authenticationToken, reference, params.build());
-            }
-        };
+        return authenticationToken -> findRelatedConceptsBackend.findRelatedConceptsWithReference(authenticationToken, reference, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlBackendCaller(final String url, final FindRelatedConceptsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return findRelatedConceptsBackend.findRelatedConceptsWithUrl(authenticationToken, url, params.build());
-            }
-        };
+        return authenticationToken -> findRelatedConceptsBackend.findRelatedConceptsWithUrl(authenticationToken, url, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getFileBackendCaller(final File file, final FindRelatedConceptsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return findRelatedConceptsBackend.findRelatedConceptsWithFile(authenticationToken, new TypedFile(MIME_TYPE, file), params.build());
-            }
-        };
+        return authenticationToken -> findRelatedConceptsBackend.findRelatedConceptsWithFile(authenticationToken, new TypedFile(MIME_TYPE, file), params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayBackendCaller(final byte[] bytes, final FindRelatedConceptsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return findRelatedConceptsBackend.findRelatedConceptsWithFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, bytes), params.build());
-            }
-        };
+        return authenticationToken -> findRelatedConceptsBackend.findRelatedConceptsWithFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, bytes), params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamBackendCaller(final InputStream inputStream, final FindRelatedConceptsRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                try {
-                    return findRelatedConceptsBackend.findRelatedConceptsWithFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, IOUtils.toByteArray(inputStream)), params.build());
-                } catch (final IOException e) {
-                    throw new RuntimeException(e);
-                }
+        return authenticationToken -> {
+            try {
+                return findRelatedConceptsBackend.findRelatedConceptsWithFile(authenticationToken, new TypedByteArrayWithFilename(MIME_TYPE, IOUtils.toByteArray(inputStream)), params.build());
+            } catch (final IOException e) {
+                throw new RuntimeException(e);
             }
         };
     }

@@ -118,59 +118,31 @@ public class QueryTextIndexServiceImpl<T extends Serializable> implements QueryT
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getTextBackendCaller(final String text, final QueryRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryTextIndexBackend.queryTextIndexWithText(authenticationToken, text, params.build());
-            }
-        };
+        return authenticationToken -> queryTextIndexBackend.queryTextIndexWithText(authenticationToken, text, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getReferenceBackendCaller(final String reference, final QueryRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryTextIndexBackend.queryTextIndexWithReference(authenticationToken, reference, params.build());
-            }
-        };
+        return authenticationToken -> queryTextIndexBackend.queryTextIndexWithReference(authenticationToken, reference, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getUrlBackendCaller(final String url, final QueryRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryTextIndexBackend.queryTextIndexWithUrl(authenticationToken, url, params.build());
-            }
-        };
+        return authenticationToken -> queryTextIndexBackend.queryTextIndexWithUrl(authenticationToken, url, params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getFileBackendCaller(final File file, final QueryRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryTextIndexBackend.queryTextIndexWithFile(authenticationToken, new TypedFile("text/plain", file), params.build());
-            }
-        };
+        return authenticationToken -> queryTextIndexBackend.queryTextIndexWithFile(authenticationToken, new TypedFile("text/plain", file), params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getByteArrayBackendCaller(final byte[] file, final QueryRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return queryTextIndexBackend.queryTextIndexWithFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", file), params.build());
-            }
-        };
+        return authenticationToken -> queryTextIndexBackend.queryTextIndexWithFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", file), params.build());
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getInputStreamBackendCaller(final InputStream file, final QueryRequestBuilder params) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                try {
-                    return queryTextIndexBackend.queryTextIndexWithFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(file)), params.build());
-                } catch (final IOException e) {
-                    throw new RuntimeException("Error reading bytes from stream", e);
-                }
+        return authenticationToken -> {
+            try {
+                return queryTextIndexBackend.queryTextIndexWithFile(authenticationToken, new TypedByteArrayWithFilename("text/plain", IOUtils.toByteArray(file)), params.build());
+            } catch (final IOException e) {
+                throw new RuntimeException("Error reading bytes from stream", e);
             }
         };
     }

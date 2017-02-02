@@ -130,13 +130,10 @@ public class RequesterTest {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getBackendCaller(final AuthenticationToken<?, ? extends TokenType.Simple> fakeToken, final Response response) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                assertEquals(authenticationToken, fakeToken);
+        return authenticationToken -> {
+            assertEquals(authenticationToken, fakeToken);
 
-                return response;
-            }
+            return response;
         };
     }
 

@@ -6,6 +6,7 @@
 package com.hp.autonomy.hod.client.api.authentication.tokeninformation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hp.autonomy.hod.client.api.resource.Resource;
 import lombok.Data;
 
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class CombinedTokenInformation {
     /**
      * @return Information about the user store containing the user authenticated by this token.
      */
-    private final UserStoreInformation userStore;
+    private final Resource userStore;
 
     /**
      * @return Information about the user authenticated by this token.
@@ -38,7 +39,7 @@ public class CombinedTokenInformation {
     public CombinedTokenInformation(
         @JsonProperty("tenant_uuid") final UUID tenantUuid,
         @JsonProperty("application") final ApplicationInformation application,
-        @JsonProperty("user_store") final UserStoreInformation userStore,
+        @JsonProperty("user_store") final Resource userStore,
         @JsonProperty("user") final UserInformation user
     ) {
         this.tenantUuid = tenantUuid;

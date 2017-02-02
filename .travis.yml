@@ -1,6 +1,8 @@
-language: java
-jdk:
-- oraclejdk8
+# Get later version of JDK 8
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
 before_script: ruby provision/setup-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
@@ -9,6 +11,7 @@ after_success: bash travis.sh
 after_script: ruby provision/destroy-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
 env:
   global:
+  - JAVA_HOME=/usr/lib/jvm/java-8-oracle
   # SONATYPE_USERNAME
   - secure: tHgE7kxDPCg2qs16hxOQf1V5l0pFIj6dDWCYRh3hod2pIv30y0FqOLorvXxABElpKc2HLGvz9zSgQx1tYeLJNETs3zgX81zgbODApRBMYoQa83OKC02P5kospYdMg52IXPRAYWk/wacEVJJ2daROy6n2NQGFCZQ675SPapt76Ps=
   # SONATYPE_PASSWORD

@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Map implementation which supports multiple values for keys. This allow converting items in a list to multiple HTTP
@@ -145,11 +146,7 @@ public class MultiMap<K, V> implements Map<K, V> {
      */
     @Override
     public Set<K> keySet() {
-        final Set<K> keys = new HashSet<>();
-
-        for (final Map.Entry<K, V> entry : entries) {
-            keys.add(entry.getKey());
-        }
+        final Set<K> keys = entries.stream().map(Map.Entry::getKey).collect(Collectors.toSet());
 
         return keys;
     }
@@ -159,11 +156,7 @@ public class MultiMap<K, V> implements Map<K, V> {
      */
     @Override
     public Collection<V> values() {
-        final Set<V> values = new HashSet<>();
-
-        for (final Map.Entry<K, V> entry : entries) {
-            values.add(entry.getValue());
-        }
+        final Set<V> values = entries.stream().map(Map.Entry::getValue).collect(Collectors.toSet());
 
         return values;
     }

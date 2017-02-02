@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.api.textindex.document.AddToTextIndexRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.document.Document;
 import com.hp.autonomy.hod.client.api.textindex.document.Documents;
@@ -63,7 +63,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
 
         havenOnDemandService = new HavenOnDemandServiceImpl(getConfig());
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        jobService = new JobServiceImpl<JobStatus<Map<String, Object>>>(getConfig(), MapJobStatus.class);
+        jobService = new JobServiceImpl<>(getConfig(), MapJobStatus.class);
     }
 
     @After
@@ -80,7 +80,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     public void testGet() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
         params.put("text", "*");
-        params.put("indexes", ResourceIdentifier.WIKI_ENG);
+        params.put("indexes", ResourceName.WIKI_ENG);
         params.put("total_results", true);
 
         final Map<String, Object> result = havenOnDemandService.get(getTokenProxy(), "textindex", "query", "search", 1, params, JsonMap.class);
@@ -93,7 +93,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     public void testAsyncGet() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
         params.put("text", "*");
-        params.put("indexes", ResourceIdentifier.WIKI_ENG);
+        params.put("indexes", ResourceName.WIKI_ENG);
         params.put("total_results", true);
 
         final JobId jobId = havenOnDemandService.getAsync(getTokenProxy(), "textindex", "query", "search", 1, params);
@@ -110,7 +110,7 @@ public class HavenOnDemandServiceITCase extends AbstractHodClientIntegrationTest
     public void testPost() throws HodErrorException {
         final Map<String, Object> params = new HashMap<>();
         params.put("file", new TypedFile("text/plain", new File("src/test/resources/com/hp/autonomy/hod/client/api/textindex/query/queryText.txt")));
-        params.put("indexes", ResourceIdentifier.WIKI_ENG);
+        params.put("indexes", ResourceName.WIKI_ENG);
         params.put("total_results", true);
 
         final Map<String, Object> result = havenOnDemandService.post(getTokenProxy(), "textindex", "query", "search", 1, params, JsonMap.class);

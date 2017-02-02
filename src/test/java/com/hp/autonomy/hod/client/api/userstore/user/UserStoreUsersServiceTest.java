@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.config.HodServiceConfig;
 import com.hp.autonomy.hod.client.config.Requester;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -32,7 +32,7 @@ public class UserStoreUsersServiceTest {
     private HodServiceConfig<EntityType, TokenType.Simple> hodServiceConfig;
 
     @Mock
-    private ResourceIdentifier resourceIdentifier;
+    private ResourceName resourceName;
 
     @Mock
     private Requester<EntityType, TokenType.Simple> requester;
@@ -60,7 +60,7 @@ public class UserStoreUsersServiceTest {
 
         when(requester.makeRequest(any(Class.class), Mockito.<Requester.BackendCaller<EntityType, TokenType.Simple>>any())).thenReturn(sampleGetMetadataResponse);
 
-        final Map<String, JsonNode> metadataMap = userStoreUsersService.getUserMetadata(resourceIdentifier, UUID.randomUUID());
+        final Map<String, JsonNode> metadataMap = userStoreUsersService.getUserMetadata(resourceName, UUID.randomUUID());
         assertNotNull(metadataMap);
         assertThat(metadataMap, hasKey("DisplayName"));
     }

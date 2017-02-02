@@ -6,7 +6,7 @@
 package com.hp.autonomy.hod.client.api.textindex.query.fields;
 
 import com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import retrofit.client.Response;
 import retrofit.http.GET;
@@ -32,7 +32,7 @@ interface RetrieveIndexFieldsBackend {
     @GET(URL + COMBINE_FIELDS_TRUE)
     Response retrieveIndexFields(
             @Header("token") AuthenticationToken<?, ?> token,
-            @Query("indexes") Collection<ResourceIdentifier> indexes,
+            @Query("indexes") Collection<ResourceName> indexes,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 
@@ -47,7 +47,7 @@ interface RetrieveIndexFieldsBackend {
     @GET(URL)
     Response retrieveIndexFieldsByIndex(
             @Header("token") AuthenticationToken<?, ?> token,
-            @Query("indexes") Collection<ResourceIdentifier> indexes,
+            @Query("indexes") Collection<ResourceName> indexes,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
 }

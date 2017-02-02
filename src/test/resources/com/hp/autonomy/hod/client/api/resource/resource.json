@@ -1,0 +1,12 @@
+{
+  "resource": {
+    "name": "arxiv",
+    "domain_name": "PUBLIC_INDEXES",
+    "fully_qualified_name": "PUBLIC_INDEXES:arxiv",
+    "uuid": "111e34b3-d20c-11e4-9484-d48564a6c0ef"
+  },
+  "display_name": "Arxiv",
+  "date_created": "2015-10-12T07:17:50.000Z",
+  "description": "Arxiv scientific papers",
+  "type": "text_index"
+}

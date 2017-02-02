@@ -48,20 +48,10 @@ public class JobServiceImpl<T extends JobStatus<?>> implements JobService<T> {
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getStatusBackendCaller(final JobId jobId) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return jobBackend.getJobStatus(authenticationToken, jobId);
-            }
-        };
+        return authenticationToken -> jobBackend.getJobStatus(authenticationToken, jobId);
     }
 
     private Requester.BackendCaller<EntityType, TokenType.Simple> getResultBackendCaller(final JobId jobId) {
-        return new Requester.BackendCaller<EntityType, TokenType.Simple>() {
-            @Override
-            public Response makeRequest(final AuthenticationToken<?, ? extends TokenType.Simple> authenticationToken) throws HodErrorException {
-                return jobBackend.getJobResult(authenticationToken, jobId);
-            }
-        };
+        return authenticationToken -> jobBackend.getJobResult(authenticationToken, jobId);
     }
 }

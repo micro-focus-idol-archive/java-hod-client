@@ -30,12 +30,12 @@ public class ResourceTypeTest {
     public void testSerializeAndDeserialize() throws IOException, ClassNotFoundException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-        objectOutputStream.writeObject(ResourceType.CONTENT);
+        objectOutputStream.writeObject(ResourceType.TEXT_INDEX);
 
         final ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
         final ResourceType resourceType = (ResourceType) objectInputStream.readObject();
 
-        assertThat(resourceType, is(ResourceType.CONTENT));
+        assertThat(resourceType, is(ResourceType.TEXT_INDEX));
     }
 
     // this test uses reflection to check allOf contains all the types
@@ -60,10 +60,10 @@ public class ResourceTypeTest {
 
     @Test
     public void testOf() {
-        final Set<ResourceType> resourceTypes = ResourceType.of(ResourceType.CONTENT, ResourceType.CONNECTOR);
+        final Set<ResourceType> resourceTypes = ResourceType.of(ResourceType.TEXT_INDEX, ResourceType.CONNECTOR);
 
         assertThat(resourceTypes, hasSize(2));
-        assertThat(resourceTypes, hasItems(ResourceType.CONTENT, ResourceType.CONNECTOR));
+        assertThat(resourceTypes, hasItems(ResourceType.TEXT_INDEX, ResourceType.CONNECTOR));
     }
 
     @Test

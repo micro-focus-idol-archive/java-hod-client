@@ -10,7 +10,7 @@ import com.hp.autonomy.hod.client.Endpoint;
 import com.hp.autonomy.hod.client.HodServiceConfigFactory;
 import com.hp.autonomy.hod.client.api.authentication.EntityType;
 import com.hp.autonomy.hod.client.api.authentication.TokenType;
-import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.api.textindex.query.search.Document;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryRequestBuilder;
 import com.hp.autonomy.hod.client.api.textindex.query.search.QueryResults;
@@ -47,12 +47,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
         // TokenRepository, which requires the HodServiceConfig
         final AtomicReference<TokenProxy<EntityType.Application, TokenType.Simple>> tokenProxyAtomicReference = new AtomicReference<>();
 
-        final TokenProxyService<EntityType.Application, TokenType.Simple> tokenProxyService = new TokenProxyService<EntityType.Application, TokenType.Simple>() {
-            @Override
-            public TokenProxy<EntityType.Application, TokenType.Simple> getTokenProxy() {
-                return tokenProxyAtomicReference.get();
-            }
-        };
+        final TokenProxyService<EntityType.Application, TokenType.Simple> tokenProxyService = tokenProxyAtomicReference::get;
 
         final HodServiceConfig<EntityType.Application, TokenType.Simple> hodServiceConfig = HodServiceConfigFactory.getHodServiceConfig(tokenProxyService, getEndpoint());
 
@@ -72,7 +67,7 @@ public class TokenProxyServiceITCase extends AbstractHodClientIntegrationTest {
     @Test
     public void testInterceptor() throws HodErrorException {
         final QueryRequestBuilder params = new QueryRequestBuilder()
-            .addIndexes(ResourceIdentifier.WIKI_ENG)
+            .addIndexes(ResourceName.WIKI_ENG)
             .setTotalResults(true);
 
         final QueryResults<Document> documents = queryTextIndexService.queryTextIndexWithText("*", params);
