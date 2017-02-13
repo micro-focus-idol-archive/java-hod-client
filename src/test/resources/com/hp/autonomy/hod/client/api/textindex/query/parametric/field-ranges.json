@@ -1,0 +1,23 @@
+{
+  "name": "file_size",
+  "total_ranges": 2,
+  "value_details": {
+    "count": 3,
+    "sum": 1947,
+    "mean": 649,
+    "minimum": 510,
+    "maximum": 772.5
+  },
+  "value_ranges": [
+    {
+      "lower_bound": 400,
+      "upper_bound": 600,
+      "count": 1
+    },
+    {
+      "lower_bound": 600,
+      "upper_bound": 800,
+      "count": 2
+    }
+  ]
+}
