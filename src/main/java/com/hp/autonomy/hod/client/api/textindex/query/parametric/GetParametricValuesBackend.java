@@ -17,20 +17,21 @@ import java.util.Collection;
 import java.util.Map;
 
 interface GetParametricValuesBackend {
-    String URL = "/2/api/sync/textindex/query/parametricvalues/v1";
+    String URL = "/2/api/sync/textindex/query/parametricvalues/v2";
 
     /**
-     * Get parametric values for the fieldName using the given token
-     * @param token The token to use to authenticate the request
-     * @param fieldName A comma-separated list of field names to return values for.
-     * @param indexes The indexes to get values for
-     * @param params Additional parameters to be sent as part of the request
+     * Get parametric values for the fieldNames using the given token
+     *
+     * @param token      The token to use to authenticate the request
+     * @param fieldNames A collection of field names to return values for
+     * @param indexes    The indexes to get values for
+     * @param params     Additional parameters to be sent as part of the request
      * @return A list of field names with their parametric values
      */
     @GET(URL)
     Response getParametricValues(
             @Query("token") AuthenticationToken<?, ?> token,
-            @Query("field_name") String fieldName,
+            @Query("field_names") Collection<String> fieldNames,
             @Query("indexes") Collection<ResourceName> indexes,
             @QueryMap Map<String, Object> params
     ) throws HodErrorException;
