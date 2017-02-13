@@ -7,6 +7,9 @@ package com.hp.autonomy.hod.client.api.textindex.query.parametric;
 
 import com.hp.autonomy.hod.client.AbstractHodClientIntegrationTest;
 import com.hp.autonomy.hod.client.Endpoint;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileRequestBuilder;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileService;
+import com.hp.autonomy.hod.client.api.queryprofile.QueryProfileServiceImpl;
 import com.hp.autonomy.hod.client.api.resource.ResourceName;
 import com.hp.autonomy.hod.client.error.HodErrorException;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +77,33 @@ public class GetParametricValuesServiceITCase extends AbstractHodClientIntegrati
         final FieldValues personProfession = findField(output, "person_profession");
         assertThat(personProfession.getTotalValues(), is(greaterThan(0)));
         assertThat(wikipediaType.getValues(), hasSize(lessThanOrEqualTo(15)));
+    }
+
+    @Test
+    public void getParametricValuesWithQueryProfile() throws HodErrorException {
+        final ResourceName queryProfileName = new ResourceName(getEndpoint().getDomainName(), UUID.randomUUID().toString());
+
+        final QueryProfileService queryProfileService = new QueryProfileServiceImpl(getConfig());
+
+        queryProfileService.createQueryProfile(
+                getTokenProxy(),
+                queryProfileName.getName(),
+                QUERY_MANIPULATION_INDEX_NAME,
+                new QueryProfileRequestBuilder()
+        );
+
+        final GetParametricValuesRequestBuilder params = new GetParametricValuesRequestBuilder()
+                .setQueryProfile(queryProfileName)
+                .setMaxValues(15);
+
+        final List<FieldValues> output = getParametricValuesService.getParametricValues(
+                getTokenProxy(),
+                Arrays.asList("wikipedia_type", "person_profession"),
+                Collections.singletonList(ResourceName.WIKI_ENG),
+                params
+        );
+
+        assertThat(output, hasSize(2));
     }
 
     @Test
