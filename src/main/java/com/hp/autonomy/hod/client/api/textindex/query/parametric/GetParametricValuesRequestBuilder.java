@@ -43,6 +43,16 @@ public class GetParametricValuesRequestBuilder {
     private Boolean documentCount;
 
     /**
+     * @param totalValues The value of the total_values parameter
+     */
+    private Boolean totalValues;
+
+    /**
+     * @param nestFieldResults The value of the nest_field_results parameter
+     */
+    private Boolean nestFieldResults;
+
+    /**
      * @param Sort The value of the sort parameter
      */
     private ParametricSort sort;
@@ -51,6 +61,11 @@ public class GetParametricValuesRequestBuilder {
      * @param queryProfile The value of the query_profile parameter
      */
     private ResourceName queryProfile;
+
+    /**
+     * @param datePeriod The value of the date_period parameter
+     */
+    private DatePeriod datePeriod;
 
     private String securityInfo;
 
@@ -86,7 +101,9 @@ public class GetParametricValuesRequestBuilder {
         map.put("sort", sort);
         map.put("query_profile", queryProfile);
         map.put("security_info", securityInfo);
-
+        map.put("total_values", totalValues);
+        map.put("nest_field_results", nestFieldResults);
+        map.put("date_period", datePeriod);
         return map;
     }
 

@@ -11,6 +11,7 @@ import com.hp.autonomy.hod.client.error.HodErrorException;
 import com.hp.autonomy.hod.client.token.TokenProxy;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Service representing the GetParametricValues API
@@ -18,7 +19,7 @@ import java.util.Collection;
 public interface GetParametricValuesService {
 
     /**
-     * Query parametric values for the fieldName using a token proxy
+     * Query parametric values for the fieldNames using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param fieldNames A list of field names to return values for
      * @param indexes The indexes to get values from
@@ -28,14 +29,14 @@ public interface GetParametricValuesService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    FieldNames getParametricValues(
+    List<FieldValues> getParametricValues(
         Collection<String> fieldNames,
         Collection<ResourceName> indexes,
         GetParametricValuesRequestBuilder params
     ) throws HodErrorException;
 
     /**
-     * Get parametric values for the fieldName using the given token proxy
+     * Get parametric values for the fieldNames using the given token proxy
      * @param tokenProxy The token to use to authenticate the request
      * @param fieldNames A list of field names to return values for
      * @param indexes The indexes to get values from
@@ -44,7 +45,7 @@ public interface GetParametricValuesService {
      * @throws com.hp.autonomy.hod.client.api.authentication.HodAuthenticationFailedException If the token associated
      * with the token proxy has expired
      */
-    FieldNames getParametricValues(
+    List<FieldValues> getParametricValues(
         TokenProxy<?, TokenType.Simple> tokenProxy,
         Collection<String> fieldNames,
         Collection<ResourceName> indexes,
