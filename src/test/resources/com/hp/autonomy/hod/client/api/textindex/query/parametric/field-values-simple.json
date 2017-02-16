@@ -1,0 +1,14 @@
+{
+  "name": "category",
+  "values": [
+    {
+      "value": "DEFAULT"
+    },
+    {
+      "value": "ANIMAL"
+    },
+    {
+      "value": "PLACE"
+    }
+  ]
+}

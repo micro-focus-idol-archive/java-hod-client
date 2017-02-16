@@ -1,0 +1,18 @@
+{
+  "name": "category",
+  "total_values": 5,
+  "values": [
+    {
+      "value": "DEFAULT",
+      "count": 4
+    },
+    {
+      "value": "ANIMAL",
+      "count": 2
+    },
+    {
+      "value": "PLACE",
+      "count": 1
+    }
+  ]
+}

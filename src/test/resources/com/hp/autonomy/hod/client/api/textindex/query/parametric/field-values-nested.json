@@ -1,0 +1,39 @@
+{
+  "name": "content_type",
+  "values": [
+    {
+      "value": "TEXT/PLAIN",
+      "count": 3,
+      "subfield": {
+        "name": "category",
+        "values": [
+          {
+            "value": "ANIMAL",
+            "count": 1
+          },
+          {
+            "value": "AWESOME",
+            "count": 1
+          },
+          {
+            "value": null,
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "value": "TEXT/HTML",
+      "count": 1,
+      "subfield": {
+        "name": "category",
+        "values": [
+          {
+            "value": null,
+            "count": 1
+          }
+        ]
+      }
+    }
+  ]
+}

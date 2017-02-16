@@ -13,10 +13,13 @@ import com.hp.autonomy.types.requests.idol.actions.tags.params.SortParam;
 @SuppressWarnings("WeakerAccess")
 public enum ParametricSort {
     document_count,
+    reverse_document_count,
     alphabetical,
     reverse_alphabetical,
     number_increasing,
     number_decreasing,
+    date,
+    reverse_date,
     off;
 
     @SuppressWarnings("unused")
@@ -27,7 +30,7 @@ public enum ParametricSort {
                 sort = alphabetical;
                 break;
             case Date:
-                sort = number_decreasing; // HOD-2717
+                sort = date;
                 break;
             case DocumentCount:
                 sort = document_count;
@@ -42,11 +45,11 @@ public enum ParametricSort {
                 sort = reverse_alphabetical;
                 break;
             case ReverseDate:
-                sort = number_increasing; // HOD-2717
+                sort = reverse_date;
                 break;
             case ReverseDocumentCount:
-                // HOD-2717
-                throw new IllegalArgumentException("Reverse document count sorting not currently supported in Haven On Demand");
+                sort = reverse_document_count;
+                break;
             case Off:
                 sort = off;
                 break;
