@@ -9,7 +9,7 @@ import lombok.Singular;
 
 import java.util.List;
 
-@Builder
+@Builder(toBuilder = true)
 @JsonDeserialize(builder = FieldValues.FieldValuesBuilder.class)
 @Data
 public class FieldValues {
@@ -25,7 +25,7 @@ public class FieldValues {
         private Integer totalValues;
     }
 
-    @Builder
+    @Builder(toBuilder = true)
     @JsonDeserialize(builder = ValueAndCount.ValueAndCountBuilder.class)
     @Data
     public static class ValueAndCount {
