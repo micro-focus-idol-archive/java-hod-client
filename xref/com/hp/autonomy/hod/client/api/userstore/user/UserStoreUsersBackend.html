@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>UserStoreUsersBackend xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../../apidocs/com/hp/autonomy/hod/client/api/userstore/user/UserStoreUsersBackend.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <em class="jxr_comment"> * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.</em>
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment"> * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">package</strong> com.hp.autonomy.hod.client.api.userstore.user;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.hp.autonomy.hod.client.api.authentication.AuthenticationToken;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> com.hp.autonomy.hod.client.error.HodErrorException;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> retrofit.client.Response;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> retrofit.http.DELETE;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> retrofit.http.GET;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> retrofit.http.Header;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> retrofit.http.Multipart;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> retrofit.http.PATCH;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> retrofit.http.POST;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> retrofit.http.Part;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> retrofit.http.PartMap;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> retrofit.http.Path;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> retrofit.http.Query;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> java.util.UUID;
+<a class="jxr_linenumber" name="26" href="#26">26</a>  
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../../com/hp/autonomy/hod/client/api/userstore/user/UserStoreUsersBackend.html">UserStoreUsersBackend</a> {
+<a class="jxr_linenumber" name="28" href="#28">28</a>  
+<a class="jxr_linenumber" name="29" href="#29">29</a>      String USER_STORE_VARIABLE = <span class="jxr_string">"user_store"</span>;
+<a class="jxr_linenumber" name="30" href="#30">30</a>      String USER_UUID_VARIABLE = <span class="jxr_string">"user_uuid"</span>;
+<a class="jxr_linenumber" name="31" href="#31">31</a>  
+<a class="jxr_linenumber" name="32" href="#32">32</a>      String BASE_PATH = <span class="jxr_string">"/2/api/sync/user_store/{"</span> + USER_STORE_VARIABLE + <span class="jxr_string">"}/user"</span>;
+<a class="jxr_linenumber" name="33" href="#33">33</a>      String USER_BASE_PATH = BASE_PATH + <span class="jxr_string">"/{"</span> + USER_UUID_VARIABLE + '}';
+<a class="jxr_linenumber" name="34" href="#34">34</a>      String METADATA_BASE_PATH = USER_BASE_PATH + <span class="jxr_string">"/metadata"</span>;
+<a class="jxr_linenumber" name="35" href="#35">35</a>  
+<a class="jxr_linenumber" name="36" href="#36">36</a>      String V1 = <span class="jxr_string">"/v1"</span>;
+<a class="jxr_linenumber" name="37" href="#37">37</a>      String TOKEN_HEADER = <span class="jxr_string">"token"</span>;
+<a class="jxr_linenumber" name="38" href="#38">38</a>  
+<a class="jxr_linenumber" name="39" href="#39">39</a>      @GET(BASE_PATH + V1)
+<a class="jxr_linenumber" name="40" href="#40">40</a>      Response list(
+<a class="jxr_linenumber" name="41" href="#41">41</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="42" href="#42">42</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="43" href="#43">43</a>          @Query(<span class="jxr_string">"include_metadata"</span>) <strong class="jxr_keyword">boolean</strong> includeMetadata,
+<a class="jxr_linenumber" name="44" href="#44">44</a>          @Query(<span class="jxr_string">"include_accounts"</span>) <strong class="jxr_keyword">boolean</strong> includeAccounts,
+<a class="jxr_linenumber" name="45" href="#45">45</a>          @Query(<span class="jxr_string">"include_groups"</span>) <strong class="jxr_keyword">boolean</strong> includeGroups
+<a class="jxr_linenumber" name="46" href="#46">46</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="47" href="#47">47</a>  
+<a class="jxr_linenumber" name="48" href="#48">48</a>      @POST(BASE_PATH + V1)
+<a class="jxr_linenumber" name="49" href="#49">49</a>      @Multipart
+<a class="jxr_linenumber" name="50" href="#50">50</a>      Response create(
+<a class="jxr_linenumber" name="51" href="#51">51</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="52" href="#52">52</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="53" href="#53">53</a>          @Part(<span class="jxr_string">"user_email"</span>) String email,
+<a class="jxr_linenumber" name="54" href="#54">54</a>          @Part(<span class="jxr_string">"on_success"</span>) String onSuccess,
+<a class="jxr_linenumber" name="55" href="#55">55</a>          @Part(<span class="jxr_string">"on_error"</span>) String onError,
+<a class="jxr_linenumber" name="56" href="#56">56</a>          @PartMap Map&lt;String, Object&gt; params
+<a class="jxr_linenumber" name="57" href="#57">57</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="58" href="#58">58</a>  
+<a class="jxr_linenumber" name="59" href="#59">59</a>      @DELETE(USER_BASE_PATH + V1)
+<a class="jxr_linenumber" name="60" href="#60">60</a>      Response delete(
+<a class="jxr_linenumber" name="61" href="#61">61</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="62" href="#62">62</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="63" href="#63">63</a>          @Path(USER_UUID_VARIABLE) UUID userUuid
+<a class="jxr_linenumber" name="64" href="#64">64</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="65" href="#65">65</a>  
+<a class="jxr_linenumber" name="66" href="#66">66</a>      @POST(USER_BASE_PATH + <span class="jxr_string">"/reset"</span> + V1)
+<a class="jxr_linenumber" name="67" href="#67">67</a>      @Multipart
+<a class="jxr_linenumber" name="68" href="#68">68</a>      Response resetAuthentication(
+<a class="jxr_linenumber" name="69" href="#69">69</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="70" href="#70">70</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="71" href="#71">71</a>          @Path(USER_UUID_VARIABLE) UUID userUuid,
+<a class="jxr_linenumber" name="72" href="#72">72</a>          @Part(<span class="jxr_string">"on_success"</span>) String onSuccess,
+<a class="jxr_linenumber" name="73" href="#73">73</a>          @Part(<span class="jxr_string">"on_error"</span>) String onError
+<a class="jxr_linenumber" name="74" href="#74">74</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="75" href="#75">75</a>  
+<a class="jxr_linenumber" name="76" href="#76">76</a>      @GET(USER_BASE_PATH + <span class="jxr_string">"/group"</span> + V1)
+<a class="jxr_linenumber" name="77" href="#77">77</a>      Response listUserGroups(
+<a class="jxr_linenumber" name="78" href="#78">78</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="79" href="#79">79</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="80" href="#80">80</a>          @Path(USER_UUID_VARIABLE) UUID userUuid
+<a class="jxr_linenumber" name="81" href="#81">81</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="82" href="#82">82</a>  
+<a class="jxr_linenumber" name="83" href="#83">83</a>      @GET(METADATA_BASE_PATH + V1)
+<a class="jxr_linenumber" name="84" href="#84">84</a>      Response getUserMetadata(
+<a class="jxr_linenumber" name="85" href="#85">85</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="86" href="#86">86</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="87" href="#87">87</a>          @Path(USER_UUID_VARIABLE) UUID userUuid
+<a class="jxr_linenumber" name="88" href="#88">88</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="89" href="#89">89</a>  
+<a class="jxr_linenumber" name="90" href="#90">90</a>      @PATCH(METADATA_BASE_PATH + V1)
+<a class="jxr_linenumber" name="91" href="#91">91</a>      @Multipart
+<a class="jxr_linenumber" name="92" href="#92">92</a>      Response addUserMetadata(
+<a class="jxr_linenumber" name="93" href="#93">93</a>          @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="94" href="#94">94</a>          @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="95" href="#95">95</a>          @Path(USER_UUID_VARIABLE) UUID userUuid,
+<a class="jxr_linenumber" name="96" href="#96">96</a>          @Part(<span class="jxr_string">"metadata"</span>) List&lt;Metadata&lt;?&gt;&gt; metadata
+<a class="jxr_linenumber" name="97" href="#97">97</a>      ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="98" href="#98">98</a>  
+<a class="jxr_linenumber" name="99" href="#99">99</a>      @DELETE(METADATA_BASE_PATH + <span class="jxr_string">"/{metadata_key}"</span> + V1)
+<a class="jxr_linenumber" name="100" href="#100">100</a>     Response removeUserMetadata(
+<a class="jxr_linenumber" name="101" href="#101">101</a>         @Header(TOKEN_HEADER) AuthenticationToken&lt;?, ?&gt; token,
+<a class="jxr_linenumber" name="102" href="#102">102</a>         @Path(USER_STORE_VARIABLE) ResourceIdentifier userStore,
+<a class="jxr_linenumber" name="103" href="#103">103</a>         @Path(USER_UUID_VARIABLE) UUID userUuid,
+<a class="jxr_linenumber" name="104" href="#104">104</a>         @Path(<span class="jxr_string">"metadata_key"</span>) String metadataKey
+<a class="jxr_linenumber" name="105" href="#105">105</a>     ) <strong class="jxr_keyword">throws</strong> HodErrorException;
+<a class="jxr_linenumber" name="106" href="#106">106</a> 
+<a class="jxr_linenumber" name="107" href="#107">107</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

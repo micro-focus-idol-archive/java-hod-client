@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>TokenProxyTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/com/hp/autonomy/hod/client/token/TokenProxyTest.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <em class="jxr_comment"> * Copyright 2015-2016 Hewlett-Packard Development Company, L.P.</em>
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment"> * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">package</strong> com.hp.autonomy.hod.client.token;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.hp.autonomy.hod.client.api.authentication.EntityType;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> com.hp.autonomy.hod.client.api.authentication.TokenType;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> java.io.ByteArrayInputStream;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> java.io.ByteArrayOutputStream;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> java.io.ObjectInputStream;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> java.io.ObjectOutputStream;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.MatcherAssert.assertThat;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.core.Is.is;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/hp/autonomy/hod/client/token/TokenProxyTest.html">TokenProxyTest</a> {
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>      @Test
+<a class="jxr_linenumber" name="24" href="#24">24</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSerialization() <strong class="jxr_keyword">throws</strong> IOException, ClassNotFoundException {
+<a class="jxr_linenumber" name="25" href="#25">25</a>          <strong class="jxr_keyword">final</strong> ByteArrayOutputStream byteArrayOutputStream = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="26" href="#26">26</a>          <strong class="jxr_keyword">final</strong> ObjectOutputStream objectOutputStream = <strong class="jxr_keyword">new</strong> ObjectOutputStream(byteArrayOutputStream);
+<a class="jxr_linenumber" name="27" href="#27">27</a>          <strong class="jxr_keyword">final</strong> TokenProxy&lt;EntityType.User, TokenType.Simple&gt; initialTokenProxy = <strong class="jxr_keyword">new</strong> TokenProxy&lt;&gt;(EntityType.User.INSTANCE, TokenType.Simple.INSTANCE);
+<a class="jxr_linenumber" name="28" href="#28">28</a>          objectOutputStream.writeObject(initialTokenProxy);
+<a class="jxr_linenumber" name="29" href="#29">29</a>  
+<a class="jxr_linenumber" name="30" href="#30">30</a>          <strong class="jxr_keyword">final</strong> ObjectInputStream objectInputStream = <strong class="jxr_keyword">new</strong> ObjectInputStream(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+<a class="jxr_linenumber" name="31" href="#31">31</a>  
+<a class="jxr_linenumber" name="32" href="#32">32</a>          @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="33" href="#33">33</a>          <strong class="jxr_keyword">final</strong> TokenProxy&lt;EntityType.User, TokenType.Simple&gt; result = (TokenProxy&lt;EntityType.User, TokenType.Simple&gt;) objectInputStream.readObject();
+<a class="jxr_linenumber" name="34" href="#34">34</a>  
+<a class="jxr_linenumber" name="35" href="#35">35</a>          assertThat(result, is(initialTokenProxy));
+<a class="jxr_linenumber" name="36" href="#36">36</a>      }
+<a class="jxr_linenumber" name="37" href="#37">37</a>  
+<a class="jxr_linenumber" name="38" href="#38">38</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

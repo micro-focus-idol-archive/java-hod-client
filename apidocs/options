@@ -1,0 +1,24 @@
+-classpath
+'/home/travis/.m2/repository/joda-time/joda-time/2.7/joda-time-2.7.jar:/home/travis/.m2/repository/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar:/home/travis/.m2/repository/com/squareup/retrofit/converter-jackson/1.9.0/converter-jackson-1.9.0.jar:/home/travis/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/travis/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar:/home/travis/.m2/repository/commons-codec/commons-codec/1.6/commons-codec-1.6.jar:/home/travis/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.6.0/jackson-databind-2.6.0.jar:/home/travis/.m2/repository/com/squareup/retrofit/retrofit/1.9.0/retrofit-1.9.0.jar:/home/travis/.m2/repository/com/google/code/gson/gson/2.3.1/gson-2.3.1.jar:/home/travis/.m2/repository/com/github/npathai/hamcrest-optional/1.0/hamcrest-optional-1.0.jar:/home/travis/.m2/repository/com/hp/autonomy/frontend/aci-types/0.18.1/aci-types-0.18.1.jar:/home/travis/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.6.0/jackson-annotations-2.6.0.jar:/home/travis/.m2/repository/org/projectlombok/lombok/1.16.10/lombok-1.16.10.jar:/home/travis/.m2/repository/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.jar:/home/travis/.m2/repository/org/apache/httpcomponents/httpclient/4.3.4/httpclient-4.3.4.jar:/home/travis/.m2/repository/org/apache/commons/commons-collections4/4.0/commons-collections4-4.0.jar:/home/travis/.m2/repository/org/slf4j/slf4j-api/1.7.10/slf4j-api-1.7.10.jar:/home/travis/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/home/travis/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.6.0/jackson-core-2.6.0.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/travis/build/hpe-idol/java-hod-client/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2015&#x2013;2017 <a href="http://www.hp.com/">Hewlett-Packard Development Company, L.P.</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/travis/build/hpe-idol/java-hod-client/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'java-hod-client 0.25.1 API'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' '/home/travis/build/hpe-idol/java-hod-client/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'java-hod-client 0.25.1 API'
