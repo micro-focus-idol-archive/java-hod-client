@@ -19,7 +19,7 @@ env:
   # GPG_PASSPHRASE
   - secure: Mpt2nllsCPb52HTeVF/EjcZSY36KupzJ4oWUWNLVoxFncXqgkMceOW96GuQKt3u3dQXCsymUmebZxiWUawt9uah3RJ6p3N2iqnQEK0/C5yAlFxtpSsqzsgKF0aEi9pZ1O8oN1F3hZqfnDaltuWdXzrEl5atetwpVsm65reUfALU=
   # GPG_KEYID
-  - secure: As4lclrrQ1t6bpl5Rnp6UJJKPjX61WIPL5d9yb5p5shphgtwUoQtICMWAWienALDCvxb3sYz7lTlxHnpnLXXVyckrdvG0rRfe3OWi1mFbXcWMGGdZXgY7I99GmqMHYd+hGaWhr1O3w5tS3AjdZeYQWmcdHS+zGw3qBxvtHrc3tg=
+  - GPG_KEYID: 0DD20E21
   # GPG_KEY
   - secure: A/E5Mjb7/SynfzM+dD5UwHX/rWRGhOQoayWtPx7f0xQJJ2pRgMDX2DdCtomDTziuQuiyXam91G5V7qyA/nnl8LXY9wqEBvp0xl0V4eFEmtqG3JtrydqQLmd8ttIrJGJ/Nn0ZjBBpHO2y0hunmVfQVa+R0wkfWcmMcdOxck47qck=
   # GITHUB_TOKEN
