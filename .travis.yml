@@ -22,8 +22,6 @@ env:
   - GPG_KEYID: 0DD20E21
   # GPG_KEY
   - secure: A/E5Mjb7/SynfzM+dD5UwHX/rWRGhOQoayWtPx7f0xQJJ2pRgMDX2DdCtomDTziuQuiyXam91G5V7qyA/nnl8LXY9wqEBvp0xl0V4eFEmtqG3JtrydqQLmd8ttIrJGJ/Nn0ZjBBpHO2y0hunmVfQVa+R0wkfWcmMcdOxck47qck=
-  # GITHUB_TOKEN
-  - secure: TkOA/HxrkAixfluP3Hw8H1voopt0Qx95gvr/dtxyNYl2uOwntxd8gglF37hYOZxiCfT8l/FnVE9WQVwPEqG4cioHd+NXxDTM0amLumM8NRqYsTJoQ6uRZOQ7zvj8VvJ4no3G4x9+IJJHJvIot9UdD/lfK7XYlyXzBlTPAJ7CXpw=
   # HOD_APPLICATION_API_KEY
   - secure: c15hFhdzstX4t/mHyvHty64uaLSLGU0cXSOQdcXbzerx4kk33lW65lyzQZTf0BcnxzJ+knSWvWsIbsYuEvAc7wKjE1OLA7NuP7U16Y80+5UvwPlomsStxrXcdfM4zMhB7DU8Wp5+NvD79EYl1ClrFehSGk/+6R9QuVEvWNgpyg4=
   # HOD_APPLICATION
