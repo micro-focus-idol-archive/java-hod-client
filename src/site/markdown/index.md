@@ -1,14 +1,14 @@
 # java-hod-client
 
-Java Client for communicating with [HPE Haven OnDemand](http://www.havenondemand.com)
+Java Client for communicating with [Micro Focus Haven OnDemand](http://www.havenondemand.com)
 
 ## About
-java-hod-client provides a Java Interface to the HPE Haven OnDemand APIs to simplify calling the HPE Haven OnDemand APIs
+java-hod-client provides a Java Interface to the Micro Focus Haven OnDemand APIs to simplify calling the Micro Focus Haven OnDemand APIs
 from Java, allowing consumers of java-hod-client to access HP Haven OnDemand in a typesafe way. It also automatically
 handles refreshed tokens in the headers of HP Haven OnDemand responses.
 
 ## Goals
-Currently only a small subset of HPE Haven OnDemand APIs are supported. The eventual aim to support all the HP Haven
+Currently only a small subset of Micro Focus Haven OnDemand APIs are supported. The eventual aim to support all the HP Haven
 OnDemand APIs.
 
 If an API you need is not supported, submit a pull request!

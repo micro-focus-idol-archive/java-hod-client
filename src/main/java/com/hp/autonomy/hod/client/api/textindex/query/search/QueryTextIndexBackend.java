@@ -28,7 +28,7 @@ interface QueryTextIndexBackend {
     String URL = "/2/api/sync/textindex/query/search/v1";
 
     /**
-     * Query HP Haven OnDemand for documents matching query text using the given token
+     * Query Micro Focus Haven OnDemand for documents matching query text using the given token
      * @param token The token to use to authenticate the request
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
@@ -42,9 +42,9 @@ interface QueryTextIndexBackend {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from an object store object using the given token
+     * Query Micro Focus Haven OnDemand for documents using query text from an object store object using the given token
      * @param token The token to use to authenticate the request
-     * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
+     * @param reference An Micro Focus Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that match the query text
@@ -57,7 +57,7 @@ interface QueryTextIndexBackend {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text from a url using the given token
+     * Query Micro Focus Haven OnDemand for documents using query text from a url using the given token
      * @param token The token to use to authenticate the request
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
@@ -71,7 +71,7 @@ interface QueryTextIndexBackend {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for documents using query text in a file using the given token
+     * Query Micro Focus Haven OnDemand for documents using query text in a file using the given token
      * @param token The token to use to authenticate the request
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request

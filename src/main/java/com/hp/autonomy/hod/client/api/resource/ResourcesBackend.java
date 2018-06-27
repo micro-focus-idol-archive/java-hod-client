@@ -22,7 +22,7 @@ interface ResourcesBackend {
     String URL = "/2/api/sync/resource/v3";
 
     /**
-     * Query HP Haven OnDemand for the list of resources with the given token
+     * Query Micro Focus Haven OnDemand for the list of resources with the given token
      * @param token The authentication token
      * @param parameters Request parameters (can be built using {@link ListResourcesRequestBuilder}
      * @return Public and private resources

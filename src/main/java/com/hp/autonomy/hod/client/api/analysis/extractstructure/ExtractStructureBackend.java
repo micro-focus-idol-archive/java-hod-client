@@ -26,7 +26,7 @@ public interface ExtractStructureBackend {
     String URL = "/2/api/sync/analysis/extractcontent/v1";
 
     /**
-     * Extract content from a CSV file into a JSON format using HP Haven on Demand using a token proxy
+     * Extract content from a CSV file into a JSON format using Micro Focus Haven on Demand using a token proxy
      * @param token The authentication token
      * @param file The bytes of a file containing the data to be extracted.
      * @return {@link List} of JSON objects stored as a {@link LinkedHashMap} with column names as keys and cell values as values.
@@ -36,7 +36,7 @@ public interface ExtractStructureBackend {
     Response extractFromFile(@Header("token") AuthenticationToken<?, ?> token, @Part("file") TypedOutput file) throws HodErrorException;
 
     /**
-     * Extract content from a CSV file into a JSON format using HP Haven on Demand using a token proxy
+     * Extract content from a CSV file into a JSON format using Micro Focus Haven on Demand using a token proxy
      * @param token The authentication token
      * @param reference The object store reference containing the data to be extracted.
      * @return {@link List} of JSON objects stored as a {@link LinkedHashMap} with column names as keys and cell values as values.
@@ -46,7 +46,7 @@ public interface ExtractStructureBackend {
 
 
     /**
-     * Extract content from a CSV file into a JSON format using HP Haven on Demand using a token proxy
+     * Extract content from a CSV file into a JSON format using Micro Focus Haven on Demand using a token proxy
      * @param token The authentication token
      * @param url The url pointing to a file containing the data to be extracted.
      * @return {@link List} of JSON objects stored as a {@link LinkedHashMap} with column names as keys and cell values as values.

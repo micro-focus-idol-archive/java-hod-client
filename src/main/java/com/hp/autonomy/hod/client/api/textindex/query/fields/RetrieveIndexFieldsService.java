@@ -20,7 +20,7 @@ import java.util.Map;
 public interface RetrieveIndexFieldsService {
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been indexed
+     * Retrieve from Micro Focus Haven OnDemand a list of the fields that have been indexed
      * into the specified text indexes using a token proxy provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * Returns results across all indexes in a single combined response.
      *
@@ -36,7 +36,7 @@ public interface RetrieveIndexFieldsService {
     ) throws HodErrorException;
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been indexed
+     * Retrieve from Micro Focus Haven OnDemand a list of the fields that have been indexed
      * into the specified text indexes index using the given token proxy.
      * Returns results across all indexes in a single combined response.
      *
@@ -53,7 +53,7 @@ public interface RetrieveIndexFieldsService {
     ) throws HodErrorException;
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been indexed
+     * Retrieve from Micro Focus Haven OnDemand a list of the fields that have been indexed
      * into the specified text indexes using a token proxy provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
      * Returns results per index.
      *
@@ -69,7 +69,7 @@ public interface RetrieveIndexFieldsService {
     ) throws HodErrorException;
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields that have been indexed
+     * Retrieve from Micro Focus Haven OnDemand a list of the fields that have been indexed
      * into the specified text indexes index using the given token proxy.
      * Returns results per index.
      *

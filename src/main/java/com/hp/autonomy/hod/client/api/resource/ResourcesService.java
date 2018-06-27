@@ -17,7 +17,7 @@ import java.util.List;
 public interface ResourcesService {
 
     /**
-     * Query HP Haven OnDemand for the list of resources using a token proxy
+     * Query Micro Focus Haven OnDemand for the list of resources using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param parameters Request parameters
      * @return List of HOD resources
@@ -28,7 +28,7 @@ public interface ResourcesService {
     List<ResourceDetails> list(ListResourcesRequestBuilder parameters) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for the list of resources using the given token proxy
+     * Query Micro Focus Haven OnDemand for the list of resources using the given token proxy
      * @param tokenProxy The token proxy to use
      * @param parameters Request parameters
      * @return List of HOD resources

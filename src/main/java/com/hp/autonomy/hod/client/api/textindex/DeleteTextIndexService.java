@@ -19,7 +19,7 @@ public interface DeleteTextIndexService {
     /**
      * Deletes the given text index using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}.
-     * This API handles the confirm token returned by HP Haven OnDemand automatically.
+     * This API handles the confirm token returned by Micro Focus Haven OnDemand automatically.
      * @param index The name of the index
      * @param callback Callback that will be called with the response
      * @throws NullPointerException If a TokenProxyService has not been defined
@@ -34,7 +34,7 @@ public interface DeleteTextIndexService {
 
     /**
      * Deletes the given text index using the given token proxy.
-     * This API handles the confirm token returned by HP Haven OnDemand automatically.
+     * This API handles the confirm token returned by Micro Focus Haven OnDemand automatically.
      * @param tokenProxy The token proxy to use
      * @param index The name of the index
      * @param callback Callback that will be called with the response

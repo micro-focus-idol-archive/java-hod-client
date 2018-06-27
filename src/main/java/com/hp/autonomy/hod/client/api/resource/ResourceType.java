@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represents the type of a resource in HP Haven OnDemand.
+ * Represents the type of a resource in Micro Focus Haven OnDemand.
  */
 @Data
 public class ResourceType implements Serializable {

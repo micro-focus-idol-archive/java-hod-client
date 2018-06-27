@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Helper class for building up optional parameters for the QueryTextIndex API and FindSimilar API. The default value
- * for all parameters is null. Null parameters will not be sent to HP Haven OnDemand
+ * for all parameters is null. Null parameters will not be sent to Micro Focus Haven OnDemand
  */
 @Data
 @Accessors(chain = true)

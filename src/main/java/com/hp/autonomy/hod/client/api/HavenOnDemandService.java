@@ -13,7 +13,7 @@ import com.hp.autonomy.hod.client.token.TokenProxy;
 import java.util.Map;
 
 /**
- * Service which allows arbitrary requests to be made to HP Haven OnDemand
+ * Service which allows arbitrary requests to be made to Micro Focus Haven OnDemand
  */
 public interface HavenOnDemandService {
 
@@ -23,9 +23,9 @@ public interface HavenOnDemandService {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T get(
@@ -43,9 +43,9 @@ public interface HavenOnDemandService {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T get(
@@ -65,9 +65,9 @@ public interface HavenOnDemandService {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T get(
@@ -139,9 +139,9 @@ public interface HavenOnDemandService {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T post(
@@ -159,9 +159,9 @@ public interface HavenOnDemandService {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T post(
@@ -181,9 +181,9 @@ public interface HavenOnDemandService {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T post(
@@ -202,7 +202,7 @@ public interface HavenOnDemandService {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     JobId postAsync(
@@ -219,7 +219,7 @@ public interface HavenOnDemandService {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     JobId postAsync(
@@ -238,7 +238,7 @@ public interface HavenOnDemandService {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     JobId postAsync(
@@ -256,9 +256,9 @@ public interface HavenOnDemandService {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T put(
@@ -276,9 +276,9 @@ public interface HavenOnDemandService {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T put(
@@ -298,9 +298,9 @@ public interface HavenOnDemandService {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T put(
@@ -373,9 +373,9 @@ public interface HavenOnDemandService {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T delete(
@@ -393,9 +393,9 @@ public interface HavenOnDemandService {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T delete(
@@ -415,9 +415,9 @@ public interface HavenOnDemandService {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token
-     * @param returnType The expected return type from HP Haven OnDemand. Pass in Map.class if you don't have a more
+     * @param returnType The expected return type from Micro Focus Haven OnDemand. Pass in Map.class if you don't have a more
      * specific response type
-     * @return A representation of the result from HP Haven OnDemand
+     * @return A representation of the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     <T> T delete(
