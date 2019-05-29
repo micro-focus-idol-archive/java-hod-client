@@ -22,7 +22,7 @@ interface RetrieveIndexFieldsBackend {
     String COMBINE_FIELDS_TRUE = "?combine_fields=true";
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields across all specified indexes that have been ingested
+     * Retrieve from Micro Focus Haven OnDemand a list of the fields across all specified indexes that have been ingested
      * into a given text index using the given token
      *
      * @param token  The token to use to authenticate the request
@@ -37,7 +37,7 @@ interface RetrieveIndexFieldsBackend {
     ) throws HodErrorException;
 
     /**
-     * Retrieve from HP Haven OnDemand a list of the fields for each index that have been ingested
+     * Retrieve from Micro Focus Haven OnDemand a list of the fields for each index that have been ingested
      * into a given text index using the given token
      *
      * @param token  The token to use to authenticate the request

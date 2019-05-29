@@ -45,7 +45,7 @@ interface FindSimilarBackend {
     /**
      * Finds similar documents to the text from an object store object using the given token
      * @param token The token to use to authenticate the request
-     * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
+     * @param reference An Micro Focus Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
@@ -74,7 +74,7 @@ interface FindSimilarBackend {
     /**
      * Finds similar documents to the text from a url using the given token
      * @param token The token to use to authenticate the request
-     * @param indexReference The reference of a document in HP Haven OnDemand
+     * @param indexReference The reference of a document in Micro Focus Haven OnDemand
      * @param params Additional parameters to be sent as part of the request
      * @return A list of documents that are similar to the query text
      */

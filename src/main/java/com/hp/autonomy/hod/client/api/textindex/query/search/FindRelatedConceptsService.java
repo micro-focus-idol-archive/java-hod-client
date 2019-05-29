@@ -19,7 +19,7 @@ import java.util.List;
 public interface FindRelatedConceptsService {
 
     /**
-     * Query HP Haven OnDemand for related concepts matching query text using a token proxy provided by a
+     * Query Micro Focus Haven OnDemand for related concepts matching query text using a token proxy provided by a
      * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
@@ -34,7 +34,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts matching query text using the given token proxy
+     * Query Micro Focus Haven OnDemand for related concepts matching query text using the given token proxy
      * @param tokenProxy The token proxy to use to authenticate the request
      * @param text The query text
      * @param params Additional parameters to be sent as part of the request
@@ -49,9 +49,9 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text from an object store object using a token proxy provided by a
+     * Query Micro Focus Haven OnDemand for related concepts using query text from an object store object using a token proxy provided by a
      * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
-     * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
+     * @param reference An Micro Focus Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
@@ -65,9 +65,9 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text from an object store object using the given token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text from an object store object using the given token proxy
      * @param tokenProxy The token proxy to use to authenticate the request
-     * @param reference An HP Haven OnDemand reference obtained from either the Expand Container or Store Object API.
+     * @param reference An Micro Focus Haven OnDemand reference obtained from either the Expand Container or Store Object API.
      * The contents of the object will be used as the query text
      * @param params Additional parameters to be sent as part of the request
      * @return A list of related concepts that match the query text
@@ -81,7 +81,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text from a url using a token proxy provided by a
+     * Query Micro Focus Haven OnDemand for related concepts using query text from a url using a token proxy provided by a
      * {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
@@ -96,7 +96,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text from a url using the given token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text from a url using the given token proxy
      * @param tokenProxy The token proxy to use to authenticate the request
      * @param url A publicly accessible HTTP URL from which the query text can be retrieved
      * @param params Additional parameters to be sent as part of the request
@@ -111,7 +111,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text in a file using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
@@ -126,7 +126,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text in a file using the given token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text in a file using the given token proxy
      * @param tokenProxy The token proxy to use to authenticate the request
      * @param file A file containing the query text
      * @param params Additional parameters to be sent as part of the request
@@ -141,7 +141,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text in a file using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
@@ -156,7 +156,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text in a file using the given token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text in a file using the given token proxy
      * @param tokenProxy The token proxy to use to authenticate the request
      * @param bytes The bytes of a file containing the query text
      * @param params Additional parameters to be sent as part of the request
@@ -171,7 +171,7 @@ public interface FindRelatedConceptsService {
     ) throws HodErrorException;
 
     /**
-     * Query HP Haven OnDemand for related concepts using query text in a file using a token proxy
+     * Query Micro Focus Haven OnDemand for related concepts using query text in a file using a token proxy
      * provided by a {@link com.hp.autonomy.hod.client.token.TokenProxyService}
      * @param inputStream A file containing the query text
      * @param params Additional parameters to be sent as part of the request

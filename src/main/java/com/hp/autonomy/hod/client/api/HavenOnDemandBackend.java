@@ -21,8 +21,8 @@ import retrofit.http.QueryMap;
 import java.util.Map;
 
 /**
- * Service for calling HP Haven OnDemand APIs which do not have a dedicated service. These methods provide no assistance
- * with calling HP Haven OnDemand, so prefer dedicated services where available
+ * Service for calling Micro Focus Haven OnDemand APIs which do not have a dedicated service. These methods provide no assistance
+ * with calling Micro Focus Haven OnDemand, so prefer dedicated services where available
  */
 interface HavenOnDemandBackend {
 
@@ -39,7 +39,7 @@ interface HavenOnDemandBackend {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @GET(SYNC_URL_ONE)
@@ -57,7 +57,7 @@ interface HavenOnDemandBackend {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @GET(SYNC_URL_TWO)
@@ -77,7 +77,7 @@ interface HavenOnDemandBackend {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @GET(SYNC_URL_THREE)
@@ -152,7 +152,7 @@ interface HavenOnDemandBackend {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @POST(SYNC_URL_ONE)
@@ -171,7 +171,7 @@ interface HavenOnDemandBackend {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @POST(SYNC_URL_TWO)
@@ -192,7 +192,7 @@ interface HavenOnDemandBackend {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @POST(SYNC_URL_THREE)
@@ -212,7 +212,7 @@ interface HavenOnDemandBackend {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL_ONE)
@@ -231,7 +231,7 @@ interface HavenOnDemandBackend {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL_TWO)
@@ -252,7 +252,7 @@ interface HavenOnDemandBackend {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @POST(ASYNC_URL_THREE)
@@ -272,7 +272,7 @@ interface HavenOnDemandBackend {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @PUT(SYNC_URL_ONE)
@@ -291,7 +291,7 @@ interface HavenOnDemandBackend {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @PUT(SYNC_URL_TWO)
@@ -312,7 +312,7 @@ interface HavenOnDemandBackend {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @PUT(SYNC_URL_THREE)
@@ -392,7 +392,7 @@ interface HavenOnDemandBackend {
      * @param api The name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @DELETE(SYNC_URL_ONE)
@@ -410,7 +410,7 @@ interface HavenOnDemandBackend {
      * @param second The second part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @DELETE(SYNC_URL_TWO)
@@ -430,7 +430,7 @@ interface HavenOnDemandBackend {
      * @param third The third part of the name of the API
      * @param version The version of the API
      * @param params The query parameters sent to the API. These should include a token if not using a RequestInterceptor
-     * @return A Map representing the result from HP Haven OnDemand
+     * @return A Map representing the result from Micro Focus Haven OnDemand
      * @throws HodErrorException
      */
     @DELETE(SYNC_URL_THREE)

@@ -12,85 +12,61 @@
 
     <groupId>com.hp.autonomy.hod</groupId>
     <artifactId>java-hod-client</artifactId>
-    <version>0.25.1</version>
+    <version>0.25.2</version>
 
-    <description>Java Client for communicating with HP Haven OnDemand</description>
+    <description>Java Client for communicating with Micro Focus Haven OnDemand</description>
 
-    <url>https://github.com/hpautonomy/java-hod-client</url>
+    <url>https://github.com/microfocus-idol/java-hod-client</url>
 
     <inceptionYear>2015</inceptionYear>
 
     <scm>
-        <connection>scm:git:git@github.com:hpautonomy/java-hod-client.git</connection>
-        <developerConnection>scm:git:git@github.com:hpautonomy/java-hod-client.git</developerConnection>
-        <url>git@github.com:hpautonomy/java-hod-client.git</url>
+        <connection>scm:git:git@github.com:microfocus-idol/java-hod-client.git</connection>
+        <developerConnection>scm:git:git@github.com:microfocus-idol/java-hod-client.git</developerConnection>
+        <url>git@github.com:microfocus-idol/java-hod-client.git</url>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/hpautonomy/java-hod-client/issues</url>
+        <url>https://github.com/microfocus-idol/java-hod-client/issues</url>
     </issueManagement>
 
     <developers>
         <developer>
             <name>Alex Scown</name>
-            <email>alex.scown@hp.com</email>
-            <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
         <developer>
             <name>Daniel Grayling</name>
-            <email>daniel.grayling@hp.com</email>
-            <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
         <developer>
             <name>ivanoaly</name>
-            <email>alyona.ivanova@hp.com</email>
-            <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
+            <email>alyona.ivanova@microfocus.com</email>
+            <organization>Micro Focus</organization>
+            <organizationUrl>http://www.microfocus.com</organizationUrl>
         </developer>
         <developer>
             <name>Jonathan Soul</name>
-            <email>jonathan.soul@hp.com</email>
-            <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
         <developer>
             <name>Brian Beckett</name>
-            <email>brian.beckett@hp.com</email>
-            <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
         <developer>
             <name>Matthew Gordon</name>
-            <email>matthew.gordon2@hp.com</email>
-            <organization>HP</organization>
-            <organizationUrl>http://www.hp.com</organizationUrl>
         </developer>
         <developer>
             <name>Ivo Miller</name>
-            <email>ivo.miller@hpe.com</email>
-            <organization>Hewlett-Packard Enterprise</organization>
-            <organizationUrl>http://www.hpe.com</organizationUrl>
         </developer>
         <developer>
             <name>Will Byrne</name>
-            <email>will.byrne@hpe.com</email>
-            <organization>Hewlett Packard Enterprise</organization>
-            <organizationUrl>http://www.hpe.com</organizationUrl>
         </developer>
         <developer>
             <name>Rosie Taylor</name>
-            <email>rosie.taylor@hpe.com</email>
-            <organization>Hewlett-Packard Enterprise</organization>
-            <organizationUrl>http://www.hpe.com</organizationUrl>
         </developer>
     </developers>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jackson.version>2.6.0</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
     </properties>
 
     <profiles>
@@ -179,7 +155,7 @@
         <dependency>
             <groupId>com.hp.autonomy.frontend</groupId>
             <artifactId>aci-types</artifactId>
-            <version>0.18.1</version>
+            <version>0.25.1</version>
         </dependency>
 
         <dependency>
@@ -246,7 +222,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.4</version>
+            <version>4.3.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

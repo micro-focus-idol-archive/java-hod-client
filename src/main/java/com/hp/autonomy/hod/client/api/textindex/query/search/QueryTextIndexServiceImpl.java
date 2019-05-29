@@ -40,7 +40,7 @@ public class QueryTextIndexServiceImpl<T extends Serializable> implements QueryT
      * Creates a new QueryTextIndexServiceImpl with the given configuration and return type
      * @param config The configuration to use
      * @param documentType The desired type of documents returned by this service. This type must have to correct Jackson
-     * annotations to read responses from HP Haven OnDemand
+     * annotations to read responses from Micro Focus Haven OnDemand
      */
     public QueryTextIndexServiceImpl(final HodServiceConfig<?, TokenType.Simple> config, final Class<T> documentType) {
         queryTextIndexBackend = config.getRestAdapter().create(QueryTextIndexBackend.class);

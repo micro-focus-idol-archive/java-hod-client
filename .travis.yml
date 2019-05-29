@@ -5,25 +5,23 @@ addons:
       - oracle-java8-installer
 before_install:
 - echo $GPG_KEY > tmp.txt && gpg --batch --passphrase-fd 3 3<tmp.txt secret.gpg.gpg
-before_script: ruby provision/setup-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
-script: mvn verify -Prelease -Dhp.hod.env=$HOD_ENV -Dhp.hod.applicationApiKey=$HOD_APPLICATION_API_KEY -Dhp.hod.developerApiKey=$HOD_DEVELOPER_API_KEY -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN -Dhp.hod.developerEmail=$HOD_DEVELOPER_EMAIL
+#before_script: ruby provision/setup-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
+script: mvn verify -Prelease -DskipITs #-Dhp.hod.env=$HOD_ENV -Dhp.hod.applicationApiKey=$HOD_APPLICATION_API_KEY -Dhp.hod.developerApiKey=$HOD_DEVELOPER_API_KEY -Dhp.hod.application=$HOD_APPLICATION -Dhp.hod.domain=$HOD_DOMAIN -Dhp.hod.developerEmail=$HOD_DEVELOPER_EMAIL
 after_success: bash travis.sh
-after_script: ruby provision/destroy-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
+#after_script: ruby provision/destroy-test-environment.rb $HOD_APPLICATION_API_KEY $HOD_ENV $HOD_APPLICATION $HOD_DOMAIN
 env:
   global:
   - JAVA_HOME=/usr/lib/jvm/java-8-oracle
   # SONATYPE_USERNAME
-  - secure: tHgE7kxDPCg2qs16hxOQf1V5l0pFIj6dDWCYRh3hod2pIv30y0FqOLorvXxABElpKc2HLGvz9zSgQx1tYeLJNETs3zgX81zgbODApRBMYoQa83OKC02P5kospYdMg52IXPRAYWk/wacEVJJ2daROy6n2NQGFCZQ675SPapt76Ps=
+  - secure: RDP92bbLt8l+5wnKP30N4VQQXeG7kAP11fr/H2GRXK8jzyY3V7wAZh8+u61kMlC3ebaL4e7BsE4SJSGJRbpdcUvPV4GT2vGlENfKo4sk4Zl96hRmOi1rkutkOoI706PrGz7RIX5oLXyMi3cEhvjRWhZ/e30SalEbUO49il8IasA=
   # SONATYPE_PASSWORD
-  - secure: S149VC2Z+JszhAajCixniVCMHNZQMAvqwcW5AG+UZY0ssXoQGSbSuHk2fAgqUA6BBTMEOtZjkgGiR4dpnAk32KEpCXcSfG2DAIa7M7CfXsfbdnYEJNAEn9iSLAaoLHLtdkuQSBl2DHnWw/V6FZgpnnpeat29r4xr6UGp/Oo/Hkg=
+  - secure: IezaXs47mUZpSPdwgq0RuC7ucMwi0sBSUjQvcj/fuej+FnvoKY8UZvZKu0Rxw3rhVVULPFne+ncYIKMRAbS+mn692Z2UHhS2apLmyqcX/q6TZXFlazVr5nleB4wQqkO9jukkLHOwKCuR5MEk7Mma5uqV7PqhNNhHoEPy5YVNxnE=
   # GPG_PASSPHRASE
-  - secure: hXKkf5WpyTkvRUfDpuVcdqknuBpZJjow8YGXpN1bo41hvpv9sekj6M9LClJj4vifYAGwT38bvjK1/qxDebfAhqcGUlr3KLsHaXK3QkzUwBnvjyOK+im9Z7Ipcc1/H6c0+ZLv3TwhovTj7RuIZFyGTkun6rINdW8kYaS8YpNFpp8=
+  - secure: Mpt2nllsCPb52HTeVF/EjcZSY36KupzJ4oWUWNLVoxFncXqgkMceOW96GuQKt3u3dQXCsymUmebZxiWUawt9uah3RJ6p3N2iqnQEK0/C5yAlFxtpSsqzsgKF0aEi9pZ1O8oN1F3hZqfnDaltuWdXzrEl5atetwpVsm65reUfALU=
   # GPG_KEYID
-  - secure: OzPm3bYdM8Dg9AYigGqM8cEv4bKbeHY+MoljGnsX7edMt1uwtglW/VzGVWIEQF57hTaPA+/3orGOJak6cn2s9355mZlo5lCbJz43e6LyKX5ryX5jPe4jgpgwFSwH7hin7hkP4VkjT+Wb/4UTaiXRmj3LkzK1HA7EssNcw2j/9us=
+  - GPG_KEYID: 0DD20E21
   # GPG_KEY
-  - secure: YvX/muwjVf+xQughSFMctniIg4sxpTmq6wfet6Un8x6cinKTWXQZNm0DdadRwZtkVq60Ddne2Yweb4E0xnOn86h6ACEAQcLrnTuv6UWx8u/M09Rp7FHCdMnFhoaJpeU6QDNJJkV152bU9u2gbYikLGcyanK8sU/wuGo6mkBvuAc=
-  # GITHUB_TOKEN
-  - secure: lFlg8557sEpm61f8G/3d0bz/C/arHJxEX7ag5q8bYNtwxXFf1Roikwr7M8PfD7CKYqdwIMxrtsoMsaj2D4PeFKTJWNWA/K46yg2rU4q7qZounPJnAwXQeKyaO7KsuO3d1Cez5cQhuypfOL02+d5t2vWU3L4R1sbQGg1HokCwbwU=
+  - secure: A/E5Mjb7/SynfzM+dD5UwHX/rWRGhOQoayWtPx7f0xQJJ2pRgMDX2DdCtomDTziuQuiyXam91G5V7qyA/nnl8LXY9wqEBvp0xl0V4eFEmtqG3JtrydqQLmd8ttIrJGJ/Nn0ZjBBpHO2y0hunmVfQVa+R0wkfWcmMcdOxck47qck=
   # HOD_APPLICATION_API_KEY
   - secure: c15hFhdzstX4t/mHyvHty64uaLSLGU0cXSOQdcXbzerx4kk33lW65lyzQZTf0BcnxzJ+knSWvWsIbsYuEvAc7wKjE1OLA7NuP7U16Y80+5UvwPlomsStxrXcdfM4zMhB7DU8Wp5+NvD79EYl1ClrFehSGk/+6R9QuVEvWNgpyg4=
   # HOD_APPLICATION

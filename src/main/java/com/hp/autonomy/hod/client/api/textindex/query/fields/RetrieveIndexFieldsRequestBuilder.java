@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Helper class for building up optional parameters for the Retrieve Index Fields API. The default value for all parameters
- * is null. Null parameters will not be sent to HP Haven OnDemand
+ * is null. Null parameters will not be sent to Micro Focus Haven OnDemand
  */
 @Data
 @Accessors(chain = true)
